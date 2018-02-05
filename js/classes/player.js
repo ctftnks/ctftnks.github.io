@@ -1,11 +1,11 @@
 
 nplayers = 0;
 
-Player = function(){
+Player = function(color){
 
   this.id = nplayers++;
   this.name = "Player " + id;
-  this.color = "#F00";
+  this.color = color;
   this.tank = new Tank(this);
 
 }

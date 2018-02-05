@@ -9,7 +9,7 @@ Canvas = function(id){
   this.canvas.height = window.innerHeight;
   this.canvas.width = window.innerWidth;
   this.game = undefined;
-  this.canvasIntvl = undefined;
+  this.loop = undefined;
 
   // Clear canvas and draw all objects
   this.draw = function(){
@@ -20,14 +20,14 @@ Canvas = function(id){
 
   // Keep canvas in sync with game: redraw every few milliseconds
   this.sync = function(){
-    this.canvasIntvl = setInterval(function(){
+    this.loop = setInterval(function(){
       this.draw();
   	}, 40);
   }
 
   // Stop syncing of canvas
   this.stopSync = function(){
-  	if(typeof(canvasIntvl) != "undefined") clearInterval(canvasIntvl);
+  	if(typeof(this.loop) != "undefined") clearInterval(this.loop);
   }
 
   // add a game to be drawn to the canvas
