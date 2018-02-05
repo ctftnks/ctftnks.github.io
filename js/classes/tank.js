@@ -9,22 +9,22 @@ Tank = function(player){
   this.y = 100;
   this.angle = 0;
   this.width = 20;
-  this.length = 30;
-  this.weapon = new Gun(this);
+  this.height = 30;
+  this.weapon = new MG(this);
   this.canShoot = true;
   this.speed = 2;
 
   this.setPosition = function(x, y){
-    this.x = 0;
-    this.y = 0;
+    this.x = x;
+    this.y = y;
   }
 
   this.draw = function(canvas, context){
     context.save();
     context.beginPath();
-    context.translate(this.x+this.width/2, this.y+this.length/2 );
+    context.translate(this.x, this.y);
     context.rotate(this.angle);
-    context.rect(-this.width/2, -this.length/2, this.width, this.length);
+    context.rect(-this.width/2, -this.height/2, this.width, this.height);
     context.fillStyle = this.player.color;
     context.fill();
     context.restore();
@@ -46,6 +46,31 @@ Tank = function(player){
 
   this.shoot = function(){
       this.weapon.shoot();
+  }
+
+  this.defaultWeapon = function(){
+    this.weapon = new Gun(this);
+  }
+
+  this.corners = function(){
+      return [
+        {
+          x: this.x - (this.width / 2) * Math.cos(-this.angle) - (this.height / 2) * Math.sin(-this.angle),
+          y: this.y + (this.width / 2) * Math.sin(-this.angle) - (this.height / 2) * Math.cos(-this.angle)
+        },
+        {
+          x: this.x + (this.width / 2) * Math.cos(-this.angle) - (this.height / 2) * Math.sin(-this.angle),
+          y: this.y - (this.width / 2) * Math.sin(-this.angle) - (this.height / 2) * Math.cos(-this.angle)
+        },
+        {
+          x: this.x - (this.width / 2) * Math.cos(-this.angle) + (this.height / 2) * Math.sin(-this.angle),
+          y: this.y + (this.width / 2) * Math.sin(-this.angle) + (this.height / 2) * Math.cos(-this.angle)
+        },
+        {
+          x: this.x + (this.width / 2) * Math.cos(-this.angle) + (this.height / 2) * Math.sin(-this.angle),
+          y: this.y - (this.width / 2) * Math.sin(-this.angle) + (this.height / 2) * Math.cos(-this.angle)
+        }
+      ];
   }
 
 }

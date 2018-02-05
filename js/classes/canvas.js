@@ -15,7 +15,7 @@ Canvas = function(id){
 
   // Clear canvas and draw all objects
   this.draw = function(){
-  	this.context.clearRect(0, 0, this.width, this.height);
+  	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     for(var i=0; i<this.game.objs.length; i++)
       this.game.objs[i].draw(this.canvas, this.context);
   }
@@ -26,7 +26,7 @@ Canvas = function(id){
       var self = this;
       this.loop = setInterval(function(){
         self.draw();
-      }, 40);
+      }, 20);
     }
   }
 

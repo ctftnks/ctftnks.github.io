@@ -12,6 +12,7 @@ Game = function(){
 
   this.addPlayer = function(player){
     this.players.push(player);
+    player.game = this;
     this.addObject(player.tank);
   }
 
@@ -24,7 +25,7 @@ Game = function(){
     var self = this;
     this.loop = setInterval(function(){
       self.step();
-    }, 40);
+    }, 20);
   }
 
   this.step = function(){

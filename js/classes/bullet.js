@@ -8,7 +8,8 @@ Bullet = function(weapon){
   this.y = 0;
   this.radius = 5;
   this.speed = 5;
-  this.timeout = 10;
+  this.angle = 5;
+  this.timeout = 1000 / 40;
 
   this.setPosition = function(x, y){
     this.x = 0;
@@ -24,8 +25,16 @@ Bullet = function(weapon){
   }
 
   this.step = function(){
-    // TODO: collision checking
-    // update position
+    // is bullet timed out?
+    this.timeout -= 1;
+    if(this.timeout < 0)
+      this.delete();
+    // translate bullet
+    this.x -= this.speed * Math.sin(-this.angle);
+    this.y -= this.speed * Math.cos(-this.angle);
+    // has bullet hit something?
+    // TODO: Collision detection
+
   }
 
   this.delete = function(){

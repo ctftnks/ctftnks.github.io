@@ -9,6 +9,7 @@ Player = function(color){
   this.score = 0;
   this.tank = new Tank(this);
   this.keys = keymaps[this.id];
+  this.game = undefined;
 
   this.step = function(){
     if (Key.isDown(this.keys[0])) this.tank.move(1);
