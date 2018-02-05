@@ -1,5 +1,6 @@
 
 Bullet = function(weapon){
+  Object.call(this);
 
   this.player = weapon.tank.player;
   this.weapon = weapon;
@@ -8,7 +9,6 @@ Bullet = function(weapon){
   this.radius = 5;
   this.speed = 5;
   this.timeout = 10;
-  this.deleted = false;
 
   this.setPosition = function(x, y){
     this.x = 0;

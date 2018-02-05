@@ -2,6 +2,7 @@
 // TODO: merge with player class?
 
 Tank = function(player){
+  Object.call(this);
 
   this.player = player;
   this.x = 0;

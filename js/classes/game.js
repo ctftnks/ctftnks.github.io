@@ -11,25 +11,32 @@ Game = function(){
   this.loop = undefined;
 
   this.addPlayer = function(player){
-    this.players.append(player);
+    this.players.push(player);
     this.addObject(player.tank);
   }
 
   this.addObject = function(object){
-    this.objs.append(object);
+    this.objs.push(object);
   }
 
   this.start = function(){
     console.log("Game started!");
+    var self = this;
     this.loop = setInterval(function(){
-      this.draw();
+      self.step();
     }, 40);
   }
 
   this.step = function(){
-    if(!this.paused)
-      for(var i=0; i<objs.length; i++)
-        objs[i].step();
+    if(!this.paused){
+      var newObjs = [];
+      for(var i=0; i<this.objs.length; i++)
+        if(!this.objs[i].deleted){
+          newObjs.push(this.objs[i]);
+          this.objs[i].step();
+        }
+      this.objs = newObjs;
+    }
   }
 
   this.stop = function(){
