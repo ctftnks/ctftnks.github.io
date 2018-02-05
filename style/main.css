@@ -1,0 +1,9 @@
+#gameFrame{
+
+  position: fixed;
+  top: 5%;
+  height: 90%;
+  left: 10%;
+  width: 80%;
+  border: solid 2px #444;
+}

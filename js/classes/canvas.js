@@ -6,24 +6,28 @@ Canvas = function(id){
   // Initialize
   this.canvas = document.getElementById(id);
   this.context = this.canvas.getContext("2d");
-  this.canvas.height = window.innerHeight;
-  this.canvas.width = window.innerWidth;
+  this.canvas.height = this.canvas.clientHeight;
+  this.canvas.width = this.canvas.clientWidth;
+  console.log(this.canvas.width);
+  console.log(this.canvas.height);
   this.game = undefined;
   this.loop = undefined;
 
   // Clear canvas and draw all objects
   this.draw = function(){
-    console.log("f")
-  	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    for(var i=0; i<objs.length; i++)
+  	this.context.clearRect(0, 0, this.width, this.height);
+    for(var i=0; i<this.game.objs.length; i++)
       this.game.objs[i].draw(this.canvas, this.context);
   }
 
   // Keep canvas in sync with game: redraw every few milliseconds
   this.sync = function(){
-    this.loop = setInterval(function(){
-      this.draw();
-  	}, 40);
+    if(typeof(this.loop) == "undefined"){
+      var self = this;
+      this.loop = setInterval(function(){
+        self.draw();
+      }, 40);
+    }
   }
 
   // Stop syncing of canvas

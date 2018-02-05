@@ -12,4 +12,5 @@ function newGame(){
     game.addPlayer(players[i]);
   canvas.setGame(game);
   game.start();
+  canvas.sync();
 }

@@ -12,9 +12,9 @@ Player = function(color){
 
   this.step = function(){
     if (Key.isDown(this.keys[0])) this.tank.move(1);
-    if (Key.isDown(this.keys[1])) this.tank.turn(1);
-    if (Key.isDown(this.keys[2])) this.tank.move(-1);
-    if (Key.isDown(this.keys[3])) this.tank.turn(-1);
+    if (Key.isDown(this.keys[1])) this.tank.turn(-1);
+    if (Key.isDown(this.keys[2])) this.tank.move(-0.5);
+    if (Key.isDown(this.keys[3])) this.tank.turn(1);
     if (Key.isDown(this.keys[4])) this.tank.shoot();
   }
 
