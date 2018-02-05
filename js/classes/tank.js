@@ -12,6 +12,7 @@ Tank = function(player){
   this.length = 20;
   this.weapon = new Gun(this);
   this.canShoot = true;
+  this.speed = 1;
 
   this.setPosition = function(x, y){
     this.x = 0;
@@ -28,9 +29,17 @@ Tank = function(player){
   }
 
   this.step = function(){
-    // TODO: check if keys pressed
-    // then update positions
+    this.player.step();
     // TODO: collision checking
+  }
+
+  this.move = function(direction){
+    this.x += direction * this.speed * Math.cos(this.angle);
+    this.y += direction * this.speed * Math.sin(this.angle);
+  }
+
+  this.turn = function(direction){
+    this.angle += direction * 0.1;
   }
 
   this.shoot = function(){

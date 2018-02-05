@@ -13,6 +13,7 @@ Canvas = function(id){
 
   // Clear canvas and draw all objects
   this.draw = function(){
+    console.log("f")
   	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     for(var i=0; i<objs.length; i++)
       this.game.objs[i].draw(this.canvas, this.context);
