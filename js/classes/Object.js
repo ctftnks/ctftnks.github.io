@@ -5,7 +5,6 @@ Object = function(){
 
   this.delete = function(){
     this.deleted = true;
-    this.weapon.canShoot = true;
   }
 
 }

@@ -3,13 +3,14 @@ Bullet = function(weapon){
   Object.call(this);
 
   this.player = weapon.tank.player;
+  this.map = this.player.game.map;
   this.weapon = weapon;
-  this.x = 0;
-  this.y = 0;
+  this.x = undefined;
+  this.y = undefined;
   this.radius = 5;
-  this.speed = 5;
-  this.angle = 5;
-  this.timeout = 1000 / 40;
+  this.speed = BulletSpeed;
+  this.angle = undefined;
+  this.timeout = 5000;
 
   this.setPosition = function(x, y){
     this.x = 0;
@@ -26,15 +27,21 @@ Bullet = function(weapon){
 
   this.step = function(){
     // is bullet timed out?
-    this.timeout -= 1;
+    this.timeout -= GameFrequency;
     if(this.timeout < 0)
       this.delete();
     // translate bullet
-    this.x -= this.speed * Math.sin(-this.angle);
-    this.y -= this.speed * Math.cos(-this.angle);
-    // has bullet hit something?
-    // TODO: Collision detection
+    oldx = this.x;
+    oldy = this.y;
+    this.x -= this.speed * Math.sin(-this.angle) * GameFrequency / 1000.;
+    this.y -= this.speed * Math.cos(-this.angle) * GameFrequency / 1000.;
+    this.checkCollision(oldx, oldy);
+  }
 
+
+  this.checkCollision = function(oldx, oldy){
+    tile1 = this.map.getTileByPos(oldx, oldy);
+    tile2 = this.map.getTileByPos(this.x, this.y);
   }
 
   this.delete = function(){

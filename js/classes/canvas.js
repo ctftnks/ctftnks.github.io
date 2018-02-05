@@ -8,14 +8,13 @@ Canvas = function(id){
   this.context = this.canvas.getContext("2d");
   this.canvas.height = this.canvas.clientHeight;
   this.canvas.width = this.canvas.clientWidth;
-  console.log(this.canvas.width);
-  console.log(this.canvas.height);
   this.game = undefined;
   this.loop = undefined;
 
   // Clear canvas and draw all objects
   this.draw = function(){
   	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.game.map.draw(this.canvas, this.context);  // TODO: draw map just once
     for(var i=0; i<this.game.objs.length; i++)
       this.game.objs[i].draw(this.canvas, this.context);
   }
@@ -26,7 +25,7 @@ Canvas = function(id){
       var self = this;
       this.loop = setInterval(function(){
         self.draw();
-      }, 20);
+      }, FrameFrequency);
     }
   }
 
@@ -38,6 +37,7 @@ Canvas = function(id){
   // add a game to be drawn to the canvas
   this.setGame = function(game){
     this.game = game;
+    this.game.map.setSize(this.canvas.width, this.canvas.height);
   }
 
 }

@@ -11,8 +11,7 @@ Tank = function(player){
   this.width = 20;
   this.height = 30;
   this.weapon = new MG(this);
-  this.canShoot = true;
-  this.speed = 2;
+  this.speed = TankSpeed;
 
   this.setPosition = function(x, y){
     this.x = x;
@@ -36,12 +35,12 @@ Tank = function(player){
   }
 
   this.move = function(direction){
-    this.x -= direction * this.speed * Math.sin(-this.angle);
-    this.y -= direction * this.speed * Math.cos(-this.angle);
+    this.x -= direction * this.speed * Math.sin(-this.angle) * GameFrequency / 1000.;
+    this.y -= direction * this.speed * Math.cos(-this.angle) * GameFrequency / 1000.;
   }
 
   this.turn = function(direction){
-    this.angle += direction * 0.1;
+    this.angle += direction * TankTurnSpeed * GameFrequency / 1000.;
   }
 
   this.shoot = function(){
@@ -71,6 +70,12 @@ Tank = function(player){
           y: this.y - (this.width / 2) * Math.sin(-this.angle) + (this.height / 2) * Math.cos(-this.angle)
         }
       ];
+  }
+
+  this.intersects = function(){
+
+
+    return false;
   }
 
 }

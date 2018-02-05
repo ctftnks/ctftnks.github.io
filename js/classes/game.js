@@ -2,9 +2,8 @@
 
 Game = function(){
 
-  this.map = new Map();
   this.players = [];
-  this.canvas = undefined;
+  this.map = new Map();
   this.grid = undefined;
   this.objs = [];
   this.paused = false;
@@ -25,18 +24,21 @@ Game = function(){
     var self = this;
     this.loop = setInterval(function(){
       self.step();
-    }, 20);
+    }, GameFrequency);
   }
 
   this.step = function(){
     if(!this.paused){
+      this.map.clearObjectLists();
       var newObjs = [];
       for(var i=0; i<this.objs.length; i++)
         if(!this.objs[i].deleted){
           newObjs.push(this.objs[i]);
-          this.objs[i].step();
+          this.map.addObject(this.objs[i]);
         }
       this.objs = newObjs;
+      for(var i=0; i<this.objs.length; i++)
+        this.objs[i].step();
     }
   }
 
