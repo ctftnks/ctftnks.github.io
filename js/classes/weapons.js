@@ -1,6 +1,6 @@
 
 
-
+// the normal, default gun
 Gun = function(tank){
 
   this.tank = tank;
@@ -22,7 +22,7 @@ Gun = function(tank){
 }
 
 
-
+// a rapid-firing mini-gun
 MG = function(tank){
 
   this.tank = tank;
@@ -52,7 +52,7 @@ MG = function(tank){
   }
 }
 
-
+// yay, lasers!
 Laser = function(tank){
 
   this.tank = tank;
@@ -65,7 +65,8 @@ Laser = function(tank){
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
       bullet.radius = 2;
-      bullet.speed = BulletSpeed;
+      bullet.color = this.tank.player.color;
+      bullet.speed = 5*BulletSpeed;
       bullet.angle = this.tank.angle + 0.1 * (0.5 - Math.random());
       bullet.timeout = 5000;
       this.tank.player.game.addObject(bullet);

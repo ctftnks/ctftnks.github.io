@@ -50,7 +50,9 @@ Map = function(canvas){
   this.spawnPoint = function(){
     rInt = parseInt(Math.random() * (this.Nx * this.Ny - 1));
     tile = this.tiles[rInt];
-    // TODO: check if tile.objs.length == 0
+    // if there is something else already, find another point
+    if(tile.objs.length > 0)
+      return this.spawnPoint();
     return {x: tile.x + this.dx / 2, y: tile.y + this.dy / 2};
   }
 

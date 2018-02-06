@@ -15,6 +15,5 @@ Zum Starten main.html öffnen.
   - eine Lenkrakete, die das Labyrinth lösen kann
 - bessere Maps mit dem Maze Generation Algorithm
 - Effekte mit Rauch und Sound
-- Kommentare im Code 😀
 - Menü am Anfang zur Spielauswahl: wie viele Spieler?
 - Steuerung für mehr als zwei Spieler

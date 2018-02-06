@@ -1,6 +1,10 @@
+
+// static Key class
+// keeps track of pressed keys
 var Key = {
   _pressed: {},
 
+  // TODO: add more keys
   LEFT: 37,
   UP: 38,
   RIGHT: 39,
@@ -25,11 +29,13 @@ var Key = {
   }
 };
 
+// available keymaps
+// order: up, left, down, right, fire
 var keymaps = [
   [Key.UP, Key.LEFT, Key.DOWN, Key.RIGHT, Key.M],
   [Key.W, Key.A, Key.S, Key.D, Key.Q]
 ]
 
-
+// event listeners
 window.addEventListener('keyup', function(event){Key.onKeyup(event);}, false);
 window.addEventListener('keydown', function(event){Key.onKeydown(event);}, false);
