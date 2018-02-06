@@ -11,10 +11,10 @@ Tank = function(player){
   this.map = undefined;
   this.x = 0;
   this.y = 0;
-  this.angle = 0;
+  this.angle = 2 * Math.PI * Math.random();
   this.width = 20;
   this.height = 30;
-  this.weapon = new Gun(this);
+  this.weapon = new MG(this);
   this.speed = TankSpeed;
 
   // draw the tank (rotated) on map
@@ -26,6 +26,12 @@ Tank = function(player){
     context.rect(-this.width/2, -this.height/2, this.width, this.height);
     context.fillStyle = this.player.color;
     context.fill();
+    if(this.weapon.image != ""){
+      var img = new Image;
+      img.src = this.weapon.image;
+      context.drawImage(img, -this.width / 2, -this.width / 2, this.width, this.width);
+    }
+
     context.restore();
     //TODO: draw PowerUp
   }

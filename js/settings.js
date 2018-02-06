@@ -1,7 +1,7 @@
 
 
 FrameFrequency = 30;
-GameFrequency = 20;
+GameFrequency = 10;
 
 TankSpeed = 80;
 TankTurnSpeed = 4;
@@ -11,4 +11,4 @@ WallProbability = 0.4;
 
 TimeAfterLastKill = 2000;
 
-PowerUpFrequency = 3000
+PowerUpFrequency = 2000;

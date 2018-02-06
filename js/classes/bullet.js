@@ -19,6 +19,7 @@ Bullet = function(weapon){
   this.angle = undefined;
   this.radius = 5;
   this.speed = BulletSpeed;
+  this.color = "#000";
   // lifetime of the bullet in [ms]
   this.timeout = 5000;
   // bullet age starts at negative value, so it doesn't instantly kill the shooter

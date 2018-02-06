@@ -7,9 +7,10 @@ PowerUp = function(){
   Object.call(this);
   this.isPowerUp = true;
   this.image = "";
-  this.width = 20;
+  this.width = 24;
   this.x = undefined;
   this.y = undefined;
+  this.radius = 12;
 
   this.apply = function(tank){
 
@@ -20,12 +21,9 @@ PowerUp = function(){
   this.draw = function(canvas, context){
     context.save();
     context.translate(this.x, this.y);
-    context.beginPath();
-    context.fillStyle = "#00F";
-    context.arc(0, 0, 5, 0, Math.PI*2, true);
-    context.closePath();
-    context.fill();
-    // context.drawImage(this.image, -this.width / 2, -this.width / 2, this.width, this.width);
+    var img = new Image;
+    img.src = this.image;
+    context.drawImage(img, -this.width / 2, -this.width / 2, this.width, this.width);
     context.restore();
   }
 
@@ -34,22 +32,38 @@ PowerUp = function(){
 
 LaserBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/LaserBonus.png";
+  this.image = "res/img/laser.png";
   this.apply = function(tank){
-    tank.weapon = new Laser();
+    tank.weapon = new Laser(tank);
   }
 }
 MGBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/MGBonus.png";
+  this.image = "res/img/mg.png";
   this.apply = function(tank){
-    tank.weapon = new MG();
+    tank.weapon = new MG(tank);
+  }
+}
+GrenadeBonus = function(){
+  PowerUp.call(this);
+  this.image = "res/img/grenade.png";
+  this.apply = function(tank){
+    tank.weapon = new Grenade(tank);
+  }
+}
+SpeedBonus = function(){
+  PowerUp.call(this);
+  this.image = "res/img/speed.png";
+  this.apply = function(tank){
+    tank.speed *= 2;
+    var self = tank;
+    setTimeout(function(){self.speed /= 2;}, 2000);
   }
 }
 
 
 function getRandomPowerUp(){
-  var powerups = [new LaserBonus(), new MGBonus()];
+  var powerups = [new LaserBonus(), new MGBonus(), new GrenadeBonus(), new SpeedBonus()];
   var len = powerups.length;
   return powerups[Math.floor(Math.random() * len)];
 }
