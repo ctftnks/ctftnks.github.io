@@ -1,9 +1,11 @@
 
+// A class for the canvas in which the game is drawn
+// binds HTML element and handles its size
+// provides loop to keep the frame in sync with the game
 
-// The canvas in which the game is drawn
 Canvas = function(id){
 
-  // Initialize
+  // initialize: get HTML element
   this.canvas = document.getElementById(id);
   this.context = this.canvas.getContext("2d");
   this.canvas.height = this.canvas.clientHeight;
