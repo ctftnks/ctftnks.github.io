@@ -40,8 +40,21 @@ Bullet = function(weapon){
 
 
   this.checkCollision = function(oldx, oldy){
-    tile1 = this.map.getTileByPos(oldx, oldy);
-    tile2 = this.map.getTileByPos(this.x, this.y);
+    // check for collision with walls
+    tile = this.map.getTileByPos(oldx, oldy);
+    if(tile == -1)
+      return;
+    border = tile.getBorder(this.x, this.y);
+    if(border != -1){
+      if(border == "left" || border == "right"){
+        this.angle *= -1;
+        this.x = 2*oldx - this.x
+      }
+      if(border == "top" || border == "bottom"){
+        this.angle = Math.PI - this.angle;
+        this.y = 2*oldy - this.y
+      }
+    }
   }
 
   this.delete = function(){

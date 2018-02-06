@@ -5,12 +5,12 @@ Tank = function(player){
   Object.call(this);
 
   this.player = player;
-  this.x = 100;
+  this.x = 700;
   this.y = 100;
   this.angle = 0;
   this.width = 20;
   this.height = 30;
-  this.weapon = new MG(this);
+  this.weapon = new Gun(this);
   this.speed = TankSpeed;
 
   this.setPosition = function(x, y){
