@@ -7,10 +7,9 @@ window.onload = function(){
 };
 
 function newGame(){
-  game = new Game();
+  game = new Game(canvas);
   for(i=0; i<players.length; i++)
     game.addPlayer(players[i]);
-  canvas.setGame(game);
   game.start();
   canvas.sync();
 }

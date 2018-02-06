@@ -7,7 +7,9 @@ Canvas = function(id){
   this.canvas = document.getElementById(id);
   this.context = this.canvas.getContext("2d");
   this.canvas.height = this.canvas.clientHeight;
+  this.height = this.canvas.clientHeight;
   this.canvas.width = this.canvas.clientWidth;
+  this.width = this.canvas.clientWidth;
   this.game = undefined;
   this.loop = undefined;
 
@@ -32,12 +34,6 @@ Canvas = function(id){
   // Stop syncing of canvas
   this.stopSync = function(){
   	if(typeof(this.loop) != "undefined") clearInterval(this.loop);
-  }
-
-  // add a game to be drawn to the canvas
-  this.setGame = function(game){
-    this.game = game;
-    this.game.map.setSize(this.canvas.width, this.canvas.height);
   }
 
 }

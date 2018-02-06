@@ -1,10 +1,11 @@
 
 
-Game = function(){
+Game = function(canvas){
 
+  this.canvas = canvas;
+  this.canvas.game = this;
+  this.map = new Map(this.canvas);
   this.players = [];
-  this.map = new Map();
-  this.grid = undefined;
   this.objs = [];
   this.paused = false;
   this.loop = undefined;
@@ -13,6 +14,9 @@ Game = function(){
     this.players.push(player);
     player.game = this;
     this.addObject(player.tank);
+    pos = this.map.spawnPoint();
+    player.tank.x = pos.x;
+    player.tank.y = pos.y;
   }
 
   this.addObject = function(object){
@@ -43,7 +47,7 @@ Game = function(){
   }
 
   this.stop = function(){
-    console.log("Game started!");
+    console.log("Game stopped!");
   }
 
 }

@@ -5,18 +5,13 @@ Tank = function(player){
   Object.call(this);
 
   this.player = player;
-  this.x = 700;
-  this.y = 100;
+  this.x = 0;
+  this.y = 0;
   this.angle = 0;
   this.width = 20;
   this.height = 30;
   this.weapon = new Gun(this);
   this.speed = TankSpeed;
-
-  this.setPosition = function(x, y){
-    this.x = x;
-    this.y = y;
-  }
 
   this.draw = function(canvas, context){
     context.save();
