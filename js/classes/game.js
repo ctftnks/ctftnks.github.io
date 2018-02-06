@@ -9,14 +9,17 @@ Game = function(canvas){
   this.objs = [];
   this.paused = false;
   this.loop = undefined;
+  this.n_playersAlive = 0;
 
   this.addPlayer = function(player){
     this.players.push(player);
     player.game = this;
+    player.tank.map = this.map;
     this.addObject(player.tank);
     pos = this.map.spawnPoint();
     player.tank.x = pos.x;
     player.tank.y = pos.y;
+    this.n_playersAlive += 1;
   }
 
   this.addObject = function(object){
@@ -47,6 +50,7 @@ Game = function(canvas){
   }
 
   this.stop = function(){
+    this.paused = true;
     console.log("Game stopped!");
   }
 

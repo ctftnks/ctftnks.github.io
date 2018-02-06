@@ -11,6 +11,8 @@ Bullet = function(weapon){
   this.speed = BulletSpeed;
   this.angle = undefined;
   this.timeout = 5000;
+  this.age = -300;
+  this.isBullet = true;
 
   this.setPosition = function(x, y){
     this.x = 0;
@@ -27,8 +29,8 @@ Bullet = function(weapon){
 
   this.step = function(){
     // is bullet timed out?
-    this.timeout -= GameFrequency;
-    if(this.timeout < 0)
+    this.age += GameFrequency;
+    if(this.age > this.timeout)
       this.delete();
     // translate bullet
     oldx = this.x;

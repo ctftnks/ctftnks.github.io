@@ -8,3 +8,5 @@ TankTurnSpeed = 4;
 BulletSpeed = 140;
 
 WallProbability = 0.4;
+
+TimeAfterLastKill = 2000;

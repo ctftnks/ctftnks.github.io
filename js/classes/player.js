@@ -19,4 +19,12 @@ Player = function(color){
     if (Key.isDown(this.keys[4])) this.tank.shoot();
   }
 
+  this.kill = function(){
+    this.tank.delete();
+    this.game.n_playersAlive -= 1;
+    if(this.game.n_playersAlive < 2){
+      setTimeout(function(){game.stop();}, TimeAfterLastKill)
+    }
+  }
+
 }
