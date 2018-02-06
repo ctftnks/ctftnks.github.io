@@ -41,8 +41,8 @@ Bullet = function(weapon){
   }
 
 
+  // check for collision with walls
   this.checkCollision = function(oldx, oldy){
-    // check for collision with walls
     tile = this.map.getTileByPos(oldx, oldy);
     if(tile == -1)
       return;
@@ -59,6 +59,7 @@ Bullet = function(weapon){
     }
   }
 
+  // delete bullet from map
   this.delete = function(){
     this.deleted = true;
     this.weapon.canShoot = true;
