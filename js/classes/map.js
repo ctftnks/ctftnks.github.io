@@ -100,13 +100,13 @@ Tile = function(x, y, dx, dy){
   this.draw = function(canvas, context){
     context.fillStyle = "#555";
     if(this.borders.left)
-      context.fillRect(this.x-1, this.y, 2, this.dy);
+      context.fillRect(this.x-2, this.y, 4, this.dy);
     if(this.borders.right)
-      context.fillRect(this.x-1+this.dx, this.y, 2, this.dy);
+      context.fillRect(this.x-2+this.dx, this.y, 4, this.dy);
     if(this.borders.top)
-      context.fillRect(this.x, this.y-1, this.dx, 2);
+      context.fillRect(this.x, this.y-2, this.dx, 4);
     if(this.borders.bottom)
-      context.fillRect(this.x, this.y-1+this.dy, this.dx, 2);
+      context.fillRect(this.x, this.y-2+this.dy, this.dx, 4);
 
   }
 
