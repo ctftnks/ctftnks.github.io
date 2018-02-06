@@ -47,8 +47,8 @@ MG = function(tank){
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
       bullet.radius = 2;
       bullet.speed = BulletSpeed;
-      bullet.angle = this.tank.angle + 0.1 * (0.5 - Math.random());
-      bullet.timeout = 5000;
+      bullet.angle = this.tank.angle + 0.2 * (0.5 - Math.random());
+      bullet.timeout = 5000 + 1000 * (0.5 - Math.random());;
       this.tank.player.game.addObject(bullet);
       if(this.fired)
         return;
@@ -77,6 +77,7 @@ Laser = function(tank){
       bullet.color = this.tank.player.color;
       bullet.trace = true;
       bullet.leaveTrace = function(){
+        var angle = bullet.angle;
         var thisbullet = bullet;
         var smoke = new Smoke(this.x, this.y, timeout=150, radius=thisbullet.radius, rspeed = 0);
         smoke.color = thisbullet.color;
@@ -84,7 +85,7 @@ Laser = function(tank){
           context.save();
           context.beginPath();
           context.translate(smoke.x, smoke.y);
-          context.rotate(thisbullet.angle);
+          context.rotate(angle);
           context.rect(-smoke.radius/2, -smoke.radius*5, smoke.radius, smoke.radius*10);
           context.fillStyle = thisbullet.color;
           context.fill();

@@ -12,8 +12,8 @@ Tank = function(player){
   this.x = 0;
   this.y = 0;
   this.angle = 2 * Math.PI * Math.random();
-  this.width = 20;
-  this.height = 30;
+  this.width = TankWidth;
+  this.height = TankHeight;
   this.weapon = new Gun(this);
   this.speed = TankSpeed;
 
@@ -151,8 +151,6 @@ Tank = function(player){
           bullets[i].player.score -= 1;
         else{
           bullets[i].player.score += 1;
-          if(bullets[i].player.score >= MaxScore)
-            this.player.game.stop();
         }
         // fancy explosion cloud
         new Cloud(this.player.game, this.x, this.y, color=this.color);

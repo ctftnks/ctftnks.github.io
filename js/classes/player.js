@@ -43,9 +43,11 @@ Player = function(color){
   // check if game should end
   this.kill = function(){
     this.game.n_playersAlive -= 1;
-    // if(this.game.n_playersAlive < 2){
-    //   setTimeout(function(){game.stop();}, TimeAfterLastKill)
-    // }
+    this.game.nkills++;
+    updateScores();
+    if(this.game.nkills >= MaxKillsPerGame){
+      setTimeout(function(){game.stop();}, TimeAfterLastKill)
+    }
     var self = this;
     this.game.intvls.push(setTimeout(function(){
       self.spawn();

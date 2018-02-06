@@ -17,6 +17,7 @@ Game = function(canvas){
   this.n_playersAlive = 0;
   this.t = 0;
   this.intvls = [];
+  this.nkills = 0;
 
   // add a player (class) to the game
   this.addPlayer = function(player){
@@ -64,6 +65,7 @@ Game = function(canvas){
       p.x = pos.x;
       p.y = pos.y;
       this.addObject(p);
+      this.intvls.push(setInterval(function(){p.delete();}, PowerUpFrequency*MaxPowerUps));
     }
   }
 

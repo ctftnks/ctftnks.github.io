@@ -5,8 +5,8 @@
 
 Map = function(canvas){
 
-  this.Nx = 16;
-  this.Ny = 16;
+  this.Nx = 10;
+  this.Ny = 10;
   this.dx = canvas.width / this.Nx;
   this.dy = canvas.height / this.Ny;
   this.tiles = [];

@@ -14,3 +14,9 @@ function newGame(){
   game.start();
   canvas.sync();
 }
+
+function updateScores(){
+  // for(player: players){
+  //
+  // }
+}
