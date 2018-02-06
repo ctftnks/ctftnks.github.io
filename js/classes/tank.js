@@ -27,6 +27,7 @@ Tank = function(player){
     context.fillStyle = this.player.color;
     context.fill();
     context.restore();
+    //TODO: draw PowerUp
   }
 
   // let player class check for key presses and move tank
