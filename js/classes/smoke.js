@@ -6,7 +6,7 @@ Smoke = function(x, y, timeout=300, radius=10, rspeed = 1){
   this.x = x;
   this.y = y;
   this.radius = radius;
-  this.color = "rgba(40, 40, 40, 0.4)";
+  this.color = "rgba(40, 40, 40, 0.3)";
   this.rspeed = rspeed;
   // lifetime of the smoke in [ms]
   this.timeout = timeout;
@@ -34,6 +34,12 @@ Smoke = function(x, y, timeout=300, radius=10, rspeed = 1){
 }
 
 // make a whole cloud of smoke
-Cloud = function(x, y, n=1, dr=10, timeout=1000, radius=10, rspeed=1){
-  // TODO
+Cloud = function(game, x, y, n=4, radius=10, rspeed=1){
+  for(i=0; i<n; i++){
+    var rx = x + radius * 2 * (Math.random() - 0.5);
+    var ry = y + radius * 2 * (Math.random() - 0.5);
+    var rr = radius + radius * (Math.random() - 0.5)
+    var smoke = new Smoke(rx, ry, 2000, 20, 0.3);
+    game.addObject(smoke);
+  }
 }

@@ -14,7 +14,7 @@ Tank = function(player){
   this.angle = 0;
   this.width = 20;
   this.height = 30;
-  this.weapon = new Laser(this);
+  this.weapon = new Gun(this);
   this.speed = TankSpeed;
 
   // draw the tank (rotated) on map
@@ -132,12 +132,16 @@ Tank = function(player){
     for(i=0; i<bullets.length; i++){
       if(this.intersects(bullets[i].x, bullets[i].y)){
         // Hit! kill the player, delete the tank and bullet
-        // increment score of the shooter
-        // TODO: fancy smoke like: new Smoke(radius=10, n=4);
-        this.player.kill();
-        this.delete();
         bullets[i].delete();
-        bullets[i].player.score += 1;
+        this.delete();
+        this.player.kill();
+        // increment score of the shooter
+        if(this.player.name == bullets[i].player.name)
+          bullets[i].player.score -= 1;
+        else
+          bullets[i].player.score += 1;
+        // fancy explosion cloud
+        new Cloud(this.player.game, this.x, this.y);
       }
     }
   }

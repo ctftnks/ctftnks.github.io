@@ -11,9 +11,8 @@ Zum Starten main.html öffnen.
 - Scoreboard
 - Powerups
   - die Granate
-  - der Laser
   - eine Lenkrakete, die das Labyrinth lösen kann
 - bessere Maps mit dem Maze Generation Algorithm
-- Effekte mit Rauch und Sound
+- Soundeffekte
 - Menü am Anfang zur Spielauswahl: wie viele Spieler?
 - Steuerung für mehr als zwei Spieler
