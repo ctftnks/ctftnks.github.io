@@ -10,3 +10,5 @@ BulletSpeed = 140;
 WallProbability = 0.4;
 
 TimeAfterLastKill = 2000;
+
+PowerUpFrequency = 3000

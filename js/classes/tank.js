@@ -120,12 +120,15 @@ Tank = function(player){
     // create a list of bullets that may hit the tank by looking
     // at the object lists of the tiles of the tanks corners
     bullets = [];
+    powerups = [];
     corners = this.corners();
     for(m=0; m<4; m++){
       tile = this.map.getTileByPos(corners[m].x, corners[m].y);
       for(j=0; j<tile.objs.length; j++){
         if(tile.objs[j].isBullet && tile.objs[j].age > 0)
           bullets.push(tile.objs[j]);
+        if(tile.objs[j].isPowerUp)
+          powerups.push(tile.objs[j]);
       }
     }
     // for each bullet in the list, check if it intersects the tank
@@ -142,6 +145,12 @@ Tank = function(player){
           bullets[i].player.score += 1;
         // fancy explosion cloud
         new Cloud(this.player.game, this.x, this.y);
+      }
+    }
+    for(i=0; i<powerups.length; i++){
+      if(this.intersects(powerups[i].x, powerups[i].y)){
+        powerups[i].apply(this);
+        powerups[i].delete();
       }
     }
   }
