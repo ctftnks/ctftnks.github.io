@@ -38,6 +38,7 @@ Game = function(canvas){
     this.loop = setInterval(function(){
       self.step();
     }, GameFrequency);
+    playSound("res/sound/gamestart.wav");
   }
 
   // a single step of the time-loop
@@ -76,6 +77,7 @@ Game = function(canvas){
     for(var i=0; i<this.intvls.length; i++)
       clearInterval(this.intvls[i]);
     console.log("Game stopped!");
+    newGame();
   }
 
 }

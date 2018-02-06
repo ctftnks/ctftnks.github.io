@@ -8,14 +8,13 @@ TankHeight = 45;
 
 TankSpeed = 140;
 TankTurnSpeed = 4;
-BulletSpeed = 200;
+BulletSpeed = 240;
 
-WallProbability = 0.4;
+WallProbability = 0.6;
 
 TimeAfterLastKill = 2000;
 
-PowerUpFrequency = 2000;
+PowerUpFrequency = 5000;
 MaxPowerUps = 8;
 
 MaxKillsPerGame = 5;
-MaxScore = 5;

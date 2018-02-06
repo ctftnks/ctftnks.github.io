@@ -142,6 +142,7 @@ Tank = function(player){
     for(var i=0; i<bullets.length; i++){
       if(this.intersects(bullets[i].x, bullets[i].y)){
         // Hit! kill the player, delete the tank and bullet
+        playSound("res/sound/kill.wav");
         bullets[i].delete();
         this.delete();
         this.player.kill();

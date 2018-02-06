@@ -26,6 +26,7 @@ Bullet = function(weapon){
   this.age = -300;
   // shall the bullet leave a trace of smoke?
   this.trace = false;
+  this.bounceSound = "res/sound/bounce.wav";
 
   // draw the bullet in the canvas
   this.draw = function(canvas, context){
@@ -63,6 +64,7 @@ Bullet = function(weapon){
       return;
     var wall = tile.getWall(this.x, this.y);
     if(wall != -1){
+      playSound(this.bounceSound);
       // there seems to be a wall: handle accordingly
       if(wall == "left" || wall == "right"){
         this.angle *= -1;
