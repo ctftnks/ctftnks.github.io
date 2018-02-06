@@ -39,10 +39,12 @@ MG = function(tank){
   this.tank = tank;
   this.canShoot = true;
   this.fired = false;
+  this.nshots = 30;
   this.shoot = function(){
-    if(this.canShoot){
-      if(Math.random() > 0.7) return;
+    if(this.nshots > 0){
+      if(Math.random() > 0.99) return;
       var bullet = new Bullet(this);
+      this.nshots--;
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
       bullet.radius = 2;
@@ -54,10 +56,9 @@ MG = function(tank){
         return;
       this.fired = true;
       var self = this;
-      setTimeout(function(){
-        self.canShoot = false;
-        setTimeout(function(){self.tank.defaultWeapon();}, 1500);
-      }, 1500);
+      this.tank.player.game.intvls.push(setTimeout(function(){
+        self.tank.defaultWeapon();
+      }, 1500));
     }
   }
 }
@@ -67,9 +68,8 @@ Laser = function(tank){
   this.image = "res/img/laser.png";
   this.tank = tank;
   this.canShoot = true;
-  this.fired = false;
   this.shoot = function(){
-    if(this.canShoot && !this.fired){
+    if(this.canShoot){
       var bullet = new Bullet(this);
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
@@ -81,16 +81,16 @@ Laser = function(tank){
         var thisbullet = bullet;
         var smoke = new Smoke(this.x, this.y, timeout=150, radius=thisbullet.radius, rspeed = 0);
         smoke.color = thisbullet.color;
-        smoke.draw = function(canvas, context){
-          context.save();
-          context.beginPath();
-          context.translate(smoke.x, smoke.y);
-          context.rotate(angle);
-          context.rect(-smoke.radius/2, -smoke.radius*5, smoke.radius, smoke.radius*10);
-          context.fillStyle = thisbullet.color;
-          context.fill();
-          context.restore();
-        }
+        // smoke.draw = function(canvas, context){
+        //   context.save();
+        //   context.beginPath();
+        //   context.translate(smoke.x, smoke.y);
+        //   context.rotate(angle);
+        //   context.rect(-smoke.radius/2, -smoke.radius*5, smoke.radius, smoke.radius*10);
+        //   context.fillStyle = thisbullet.color;
+        //   context.fill();
+        //   context.restore();
+        // }
         bullet.player.game.addObject(smoke);
       }
       bullet.speed = 14*BulletSpeed;
@@ -98,7 +98,6 @@ Laser = function(tank){
       bullet.timeout = 300;
       this.tank.player.game.addObject(bullet);
       this.canShoot = false;
-      this.fired = true;
       var self = this;
       setTimeout(function(){self.tank.defaultWeapon();}, 1500);
     }
@@ -116,10 +115,11 @@ Grenade = function(tank){
   this.bullet = undefined;
   this.nshrapnels = 30;
   this.shoot = function(){
-    if(this.canShoot && !this.fired){
+    if(!this.fired){
       var bullet = new Bullet(this);
       this.bullet = bullet;
       this.fired = true;
+      this.canShoot = false;
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
       bullet.radius = 6;
@@ -128,7 +128,6 @@ Grenade = function(tank){
       bullet.angle = this.tank.angle;
       bullet.timeout = 10000;
       this.tank.player.game.addObject(bullet);
-      this.canShoot = false;
       var self = this;
       this.intvl = setTimeout(function(){self.shoot();}, 10000);
     }
@@ -144,8 +143,8 @@ Grenade = function(tank){
         bullet.timeout = 800;
         bullet.checkCollision = function(x, y){}
         this.tank.player.game.addObject(bullet);
-        clearInterval(this.intvl);
       }
+      // clearInterval(this.intvl);
       var self = this;
       setTimeout(function(){self.tank.defaultWeapon();}, 1000);
       this.bullet.delete();

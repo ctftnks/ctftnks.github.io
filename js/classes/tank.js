@@ -96,8 +96,8 @@ Tank = function(player){
 
   // does the tank intersect with a point?
   this.intersects = function(x, y){
-    distx = this.x - x;
-    disty = this.y - y;
+    var distx = this.x - x;
+    var disty = this.y - y;
     // TODO: find a better algorithm, tank is currently approximated as a circle
     return Math.sqrt(Math.pow(distx, 2) + Math.pow(disty, 2)) < 0.5 * (this.width + this.height)
   }
@@ -105,15 +105,14 @@ Tank = function(player){
   // check for collision of the walls:
   // checks if there is a wall between the center of the tank and each corner
   this.checkWallCollision = function(){
-    tile = this.map.getTileByPos(this.x, this.y);
+    var tile = this.map.getTileByPos(this.x, this.y);
     if(tile == -1)
       return;
-    corners = this.corners();
+    var corners = this.corners();
     for(i=0; i<corners.length; i++){
       // TODO: check if there are walls between each corner
       // instead of corner and center --> better detection
-      wall = tile.getWall(corners[i].x, corners[i].y);
-      if(wall != -1)
+      if(tile.getWall(corners[i].x, corners[i].y) != -1)
         return true;
     }
     return false;
@@ -125,11 +124,11 @@ Tank = function(player){
   this.checkBulletCollision = function(){
     // create a list of bullets that may hit the tank by looking
     // at the object lists of the tiles of the tanks corners
-    bullets = [];
-    powerups = [];
-    corners = this.corners();
-    for(m=0; m<4; m++){
-      tile = this.map.getTileByPos(corners[m].x, corners[m].y);
+    var bullets = [];
+    var powerups = [];
+    var corners = this.corners();
+    for(var m=0; m<4; m++){
+      var tile = this.map.getTileByPos(corners[m].x, corners[m].y);
       if(tile != -1){
         for(j=0; j<tile.objs.length; j++){
           if(tile.objs[j].isBullet && tile.objs[j].age > 0)
@@ -140,23 +139,24 @@ Tank = function(player){
       }
     }
     // for each bullet in the list, check if it intersects the tank
-    for(i=0; i<bullets.length; i++){
+    for(var i=0; i<bullets.length; i++){
       if(this.intersects(bullets[i].x, bullets[i].y)){
         // Hit! kill the player, delete the tank and bullet
         bullets[i].delete();
         this.delete();
         this.player.kill();
+        // fancy explosion cloud
+        new Cloud(this.player.game, this.x, this.y, color=this.color);
         // increment score of the shooter
         if(this.player.name == bullets[i].player.name)
           bullets[i].player.score -= 1;
         else{
           bullets[i].player.score += 1;
         }
-        // fancy explosion cloud
-        new Cloud(this.player.game, this.x, this.y, color=this.color);
+        return;
       }
     }
-    for(i=0; i<powerups.length; i++){
+    for(var i=0; i<powerups.length; i++){
       if(this.intersects(powerups[i].x, powerups[i].y)){
         powerups[i].apply(this);
         powerups[i].delete();

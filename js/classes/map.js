@@ -20,15 +20,9 @@ Map = function(canvas){
 
   // get tile by x,y-position
   this.getTileByPos = function(x, y){
-    i = parseInt(x / this.dx);
-    j = parseInt(y / this.dy);
+    var i = parseInt(x / this.dx);
+    var j = parseInt(y / this.dy);
     return this.getTileByIndex(i, j);
-  }
-
-  // get tile relative to tile1 shifted by dx,dy steps
-  this.getNeighbor = function(tile1, dx, dy){
-    console.log("qq");
-    return this.getTileByPos(tile1.x+this.dx*dx, tile1.y+this.dy*dy);
   }
 
   // spatial sorting: clear tile object lists
@@ -39,7 +33,7 @@ Map = function(canvas){
 
   // spatial sorting: add object to corresponding tile list
   this.addObject = function(obj){
-    tile = this.getTileByPos(obj.x, obj.y);
+    var tile = this.getTileByPos(obj.x, obj.y);
     if(tile == -1)
       obj.delete();
     else
@@ -48,8 +42,8 @@ Map = function(canvas){
 
   // return a random free spawn point
   this.spawnPoint = function(){
-    rInt = parseInt(Math.random() * (this.Nx * this.Ny - 1));
-    tile = this.tiles[rInt];
+    var rInt = parseInt(Math.random() * (this.Nx * this.Ny - 1));
+    var tile = this.tiles[rInt];
     // if there is something else already, find another point
     if(tile.objs.length > 0)
       return this.spawnPoint();
@@ -134,8 +128,8 @@ Tile = function(i, j, map){
   // is there a wall between the tile and a point at x,y?
   // if so, what kind of wall is it?
   this.getWall = function(x, y){
-    distx = this.x - x;
-    disty = this.y - y;
+    var distx = this.x - x;
+    var disty = this.y - y;
     // walls to walls
     if(distx > 0 && this.walls.left)
       return "left";

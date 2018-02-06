@@ -46,8 +46,8 @@ Bullet = function(weapon){
     if(this.trace)
       this.leaveTrace();
     // translate
-    oldx = this.x;
-    oldy = this.y;
+    var oldx = this.x;
+    var oldy = this.y;
     this.x -= this.speed * Math.sin(-this.angle) * GameFrequency / 1000.;
     this.y -= this.speed * Math.cos(-this.angle) * GameFrequency / 1000.;
     // check for wall collisions
@@ -58,10 +58,10 @@ Bullet = function(weapon){
   // tests whether last timestep put the bullet in a new tile
   // and if old and new tile are separated by a wall
   this.checkCollision = function(oldx, oldy){
-    tile = this.map.getTileByPos(oldx, oldy);
+    var tile = this.map.getTileByPos(oldx, oldy);
     if(tile == -1)
       return;
-    wall = tile.getWall(this.x, this.y);
+    var wall = tile.getWall(this.x, this.y);
     if(wall != -1){
       // there seems to be a wall: handle accordingly
       if(wall == "left" || wall == "right"){

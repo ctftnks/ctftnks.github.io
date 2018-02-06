@@ -27,7 +27,7 @@ Player = function(color){
   this.spawn = function(){
     this.tank = new Tank(this);
     this.tank.map = this.game.map;
-    pos = this.game.map.spawnPoint();
+    var pos = this.game.map.spawnPoint();
     this.tank.x = pos.x;
     this.tank.y = pos.y;
     this.game.addObject(this.tank);
