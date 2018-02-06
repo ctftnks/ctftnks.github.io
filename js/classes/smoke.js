@@ -34,12 +34,14 @@ Smoke = function(x, y, timeout=300, radius=10, rspeed = 1){
 }
 
 // make a whole cloud of smoke
-Cloud = function(game, x, y, n=4, radius=10, rspeed=1){
+Cloud = function(game, x, y, n=4, radius=20, rspeed=0.3, color=-1){
   for(i=0; i<n; i++){
     var rx = x + radius * 2 * (Math.random() - 0.5);
     var ry = y + radius * 2 * (Math.random() - 0.5);
     var rr = radius + radius * (Math.random() - 0.5)
-    var smoke = new Smoke(rx, ry, 2000, 20, 0.3);
+    var smoke = new Smoke(rx, ry, 2000, radius, rspeed);
+    if(color != -1)
+      smoke.color = color;
     game.addObject(smoke);
   }
 }

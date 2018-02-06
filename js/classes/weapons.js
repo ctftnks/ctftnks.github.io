@@ -3,6 +3,7 @@
 Weapon = function(tank){
   this.tank = tank;
   this.canShoot = true;
+  this.image = "";
   this.shoot = function(){
 
   }
@@ -11,7 +12,7 @@ Weapon = function(tank){
 // the normal, default gun
 Gun = function(tank){
   Weapon.call(this);
-  this.image = "";
+  this.image = "res/img/gun.png";
   this.tank = tank;
   this.canShoot = true;
 
@@ -40,7 +41,7 @@ MG = function(tank){
   this.fired = false;
   this.shoot = function(){
     if(this.canShoot){
-      if(Math.random() > 0.5) return;
+      if(Math.random() > 0.7) return;
       var bullet = new Bullet(this);
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
@@ -76,16 +77,14 @@ Laser = function(tank){
       bullet.color = this.tank.player.color;
       bullet.trace = true;
       bullet.leaveTrace = function(){
-        var angle = bullet.angle
         var thisbullet = bullet;
         var smoke = new Smoke(this.x, this.y, timeout=150, radius=thisbullet.radius, rspeed = 0);
-        // TODO: var color
         smoke.color = thisbullet.color;
         smoke.draw = function(canvas, context){
           context.save();
           context.beginPath();
           context.translate(smoke.x, smoke.y);
-          context.rotate(angle);
+          context.rotate(thisbullet.angle);
           context.rect(-smoke.radius/2, -smoke.radius*5, smoke.radius, smoke.radius*10);
           context.fillStyle = thisbullet.color;
           context.fill();
@@ -114,7 +113,7 @@ Grenade = function(tank){
   this.fired = false;
   this.exploded = false;
   this.bullet = undefined;
-  this.nshrapnels = 20;
+  this.nshrapnels = 30;
   this.shoot = function(){
     if(this.canShoot && !this.fired){
       var bullet = new Bullet(this);
@@ -122,28 +121,29 @@ Grenade = function(tank){
       this.fired = true;
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
-      bullet.radius = 8;
-      bullet.color = this.tank.player.color;
+      bullet.radius = 6;
+      bullet.color = "#000";
       bullet.speed = BulletSpeed;
       bullet.angle = this.tank.angle;
       bullet.timeout = 10000;
       this.tank.player.game.addObject(bullet);
       this.canShoot = false;
       var self = this;
-      setTimeout(function(){self.shoot();}, 10000);
+      this.intvl = setTimeout(function(){self.shoot();}, 10000);
     }
-    if(this.fired && this.bullet.age > 0 && !this.exploded){
+    if(this.fired && this.bullet.age > 300 && !this.exploded){
       this.exploded = true;
       for(i=0; i<this.nshrapnels; i++){
         var bullet = new Bullet(this);
         bullet.x = this.bullet.x;
         bullet.y = this.bullet.y;
         bullet.radius = 2;
-        bullet.speed = 2*BulletSpeed;
+        bullet.speed = 2 * BulletSpeed * (0.8 + 0.4 * Math.random());
         bullet.angle = 2 * Math.PI * Math.random();
-        bullet.timeout = 3000;
+        bullet.timeout = 800;
         bullet.checkCollision = function(x, y){}
         this.tank.player.game.addObject(bullet);
+        clearInterval(this.intvl);
       }
       var self = this;
       setTimeout(function(){self.tank.defaultWeapon();}, 1000);

@@ -23,13 +23,33 @@ Player = function(color){
     if (Key.isDown(this.keys[4])) this.tank.shoot();
   }
 
+  // spawn at some point
+  this.spawn = function(){
+    this.tank = new Tank(this);
+    this.tank.map = this.game.map;
+    pos = this.game.map.spawnPoint();
+    this.tank.x = pos.x;
+    this.tank.y = pos.y;
+    this.game.addObject(this.tank);
+    this.game.n_playersAlive += 1;
+    // this.game.addObject(new Smoke(this.x, this.y));
+    var self = this;
+    this.game.intvls.push(setTimeout(function(){
+      new Cloud(self.game, self.tank.x, self.tank.y, n=4, radius=20, rspeed=2);
+    }, 10));
+  }
+
   // kill the player, called when tank is shot
   // check if game should end
   this.kill = function(){
     this.game.n_playersAlive -= 1;
-    if(this.game.n_playersAlive < 2){
-      setTimeout(function(){game.stop();}, TimeAfterLastKill)
-    }
+    // if(this.game.n_playersAlive < 2){
+    //   setTimeout(function(){game.stop();}, TimeAfterLastKill)
+    // }
+    var self = this;
+    this.game.intvls.push(setTimeout(function(){
+      self.spawn();
+    }, 3000));
   }
 
 }

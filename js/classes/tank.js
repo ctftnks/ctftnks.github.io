@@ -14,7 +14,7 @@ Tank = function(player){
   this.angle = 2 * Math.PI * Math.random();
   this.width = 20;
   this.height = 30;
-  this.weapon = new MG(this);
+  this.weapon = new Gun(this);
   this.speed = TankSpeed;
 
   // draw the tank (rotated) on map
@@ -33,7 +33,6 @@ Tank = function(player){
     }
 
     context.restore();
-    //TODO: draw PowerUp
   }
 
   // let player class check for key presses and move tank
@@ -131,11 +130,13 @@ Tank = function(player){
     corners = this.corners();
     for(m=0; m<4; m++){
       tile = this.map.getTileByPos(corners[m].x, corners[m].y);
-      for(j=0; j<tile.objs.length; j++){
-        if(tile.objs[j].isBullet && tile.objs[j].age > 0)
+      if(tile != -1){
+        for(j=0; j<tile.objs.length; j++){
+          if(tile.objs[j].isBullet && tile.objs[j].age > 0)
           bullets.push(tile.objs[j]);
-        if(tile.objs[j].isPowerUp)
+          if(tile.objs[j].isPowerUp)
           powerups.push(tile.objs[j]);
+        }
       }
     }
     // for each bullet in the list, check if it intersects the tank
@@ -148,10 +149,13 @@ Tank = function(player){
         // increment score of the shooter
         if(this.player.name == bullets[i].player.name)
           bullets[i].player.score -= 1;
-        else
+        else{
           bullets[i].player.score += 1;
+          if(bullets[i].player.score >= MaxScore)
+            this.player.game.stop();
+        }
         // fancy explosion cloud
-        new Cloud(this.player.game, this.x, this.y);
+        new Cloud(this.player.game, this.x, this.y, color=this.color);
       }
     }
     for(i=0; i<powerups.length; i++){

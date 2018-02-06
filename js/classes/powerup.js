@@ -55,9 +55,9 @@ SpeedBonus = function(){
   PowerUp.call(this);
   this.image = "res/img/speed.png";
   this.apply = function(tank){
-    tank.speed *= 2;
+    tank.speed *= 1.6;
     var self = tank;
-    setTimeout(function(){self.speed /= 2;}, 2000);
+    setTimeout(function(){self.speed /= 1.6;}, 2000);
   }
 }
 
