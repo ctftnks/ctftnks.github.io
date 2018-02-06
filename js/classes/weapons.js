@@ -64,9 +64,9 @@ Laser = function(tank){
       bullet.radius = 2;
       bullet.color = this.tank.player.color;
       bullet.trace = true;
-      var angle = bullet.angle
       bullet.leaveTrace = function(){
-        var smoke = new Smoke(this.x, this.y, timeout=1000, radius=bullet.radius, rspeed = 0);
+        var angle = bullet.angle
+        var smoke = new Smoke(this.x, this.y, timeout=200, radius=bullet.radius, rspeed = 0);
         smoke.color = bullet.color;
         smoke.draw = function(canvas, context){
           context.save();
@@ -82,7 +82,7 @@ Laser = function(tank){
       }
       bullet.speed = 10*BulletSpeed;
       bullet.angle = this.tank.angle;
-      bullet.timeout = 1000;
+      bullet.timeout = 200;
       this.tank.player.game.addObject(bullet);
       this.canShoot = false;
     }
