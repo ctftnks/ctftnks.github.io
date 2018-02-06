@@ -1,7 +1,7 @@
 
 
 FrameFrequency = 30;
-GameFrequency = 30;
+GameFrequency = 20;
 
 TankSpeed = 80;
 TankTurnSpeed = 4;

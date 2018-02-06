@@ -54,11 +54,8 @@ MG = function(tank){
 
 // yay, lasers!
 Laser = function(tank){
-
   this.tank = tank;
   this.canShoot = true;
-  this.numberOfShots = 30;
-
   this.shoot = function(){
     if(this.canShoot){
       bullet = new Bullet(this);
@@ -66,16 +63,28 @@ Laser = function(tank){
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
       bullet.radius = 2;
       bullet.color = this.tank.player.color;
-      bullet.speed = 5*BulletSpeed;
-      bullet.angle = this.tank.angle + 0.1 * (0.5 - Math.random());
-      bullet.timeout = 5000;
-      this.tank.player.game.addObject(bullet);
-      if(this.numberOfShots-- < 0){
-        this.tank.defaultWeapon();
-        this.tank.weapon.canShoot = false;
-        var self = this;
-        setTimeout(function(){self.tank.weapon.canShoot = true;}, 1000);
+      bullet.trace = true;
+      var angle = bullet.angle
+      bullet.leaveTrace = function(){
+        var smoke = new Smoke(this.x, this.y, timeout=1000, radius=bullet.radius, rspeed = 0);
+        smoke.color = bullet.color;
+        smoke.draw = function(canvas, context){
+          context.save();
+          context.beginPath();
+          context.translate(smoke.x, smoke.y);
+          context.rotate(angle);
+          context.rect(-smoke.radius/2, -smoke.radius*5, smoke.radius, smoke.radius*10);
+          context.fillStyle = bullet.color;
+          context.fill();
+          context.restore();
+        }
+        bullet.player.game.addObject(smoke);
       }
+      bullet.speed = 10*BulletSpeed;
+      bullet.angle = this.tank.angle;
+      bullet.timeout = 1000;
+      this.tank.player.game.addObject(bullet);
+      this.canShoot = false;
     }
   }
 }

@@ -23,11 +23,13 @@ Bullet = function(weapon){
   this.timeout = 5000;
   // bullet age starts at negative value, so it doesn't instantly kill the shooter
   this.age = -300;
+  // shall the bullet leave a trace of smoke?
+  this.trace = false;
 
   // draw the bullet in the canvas
   this.draw = function(canvas, context){
     context.beginPath();
-    context.fillStyle = "#000";
+    context.fillStyle = this.color;
     context.arc(this.x, this.y, this.radius, 0, Math.PI*2, true);
     context.closePath();
     context.fill();
@@ -39,13 +41,16 @@ Bullet = function(weapon){
     this.age += GameFrequency;
     if(this.age > this.timeout)
       this.delete();
+    // leave a trace of smoke
+    if(this.trace)
+      this.leaveTrace();
     // translate
     oldx = this.x;
     oldy = this.y;
     this.x -= this.speed * Math.sin(-this.angle) * GameFrequency / 1000.;
     this.y -= this.speed * Math.cos(-this.angle) * GameFrequency / 1000.;
     // check for wall collisions
-      this.checkCollision(oldx, oldy);
+    this.checkCollision(oldx, oldy);
   }
 
   // check for collision with walls, handle them
@@ -67,6 +72,11 @@ Bullet = function(weapon){
         this.y = 2*oldy - this.y
       }
     }
+  }
+
+  // leave a trace of smoke
+  this.leaveTrace = function(){
+    this.player.game.addObject(new Smoke(this.x, this.y, timeout=300, radius=this.radius, rspeed = 1));
   }
 
   // delete bullet from map, weapon may shoot again
