@@ -19,6 +19,10 @@ function newGame(){
 }
 
 function addPlayer(){
+  if(players.length >= keymaps.length){
+    keymaps.push(keymaps[0].slice());
+    console.log("asfs");
+  }
   players.push(new Player());
   updateMenu();
 }

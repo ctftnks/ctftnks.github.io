@@ -94,8 +94,9 @@ var keymaps = [
   [Key.F, Key.C, Key.V, Key.B, Key.X],
   [Key.Z, Key.G, Key.H, Key.J, Key.T],
   [Key.K, Key.M, Key.COMMA, Key.PERIOD, Key.N],
-  [Key.N4, Key.E, Key.R, Key.N5, Key.N3],
-  [Key.N8, Key.U, Key.I, Key.N9, Key.N7]
+  [Key.R4, Key.E, Key.R, Key.R5, Key.R3],
+  [Key.R8, Key.U, Key.I, Key.R9, Key.R7],
+  [Key.N8, Key.N4, Key.N5, Key.N6, Key.N7]
 ]
 
 // event listeners
@@ -240,16 +241,16 @@ var keyLabels = [
   "CONTEXT_MENU", // [93]
   "", // [94]
   "SLEEP", // [95]
-  "NUMPAD0", // [96]
-  "NUMPAD1", // [97]
-  "NUMPAD2", // [98]
-  "NUMPAD3", // [99]
-  "NUMPAD4", // [100]
-  "NUMPAD5", // [101]
-  "NUMPAD6", // [102]
-  "NUMPAD7", // [103]
-  "NUMPAD8", // [104]
-  "NUMPAD9", // [105]
+  "NUM0", // [96]
+  "NUM1", // [97]
+  "NUM2", // [98]
+  "NUM3", // [99]
+  "NUM4", // [100]
+  "NUM5", // [101]
+  "NUM6", // [102]
+  "NUM7", // [103]
+  "NUM8", // [104]
+  "NUM9", // [105]
   "MULTIPLY", // [106]
   "ADD", // [107]
   "SEPARATOR", // [108]

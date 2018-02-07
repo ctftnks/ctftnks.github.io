@@ -27,7 +27,7 @@ playercolors = [
 Player = function(){
 
   this.id = nplayers++;
-  this.name = "Player " + this.id;
+  this.name = "Player " + (this.id+1);
   this.color = playercolors[this.id];
   this.game = undefined;
   this.score = 0;
