@@ -79,7 +79,9 @@ Laser = function(tank){
       playSound("res/sound/laser.wav");
       var bullet = new Bullet(this);
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
-      bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
+      bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2.;
+      bullet.speed = 14*BulletSpeed;
+      bullet.angle = this.tank.angle;
       bullet.radius = 2;
       bullet.color = this.tank.player.color;
       bullet.trace = true;
@@ -87,23 +89,22 @@ Laser = function(tank){
       bullet.leaveTrace = function(){
         var angle = bullet.angle;
         var thisbullet = bullet;
-        var smoke = new Smoke(this.x, this.y, timeout=150, radius=thisbullet.radius, rspeed = 0);
+        var smoke = new Smoke(this.x, this.y, timeout=350, radius=thisbullet.radius, rspeed = 0);
         smoke.color = thisbullet.color;
-        // smoke.draw = function(canvas, context){
-        //   context.save();
-        //   context.beginPath();
-        //   context.translate(smoke.x, smoke.y);
-        //   context.rotate(angle);
-        //   context.rect(-smoke.radius/2, -smoke.radius*5, smoke.radius, smoke.radius*10);
-        //   context.fillStyle = thisbullet.color;
-        //   context.fill();
-        //   context.restore();
-        // }
+        smoke.draw = function(canvas, context){
+          context.save();
+          context.beginPath();
+          context.translate(smoke.x, smoke.y);
+          context.rotate(angle);
+          context.rect(-smoke.radius/2, -smoke.radius*5, smoke.radius, smoke.radius*10);
+          context.fillStyle = thisbullet.color;
+          context.fill();
+          context.restore();
+        }
         bullet.player.game.addObject(smoke);
       }
-      bullet.speed = 14*BulletSpeed;
-      bullet.angle = this.tank.angle;
       bullet.timeout = 300;
+      bullet.age = 0;
       this.tank.player.game.addObject(bullet);
       this.canShoot = false;
       this.fired = true;
@@ -140,12 +141,11 @@ Grenade = function(tank){
       bullet.delete = function(){
         self.shoot();
         bullet.deleted = true;
-        self.tank.defaultWeapon();
       }
       this.tank.player.game.addObject(bullet);
       this.intvl = setTimeout(function(){self.shoot();}, 10000);
     }
-    if(this.fired && this.bullet.age > 30 && !this.exploded){
+    if(this.fired && this.bullet.age > 300 && !this.exploded){
       this.exploded = true;
       playSound("res/sound/grenade.wav");
       for(i=0; i<this.nshrapnels; i++){
@@ -160,9 +160,11 @@ Grenade = function(tank){
         shrapnel.checkCollision = function(x, y){}
         this.tank.player.game.addObject(shrapnel);
       }
-      // clearInterval(this.intvl);
+      clearInterval(this.intvl);
       var self = this;
-      setTimeout(function(){self.tank.defaultWeapon();}, 1000);
+      this.tank.player.game.intvls.push(setTimeout(function(){
+        self.tank.defaultWeapon();
+      }, 1000));
       this.bullet.delete();
     }
   }

@@ -92,7 +92,7 @@ var Key = {
 //   [Key.I, Key.J, Key.K, Key.L, Key.U]
 // ]
 var keymaps = [
-  [Key.UP, Key.LEFT, Key.DOWN, Key.RIGHT, Key.CTRL],
+  [Key.UP, Key.LEFT, Key.DOWN, Key.RIGHT, Key.SPACE],
   [Key.W, Key.A, Key.S, Key.D, Key.Q],
   [Key.F, Key.C, Key.V, Key.B, Key.X],
   [Key.Z, Key.G, Key.H, Key.J, Key.T],

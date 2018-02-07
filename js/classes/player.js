@@ -46,7 +46,7 @@ Player = function(color){
     this.game.nkills++;
     updateScores();
     if(this.game.nkills >= MaxKillsPerGame){
-      setTimeout(function(){game.stop();}, TimeAfterLastKill)
+      this.game.intvls.push(setTimeout(function(){game.stop();}, TimeAfterLastKill));
     }
     var self = this;
     this.game.intvls.push(setTimeout(function(){

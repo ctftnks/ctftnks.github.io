@@ -9,10 +9,7 @@ Zum Starten main.html öffnen.
 
 # TODO:
 - Scoreboard
-- Powerups
-  - die Granate
-  - eine Lenkrakete, die das Labyrinth lösen kann
+- mehr PowerUps
 - bessere Maps mit dem Maze Generation Algorithm
-- Soundeffekte
 - Menü am Anfang zur Spielauswahl: wie viele Spieler?
-- Steuerung für mehr als zwei Spieler
+- Bugfix: Nx und Ny irgendwo vertauscht

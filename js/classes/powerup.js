@@ -60,7 +60,9 @@ SpeedBonus = function(){
   this.apply = function(tank){
     tank.speed *= 1.3;
     var self = tank;
-    setTimeout(function(){self.speed /= 1.3;}, 4000);
+    tank.player.game.intvls.push(setTimeout(function(){
+      self.speed /= 1.3;
+    }, 4000));
   }
 }
 

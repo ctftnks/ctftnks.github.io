@@ -96,10 +96,11 @@ Tank = function(player){
 
   // does the tank intersect with a point?
   this.intersects = function(x, y){
+    // center
     var distx = this.x - x;
     var disty = this.y - y;
     // TODO: find a better algorithm, tank is currently approximated as a circle
-    return Math.sqrt(Math.pow(distx, 2) + Math.pow(disty, 2)) < 0.5 * (this.width + this.height)
+    return Math.sqrt(Math.pow(distx, 2) + Math.pow(disty, 2)) < 0.5 * (this.height)
   }
 
   // check for collision of the walls:
@@ -141,11 +142,9 @@ Tank = function(player){
     // for each bullet in the list, check if it intersects the tank
     for(var i=0; i<bullets.length; i++){
       if(this.intersects(bullets[i].x, bullets[i].y)){
-        // Hit! kill the player, delete the tank and bullet
+        // Hit!
         playSound("res/sound/kill.wav");
         bullets[i].delete();
-        this.delete();
-        this.player.kill();
         // fancy explosion cloud
         new Cloud(this.player.game, this.x, this.y, color=this.color);
         // increment score of the shooter
@@ -154,6 +153,11 @@ Tank = function(player){
         else{
           bullets[i].player.score += 1;
         }
+        // kill the player, delete the tank and bullet
+        playSound("res/sound/kill.wav");
+        bullets[i].delete();
+        this.delete();
+        this.player.kill();
         return;
       }
     }

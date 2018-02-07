@@ -41,12 +41,12 @@ Map = function(canvas){
   }
 
   // return a random free spawn point
-  this.spawnPoint = function(){
+  this.spawnPoint = function(tries = 0){
     var rInt = parseInt(Math.random() * (this.Nx * this.Ny - 1));
     var tile = this.tiles[rInt];
     // if there is something else already, find another point
-    if(tile.objs.length > 0)
-      return this.spawnPoint();
+    if(tile.objs.length > 0 && tries++ < this.Nx * this.Ny)
+      return this.spawnPoint(tries);
     return {x: tile.x + this.dx / 2, y: tile.y + this.dy / 2};
   }
 
