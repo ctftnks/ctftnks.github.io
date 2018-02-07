@@ -45,9 +45,9 @@ Game = function(canvas){
   // a single step of the time-loop
   this.step = function(){
     this.t += GameFrequency;
+    if(!this.paused){
     // remove deleted objects and
     // initiate spatial sorting of objects within the map class
-    if(!this.paused){
       this.map.clearObjectLists();
       var newObjs = [];
       for(var i=0; i<this.objs.length; i++)
@@ -59,16 +59,24 @@ Game = function(canvas){
       this.objs = newObjs;
       for(var i=0; i<this.objs.length; i++)
         this.objs[i].step();
+      // add random PowerUp
+      if(this.t % PowerUpFrequency == 0){
+        var p = getRandomPowerUp();
+        var pos = this.map.spawnPoint();
+        p.x = pos.x;
+        p.y = pos.y;
+        this.addObject(p);
+        this.intvls.push(setInterval(function(){p.delete();}, PowerUpFrequency*MaxPowerUps));
+      }
     }
-    // add random PowerUp
-    if(this.t % PowerUpFrequency == 0){
-      var p = getRandomPowerUp();
-      var pos = this.map.spawnPoint();
-      p.x = pos.x;
-      p.y = pos.y;
-      this.addObject(p);
-      this.intvls.push(setInterval(function(){p.delete();}, PowerUpFrequency*MaxPowerUps));
-    }
+  }
+
+  // pause the game
+  this.pause = function(){
+    this.paused = true;
+    // for(var i=0; i<this.intvls.length; i++)
+    //   clearInterval(this.intvls[i]);
+    console.log("Game paused!");
   }
 
   // stop the game

@@ -2,28 +2,60 @@
 // generate canvas object and players list
 window.onload = function(){
   canvas = new Canvas("gameFrame");
-  // TODO: add material colors
-  players = [new Player("#F00"), new Player("#0F0"), new Player("#00F")];
-  newGame();
+  players = [new Player(), new Player()];
+  game = newGame();
+  setTimeout(function(){game.pause();}, 1000);
+  updateMenu();
 };
 
 // start a new round
 function newGame(){
   game = new Game(canvas);
-  for(i=0; i<players.length; i++)
+  for(var i=0; i<players.length; i++)
     game.addPlayer(players[i]);
   game.start();
   canvas.sync();
+  return game;
 }
 
 function updateScores(){
-  scoreBoard = document.getElementById("scoreBoard");
+  var scoreBoard = document.getElementById("scoreBoard");
   scoreBoard.innerHTML = "";
+
+  players.sort(function(a, b){
+    return a.score < b.score;
+  } );
+
   for(var i=0; i<players.length; i++){
-    scoreBoard.innerHTML += "<span style='color:"+players[i].color+";>";
-    scoreBoard.innerHTML += players[i].name;
-    scoreBoard.innerHTML += "</span>&nbsp;&nbsp;&nbsp;";
-    scoreBoard.innerHTML += players[i].score;
-    scoreBoard.innerHTML += "<br>";
+    var entry = "";
+    entry += "<div class='entry'>";
+    entry += "<span class='name' style='color:"+players[i].color+";''>";
+    entry += players[i].name;
+    entry += "</span><span class='score'>";
+    entry += players[i].score;
+    entry += "</span></div>";
+    scoreBoard.innerHTML += entry;
+  }
+}
+
+
+function openMenu(){
+  document.getElementById("menu").style.display = "block";
+}
+function closeMenu(){
+  document.getElementById("menu").style.display = "none";
+}
+function updateMenu(){
+  var pmen = document.getElementById("playersMenu");
+  playersMenu.innerHTML = "";
+  for(var i=0; i<players.length; i++){
+    var entry = "";
+    entry += "<div class='entry'>";
+    entry += "<button class='name' style='color:"+players[i].color+";''>";
+    entry += players[i].name;
+    entry += "</button>";
+    entry += editableKeymap(players[i].id);
+    entry += "</div>";
+    playersMenu.innerHTML += entry;
   }
 }

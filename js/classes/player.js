@@ -3,12 +3,32 @@
 // and the tank to be controlled
 
 nplayers = 0;
+playercolors = [
+  "#DA1918",  // red
+  "#31B32B",  // green
+  "#1F87FF",  // blue
+  "#F4641D",  // orange
+  "#21B19B",  // teal
+  "#A020F0",  // purple
+  "#713B17",  // brown
+  "#E7E52C"  // yellow
+]
 
-Player = function(color){
+// playercolors = [
+//   "#F44336",  // red
+//   "#4CAF50",  // green
+//   "#2196F3",  // blue
+//   "#FF9800",  // orange
+//   "#009688",  // teal
+//   "#9C27B0",  // purple
+//   "#FFC107"  // amber
+// ]
+
+Player = function(){
 
   this.id = nplayers++;
   this.name = "Player " + this.id;
-  this.color = color;
+  this.color = playercolors[this.id];
   this.game = undefined;
   this.score = 0;
   this.keys = keymaps[this.id];

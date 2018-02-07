@@ -58,10 +58,10 @@ SpeedBonus = function(){
   PowerUp.call(this);
   this.image = "res/img/speed.png";
   this.apply = function(tank){
-    tank.speed *= 1.3;
+    tank.speed *= 1.2;
     var self = tank;
     tank.player.game.intvls.push(setTimeout(function(){
-      self.speed /= 1.3;
+      self.speed /= 1.2;
     }, 4000));
   }
 }

@@ -1,3 +1,7 @@
+body{
+  font-family: sans-serif;
+}
+
 #gameFrame{
   position: fixed;
   top: 5%;
@@ -7,10 +11,83 @@
   border: solid 2px #444;
 }
 
-#scoreBoard{
+#sideBar{
   position: fixed;
   top: 5%;
   height: 90%;
   left: 0;
-  width: 80%;
+  width: 10%;
+  font-weight: bold;
+}
+
+#sideBar .entry{
+  position: relative;
+  width: calc(100%-6px);
+  border-bottom: solid 1px #CCC;
+  padding: 8px;
+  margin-left: 6px;
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+#scoreBoard .entry .name{
+  position: relative;
+  left: 6px;
+  width: 1.5em;
+}
+
+#scoreBoard .entry .score{
+  position: absolute;
+  right: 4px;
+  width: 1em;
+  text-align: center;
+}
+
+.clickable{
+  cursor: pointer;
+}
+
+#menu{
+  position: fixed;
+  top: 10%;
+  left: 20%;
+  min-height: 20%;
+  width: 60%;
+  border: solid 1px #BBB;
+  background-color: #FFF;
+  box-shadow: 0px 0px 13px 0px rgba(94,94,94,1);
+  text-align: center;
+}
+
+#playersMenu{
+  position: relative;
+  width: 90%;
+  left: 0px;
+}
+
+#playersMenu .name{
+  display: inline-block;
+  width: 120px;
+  margin-right: 20px;
+}
+
+button{
+  cursor: pointer;
+  padding: 6px;
+  background: #FBFBFB;
+  border: solid 1px #DDD;
+  box-shadow: 0px 0px 1px 0px rgba(94,94,94,0.06);
+}
+
+.keyEditButton{
+  margin: 2px;
+  width: 60px;
+}
+
+.keyEditButton:focus{
+  background: #E7E52C;
+}
+
+h1, h2{
+  text-align: center;
 }

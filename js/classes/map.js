@@ -27,7 +27,7 @@ Map = function(canvas){
 
   // spatial sorting: clear tile object lists
   this.clearObjectLists = function(){
-    for(i=0; i<this.tiles.length; i++)
+    for(var i=0; i<this.tiles.length; i++)
       this.tiles[i].objs = [];
   }
 
@@ -53,20 +53,20 @@ Map = function(canvas){
   // draw the map
   // TODO: draw map in separate canvas that does not need to be updated?
   this.draw = function(canvas, context){
-    for(i=0; i<this.tiles.length; i++)
+    for(var i=0; i<this.tiles.length; i++)
       this.tiles[i].draw(canvas, context);
   }
 
   // Tile initialization
   // create discrete tiles
-  for(i=0; i<this.Nx; i++){
-    for(j=0; j<this.Ny; j++){
+  for(var i=0; i<this.Nx; i++){
+    for(var j=0; j<this.Ny; j++){
       this.tiles.push(new Tile(i, j, this));
     }
   }
   // link neighboring tiles
-  for(i=0; i<this.Nx; i++){
-    for(j=0; j<this.Ny; j++){
+  for(var i=0; i<this.Nx; i++){
+    for(var j=0; j<this.Ny; j++){
       this.tiles[i*this.Ny+j].neighbors = {
         left: this.getTileByIndex(i-1, j),
         right: this.getTileByIndex(i+1, j),
@@ -76,11 +76,11 @@ Map = function(canvas){
     }
   }
   // generate walls at walls
-  for(i=0; i<this.Nx; i++){
+  for(var i=0; i<this.Nx; i++){
     this.tiles[i*this.Ny].walls.top = true;
     this.tiles[i*this.Ny + this.Nx-1].walls.bottom = true;
   }
-  for(j=0; j<this.Ny; j++){
+  for(var j=0; j<this.Ny; j++){
     this.tiles[j].walls.left = true;
     this.tiles[(this.Nx-1)*this.Ny+j].walls.right = true;
   }

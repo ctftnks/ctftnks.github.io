@@ -19,7 +19,28 @@
 		<script src="js/classes/weapons.js" type="text/javascript"></script>
 	</head>
 	<body>
-		<div id="scoreBoard"></div>
+		<div id="sideBar">
+			<div class="entry">
+				<b>Scores</b>
+			</div>
+			<div id="scoreBoard"></div>
+			<div class="entry clickable" onclick="openMenu()">
+				Optionen
+			</div>
+		</div>
 		<canvas id="gameFrame"></canvas>
+
+		<div id="menu">
+			<h1>AZ Tank Game</h1>
+
+			<div id="playersMenu">
+
+			</div>
+			<br><br>
+			<button onclick="closeMenu();newGame();">Add Player</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<button onclick="closeMenu();newGame();">Start Game</button>
+			<br><br><br>
+		</div>
+
 	</body>
 </html>

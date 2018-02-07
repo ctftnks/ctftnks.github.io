@@ -110,7 +110,7 @@ Tank = function(player){
     if(tile == -1)
       return;
     var corners = this.corners();
-    for(i=0; i<corners.length; i++){
+    for(var i=0; i<corners.length; i++){
       // TODO: check if there are walls between each corner
       // instead of corner and center --> better detection
       if(tile.getWall(corners[i].x, corners[i].y) != -1)
@@ -131,7 +131,7 @@ Tank = function(player){
     for(var m=0; m<4; m++){
       var tile = this.map.getTileByPos(corners[m].x, corners[m].y);
       if(tile != -1){
-        for(j=0; j<tile.objs.length; j++){
+        for(var j=0; j<tile.objs.length; j++){
           if(tile.objs[j].isBullet && tile.objs[j].age > 0)
           bullets.push(tile.objs[j]);
           if(tile.objs[j].isPowerUp)

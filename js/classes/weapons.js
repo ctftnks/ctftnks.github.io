@@ -62,7 +62,8 @@ MG = function(tank){
       this.fired = true;
       var self = this;
       this.tank.player.game.intvls.push(setTimeout(function(){
-        self.tank.defaultWeapon();
+        if(self.tank.weapon==self)
+          self.tank.defaultWeapon();
       }, 2500));
     }
   }
@@ -89,14 +90,14 @@ Laser = function(tank){
       bullet.leaveTrace = function(){
         var angle = bullet.angle;
         var thisbullet = bullet;
-        var smoke = new Smoke(this.x, this.y, timeout=350, radius=thisbullet.radius, rspeed = 0);
+        var smoke = new Smoke(this.x, this.y, timeout=500, radius=thisbullet.radius, rspeed = 0);
         smoke.color = thisbullet.color;
         smoke.draw = function(canvas, context){
           context.save();
           context.beginPath();
           context.translate(smoke.x, smoke.y);
           context.rotate(angle);
-          context.rect(-smoke.radius/2, -smoke.radius*5, smoke.radius, smoke.radius*10);
+          context.rect(-smoke.radius/2, -smoke.radius*2, smoke.radius, smoke.radius*4);
           context.fillStyle = thisbullet.color;
           context.fill();
           context.restore();
@@ -109,7 +110,10 @@ Laser = function(tank){
       this.canShoot = false;
       this.fired = true;
       var self = this;
-      setTimeout(function(){self.tank.defaultWeapon();}, 1500);
+      this.tank.player.game.intvls.push(setTimeout(function(){
+        if(self.tank.weapon==self)
+          self.tank.defaultWeapon();
+      }, 1500));
     }
   }
 }
@@ -148,7 +152,7 @@ Grenade = function(tank){
     if(this.fired && this.bullet.age > 300 && !this.exploded){
       this.exploded = true;
       playSound("res/sound/grenade.wav");
-      for(i=0; i<this.nshrapnels; i++){
+      for(var i=0; i<this.nshrapnels; i++){
         var shrapnel = new Bullet(this);
         shrapnel.x = this.bullet.x;
         shrapnel.y = this.bullet.y;
@@ -163,7 +167,8 @@ Grenade = function(tank){
       clearInterval(this.intvl);
       var self = this;
       this.tank.player.game.intvls.push(setTimeout(function(){
-        self.tank.defaultWeapon();
+        if(self.tank.weapon==self)
+          self.tank.defaultWeapon();
       }, 1000));
       this.bullet.delete();
     }
