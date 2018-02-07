@@ -136,11 +136,16 @@ Grenade = function(tank){
       bullet.speed = BulletSpeed;
       bullet.angle = this.tank.angle;
       bullet.timeout = 10000;
-      this.tank.player.game.addObject(bullet);
       var self = this;
+      bullet.delete = function(){
+        self.shoot();
+        bullet.deleted = true;
+        self.tank.defaultWeapon();
+      }
+      this.tank.player.game.addObject(bullet);
       this.intvl = setTimeout(function(){self.shoot();}, 10000);
     }
-    if(this.fired && this.bullet.age > 300 && !this.exploded){
+    if(this.fired && this.bullet.age > 30 && !this.exploded){
       this.exploded = true;
       playSound("res/sound/grenade.wav");
       for(i=0; i<this.nshrapnels; i++){

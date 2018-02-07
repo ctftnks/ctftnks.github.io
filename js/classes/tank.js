@@ -14,7 +14,7 @@ Tank = function(player){
   this.angle = 2 * Math.PI * Math.random();
   this.width = TankWidth;
   this.height = TankHeight;
-  this.weapon = new Gun(this);
+  this.weapon = new Grenade(this);
   this.speed = TankSpeed;
 
   // draw the tank (rotated) on map
