@@ -15,6 +15,12 @@ var Key = {
   S: 83,
   D: 68,
   Q: 81,
+  I: 73,
+  J: 74,
+  K: 75,
+  L: 76,
+  U: 85,
+
 
   isDown: function(keyCode) {
     return this._pressed[keyCode];
@@ -33,7 +39,8 @@ var Key = {
 // order: up, left, down, right, fire
 var keymaps = [
   [Key.UP, Key.LEFT, Key.DOWN, Key.RIGHT, Key.M],
-  [Key.W, Key.A, Key.S, Key.D, Key.Q]
+  [Key.W, Key.A, Key.S, Key.D, Key.Q],
+  [Key.I, Key.J, Key.K, Key.L, Key.U]
 ]
 
 // event listeners
