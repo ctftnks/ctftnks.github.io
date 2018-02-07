@@ -45,9 +45,12 @@ function updateScores(){
 
 
 function openMenu(){
+  game.pause();
   document.getElementById("menu").style.display = "block";
 }
 function closeMenu(){
+  if(game.paused)
+    game.start();
   document.getElementById("menu").style.display = "none";
 }
 function updateMenu(){
