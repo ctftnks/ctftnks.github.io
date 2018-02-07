@@ -39,6 +39,7 @@ Game = function(canvas){
       self.step();
     }, GameFrequency);
     playSound("res/sound/gamestart.wav");
+    updateScores();
   }
 
   // a single step of the time-loop
