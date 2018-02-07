@@ -109,9 +109,18 @@ function getKeyLabel(key){
 
 // edit the keymap from the menu
 function editableKeymap(mapID){
+  if(mapID==-1){
+    var html = "";
+    html += "<button class='keyEditButton'>&uarr;</button>";
+    html += "<button class='keyEditButton'>&larr;</button>";
+    html += "<button class='keyEditButton'>&darr;</button>";
+    html += "<button class='keyEditButton'>&rarr;</button>";
+    html += "<button class='keyEditButton'>Fire</button>";
+    return html
+  }
   var html = "";
   for(var i in keymaps[mapID]){
-    html += "<button class='keyEditButton clickable' onclick='editKeymap("+mapID+", "+i+")'>";
+    html += "<button class='keyEditButton clickable' onclick='editKeymap("+mapID+", "+i+")' onfocusout='editingKeymap=false'>";
     html += keyLabels[keymaps[mapID][i]];
     html += "</button>";
   }

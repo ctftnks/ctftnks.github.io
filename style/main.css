@@ -85,7 +85,7 @@ button{
 }
 
 .keyEditButton:focus{
-  background: #E7E52C;
+  background: rgba(153, 204, 255, 0.5);
 }
 
 h1, h2{

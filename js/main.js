@@ -18,6 +18,11 @@ function newGame(){
   return game;
 }
 
+function addPlayer(){
+  players.push(new Player());
+  updateMenu();
+}
+
 function updateScores(){
   var scoreBoard = document.getElementById("scoreBoard");
   scoreBoard.innerHTML = "";
@@ -48,14 +53,27 @@ function closeMenu(){
 function updateMenu(){
   var pmen = document.getElementById("playersMenu");
   playersMenu.innerHTML = "";
+  var entry = "";
+  entry += "<div class='entry'>";
+  entry += "<button class='name'>Name</button>";
+  entry += editableKeymap(-1);
+  entry += "<br></div>";
+  playersMenu.innerHTML += entry;
   for(var i=0; i<players.length; i++){
     var entry = "";
     entry += "<div class='entry'>";
-    entry += "<button class='name' style='color:"+players[i].color+";''>";
+    entry += "<button class='name' onclick='editPlayerName("+i+")' style='color:"+players[i].color+";''>";
     entry += players[i].name;
     entry += "</button>";
     entry += editableKeymap(players[i].id);
     entry += "</div>";
     playersMenu.innerHTML += entry;
   }
+}
+
+
+function editPlayerName(playerID){
+  players[playerID].name = prompt("Namen eingeben:");
+  updateScores();
+  updateMenu();
 }

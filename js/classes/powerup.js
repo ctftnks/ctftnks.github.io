@@ -70,6 +70,6 @@ SpeedBonus = function(){
 function getRandomPowerUp(){
   var powerups = [new LaserBonus(), new MGBonus(), new GrenadeBonus(), new SpeedBonus()];
   var len = powerups.length;
-  playSound("res/sound/powerup.wav");
+  playSound("res/sound/original/powerup.mp3");
   return powerups[Math.floor(Math.random() * len)];
 }
