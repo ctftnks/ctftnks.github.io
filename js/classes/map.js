@@ -85,7 +85,7 @@ Map = function(canvas){
     this.tiles[(this.Nx-1)*this.Ny+j].walls.right = true;
   }
   // generate some random walls
-  MapGenerator.randomMap(this);
+  MapGenerator.primsMaze(this);
 }
 
 // child class for tiles
@@ -95,7 +95,7 @@ Tile = function(i, j, map){
   this.i = i;
   this.j = j;
   this.map = map;
-  this.id = i*j;
+  this.id = i*map.Ny+j;
   this.x = i * map.dx;
   this.y = j * map.dy;
   this.dx = map.dx;
