@@ -10,6 +10,8 @@ Game = function(canvas){
   this.canvas.game = this;
   // create new random map
   this.map = new Map(this.canvas);
+  // generate a random maze with Prim's algorithm
+  MapGenerator.primsMaze(this.map);
   this.players = [];
   this.objs = [];
   this.paused = false;

@@ -5,10 +5,12 @@
 
 Map = function(canvas){
 
-  this.Nx = 10;
-  this.Ny = 10;
+  this.Nx = parseInt(MapNxMin + (MapNxMax-MapNxMin) * Math.random());
+  this.Ny = parseInt((0.4 * Math.random() + 0.6) * this.Nx * canvas.height / canvas.width);
+  console.log(this.Ny);
   this.dx = canvas.width / this.Nx;
-  this.dy = canvas.height / this.Ny;
+  // this.dy = canvas.height / this.Ny;
+  this.dy = this.dx;
   this.tiles = [];
 
   // get tile by i,j-index
@@ -51,7 +53,6 @@ Map = function(canvas){
   }
 
   // draw the map
-  // TODO: draw map in separate canvas that does not need to be updated?
   this.draw = function(canvas, context){
     for(var i=0; i<this.tiles.length; i++)
       this.tiles[i].draw(canvas, context);
@@ -75,17 +76,6 @@ Map = function(canvas){
       }
     }
   }
-  // generate walls at walls
-  for(var i=0; i<this.Nx; i++){
-    this.tiles[i*this.Ny].walls.top = true;
-    this.tiles[i*this.Ny + this.Nx-1].walls.bottom = true;
-  }
-  for(var j=0; j<this.Ny; j++){
-    this.tiles[j].walls.left = true;
-    this.tiles[(this.Nx-1)*this.Ny+j].walls.right = true;
-  }
-  // generate some random walls
-  MapGenerator.primsMaze(this);
 }
 
 // child class for tiles

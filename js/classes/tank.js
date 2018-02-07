@@ -100,6 +100,7 @@ Tank = function(player){
     var distx = this.x - x;
     var disty = this.y - y;
     // TODO: find a better algorithm, tank is currently approximated as a circle
+    // anyways, approximation seems to suffice for gameplay
     return Math.sqrt(Math.pow(distx, 2) + Math.pow(disty, 2)) < 0.5 * (this.height)
   }
 

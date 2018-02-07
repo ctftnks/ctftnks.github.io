@@ -4,8 +4,8 @@ window.onload = function(){
   canvas = new Canvas("gameFrame");
   players = [new Player(), new Player()];
   game = newGame();
-  setTimeout(function(){game.pause();}, 1000);
-  openMenu(false);
+  // setTimeout(function(){game.pause();}, 1000);
+  // openMenu(false);
 };
 
 // start a new round

@@ -18,7 +18,7 @@ Canvas = function(id){
   // Clear canvas and draw all objects
   this.draw = function(){
   	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.game.map.draw(this.canvas, this.context);  // TODO: draw map just once
+    this.game.map.draw(this.canvas, this.context);
     for(var i=0; i<this.game.objs.length; i++)
       this.game.objs[i].draw(this.canvas, this.context);
   }

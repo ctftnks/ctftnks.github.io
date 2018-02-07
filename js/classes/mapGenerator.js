@@ -5,6 +5,15 @@ MapGenerator = {
 
   // just random walls somewhere
   randomMap: function(map){
+    // generate walls at frame borders
+    for(var i=0; i<this.Nx; i++){
+      this.tiles[i*this.Ny].walls.top = true;
+      this.tiles[i*this.Ny + this.Nx-1].walls.bottom = true;
+    }
+    for(var j=0; j<this.Ny; j++){
+      this.tiles[j].walls.left = true;
+      this.tiles[(this.Nx-1)*this.Ny+j].walls.right = true;
+    }
     for(var i=0; i<map.Nx; i++){
       for(var j=0; j<map.Ny-1; j++){
         if(Math.random() < WallProbability / 2){
@@ -23,8 +32,7 @@ MapGenerator = {
     }
   },
 
-  // TODO: maze algorithm
-  // prims maze algorithm
+  // Prim's maze algorithm
   // Start with a grid full of walls.
   // Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
   // While there are walls in the list:
