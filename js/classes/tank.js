@@ -106,9 +106,9 @@ Tank = function(player){
   // check for collision of the walls:
   // checks if there is a wall between the center of the tank and each corner
   this.checkWallCollision = function(){
+    var tile = this.map.getTileByPos(this.x, this.y);
     var corners = this.corners();
     for(var i=0; i<corners.length; i++){
-      var tile = this.map.getTileByPos(corners[(i+1)%4].x, corners[(i+1)%4].y);
       if(tile.getWall(corners[i].x, corners[i].y) != -1)
         return true;
     }

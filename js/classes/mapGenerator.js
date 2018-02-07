@@ -73,7 +73,6 @@ MapGenerator = {
         walls.splice(randomWallNo, 1);
       }
     }
-
   },
 
   // auxiliary functions
