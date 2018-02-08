@@ -7,6 +7,8 @@ Map = function(canvas){
 
   this.Nx = parseInt(MapNxMin + (MapNxMax-MapNxMin) * Math.random());
   this.Ny = parseInt((0.4 * Math.random() + 0.6) * this.Nx * canvas.height / canvas.width);
+  this.Nx = 6;  // TODO: remove
+  this.Ny = 4;  // TODO: remove
   console.log(this.Ny);
   this.dx = canvas.width / 10;
   canvas.scale(10 / this.Nx);
@@ -84,42 +86,65 @@ Map = function(canvas){
   // get the shortest path to the next tank
   this.pathToTank = function(listOfTiles){
     this.recursiveSteps += 1;
-    console.log(this.recursiveSteps);
-    var currentTile = listOfTiles[listOfTiles.length - 1];
+    if(this.recursiveSteps > 120)
+      return -1;
+    console.log(" ");
+    console.log("Step No.", this.recursiveSteps);
+    var currentTile = this.tiles[listOfTiles[listOfTiles.length - 1]];
     // is a tank in the current tile? Then we're done searching!
     if(currentTile.containsTank())
       return listOfTiles;
+    console.log("lot:", listOfTiles);
+    console.log(" No tank in", currentTile.id);
     // keep searching
-    listOfTiles.push(currentTile);
+    listOfTiles.push(currentTile.id);
     var options = []
     // TODO: make direction iterable: walls.left = walls[0] or so... // cf. MapGenerator
-    if(currentTile.walls.left && currentTile.neighbors.left != -1 && listOfTiles.indexOf(currentTile.neighbors.left) == -1){
-      var copy = listOfTiles.splice();
-      copy.push(currentTile.neighbors.left);
-      var option = this.pathToTank(copy);
-      if (option != -1)
-        options.push(option);
+    if(!currentTile.walls.left && currentTile.neighbors.left != -1){
+      var nn = currentTile.neighbors.left;
+      if(listOfTiles.indexOf(nn.id) == -1){
+        console.log(" left is option");
+        var copy = listOfTiles.splice();
+        console.log("cpy1:", copy);
+        copy.push(nn.id);
+        console.log("cpy2:", copy);
+        var option = this.pathToTank(copy);
+        if (option != -1)
+          options.push(option);
+      }
     }
-    if(currentTile.walls.right && currentTile.neighbors.right != -1 && listOfTiles.indexOf(currentTile.neighbors.right) == -1){
-      var copy = listOfTiles.splice();
-      copy.push(currentTile.neighbors.right);
-      var option = this.pathToTank(copy);
-      if (option != -1)
-        options.push(option);
+    if(!currentTile.walls.right && currentTile.neighbors.right != -1){
+      var nn = currentTile.neighbors.right;
+      if(listOfTiles.indexOf(nn.id) == -1){
+        console.log(" right is option");
+        var copy = listOfTiles.splice();
+        copy.push(nn.id);
+        var option = this.pathToTank(copy);
+        if (option != -1)
+          options.push(option);
+      }
     }
-    if(currentTile.walls.top && currentTile.neighbors.top != -1 && listOfTiles.indexOf(currentTile.neighbors.top) == -1){
-      var copy = listOfTiles.splice();
-      copy.push(currentTile.neighbors.right);
-      var option = this.pathToTank(copy);
-      if (option != -1)
-        options.push(option);
+    if(!currentTile.walls.top && currentTile.neighbors.top != -1){
+      var nn = currentTile.neighbors.top;
+      if(listOfTiles.indexOf(nn.id) == -1){
+        console.log(" top is option");
+        var copy = listOfTiles.splice();
+        copy.push(nn.id);
+        var option = this.pathToTank(copy);
+        if (option != -1)
+          options.push(option);
+      }
     }
-    if(currentTile.walls.bottom && currentTile.neighbors.bottom != -1 && listOfTiles.indexOf(currentTile.neighbors.bottom) == -1){
-      var copy = listOfTiles.splice();
-      copy.push(currentTile.neighbors.right);
-      var option = this.pathToTank(copy);
-      if (option != -1)
-        options.push(option);
+    if(!currentTile.walls.bottom && currentTile.neighbors.bottom != -1){
+      var nn = currentTile.neighbors.bottom;
+      if(listOfTiles.indexOf(nn.id) == -1){
+        console.log(" bottom is option");
+        var copy = listOfTiles.splice();
+        copy.push(nn.id);
+        var option = this.pathToTank(copy);
+        if (option != -1)
+          options.push(option);
+      }
     }
     if(options.length == 0)
       return -1;
