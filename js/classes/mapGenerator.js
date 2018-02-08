@@ -83,6 +83,9 @@ MapGenerator = {
     }
   },
 
+
+  // TODO: recursive division method
+
   // auxiliary functions
   modWall(tile, direction, add=true, neighbor=true){
     if(tile != -1){

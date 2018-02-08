@@ -174,3 +174,55 @@ Grenade = function(tank){
     }
   }
 }
+
+
+
+// the normal, default gun
+Guided = function(tank){
+  Weapon.call(this);
+  this.image = "res/img/gun.png";
+  this.tank = tank;
+  this.canShoot = true;
+
+  this.shoot = function(){
+    if(this.canShoot){
+      playSound("res/sound/gun.wav");
+      var bullet = new Bullet(this);
+      bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
+      bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
+      bullet.radius = 4;
+      bullet.color = this.tank.player.color;
+      bullet.speed = BulletSpeed;
+      bullet.angle = this.tank.angle;
+      bullet.step = function(){
+        bullet.age += GameFrequency;
+        if(bullet.age > bullet.timeout)
+          bullet.delete();
+        bullet.leaveTrace();
+        var oldx = bullet.x;
+        var oldy = bullet.y;
+        bullet.x -= bullet.speed * Math.sin(-bullet.angle) * GameFrequency / 1000.;
+        bullet.y -= bullet.speed * Math.cos(-bullet.angle) * GameFrequency / 1000.;
+        // check for wall collisions
+        bullet.checkCollision(oldx, oldy);
+        var tile = bullet.map.getTileByPos(oldx, oldy);
+        if(bullet.age > 1000 && tile.id != bullet.lastTileID){
+          setTimeout(function(){
+            if(bullet.angle > 0.1 && Math.abs(bullet.angle - Math.PI) > 0.1  && Math.abs(bullet.angle + Math.PI) > 0.1 ){
+              if(!tile.walls.top) bullet.angle = 0.1;
+              else if(!tile.walls.bottom) bullet.angle = Math.PI;
+            }
+            else{
+              if(!tile.walls.right) bullet.angle = Math.PI / 2.;
+              else if(!tile.walls.left) bullet.angle = -Math.PI / 2.;
+            }
+        });
+        }
+        bullet.lastTileID = tile.id;
+      }
+      bullet.timeout = 10000;
+      this.tank.player.game.addObject(bullet);
+      this.canShoot = false;
+    }
+  }
+}
