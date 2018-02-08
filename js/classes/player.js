@@ -4,8 +4,6 @@
 
 nplayers = 0;
 playercolors = [
-  "#000",   //TODO: remove!
-  "#000",   //TODO: remove!
   "#DA1918",  // red
   "#31B32B",  // green
   "#1F87FF",  // blue

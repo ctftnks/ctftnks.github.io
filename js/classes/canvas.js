@@ -40,7 +40,7 @@ Canvas = function(id){
   }
 
   // zoom into the canvas
-  this.scale = function(factor){
+  this.rescale = function(factor){
     this.scale = factor;
     this.context.setTransform(1, 0, 0, 1, 0, 0);    // reset
     this.context.scale(factor, factor);   // scale by new factor
