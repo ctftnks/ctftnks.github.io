@@ -7,7 +7,6 @@ Map = function(canvas){
 
   this.Nx = parseInt(MapNxMin + (MapNxMax-MapNxMin) * Math.random());
   this.Ny = parseInt((0.4 * Math.random() + 0.6) * this.Nx * canvas.height / canvas.width);
-  console.log(this.Ny);
   this.dx = canvas.width / 10;
   canvas.rescale(10 / this.Nx);
   // this.dy = canvas.height / this.Ny;
@@ -71,12 +70,12 @@ Map = function(canvas){
   // link neighboring tiles
   for(var i=0; i<this.Nx; i++){
     for(var j=0; j<this.Ny; j++){
-      this.tiles[i*this.Ny+j].neighbors = {
-        left: this.getTileByIndex(i-1, j),
-        right: this.getTileByIndex(i+1, j),
-        top: this.getTileByIndex(i, j-1),
-        bottom: this.getTileByIndex(i, j+1)
-      }
+      this.tiles[i*this.Ny+j].neighbors = [
+        this.getTileByIndex(i, j-1),
+        this.getTileByIndex(i-1, j),
+        this.getTileByIndex(i, j+1),
+        this.getTileByIndex(i+1, j)
+      ];
     }
   }
 
@@ -92,9 +91,9 @@ Map = function(canvas){
       return listOfTiles;
     // keep searching
     var options = []
-    // TODO: make direction iterable: walls.left = walls[0] or so... // cf. MapGenerator
-    if(!currentTile.walls.left && currentTile.neighbors.left != -1){
-      var nn = currentTile.neighbors.left;
+    // TODO: make direction iterable: this.walls[1] = walls[0] or so... // cf. MapGenerator
+    if(!currentTile.walls[1] && currentTile.neighbors[1] != -1){
+      var nn = currentTile.neighbors[1];
       if(listOfTiles.indexOf(nn.id) == -1){
         var copy = listOfTiles.slice();
         copy.push(nn.id);
@@ -103,8 +102,8 @@ Map = function(canvas){
           options.push(option);
       }
     }
-    if(!currentTile.walls.right && currentTile.neighbors.right != -1){
-      var nn = currentTile.neighbors.right;
+    if(!currentTile.walls[3] && currentTile.neighbors[3] != -1){
+      var nn = currentTile.neighbors[3];
       if(listOfTiles.indexOf(nn.id) == -1){
         var copy = listOfTiles.slice();
         copy.push(nn.id);
@@ -113,8 +112,8 @@ Map = function(canvas){
           options.push(option);
       }
     }
-    if(!currentTile.walls.top && currentTile.neighbors.top != -1){
-      var nn = currentTile.neighbors.top;
+    if(!currentTile.walls[0] && currentTile.neighbors[0] != -1){
+      var nn = currentTile.neighbors[0];
       if(listOfTiles.indexOf(nn.id) == -1){
         var copy = listOfTiles.slice();
         copy.push(nn.id);
@@ -123,8 +122,8 @@ Map = function(canvas){
           options.push(option);
       }
     }
-    if(!currentTile.walls.bottom && currentTile.neighbors.bottom != -1){
-      var nn = currentTile.neighbors.bottom;
+    if(!currentTile.walls[2] && currentTile.neighbors[2] != -1){
+      var nn = currentTile.neighbors[2];
       if(listOfTiles.indexOf(nn.id) == -1){
         var copy = listOfTiles.slice();
         copy.push(nn.id);
@@ -159,27 +158,32 @@ Tile = function(i, j, map){
   this.dy = map.dy;
   this.objs = [];
   // list of walls
-  this.walls = {
-    left: false,
-    right: false,
-    top: false,
-    bottom: false
-  };
+  this.walls = [
+    false,  // top
+    false,  // left
+    false,  // bottom
+    false   // right
+  ];
   // list of neighbors
-  this.neighbors = undefined;
+  this.neighbors = [
+      undefined,  // top
+      undefined,  // left
+      undefined,  // bottom
+      undefined   // right
+    ];
 
   // draw the tile walls (width fixed as 4px)
   this.draw = function(canvas, context){
+    // TODO: draw outer borders thicker
     context.fillStyle = "#555";
-    if(this.walls.left)
-      context.fillRect(this.x-2, this.y-1, 4, this.dy+2);
-    if(this.walls.right)
-      context.fillRect(this.x-2+this.dx, this.y-1, 4, this.dy+2);
-    if(this.walls.top)
+    if(this.walls[0])
       context.fillRect(this.x-1, this.y-2, this.dx+2, 4);
-    if(this.walls.bottom)
+    if(this.walls[1])
+      context.fillRect(this.x-2, this.y-1, 4, this.dy+2);
+    if(this.walls[2])
       context.fillRect(this.x-1, this.y-2+this.dy, this.dx+2, 4);
-
+    if(this.walls[3])
+      context.fillRect(this.x-2+this.dx, this.y-1, 4, this.dy+2);
   }
 
   // is there a wall between the tile and a point at x,y?
@@ -188,13 +192,13 @@ Tile = function(i, j, map){
     var distx = this.x - x;
     var disty = this.y - y;
     // walls to walls
-    if(distx > 0 && this.walls.left)
+    if(distx > 0 && this.walls[1])
       return "left";
-    if(distx < -this.dx && this.walls.right)
+    if(distx < -this.dx && this.walls[3])
       return "right";
-    if(disty > 0 && this.walls.top)
+    if(disty > 0 && this.walls[0])
       return "top";
-    if(disty < -this.dy && this.walls.bottom)
+    if(disty < -this.dy && this.walls[2])
       return "bottom";
     return -1;
   },

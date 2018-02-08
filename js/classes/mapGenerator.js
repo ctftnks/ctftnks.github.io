@@ -7,26 +7,26 @@ MapGenerator = {
   randomMap: function(map){
     // generate walls at frame borders
     for(var i=0; i<this.Nx; i++){
-      this.tiles[i*this.Ny].walls.top = true;
-      this.tiles[i*this.Ny + this.Nx-1].walls.bottom = true;
+      this.tiles[i*this.Ny].walls[0] = true;
+      this.tiles[i*this.Ny + this.Nx-1].walls[2] = true;
     }
     for(var j=0; j<this.Ny; j++){
-      this.tiles[j].walls.left = true;
-      this.tiles[(this.Nx-1)*this.Ny+j].walls.right = true;
+      this.tiles[j].walls[1] = true;
+      this.tiles[(this.Nx-1)*this.Ny+j].walls[3] = true;
     }
     for(var i=0; i<map.Nx; i++){
       for(var j=0; j<map.Ny-1; j++){
         if(Math.random() < WallProbability / 2){
-          map.tiles[i*map.Ny+j].walls.bottom = true;
-          map.tiles[i*map.Ny+j+1].walls.top = true;
+          map.tiles[i*map.Ny+j].walls[2] = true;
+          map.tiles[i*map.Ny+j+1].walls[0] = true;
         }
       }
     }
     for(var i=0; i<map.Nx-1; i++){
       for(var j=0; j<map.Ny; j++){
         if(Math.random() < WallProbability / 2){
-          map.tiles[i*map.Ny+j].walls.right = true;
-          map.tiles[(i+1)*map.Ny+j].walls.left = true;
+          map.tiles[i*map.Ny+j].walls[3] = true;
+          map.tiles[(i+1)*map.Ny+j].walls[1] = true;
         }
       }
     }
@@ -45,10 +45,10 @@ MapGenerator = {
   primsMaze: function(map){
     // Start with a grid full of walls.
     for(var i=0; i<map.Nx*map.Ny; i++){
-        map.tiles[i].walls.top = true;
-        map.tiles[i].walls.bottom = true;
-        map.tiles[i].walls.left = true;
-        map.tiles[i].walls.right = true;
+        map.tiles[i].walls[0] = true;
+        map.tiles[i].walls[2] = true;
+        map.tiles[i].walls[1] = true;
+        map.tiles[i].walls[3] = true;
     }
     walls = [];
     inMaze = [];
@@ -71,10 +71,10 @@ MapGenerator = {
         MapGenerator.modWall(map.tiles[cellID], wallDir, false);
         inMaze.push(opposite.id);
         // Add the neighboring walls of the cell to the wall list.
-        if(opposite.walls.top) walls.push(opposite.id+0.1*0);
-        if(opposite.walls.right) walls.push(opposite.id+0.1*1);
-        if(opposite.walls.bottom) walls.push(opposite.id+0.1*2);
-        if(opposite.walls.left) walls.push(opposite.id+0.1*3);
+        if(opposite.walls[0]) walls.push(opposite.id+0.1*0);
+        if(opposite.walls[3]) walls.push(opposite.id+0.1*1);
+        if(opposite.walls[2]) walls.push(opposite.id+0.1*2);
+        if(opposite.walls[1]) walls.push(opposite.id+0.1*3);
         walls.splice(randomWallNo, 1);
       }else{
         // If the cell on the opposite side already was in the maze, remove the wall from the list.
@@ -91,46 +91,31 @@ MapGenerator = {
     if(tile != -1){
       switch(direction % 4){
         case 0:
-          tile.walls.top = add;
+          tile.walls[0] = add;
           if(neighbor)
-            MapGenerator.modWall(tile.neighbors.top, direction + 2, add, false);
+            MapGenerator.modWall(tile.neighbors[0], direction + 2, add, false);
           break;
         case 1:
-          tile.walls.right = add;
+          tile.walls[1] = add;
           if(neighbor)
-            MapGenerator.modWall(tile.neighbors.right, direction + 2, add, false);
+            MapGenerator.modWall(tile.neighbors[1], direction + 2, add, false);
           break;
         case 2:
-          tile.walls.bottom = add;
+          tile.walls[2] = add;
           if(neighbor)
-            MapGenerator.modWall(tile.neighbors.bottom, direction + 2, add, false);
+            MapGenerator.modWall(tile.neighbors[2], direction + 2, add, false);
           break;
         case 3:
-          tile.walls.left = add;
+          tile.walls[3] = add;
           if(neighbor)
-            MapGenerator.modWall(tile.neighbors.left, direction + 2, add, false);
+            MapGenerator.modWall(tile.neighbors[3], direction + 2, add, false);
           break;
         default: break;
       }
     }
   },
   getNeighbor(tile, direction){
-    if(tile != -1){
-      switch(direction % 4){
-        case 0:
-          return tile.neighbors.top;
-          break;
-        case 1:
-          return tile.neighbors.right;
-          break;
-        case 2:
-          return tile.neighbors.bottom;
-          break;
-        case 3:
-          return tile.neighbors.left;
-          break;
-        default: break;
-      }
-    }
+    if(tile != -1)
+      return tile.neighbors[direction % 4];
   }
 }

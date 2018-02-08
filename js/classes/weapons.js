@@ -209,12 +209,12 @@ Guided = function(tank){
         if(bullet.age > 1000 && tile.id != bullet.lastTileID){
           setTimeout(function(){
             if(bullet.angle > 0.1 && Math.abs(bullet.angle - Math.PI) > 0.1  && Math.abs(bullet.angle + Math.PI) > 0.1 ){
-              if(!tile.walls.top) bullet.angle = 0.1;
-              else if(!tile.walls.bottom) bullet.angle = Math.PI;
+              if(!tile.walls[0]) bullet.angle = 0.1;
+              else if(!tile.walls[2]) bullet.angle = Math.PI;
             }
             else{
-              if(!tile.walls.right) bullet.angle = Math.PI / 2.;
-              else if(!tile.walls.left) bullet.angle = -Math.PI / 2.;
+              if(!tile.walls[3]) bullet.angle = Math.PI / 2.;
+              else if(!tile.walls[1]) bullet.angle = -Math.PI / 2.;
             }
         });
         }
