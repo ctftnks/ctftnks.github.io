@@ -80,9 +80,57 @@ Map = function(canvas){
     }
   }
 
+  this.recursiveSteps = 0;
   // get the shortest path to the next tank
-  this.pathToTank(listOfTiles){
-
+  this.pathToTank = function(listOfTiles){
+    this.recursiveSteps += 1;
+    console.log(this.recursiveSteps);
+    var currentTile = listOfTiles[listOfTiles.length - 1];
+    // is a tank in the current tile? Then we're done searching!
+    if(currentTile.containsTank())
+      return listOfTiles;
+    // keep searching
+    listOfTiles.push(currentTile);
+    var options = []
+    // TODO: make direction iterable: walls.left = walls[0] or so... // cf. MapGenerator
+    if(currentTile.walls.left && currentTile.neighbors.left != -1 && listOfTiles.indexOf(currentTile.neighbors.left) == -1){
+      var copy = listOfTiles.splice();
+      copy.push(currentTile.neighbors.left);
+      var option = this.pathToTank(copy);
+      if (option != -1)
+        options.push(option);
+    }
+    if(currentTile.walls.right && currentTile.neighbors.right != -1 && listOfTiles.indexOf(currentTile.neighbors.right) == -1){
+      var copy = listOfTiles.splice();
+      copy.push(currentTile.neighbors.right);
+      var option = this.pathToTank(copy);
+      if (option != -1)
+        options.push(option);
+    }
+    if(currentTile.walls.top && currentTile.neighbors.top != -1 && listOfTiles.indexOf(currentTile.neighbors.top) == -1){
+      var copy = listOfTiles.splice();
+      copy.push(currentTile.neighbors.right);
+      var option = this.pathToTank(copy);
+      if (option != -1)
+        options.push(option);
+    }
+    if(currentTile.walls.bottom && currentTile.neighbors.bottom != -1 && listOfTiles.indexOf(currentTile.neighbors.bottom) == -1){
+      var copy = listOfTiles.splice();
+      copy.push(currentTile.neighbors.right);
+      var option = this.pathToTank(copy);
+      if (option != -1)
+        options.push(option);
+    }
+    if(options.length == 0)
+      return -1;
+    var minLen = this.Nx * this.Ny;
+    var minIndex = -1
+    for(var i=0; i<options.length; i++){
+      if(options[i].length > minLen)
+        minIndex = i;
+    }
+    console.log(this.recursiveSteps);
+    return options[minIndex];
   }
 }
 
@@ -138,5 +186,12 @@ Tile = function(i, j, map){
     if(disty < -this.dy && this.walls.bottom)
       return "bottom";
     return -1;
+  },
+
+  this.containsTank = function(){
+    for(var i=0; i<this.objs.length; i++)
+      if(this.objs[i].isTank)
+        return true;
+    return false;
   }
 }

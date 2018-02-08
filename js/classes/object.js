@@ -6,6 +6,7 @@ Object = function(){
   // the loop will then delete it from the game object list
   this.deleted = false;
   this.isBullet = false;
+  this.isTank = false;
   this.isPowerUp = false;
 
   this.delete = function(){

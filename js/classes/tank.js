@@ -16,7 +16,7 @@ Tank = function(player){
   this.height = TankHeight;
   this.weapon = new Gun(this);
   this.speed = TankSpeed;
-  this.forceRotation = 0;
+  this.isTank = true;
 
   // draw the tank (rotated) on map
   this.draw = function(canvas, context){
