@@ -16,6 +16,7 @@ Tank = function(player){
   this.height = TankHeight;
   this.weapon = new Gun(this);
   this.speed = TankSpeed;
+  this.forceRotation = 0;
 
   // draw the tank (rotated) on map
   this.draw = function(canvas, context){
@@ -38,27 +39,28 @@ Tank = function(player){
   // let player class check for key presses and move tank
   // check for collisions and handle them
   this.step = function(){
-    var oldx = this.x;
-    var oldy = this.y;
-    var oldangle = this.angle;
     this.player.step();
     this.checkBulletCollision();
-    if(this.checkWallCollision()){
-      this.x = oldx;
-      this.y = oldy;
-      this.angle = oldangle;
-    }
   }
 
   // move the tank forward/backwards
   this.move = function(direction){
+    var oldx = this.x;
+    var oldy = this.y;
     this.x -= direction * this.speed * Math.sin(-this.angle) * GameFrequency / 1000.;
     this.y -= direction * this.speed * Math.cos(-this.angle) * GameFrequency / 1000.;
+    if(this.checkWallCollision()){
+      this.x = oldx;
+      this.y = oldy;
+    }
   }
 
   // rotate the tank
   this.turn = function(direction){
+    var oldangle = this.angle;
     this.angle += direction * TankTurnSpeed * GameFrequency / 1000.;
+    if(this.checkWallCollision())
+      this.angle = oldangle;
   }
 
   // use the weapon

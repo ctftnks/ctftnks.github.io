@@ -8,7 +8,8 @@ Map = function(canvas){
   this.Nx = parseInt(MapNxMin + (MapNxMax-MapNxMin) * Math.random());
   this.Ny = parseInt((0.4 * Math.random() + 0.6) * this.Nx * canvas.height / canvas.width);
   console.log(this.Ny);
-  this.dx = canvas.width / this.Nx;
+  this.dx = canvas.width / 10;
+  canvas.scale(10 / this.Nx);
   // this.dy = canvas.height / this.Ny;
   this.dy = this.dx;
   this.tiles = [];

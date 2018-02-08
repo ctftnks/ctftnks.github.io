@@ -3,8 +3,8 @@
 FrameFrequency = 30;
 GameFrequency = 5;
 
-TankWidth = 30;
-TankHeight = 45;
+TankWidth = 40;
+TankHeight = 60;
 
 TankSpeed = 140;
 TankTurnSpeed = 4;
@@ -20,4 +20,4 @@ MaxPowerUps = 8;
 MaxKillsPerGame = 5;
 
 MapNxMin = 8;
-MapNxMax = 20;
+MapNxMax = 15;

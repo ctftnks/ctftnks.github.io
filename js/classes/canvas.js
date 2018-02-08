@@ -14,10 +14,11 @@ Canvas = function(id){
   this.width = this.canvas.clientWidth;
   this.game = undefined;
   this.loop = undefined;
+  this.scale = 1;
 
   // Clear canvas and draw all objects
   this.draw = function(){
-  	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  	this.context.clearRect(0, 0, this.canvas.width/this.scale, this.canvas.height/this.scale);
     this.game.map.draw(this.canvas, this.context);
     for(var i=0; i<this.game.objs.length; i++)
       this.game.objs[i].draw(this.canvas, this.context);
@@ -36,6 +37,13 @@ Canvas = function(id){
   // Stop syncing of canvas
   this.stopSync = function(){
   	if(typeof(this.loop) != "undefined") clearInterval(this.loop);
+  }
+
+  // zoom into the canvas
+  this.scale = function(factor){
+    this.scale = factor;
+    this.context.setTransform(1, 0, 0, 1, 0, 0);    // reset
+    this.context.scale(factor, factor);   // scale by new factor
   }
 
 }
