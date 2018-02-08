@@ -79,67 +79,37 @@ Map = function(canvas){
     }
   }
 
-  this.recursiveSteps = 0;
   // get the shortest path to the next tank
   this.pathToTank = function(listOfTiles){
-    this.recursiveSteps += 1;
-    if(this.recursiveSteps > 120)
+    if(listOfTiles.length <= 1)
+      this.minPathLength = this.Nx * this.Ny;
+    if(listOfTiles.length > this.minPathLength)
       return -1;
     var currentTile = this.tiles[listOfTiles[listOfTiles.length - 1]];
     // is a tank in the current tile? Then we're done searching!
     if(currentTile.containsTank())
       return listOfTiles;
     // keep searching
-    var options = []
-    // TODO: make direction iterable: this.walls[1] = walls[0] or so... // cf. MapGenerator
-    if(!currentTile.walls[1] && currentTile.neighbors[1] != -1){
-      var nn = currentTile.neighbors[1];
-      if(listOfTiles.indexOf(nn.id) == -1){
-        var copy = listOfTiles.slice();
-        copy.push(nn.id);
-        var option = this.pathToTank(copy);
-        if (option != -1)
-          options.push(option);
+    var options = [];
+    for(var d=0; d<4; d++)
+      if(!currentTile.walls[d] && currentTile.neighbors[d] != -1){
+        var nn = currentTile.neighbors[d];
+        if(listOfTiles.indexOf(nn.id) == -1){
+          var copy = listOfTiles.slice();
+          copy.push(nn.id);
+          var option = this.pathToTank(copy);
+          if (option != -1)
+            options.push(option);
+        }
       }
-    }
-    if(!currentTile.walls[3] && currentTile.neighbors[3] != -1){
-      var nn = currentTile.neighbors[3];
-      if(listOfTiles.indexOf(nn.id) == -1){
-        var copy = listOfTiles.slice();
-        copy.push(nn.id);
-        var option = this.pathToTank(copy);
-        if (option != -1)
-          options.push(option);
-      }
-    }
-    if(!currentTile.walls[0] && currentTile.neighbors[0] != -1){
-      var nn = currentTile.neighbors[0];
-      if(listOfTiles.indexOf(nn.id) == -1){
-        var copy = listOfTiles.slice();
-        copy.push(nn.id);
-        var option = this.pathToTank(copy);
-        if (option != -1)
-          options.push(option);
-      }
-    }
-    if(!currentTile.walls[2] && currentTile.neighbors[2] != -1){
-      var nn = currentTile.neighbors[2];
-      if(listOfTiles.indexOf(nn.id) == -1){
-        var copy = listOfTiles.slice();
-        copy.push(nn.id);
-        var option = this.pathToTank(copy);
-        if (option != -1)
-          options.push(option);
-      }
-    }
     if(options.length == 0)
       return -1;
     var minLen = this.Nx * this.Ny;
     var minIndex = -1
-    for(var i=0; i<options.length; i++){
+    for(var i=0; i<options.length; i++)
       if(options[i].length < minLen)
         minIndex = i;
-    }
+    this.minPathLength = minLen;
     return options[minIndex];
   }
 }
@@ -184,6 +154,14 @@ Tile = function(i, j, map){
       context.fillRect(this.x-1, this.y-2+this.dy, this.dx+2, 4);
     if(this.walls[3])
       context.fillRect(this.x-2+this.dx, this.y-1, 4, this.dy+2);
+  }
+
+
+  this.addWall = function(direction, remove=false, neighbor=true){
+    direction = direction % 4;
+    this.walls[direction] = !remove;
+    if(neighbor)
+      this.neighbors[direction].addWall(direction + 2, remove, false);
   }
 
   // is there a wall between the tile and a point at x,y?

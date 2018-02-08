@@ -44,12 +44,8 @@ MapGenerator = {
 
   primsMaze: function(map){
     // Start with a grid full of walls.
-    for(var i=0; i<map.Nx*map.Ny; i++){
-        map.tiles[i].walls[0] = true;
-        map.tiles[i].walls[2] = true;
-        map.tiles[i].walls[1] = true;
-        map.tiles[i].walls[3] = true;
-    }
+    for(var i=0; i<map.Nx*map.Ny; i++)
+        map.tiles[i].walls = [true, true, true, true];
     walls = [];
     inMaze = [];
     // Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
@@ -65,16 +61,14 @@ MapGenerator = {
       // If the cell on the opposite side isn't in the maze yet:
       var cellID = Math.floor(randomWall);
       var wallDir = parseInt((10*randomWall) % 4);
-      var opposite = MapGenerator.getNeighbor(map.tiles[cellID], wallDir);
+      var opposite = map.tiles[cellID].neighbors[wallDir % 4];
       if(opposite != -1 && inMaze.indexOf(opposite.id) == -1){
         // Make the wall a passage and mark the cell on the opposite side as part of the maze.
-        MapGenerator.modWall(map.tiles[cellID], wallDir, false);
+        map.tiles[cellID].addWall(wallDir, true);
         inMaze.push(opposite.id);
         // Add the neighboring walls of the cell to the wall list.
-        if(opposite.walls[0]) walls.push(opposite.id+0.1*0);
-        if(opposite.walls[3]) walls.push(opposite.id+0.1*1);
-        if(opposite.walls[2]) walls.push(opposite.id+0.1*2);
-        if(opposite.walls[1]) walls.push(opposite.id+0.1*3);
+        for(var i=0; i<4; i++)
+          if(opposite.walls[i]) walls.push(opposite.id+0.1*i);
         walls.splice(randomWallNo, 1);
       }else{
         // If the cell on the opposite side already was in the maze, remove the wall from the list.
@@ -86,36 +80,4 @@ MapGenerator = {
 
   // TODO: recursive division method
 
-  // auxiliary functions
-  modWall(tile, direction, add=true, neighbor=true){
-    if(tile != -1){
-      switch(direction % 4){
-        case 0:
-          tile.walls[0] = add;
-          if(neighbor)
-            MapGenerator.modWall(tile.neighbors[0], direction + 2, add, false);
-          break;
-        case 1:
-          tile.walls[1] = add;
-          if(neighbor)
-            MapGenerator.modWall(tile.neighbors[1], direction + 2, add, false);
-          break;
-        case 2:
-          tile.walls[2] = add;
-          if(neighbor)
-            MapGenerator.modWall(tile.neighbors[2], direction + 2, add, false);
-          break;
-        case 3:
-          tile.walls[3] = add;
-          if(neighbor)
-            MapGenerator.modWall(tile.neighbors[3], direction + 2, add, false);
-          break;
-        default: break;
-      }
-    }
-  },
-  getNeighbor(tile, direction){
-    if(tile != -1)
-      return tile.neighbors[direction % 4];
-  }
 }
