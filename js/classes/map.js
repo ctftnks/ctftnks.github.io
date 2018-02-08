@@ -14,6 +14,15 @@ Map = function(canvas){
   this.dy = this.dx;
   this.tiles = [];
 
+  // Tile initialization
+  // create discrete tiles
+  for(var i=0; i<this.Nx; i++){
+    for(var j=0; j<this.Ny; j++){
+      this.tiles.push(new Tile(i, j, this));
+    }
+  }
+
+
   // get tile by i,j-index
   this.getTileByIndex = function(i, j){
     if(i < this.Nx && j < this.Ny && i >= 0 && j >= 0)
@@ -59,13 +68,6 @@ Map = function(canvas){
       this.tiles[i].draw(canvas, context);
   }
 
-  // Tile initialization
-  // create discrete tiles
-  for(var i=0; i<this.Nx; i++){
-    for(var j=0; j<this.Ny; j++){
-      this.tiles.push(new Tile(i, j, this));
-    }
-  }
   // link neighboring tiles
   for(var i=0; i<this.Nx; i++){
     for(var j=0; j<this.Ny; j++){
@@ -76,6 +78,11 @@ Map = function(canvas){
         bottom: this.getTileByIndex(i, j+1)
       }
     }
+  }
+
+  // get the shortest path to the next tank
+  this.pathToTank(listOfTiles){
+
   }
 }
 

@@ -21,3 +21,5 @@ MaxKillsPerGame = 5;
 
 MapNxMin = 8;
 MapNxMax = 15;
+
+muted = true;
