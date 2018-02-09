@@ -86,7 +86,7 @@ Laser = function(tank){
       var bullet = new Bullet(this);
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2.;
-      bullet.speed = 14*BulletSpeed;
+      bullet.speed = 15*BulletSpeed;
       bullet.angle = this.tank.angle;
       bullet.radius = 2;
       bullet.color = this.tank.player.color;
@@ -109,7 +109,7 @@ Laser = function(tank){
         }
         bullet.player.game.addObject(smoke);
       }
-      bullet.timeout = 300;
+      bullet.timeout = 500;
       bullet.age = 0;
       this.tank.player.game.addObject(bullet);
       this.canShoot = false;
@@ -269,6 +269,66 @@ Guided = function(tank){
       }
       this.tank.player.game.addObject(bullet);
       this.canShoot = false;
+    }
+  }
+}
+
+
+// destroys walls
+WreckingBall = function(tank){
+  Weapon.call(this);
+  this.image = "res/img/gun.png";
+  this.tank = tank;
+  this.canShoot = true;
+  this.fired = false;
+
+  this.shoot = function(){
+    if(this.canShoot && !this.fired){
+      playSound("res/sound/gun.wav");
+      var bullet = new Bullet(this);
+      bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
+      bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
+      bullet.radius = 10;
+      bullet.color = "#000";
+      bullet.speed = BulletSpeed/2;
+      bullet.angle = this.tank.angle;
+      bullet.timeout = 10000;
+      bullet.checkCollision = function(x, y){
+        var tile = this.map.getTileByPos(x, y);
+        if(tile == -1)
+          return;
+        var wall = tile.getWall(this.x, this.y);
+        if(wall != -1){
+          // hit a wall: remove it!
+          playSound("res/sound/grenade.wav");
+          new Cloud(this.player.game, bullet.x, bullet.y, n=3);
+          bullet.delete();
+          if(wall == "top")
+            tile.addWall(0, true);
+          if(wall == "left")
+            tile.addWall(1, true);
+          if(wall == "bottom")
+            tile.addWall(2, true);
+          if(wall == "right")
+            tile.addWall(3, true);
+        }
+      }
+      bullet.trace = true;
+      bullet.leaveTrace = function(){
+        if(Math.random() > 0.96){
+          var smoke = new Smoke(this.x, this.y, timeout=800, radius=bullet.radius, rspeed = 0.6);
+          smoke.color = "rgba(0,0,0,0.3)";
+          bullet.player.game.addObject(smoke);
+        }
+      }
+      this.tank.player.game.addObject(bullet);
+      this.canShoot = false;
+      this.fired = true;
+      var self = this;
+      this.tank.player.game.intvls.push(setTimeout(function(){
+        if(self.tank.weapon==self)
+          self.tank.defaultWeapon();
+      }, 1000));
     }
   }
 }

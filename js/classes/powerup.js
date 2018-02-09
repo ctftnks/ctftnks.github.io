@@ -62,6 +62,14 @@ GuidedBonus = function(){
     tank.weapon = new Guided(tank);
   }
 }
+WreckingBallBonus = function(){
+  PowerUp.call(this);
+  this.image = "res/img/wreckingBall.png";
+  this.apply = function(tank){
+    playSound("res/sound/reload.wav");
+    tank.weapon = new WreckingBall(tank);
+  }
+}
 SpeedBonus = function(){
   PowerUp.call(this);
   this.image = "res/img/speed.png";
@@ -85,6 +93,7 @@ function getRandomPowerUp(){
     new GrenadeBonus(),
     new GuidedBonus(),
     new GuidedBonus(),
+    new WreckingBallBonus(),
     new SpeedBonus()
   ];
   var len = powerups.length;
