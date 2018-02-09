@@ -33,6 +33,7 @@ Player = function(){
   this.score = 0;
   this.keys = keymaps[this.id];
   this.tank = new Tank(this);
+  isBot = false;
 
   // timestep: check if keys pressed and act accordingly
   this.step = function(){

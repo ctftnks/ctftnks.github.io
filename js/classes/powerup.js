@@ -81,6 +81,19 @@ SpeedBonus = function(){
     }, 4000));
   }
 }
+MultiBonus = function(){
+  PowerUp.call(this);
+  this.image = "res/img/multi.png";
+  this.apply = function(tank){
+    PowerUpFrequency /= 3.;
+    MaxPowerUps *= 3.;
+    var self = tank;
+    setTimeout(function(){
+      PowerUpFrequency *= 3.;
+      MaxPowerUps /= 3.;
+    }, 5000);
+  }
+}
 
 
 function getRandomPowerUp(){
@@ -94,6 +107,7 @@ function getRandomPowerUp(){
     new GuidedBonus(),
     new GuidedBonus(),
     new WreckingBallBonus(),
+    new MultiBonus(),
     new SpeedBonus()
   ];
   var len = powerups.length;
