@@ -71,6 +71,13 @@ body{
   margin-right: 20px;
 }
 
+#playersMenu .remove{
+  display: inline-block;
+  width: 30px;
+  margin-left: 20px;
+  color: #F44336;
+}
+
 button{
   cursor: pointer;
   padding: 6px;

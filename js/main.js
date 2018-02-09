@@ -28,6 +28,15 @@ function addPlayer(bot=false){
   updateMenu();
 }
 
+function removePlayer(id){
+  var newPlayers = [];
+  for(var i=0; i<players.length; i++)
+    if(players[i].id != id)
+      newPlayers.push(players[i]);
+  players = newPlayers;
+  updateMenu();
+}
+
 function updateScores(){
   var scoreBoard = document.getElementById("scoreBoard");
   scoreBoard.innerHTML = "";
@@ -67,6 +76,8 @@ function updateMenu(){
   entry += "<div class='entry'>";
   entry += "<button class='name'>Name</button>";
   entry += editableKeymap(-1);
+  entry += "<span style='width:50px;display:inline-block;'></div>";
+  entry += "</div>";
   entry += "<br></div>";
   playersMenu.innerHTML += entry;
   for(var i=0; i<players.length; i++){
@@ -76,6 +87,8 @@ function updateMenu(){
     entry += players[i].name;
     entry += "</button>";
     entry += editableKeymap(players[i].id);
+    entry += "<button class='remove' onclick='removePlayer("+i+")'>";
+    entry += "&times;</button>";
     entry += "</div>";
     playersMenu.innerHTML += entry;
   }

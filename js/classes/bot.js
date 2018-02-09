@@ -2,6 +2,7 @@
 
 Bot = function(player){
   Player.call(this);
+  this.name = "Bot " + (this.id+1);
   this.tank = new BotTank(this);
   this.isBot = true;
   this.keys = undefined;
