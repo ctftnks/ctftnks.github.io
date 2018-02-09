@@ -4,8 +4,8 @@ window.onload = function(){
   canvas = new Canvas("gameFrame");
   players = [new Player(), new Player()];
   game = newGame();
-  // setTimeout(function(){game.pause();}, 1000);
-  // openMenu(false);
+  setTimeout(function(){game.pause();}, 1000);
+  openMenu(false);
 };
 
 // start a new round
@@ -18,12 +18,13 @@ function newGame(){
   return game;
 }
 
-function addPlayer(){
-  if(players.length >= keymaps.length){
+function addPlayer(bot=false){
+  if(players.length >= keymaps.length)
     keymaps.push(keymaps[0].slice());
-    console.log("asfs");
-  }
-  players.push(new Player());
+  if(bot)
+    players.push(new Bot());
+  else
+    players.push(new Player());
   updateMenu();
 }
 

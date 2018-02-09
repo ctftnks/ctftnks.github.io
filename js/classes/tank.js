@@ -15,7 +15,7 @@ Tank = function(player){
   this.angle = 2 * Math.PI * Math.random();
   this.width = TankWidth;
   this.height = TankHeight;
-  this.weapon = new Guided(this);
+  this.weapon = new Gun(this);
   this.speed = TankSpeed;
   this.isTank = true;
 
