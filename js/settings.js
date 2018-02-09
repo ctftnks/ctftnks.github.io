@@ -17,7 +17,7 @@ TimeAfterLastKill = 2000;
 PowerUpFrequency = 5000;
 MaxPowerUps = 8;
 
-MaxKillsPerGame = 5;
+MaxKillsPerGame = 15;
 
 MapNxMin = 8;
 MapNxMax = 15;
