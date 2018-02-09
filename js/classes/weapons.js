@@ -122,7 +122,17 @@ Laser = function(tank){
     }
   }
   this.crosshair = function(){
-    // TODO: implement
+    var x = this.tank.x;
+    var y = this.tank.y;
+    for(var i=0; i<10; i++){
+      x -= 10 * BulletSpeed * Math.sin(-this.tank.angle) * GameFrequency / 1000.;
+      y -= 10 * BulletSpeed * Math.cos(-this.tank.angle) * GameFrequency / 1000.;
+      if(i>3){
+        var smoke = new Smoke(x, y, timeout=5, radius=1, rspeed = 0);
+        smoke.color = "rgba(100,100,100,0.4)";
+        this.tank.player.game.addObject(smoke);
+      }
+    }
   }
 
 }
@@ -251,7 +261,7 @@ Guided = function(tank){
         }
         bullet.leaveTrace = function(){
           if(Math.random() > 0.8){
-            var smoke = new Smoke(this.x, this.y, timeout=400, radius=this.radius/1.4, rspeed = 0.6)
+            var smoke = new Smoke(this.x, this.y, timeout=400, radius=this.radius/1.4, rspeed = 0.6);
             smoke.color = bullet.smokeColor;
             bullet.player.game.addObject(smoke);
           }

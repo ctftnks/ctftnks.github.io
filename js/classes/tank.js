@@ -41,6 +41,7 @@ Tank = function(player){
   // check for collisions and handle them
   this.step = function(){
     this.player.step();
+    this.weapon.crosshair();
     this.checkBulletCollision();
   }
 
