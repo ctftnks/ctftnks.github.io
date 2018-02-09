@@ -46,4 +46,22 @@ Canvas = function(id){
     this.context.scale(factor, factor);   // scale by new factor
   }
 
+  this.shake = function(){
+    var amp = 14;
+    var speed = 25;
+    var duration = 660;
+    var self = this;
+    var i = 0;
+    var intvl = setInterval(function(){
+      var randx = amp * (Math.random() - 0.5) * Math.exp(i * 250 / duration);
+      var randy = amp * (Math.random() - 0.5) * Math.exp(i * 250 / duration);
+      i -= 1;
+      // self.context.translate(randx, randy);
+      self.canvas.style.marginLeft = randx+"px";
+      self.canvas.style.marginTop = randy+"px";
+      setTimeout(function(){self.canvas.style.marginLeft = 0+"px";self.canvas.style.marginTop = 0+"px";}, speed);
+    }, 2*speed);
+    this.game.intvls.push(setTimeout(function(){clearInterval(intvl);}, duration));
+  }
+
 }

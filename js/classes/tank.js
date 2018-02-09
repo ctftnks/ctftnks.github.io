@@ -8,13 +8,14 @@ Tank = function(player){
   Object.call(this);
 
   this.player = player;
+  this.color = this.player.color;
   this.map = undefined;
   this.x = 0;
   this.y = 0;
   this.angle = 2 * Math.PI * Math.random();
   this.width = TankWidth;
   this.height = TankHeight;
-  this.weapon = new Gun(this);
+  this.weapon = new Guided(this);
   this.speed = TankSpeed;
   this.isTank = true;
 

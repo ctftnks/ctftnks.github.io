@@ -64,6 +64,7 @@ Player = function(){
   this.kill = function(){
     this.game.n_playersAlive -= 1;
     this.game.nkills++;
+    this.game.canvas.shake();
     updateScores();
     if(this.game.nkills >= MaxKillsPerGame){
       this.game.intvls.push(setTimeout(function(){game.stop();}, TimeAfterLastKill));

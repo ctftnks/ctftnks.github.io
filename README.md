@@ -5,6 +5,7 @@ Zum Starten main.html öffnen.
 
 # TODO:
 - mehr PowerUps
-- bessere Maps mit dem Maze Generation Algorithm
-- Bugfix: Nx und Ny irgendwo vertauscht
+- Implementation of Guided Missile
+- Implementation of Bots
+- Laser CrossHair Implementation
 - bessere Grafiken: Vektorgrafiken zeichnen

@@ -79,6 +79,8 @@ Map = function(canvas){
     }
   }
 
+  // TODO: move this to the tile class?
+  // TODO: generalize this to find anything? --> bots
   // get the shortest path to the next tank
   this.pathToTank = function(listOfTiles){
     if(listOfTiles.length <= 1)
@@ -107,8 +109,10 @@ Map = function(canvas){
     var minLen = this.Nx * this.Ny;
     var minIndex = -1
     for(var i=0; i<options.length; i++)
-      if(options[i].length < minLen)
+      if(options[i].length < minLen){
+        minLen = options[i].length;
         minIndex = i;
+      }
     this.minPathLength = minLen;
     return options[minIndex];
   }

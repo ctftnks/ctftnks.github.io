@@ -7,6 +7,9 @@ Weapon = function(tank){
   this.shoot = function(){
 
   }
+  this.crosshair = function(){
+
+  }
 }
 
 // the normal, default gun
@@ -116,6 +119,10 @@ Laser = function(tank){
       }, 1500));
     }
   }
+  this.crosshair = function(){
+    // TODO: implement
+  }
+
 }
 
 
@@ -190,10 +197,12 @@ Guided = function(tank){
       var bullet = new Bullet(this);
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
-      bullet.radius = 4;
-      bullet.color = this.tank.player.color;
+      bullet.radius = 6;
+      bullet.color = "#555";
+      bullet.smokeColor = "#555";
       bullet.speed = BulletSpeed;
       bullet.angle = this.tank.angle;
+      bullet.goto = -1;
       bullet.step = function(){
         bullet.age += GameFrequency;
         if(bullet.age > bullet.timeout)
@@ -201,26 +210,47 @@ Guided = function(tank){
         bullet.leaveTrace();
         var oldx = bullet.x;
         var oldy = bullet.y;
-        bullet.x -= bullet.speed * Math.sin(-bullet.angle) * GameFrequency / 1000.;
-        bullet.y -= bullet.speed * Math.cos(-bullet.angle) * GameFrequency / 1000.;
+        // normal translation
+        if(bullet.goto == -1){
+          bullet.x -= bullet.speed * Math.sin(-bullet.angle) * GameFrequency / 1000.;
+          bullet.y -= bullet.speed * Math.cos(-bullet.angle) * GameFrequency / 1000.;
+        }else{
+          // guided translation:
+          // if bullet.goto has point data stored go into it's direction
+          var distx = bullet.goto.x + bullet.goto.dx / 2. - bullet.x;
+          var disty = bullet.goto.y + bullet.goto.dy / 2. - bullet.y;
+          var len = Math.sqrt(distx*distx+disty*disty);
+          bullet.x += bullet.speed * (distx/len) * GameFrequency / 1000.;
+          bullet.y += bullet.speed * (disty/len) * GameFrequency / 1000.;
+        }
         // check for wall collisions
         bullet.checkCollision(oldx, oldy);
-        var tile = bullet.map.getTileByPos(oldx, oldy);
-        if(bullet.age > 1000 && tile.id != bullet.lastTileID){
-          setTimeout(function(){
-            if(bullet.angle > 0.1 && Math.abs(bullet.angle - Math.PI) > 0.1  && Math.abs(bullet.angle + Math.PI) > 0.1 ){
-              if(!tile.walls[0]) bullet.angle = 0.1;
-              else if(!tile.walls[2]) bullet.angle = Math.PI;
-            }
-            else{
-              if(!tile.walls[3]) bullet.angle = Math.PI / 2.;
-              else if(!tile.walls[1]) bullet.angle = -Math.PI / 2.;
-            }
-        });
+        // calculate path to next tank and set next goto tile
+        // at first, it waits a while and then repeats the task every few ms
+        if(bullet.age > 2500){
+          bullet.age -= 250;
+          playSound("res/sound/guided.wav");
+          // get current tile and path
+          var tile = bullet.map.getTileByPos(oldx, oldy);
+          var path = bullet.map.pathToTank([tile.id]);
+          // set next path tile as goto point
+          if(path.length > 1){
+            bullet.goto = bullet.map.tiles[path[1]];
+          }else{
+            // if there is no next tile, hit first object in tile
+            if(tile.objs.length > 0)
+              bullet.goto = {x:tile.objs[0].x,y:tile.objs[0].y,dx:0,dy:0};
+          }
+          bullet.smokeColor = bullet.map.tiles[path[path.length-1]].objs[0].color;
         }
-        bullet.lastTileID = tile.id;
+        bullet.leaveTrace = function(){
+          if(Math.random() > 0.8){
+            var smoke = new Smoke(this.x, this.y, timeout=400, radius=this.radius/1.4, rspeed = 0.6)
+            smoke.color = bullet.smokeColor;
+            bullet.player.game.addObject(smoke);
+          }
+        }
       }
-      bullet.timeout = 10000;
       this.tank.player.game.addObject(bullet);
       this.canShoot = false;
     }
