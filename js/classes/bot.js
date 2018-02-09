@@ -19,10 +19,14 @@ BotTank = function(player){
   this.step = function(){
     this.lastChecked -= GameFrequency;
     if(this.lastChecked > 500){
-      // calculate path to next tank
+      // calculate path to next tank (excluding self)
       var tile = bullet.map.getTileByPos(this.x, this.y);
-      // TODO: exclude self!
-      var path = bullet.map.pathToTank([tile.id]);
+      var path = tile.pathTo(function(destination){
+        for(var i=0; i<destination.objs.length; i++)
+          if(destination.objs[i].isTank)
+            return destination.objs[i].player.id != this.player.id;
+        return false;
+      });
       // set goto to coordinates of next path frame
       if(path.length > 1){
         this.goto = bullet.map.tiles[path[1]];

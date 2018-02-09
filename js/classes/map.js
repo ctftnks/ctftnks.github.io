@@ -176,21 +176,47 @@ Tile = function(i, j, map){
     var distx = this.x - x;
     var disty = this.y - y;
     // walls to walls
-    if(distx > 0 && this.walls[1])
-      return "left";
-    if(distx < -this.dx && this.walls[3])
-      return "right";
     if(disty > 0 && this.walls[0])
-      return "top";
+      return 0;
+    if(distx > 0 && this.walls[1])
+      return 1;
     if(disty < -this.dy && this.walls[2])
-      return "bottom";
+      return 2;
+    if(distx < -this.dx && this.walls[3])
+      return 3;
     return -1;
   },
 
-  this.containsTank = function(){
-    for(var i=0; i<this.objs.length; i++)
-      if(this.objs[i].isTank)
-        return true;
-    return false;
+  // recursively find the shortest path to any tile in map where condition is met
+  // condition is a function condition(Tile t){} returning boolean
+  this.pathTo = function(condition, path=[], minPathLength=-1){
+    // add current tile to path
+    path.push(this);
+    // if the current path is longer than the shortest known path: abort!
+    if(minPathLength != -1 && path.length >= minPathLength)
+      return -1;
+    // is this tile what we've been searching for? Then we're done!
+    if(condition(this)) return path;
+    // else keep searching:
+    // for every neighbor that is not separated by a wall and is not yet in path
+    // calculate the path recursively. If a path is found, add it to a list
+    var options = [];
+    for(var d=0; d<4; d++)
+      if(!this.walls[d] && this.neighbors[d] != -1 && path.indexOf(this.neighbors[d]) == -1){
+        var option = this.neighbors[d].pathTo(condition, path.slice(), minPathLength);
+        if (option != -1){
+          minPathLength = option.length;
+          options.push(option);
+        }
+      }
+    // found no options? negative result
+    if(options.length == 0)
+      return -1;
+    // find option with minimal length and return
+    var min = -1
+    for(var i=0; i<options.length; i++)
+      if(min == -1 || options[i].length < options[min].length)
+        min = i;
+    return options[min];
   }
 }

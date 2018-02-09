@@ -77,13 +77,13 @@ Bullet = function(weapon){
     if(wall != -1){
       playSound(this.bounceSound);
       // there seems to be a wall: handle accordingly
-      if(wall == "left" || wall == "right"){
+      if(wall == 1 || wall == 3){   // left or right
         this.angle *= -1;
-        this.x = 2*oldx - this.x
+        this.x = 2 * oldx - this.x
       }
-      if(wall == "top" || wall == "bottom"){
+      if(wall == 0 || wall == 2){   // top or bottom
         this.angle = Math.PI - this.angle;
-        this.y = 2*oldy - this.y
+        this.y = 2 * oldy - this.y
       }
     }
   }

@@ -248,16 +248,21 @@ Guided = function(tank){
           playSound("res/sound/guided.wav");
           // get current tile and path
           var tile = bullet.map.getTileByPos(oldx, oldy);
-          var path = bullet.map.pathToTank([tile.id]);
+          var path = tile.pathTo(function(destination){
+            for(var i=0; i<destination.objs.length; i++)
+              if(destination.objs[i].isTank)
+                return true;
+            return false;
+          });
           // set next path tile as goto point
           if(path.length > 1){
-            bullet.goto = bullet.map.tiles[path[1]];
+            bullet.goto = path[1];
           }else{
             // if there is no next tile, hit first object in tile
             if(tile.objs.length > 0)
               bullet.goto = {x:tile.objs[0].x,y:tile.objs[0].y,dx:0,dy:0};
           }
-          bullet.smokeColor = bullet.map.tiles[path[path.length-1]].objs[0].color;
+          bullet.smokeColor = path[path.length-1].objs[0].color;
         }
         bullet.leaveTrace = function(){
           if(Math.random() > 0.8){
