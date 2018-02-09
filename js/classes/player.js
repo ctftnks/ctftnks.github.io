@@ -50,6 +50,7 @@ Player = function(){
   // spawn at some point
   this.spawn = function(){
     // this.tank = new Tank(this);
+    this.tank.deleted = false;
     this.tank.map = this.game.map;
     var pos = this.game.map.spawnPoint();
     this.tank.x = pos.x;

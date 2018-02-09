@@ -17,6 +17,7 @@ BotTank = function(player){
   this.goto = -1;
   this.lastChecked = 0;
 
+  this.checkWallCollision = function(){return false;}
   this.step = function(){
     this.lastChecked += GameFrequency;
     if(this.lastChecked > 400){
@@ -32,7 +33,7 @@ BotTank = function(player){
         return false;
       });
 
-      if(path.length < 4){
+      if(path.length < 3){
         // if path is short enough: aim and fire a bullet
         this.goto = -1;
         var target = path[path.length-1].objs[0];
@@ -48,30 +49,30 @@ BotTank = function(player){
     if(this.goto != -1 && typeof(this.goto) != "undefined"){
       var distx = this.goto.x + this.goto.dx / 2. - this.x;
       var disty = this.goto.y + this.goto.dy / 2. - this.y;
-      // TODO: make angle gradually converge to new angle
-      this.angle = Math.atan2(-distx, disty)+Math.PI;
-      // if((((this.angle/(Math.PI*2)) % 1) + 1) % 1 < (Math.atan2(-distx, disty)+Math.PI)/(Math.PI*2)){
-      // if((((this.angle/(Math.PI*2)) % 1) + 1) % 1 < ((((Math.atan2(-distx, disty)+Math.PI)/(Math.PI*2)) % 1) + 1) % 1){
-      //   this.turn(1);
-      //   this.turn(1);
-      // }else{
-      //   this.turn(-1);
-      //   this.turn(-1);
-      // }
-      var oldx = this.x;
-      var oldy = this.y;
-      this.move(1);
-      // stuck?
-      if(this.x == oldx && this.y == oldy){
-        this.angle += 0.1;
-        this.move(-1);
-        this.move(-1);
-        this.move(-1);
-        this.move(-1);
-      }
 
-    }else{
-      // this.angle = 0;
+      // norm angles to interval [0, 2pi]
+      var newangle = Math.atan2(-distx, disty)+Math.PI;
+      while(newangle < 0)
+        newangle += 2 * Math.PI;
+      newangle = newangle % (2*Math.PI);
+      while(this.angle < 0)
+        this.angle += 2 * Math.PI;
+      this.angle = this.angle % (2*Math.PI);
+      // turn and move in correct direction
+      if(Math.abs(this.angle - newangle)<0.6){
+        this.move(1);
+      }
+      if(Math.abs(this.angle - newangle)<0.1){
+        this.angle = newangle;
+      } else if(this.angle < newangle) {
+          if(Math.abs(this.angle - newangle)<Math.PI)
+             this.turn(2);
+          else this.turn(-2);
+      } else {
+          if(Math.abs(this.angle - newangle)<Math.PI)
+             this.turn(-2);
+          else this.turn(2);
+      }
     }
 
     this.player.step();
