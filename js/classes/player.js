@@ -4,6 +4,8 @@
 
 nplayers = 0;
 playercolors = [
+  "#222222",  // red
+  "#222222",  // red
   "#DA1918",  // red
   "#31B32B",  // green
   "#1F87FF",  // blue
