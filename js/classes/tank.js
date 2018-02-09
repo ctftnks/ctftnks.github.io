@@ -15,7 +15,7 @@ Tank = function(player){
   this.angle = 2 * Math.PI * Math.random();
   this.width = TankWidth;
   this.height = TankHeight;
-  this.weapon = new Guided(this);
+  this.weapon = new Gun(this);
   this.speed = TankSpeed;
   this.isTank = true;
 
@@ -146,7 +146,7 @@ Tank = function(player){
         playSound("res/sound/kill.wav");
         bullets[i].delete();
         // fancy explosion cloud
-        new Cloud(this.player.game, this.x, this.y, color=this.color);
+        new Cloud(this.player.game, this.x, this.y, n=6);
         // increment score of the shooter
         if(this.player.name == bullets[i].player.name)
           bullets[i].player.score -= 1;

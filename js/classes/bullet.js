@@ -9,6 +9,7 @@ Bullet = function(weapon){
   // inherit from Object class
   Object.call(this);
   this.isBullet = true;
+  this.image = "";
   // parent objects
   this.player = weapon.tank.player;
   this.map = this.player.game.map;
@@ -30,11 +31,21 @@ Bullet = function(weapon){
 
   // draw the bullet in the canvas
   this.draw = function(canvas, context){
-    context.beginPath();
-    context.fillStyle = this.color;
-    context.arc(this.x, this.y, this.radius, 0, Math.PI*2, true);
-    context.closePath();
-    context.fill();
+    if(this.image == ""){
+      context.beginPath();
+      context.fillStyle = this.color;
+      context.arc(this.x, this.y, this.radius, 0, Math.PI*2, true);
+      context.closePath();
+      context.fill();
+    }else{
+      context.save();
+      context.translate(this.x, this.y);
+      var img = new Image;
+      img.src = this.image;
+      context.rotate(this.angle);
+      context.drawImage(img, -this.radius*5 / 2, -this.radius*5 / 2, this.radius*5, this.radius*5);
+      context.restore();
+    }
   }
 
   // timestepping: translation, aging, collision

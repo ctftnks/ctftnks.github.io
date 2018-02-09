@@ -39,6 +39,7 @@ Gun = function(tank){
 
 // a rapid-firing mini-gun
 MG = function(tank){
+  Weapon.call(this);
   this.image = "res/img/mg.png";
   this.tank = tank;
   this.canShoot = true;
@@ -74,6 +75,7 @@ MG = function(tank){
 
 // yay, lasers!
 Laser = function(tank){
+  Weapon.call(this);
   this.image = "res/img/laser.png";
   this.tank = tank;
   this.canShoot = true;
@@ -128,6 +130,7 @@ Laser = function(tank){
 
 // A grenade that can be remotely detonated
 Grenade = function(tank){
+  Weapon.call(this);
   this.image = "res/img/grenade.png";
   this.tank = tank;
   this.canShoot = true;
@@ -145,6 +148,7 @@ Grenade = function(tank){
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
       bullet.radius = 6;
       bullet.color = "#000";
+      bullet.image = "res/img/grenade.png";
       bullet.speed = BulletSpeed;
       bullet.angle = this.tank.angle;
       bullet.timeout = 10000;
@@ -187,7 +191,7 @@ Grenade = function(tank){
 // the normal, default gun
 Guided = function(tank){
   Weapon.call(this);
-  this.image = "res/img/gun.png";
+  this.image = "res/img/guided.png";
   this.tank = tank;
   this.canShoot = true;
 
@@ -198,6 +202,7 @@ Guided = function(tank){
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
       bullet.radius = 6;
+      bullet.image = "res/img/guided.png";
       bullet.color = "#555";
       bullet.smokeColor = "#555";
       bullet.speed = BulletSpeed;
@@ -222,6 +227,7 @@ Guided = function(tank){
           var len = Math.sqrt(distx*distx+disty*disty);
           bullet.x += bullet.speed * (distx/len) * GameFrequency / 1000.;
           bullet.y += bullet.speed * (disty/len) * GameFrequency / 1000.;
+          this.angle = Math.atan2(-distx, disty)+Math.PI;
         }
         // check for wall collisions
         bullet.checkCollision(oldx, oldy);
