@@ -6,6 +6,7 @@ nplayers = 0;
 playercolors = [
   "#222222",  // red
   "#222222",  // red
+  "#000000",  // red
   "#DA1918",  // red
   "#31B32B",  // green
   "#1F87FF",  // blue
@@ -48,7 +49,7 @@ Player = function(){
 
   // spawn at some point
   this.spawn = function(){
-    this.tank = new Tank(this);
+    // this.tank = new Tank(this);
     this.tank.map = this.game.map;
     var pos = this.game.map.spawnPoint();
     this.tank.x = pos.x;

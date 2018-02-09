@@ -1,8 +1,8 @@
 
 // parent class for all weapons
 Weapon = function(tank){
-  this.tank = tank;
   this.canShoot = true;
+  this.tank = tank;
   this.image = "";
   this.shoot = function(){
 
@@ -14,9 +14,8 @@ Weapon = function(tank){
 
 // the normal, default gun
 Gun = function(tank){
-  Weapon.call(this);
+  Weapon.call(this, tank);
   this.image = "res/img/gun.png";
-  this.tank = tank;
   this.canShoot = true;
 
   this.shoot = function(){
@@ -39,9 +38,8 @@ Gun = function(tank){
 
 // a rapid-firing mini-gun
 MG = function(tank){
-  Weapon.call(this);
+  Weapon.call(this, tank);
   this.image = "res/img/mg.png";
-  this.tank = tank;
   this.canShoot = true;
   this.fired = false;
   this.nshots = 20;
@@ -75,9 +73,8 @@ MG = function(tank){
 
 // yay, lasers!
 Laser = function(tank){
-  Weapon.call(this);
+  Weapon.call(this, tank);
   this.image = "res/img/laser.png";
-  this.tank = tank;
   this.canShoot = true;
   this.fired = false;
   this.shoot = function(){
@@ -140,9 +137,8 @@ Laser = function(tank){
 
 // A grenade that can be remotely detonated
 Grenade = function(tank){
-  Weapon.call(this);
+  Weapon.call(this, tank);
   this.image = "res/img/grenade.png";
-  this.tank = tank;
   this.canShoot = true;
   this.fired = false;
   this.exploded = false;
@@ -200,9 +196,8 @@ Grenade = function(tank){
 
 // the normal, default gun
 Guided = function(tank){
-  Weapon.call(this);
+  Weapon.call(this, tank);
   this.image = "res/img/guided.png";
-  this.tank = tank;
   this.canShoot = true;
 
   this.shoot = function(){
@@ -281,9 +276,8 @@ Guided = function(tank){
 
 // destroys walls
 WreckingBall = function(tank){
-  Weapon.call(this);
+  Weapon.call(this, tank);
   this.image = "res/img/gun.png";
-  this.tank = tank;
   this.canShoot = true;
   this.fired = false;
 
