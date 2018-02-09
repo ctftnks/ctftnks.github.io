@@ -98,16 +98,16 @@ MultiBonus = function(){
 
 function getRandomPowerUp(){
   var powerups = [
-    new LaserBonus(),
-    new LaserBonus(),
-    new MGBonus(),
-    new MGBonus(),
-    new GrenadeBonus(),
-    new GrenadeBonus(),
-    new GuidedBonus(),
-    new GuidedBonus(),
+    // new LaserBonus(),
+    // new LaserBonus(),
+    // new MGBonus(),
+    // new MGBonus(),
+    // new GrenadeBonus(),
+    // new GrenadeBonus(),
+    // new GuidedBonus(),
+    // new GuidedBonus(),
     new WreckingBallBonus(),
-    new MultiBonus(),
+    // new MultiBonus(),
     new SpeedBonus()
   ];
   var len = powerups.length;

@@ -302,14 +302,7 @@ WreckingBall = function(tank){
           playSound("res/sound/grenade.wav");
           new Cloud(this.player.game, bullet.x, bullet.y, n=3);
           bullet.delete();
-          if(wall == "top")
-            tile.addWall(0, true);
-          if(wall == "left")
-            tile.addWall(1, true);
-          if(wall == "bottom")
-            tile.addWall(2, true);
-          if(wall == "right")
-            tile.addWall(3, true);
+          tile.addWall(wall, true);
         }
       }
       bullet.trace = true;
