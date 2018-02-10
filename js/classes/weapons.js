@@ -62,7 +62,6 @@ MG = function(tank){
       bullet.angle = this.tank.angle + 0.2 * (0.5 - Math.random());
       bullet.timeout = 5000 + 1000 * (0.5 - Math.random());;
       this.tank.player.game.addObject(bullet);
-      console.log("tank shoot", this.tank.player.isBot);
       if(this.fired)
         return;
 
@@ -246,7 +245,7 @@ Guided = function(tank){
         bullet.checkCollision(oldx, oldy);
         // calculate path to next tank and set next goto tile
         // at first, it waits a while and then repeats the task every few ms
-        if(bullet.age > 2500){
+        if(bullet.age > 1750){
           bullet.age -= 250;
           playSound("res/sound/guided.wav");
           // get current tile and path
