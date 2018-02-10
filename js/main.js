@@ -6,6 +6,8 @@ window.onload = function(){
   game = newGame();
   setTimeout(function(){game.pause();}, 1000);
   openMenu(false);
+  document.getElementById('mobileInput').addEventListener('keyup', function (event){Key.onKeyup(event);}, false);
+  document.getElementById('mobileInput').addEventListener('keydown', function (event){Key.onKeydown(event);}, false);
 };
 
 // start a new round

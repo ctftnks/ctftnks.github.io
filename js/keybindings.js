@@ -103,7 +103,6 @@ var keymaps = [
 window.addEventListener('keyup', function(event){Key.onKeyup(event);}, false);
 window.addEventListener('keydown', function(event){Key.onKeydown(event);}, false);
 
-
 function getKeyLabel(key){
   return String.fromCharCode((96 <= key && key <= 105)? key-48 : key);
 }
