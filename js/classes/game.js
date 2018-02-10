@@ -64,7 +64,7 @@ Game = function(canvas){
         this.objs[i].step();
       // add random PowerUp
       if(this.t % PowerUpFrequency == 0){
-        // var p = getRandomPowerUp();
+        var p = getRandomPowerUp();
         var pos = this.map.spawnPoint();
         p.x = pos.x;
         p.y = pos.y;
