@@ -59,7 +59,7 @@ Player = function(){
     this.game.n_playersAlive += 1;
     // this.game.addObject(new Smoke(this.x, this.y));
     var self = this;
-    this.game.intvls.push(setTimeout(function(){
+    this.game.timeouts.push(setTimeout(function(){
       new Cloud(self.game, self.tank.x, self.tank.y, n=4, radius=20, rspeed=2);
     }, 10));
   }
@@ -72,10 +72,10 @@ Player = function(){
     this.game.canvas.shake();
     updateScores();
     if(this.game.nkills >= MaxKillsPerGame){
-      this.game.intvls.push(setTimeout(function(){game.stop();}, TimeAfterLastKill));
+      this.game.timeouts.push(setTimeout(function(){game.stop();}, TimeAfterLastKill));
     }
     var self = this;
-    this.game.intvls.push(setTimeout(function(){
+    this.game.timeouts.push(setTimeout(function(){
       self.spawn();
     }, 3000));
   }

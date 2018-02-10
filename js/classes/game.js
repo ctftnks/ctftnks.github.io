@@ -19,6 +19,7 @@ Game = function(canvas){
   this.n_playersAlive = 0;
   this.t = 0;
   this.intvls = [];
+  this.timeouts = [];
   this.nkills = 0;
 
   // add a player (class) to the game
@@ -63,12 +64,12 @@ Game = function(canvas){
         this.objs[i].step();
       // add random PowerUp
       if(this.t % PowerUpFrequency == 0){
-        var p = getRandomPowerUp();
+        // var p = getRandomPowerUp();
         var pos = this.map.spawnPoint();
         p.x = pos.x;
         p.y = pos.y;
         this.addObject(p);
-        this.intvls.push(setInterval(function(){p.delete();}, PowerUpFrequency*MaxPowerUps));
+        this.timeouts.push(setTimeout(function(){p.delete();}, PowerUpFrequency*MaxPowerUps));
       }
     }
   }
@@ -76,8 +77,6 @@ Game = function(canvas){
   // pause the game
   this.pause = function(){
     this.paused = true;
-    // for(var i=0; i<this.intvls.length; i++)
-    //   clearInterval(this.intvls[i]);
     console.log("Game paused!");
   }
 
@@ -87,6 +86,8 @@ Game = function(canvas){
     clearInterval(this.loop);
     for(var i=0; i<this.intvls.length; i++)
       clearInterval(this.intvls[i]);
+    for(var i=0; i<this.timeouts.length; i++)
+      clearTimeout(this.timeouts[i]);
     console.log("Game stopped!");
     newGame();
   }

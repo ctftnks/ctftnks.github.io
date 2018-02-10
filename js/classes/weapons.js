@@ -46,7 +46,7 @@ MG = function(tank){
   this.canShoot = true;
   this.fired = false;
   this.nshots = 20;
-  this.every = 50;
+  this.every = 0;
   this.shoot = function(){
     this.every -= GameFrequency;
     if(this.nshots > 0 && this.every < 0){
@@ -62,11 +62,13 @@ MG = function(tank){
       bullet.angle = this.tank.angle + 0.2 * (0.5 - Math.random());
       bullet.timeout = 5000 + 1000 * (0.5 - Math.random());;
       this.tank.player.game.addObject(bullet);
+      console.log("tank shoot", this.tank.player.isBot);
       if(this.fired)
         return;
+
       this.fired = true;
       var self = this;
-      this.tank.player.game.intvls.push(setTimeout(function(){
+      this.tank.player.game.timeouts.push(setTimeout(function(){
         if(self.tank.weapon==self)
           self.tank.defaultWeapon();
       }, 2500));
@@ -96,7 +98,7 @@ Laser = function(tank){
       bullet.leaveTrace = function(){
         var angle = bullet.angle;
         var thisbullet = bullet;
-        var smoke = new Smoke(this.x, this.y, timeout=500, radius=thisbullet.radius, rspeed = 0);
+        var smoke = new Smoke(this.x, this.y, timeout=400, radius=thisbullet.radius, rspeed = 0);
         smoke.color = thisbullet.color;
         smoke.draw = function(canvas, context){
           context.save();
@@ -110,13 +112,13 @@ Laser = function(tank){
         }
         bullet.player.game.addObject(smoke);
       }
-      bullet.timeout = 500;
+      bullet.timeout = 400;
       bullet.age = 0;
       this.tank.player.game.addObject(bullet);
       this.canShoot = false;
       this.fired = true;
       var self = this;
-      this.tank.player.game.intvls.push(setTimeout(function(){
+      this.tank.player.game.timeouts.push(setTimeout(function(){
         if(self.tank.weapon==self)
           self.tank.defaultWeapon();
       }, 1500));
@@ -188,7 +190,7 @@ Grenade = function(tank){
       }
       clearInterval(this.intvl);
       var self = this;
-      this.tank.player.game.intvls.push(setTimeout(function(){
+      this.tank.player.game.timeouts.push(setTimeout(function(){
         if(self.tank.weapon==self)
           self.tank.defaultWeapon();
       }, 1000));
@@ -283,7 +285,7 @@ Guided = function(tank){
 // destroys walls
 WreckingBall = function(tank){
   Weapon.call(this, tank);
-  this.image = "res/img/gun.png";
+  this.image = "res/img/wreckingBall.png";
   this.canShoot = true;
   this.fired = false;
 
@@ -323,7 +325,7 @@ WreckingBall = function(tank){
       this.canShoot = false;
       this.fired = true;
       var self = this;
-      this.tank.player.game.intvls.push(setTimeout(function(){
+      this.tank.player.game.timeouts.push(setTimeout(function(){
         if(self.tank.weapon==self)
           self.tank.defaultWeapon();
       }, 1000));

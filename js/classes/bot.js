@@ -76,7 +76,7 @@ BotTank = function(player){
         } else if(weapon == "Grenade"){
           this.fleeFor(4500);
           var self = this;
-          this.player.game.intvls.push(setTimeout(function(){
+          this.player.game.timeouts.push(setTimeout(function(){
             self.shoot();
           }, 4000));
         } else {
@@ -143,7 +143,7 @@ BotTank = function(player){
   this.fleeFor = function(time){
     if(!this.isFleeing){
       var self = this;
-      this.player.game.intvls.push(setTimeout(function(){
+      this.player.game.timeouts.push(setTimeout(function(){
         self.isFleeing = false;
       }, time));
       this.isFleeing = true;

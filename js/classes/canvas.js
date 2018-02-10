@@ -61,7 +61,7 @@ Canvas = function(id){
       self.canvas.style.marginTop = randy+"px";
       setTimeout(function(){self.canvas.style.marginLeft = 0+"px";self.canvas.style.marginTop = 0+"px";}, speed);
     }, 2*speed);
-    this.game.intvls.push(setTimeout(function(){clearInterval(intvl);}, duration));
+    this.game.timeouts.push(setTimeout(function(){clearInterval(intvl);}, duration));
   }
 
 }
