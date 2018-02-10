@@ -34,7 +34,11 @@ BotTank = function(player){
         return false;
       });
 
-      if(path.length < 3){
+      var sdist = 3;
+      if(Math.random() > 0.6)
+        sdist+=1;
+
+      if(path.length < sdist){
         // if path is short enough: aim and fire a bullet
         this.goto = -1;
         var target = path[path.length-1].objs[0];

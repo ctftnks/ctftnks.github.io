@@ -46,7 +46,10 @@ Player = function(){
 
   // spawn at some point
   this.spawn = function(){
-    // this.tank = new Tank(this);
+    if(isBot)
+      this.tank = new BotTank(this);
+    else
+      this.tank = new Tank(this);
     this.tank.deleted = false;
     this.tank.map = this.game.map;
     var pos = this.game.map.spawnPoint();

@@ -84,30 +84,38 @@ SpeedBonus = function(){
 MultiBonus = function(){
   PowerUp.call(this);
   this.image = "res/img/multi.png";
+  this.used = false;
   this.apply = function(tank){
-    PowerUpFrequency /= 3.;
-    MaxPowerUps *= 3.;
-    var self = tank;
-    setTimeout(function(){
-      PowerUpFrequency *= 3.;
-      MaxPowerUps /= 3.;
-    }, 5000);
+    if(!this.used){
+      console.log("before", PowerUpFrequency, this.used);
+      this.used = true;
+      PowerUpFrequency /= 4.;
+      console.log("after", PowerUpFrequency);
+      MaxPowerUps *= 4.;
+      var self = tank;
+      setTimeout(function(){
+        console.log("before_r", PowerUpFrequency);
+        PowerUpFrequency *= 4.;
+        console.log("after_r", PowerUpFrequency);
+        MaxPowerUps /= 4.;
+      }, 8000);
+    }
   }
 }
 
 
 function getRandomPowerUp(){
   var powerups = [
-    // new LaserBonus(),
-    // new LaserBonus(),
-    // new MGBonus(),
-    // new MGBonus(),
-    // new GrenadeBonus(),
-    // new GrenadeBonus(),
-    // new GuidedBonus(),
-    // new GuidedBonus(),
+    new LaserBonus(),
+    new LaserBonus(),
+    new MGBonus(),
+    new MGBonus(),
+    new GrenadeBonus(),
+    new GrenadeBonus(),
+    new GuidedBonus(),
+    new GuidedBonus(),
     new WreckingBallBonus(),
-    // new MultiBonus(),
+    new MultiBonus(),
     new SpeedBonus()
   ];
   var len = powerups.length;
