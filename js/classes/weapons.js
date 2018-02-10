@@ -4,6 +4,7 @@ Weapon = function(tank){
   this.canShoot = true;
   this.tank = tank;
   this.image = "";
+  this.name = "Weapon";
   this.shoot = function(){
 
   }
@@ -15,6 +16,7 @@ Weapon = function(tank){
 // the normal, default gun
 Gun = function(tank){
   Weapon.call(this, tank);
+  this.name = "Gun";
   this.image = "res/img/gun.png";
   this.canShoot = true;
 
@@ -39,6 +41,7 @@ Gun = function(tank){
 // a rapid-firing mini-gun
 MG = function(tank){
   Weapon.call(this, tank);
+  this.name = "MG";
   this.image = "res/img/mg.png";
   this.canShoot = true;
   this.fired = false;
@@ -75,6 +78,7 @@ MG = function(tank){
 Laser = function(tank){
   Weapon.call(this, tank);
   this.image = "res/img/laser.png";
+  this.name = "Laser";
   this.canShoot = true;
   this.fired = false;
   this.shoot = function(){
@@ -139,6 +143,7 @@ Laser = function(tank){
 Grenade = function(tank){
   Weapon.call(this, tank);
   this.image = "res/img/grenade.png";
+  this.name = "Grenade";
   this.canShoot = true;
   this.fired = false;
   this.exploded = false;
@@ -198,6 +203,7 @@ Grenade = function(tank){
 Guided = function(tank){
   Weapon.call(this, tank);
   this.image = "res/img/guided.png";
+  this.name = "Guided";
   this.canShoot = true;
 
   this.shoot = function(){

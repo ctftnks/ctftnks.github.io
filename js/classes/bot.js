@@ -17,6 +17,8 @@ BotTank = function(player){
   this.player = player;
   this.goto = -1;
   this.lastChecked = 0;
+  this.path = undefined;
+  this.isFleeing = false;
 
   this.checkWallCollision = function(){return false;}
   this.step = function(){
@@ -33,19 +35,53 @@ BotTank = function(player){
         }
         return false;
       });
+      this.path = path;
 
       var sdist = 3;
+      if(this.weapon.name == "Laser")
+        sdist = 5;
+      if(this.weapon.name == "Guided")
+        sdist = 5;
+      if(this.weapon.name == "Guided")
+        sdist = 5;
       if(Math.random() > 0.6)
         sdist+=1;
+
+
+      // get reverse path to flee
+      if(this.isFleeing)
+        this.flee();
 
       if(path.length < sdist){
         // if path is short enough: aim and fire a bullet
         this.goto = -1;
         var target = path[path.length-1].objs[0];
-        var distx = target.x - this.x;
-        var disty = target.y - this.y;
+        if(typeof(target)!="undefined"){
+          var distx = target.x - this.x;
+          var disty = target.y - this.y;
+        }else{
+          var distx = 0;
+          var disty = 0;
+        }
+        var weapon = this.weapon.name;
         this.angle = Math.atan2(-distx, disty)+Math.PI;
+        // // don't shoot directly against a wall
+        // var shootingdirection = (8-parseInt(Math.round(this.angle / (Math.PI/2.)))) % 4;
+        // if(!tile.walls[shootingdirection])
+        //   this.angle += Math.PI/4 * (Math.random()-0.5);
+
         this.shoot();
+        if(weapon == "Guided"){
+          this.fleeFor(3500);
+        } else if(weapon == "Grenade"){
+          this.fleeFor(4500);
+          var self = this;
+          this.player.game.intvls.push(setTimeout(function(){
+            self.shoot();
+          }, 4000));
+        } else {
+          this.fleeFor(1000);
+        }
       }else{
         // else set goto to coordinates of next path frame
         this.goto = path[1];
@@ -64,7 +100,7 @@ BotTank = function(player){
         this.angle += 2 * Math.PI;
       this.angle = this.angle % (2*Math.PI);
       // turn and move in correct direction
-      if(Math.abs(this.angle - newangle)<0.6){
+      if(Math.abs(this.angle - newangle)<0.6 || Math.abs(Math.abs(this.angle - newangle) - Math.PI*2)<0.6){
         this.move(1);
       }
       if(Math.abs(this.angle - newangle)<0.1){
@@ -84,5 +120,35 @@ BotTank = function(player){
     this.weapon.crosshair();
     this.checkBulletCollision();
   }
+
+  // flee instead of going to the next tank
+  this.flee = function(){
+    if(this.path.length > 1){
+      var currentTile = this.path[0];
+      var nextTile = this.path[1];
+      var nn = -1;
+      var currentDirection = -1;
+      for(var i=0; i<4; i++)
+        if(currentTile.neighbors[i].id == nextTile.id)
+          currentDirection = i
+      var reverseDirection = currentDirection + 2;
+      this.path[1] = this.path[0];
+      for(var i=reverseDirection; i<reverseDirection+4; i++)
+        if(!currentTile.walls[i%4] && currentTile.neighbors[i%4].id != nextTile.id)
+          this.path[1] = currentTile.neighbors[i%4];
+    }
+  }
+
+  // flee for a time of <time> ms
+  this.fleeFor = function(time){
+    if(!this.isFleeing){
+      var self = this;
+      this.player.game.intvls.push(setTimeout(function(){
+        self.isFleeing = false;
+      }, time));
+      this.isFleeing = true;
+    }
+  }
+
 
 }

@@ -46,7 +46,7 @@ Player = function(){
 
   // spawn at some point
   this.spawn = function(){
-    if(isBot)
+    if(this.isBot)
       this.tank = new BotTank(this);
     else
       this.tank = new Tank(this);
