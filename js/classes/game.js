@@ -51,21 +51,15 @@ Game = function(canvas){
     if(!this.paused){
       // remove deleted objects and
       // initiate spatial sorting of objects within the map class
-      // console.time("maps");
       this.map.clearObjectLists();
-      var newObjs = [];
-      for(var i=0; i<this.objs.length; i++)
-        if(!this.objs[i].deleted){
-          newObjs.push(this.objs[i]);
+      for(var i=this.objs.length-1; i>=0; i--)
+        if(!this.objs[i].deleted)
           this.map.addObject(this.objs[i]);
-        }
-      // console.timeEnd("maps");
+        else
+          this.objs.splice(i, 1);
       // call step() function for every object in order for it to move/etc.
-      // console.time("stps");
-      this.objs = newObjs;
       for(var i=0; i<this.objs.length; i++)
         this.objs[i].step();
-      // console.timeEnd("stps");
       // add random PowerUp
       if(this.t % PowerUpFrequency == 0){
         var p = getRandomPowerUp();
@@ -73,14 +67,14 @@ Game = function(canvas){
         p.x = pos.x;
         p.y = pos.y;
         this.addObject(p);
-        // this.timeouts.push(setTimeout(function(){p.delete();}, PowerUpFrequency*MaxPowerUps));
+        this.timeouts.push(setTimeout(function(){p.delete();}, PowerUpFrequency*MaxPowerUps));
       }
     }
   }
 
   // pause the game
   this.pause = function(){
-    this.paused = true;
+    this.paused = !this.paused;
     console.log("Game paused!");
   }
 

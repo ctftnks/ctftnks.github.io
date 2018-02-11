@@ -3,9 +3,9 @@
 window.onload = function(){
   canvas = new Canvas("gameFrame");
   players = [new Player(), new Player()];
-  game = newGame();
-  setTimeout(function(){game.pause();}, 1000);
-  openMenu(false);
+  // game = newGame();
+  // setTimeout(function(){game.pause();}, 1000);
+  openMenu();
   document.getElementById('mobileInput').addEventListener('keyup', function (event){Key.onKeyup(event);}, false);
   document.getElementById('mobileInput').addEventListener('keydown', function (event){Key.onKeydown(event);}, false);
 };
@@ -60,15 +60,15 @@ function updateScores(){
 }
 
 
-function openMenu(pause=true){
+function openMenu(pause=false){
   if(pause)
     game.pause();
   document.getElementById("menu").style.display = "block";
   updateMenu();
 }
-function closeMenu(){
-  if(game.paused)
-    game.start();
+function closeMenu(pause=true){
+  // if(pause && game.paused)
+  //   game.pause();
   document.getElementById("menu").style.display = "none";
 }
 function updateMenu(){

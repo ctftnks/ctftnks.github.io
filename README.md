@@ -9,4 +9,5 @@ Zum Starten main.html öffnen.
 - bots rotate instantly when aiming.. too hard?
 - different bot hardnesses
 - an input field for mobile
+- a weapon that can shoot as often as you want
 - bessere Grafiken: Vektorgrafiken zeichnen

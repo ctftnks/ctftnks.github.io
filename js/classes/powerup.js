@@ -7,10 +7,10 @@ PowerUp = function(){
   Object.call(this);
   this.isPowerUp = true;
   this.image = "";
-  this.width = 24;
+  this.width = 30;
   this.x = undefined;
   this.y = undefined;
-  this.radius = 12;
+  this.radius = 40;
 
   this.apply = function(tank){
 
@@ -103,12 +103,8 @@ MultiBonus = function(){
 function getRandomPowerUp(){
   var powerups = [
     new LaserBonus(),
-    new LaserBonus(),
-    new MGBonus(),
     new MGBonus(),
     new GrenadeBonus(),
-    new GrenadeBonus(),
-    new GuidedBonus(),
     new GuidedBonus(),
     new WreckingBallBonus(),
     new MultiBonus(),

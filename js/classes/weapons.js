@@ -70,7 +70,7 @@ MG = function(tank){
       this.tank.player.game.timeouts.push(setTimeout(function(){
         if(self.tank.weapon==self)
           self.tank.defaultWeapon();
-      }, 2500));
+      }, 3000));
     }
   }
 }
@@ -276,6 +276,11 @@ Guided = function(tank){
       }
       this.tank.player.game.addObject(bullet);
       this.canShoot = false;
+      var self = this;
+      this.tank.player.game.timeouts.push(setTimeout(function(){
+        if(self.tank.weapon==self)
+          self.tank.defaultWeapon();
+      }, 1000));
     }
   }
 }
