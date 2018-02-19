@@ -78,6 +78,14 @@ WreckingBallBonus = function(){
     tank.weapon = new WreckingBall(tank);
   }
 }
+SteelBeamBonus = function(){
+  PowerUp.call(this);
+  this.image = "res/img/steelBeam.png";
+  this.apply = function(tank){
+    playSound("res/sound/reload.wav");
+    tank.weapon = new SteelBeam(tank);
+  }
+}
 SpeedBonus = function(){
   PowerUp.call(this);
   this.image = "res/img/speed.png";
@@ -116,6 +124,7 @@ function getRandomPowerUp(){
     new MineBonus(),
     new GuidedBonus(),
     new WreckingBallBonus(),
+    new SteelBeamBonus(),
     new MultiBonus(),
     new SpeedBonus()
   ];

@@ -347,6 +347,7 @@ Guided = function(tank){
 WreckingBall = function(tank){
   Weapon.call(this, tank);
   this.image = "res/img/wreckingBall.png";
+  this.name = "WreckingBall";
   this.canShoot = true;
   this.fired = false;
 
@@ -401,6 +402,34 @@ WreckingBall = function(tank){
       this.tank.player.game.addObject(bullet);
       this.canShoot = false;
       this.fired = true;
+      var self = this;
+      this.tank.player.game.timeouts.push(setTimeout(function(){
+        if(self.tank.weapon==self)
+          self.tank.defaultWeapon();
+      }, 1000));
+    }
+  }
+}
+
+
+// creates walls
+SteelBeam = function(tank){
+  Weapon.call(this, tank);
+  this.name = "WallBuilder";
+  this.image = "res/img/steelBeam.png";
+  this.canShoot = true;
+
+  this.shoot = function(){
+    if(this.canShoot){
+      playSound("res/sound/gun.wav");
+      var tile = this.tank.map.getTileByPos(this.tank.x, this.tank.y);
+      var direction = this.tank.angle;
+      while(direction < 0)
+        direction += 2*Math.PI;
+      var direction = Math.round(-direction / (Math.PI/2.) + 16) % 4;
+      console.log(direction);
+      tile.walls[direction] = true;
+      this.canShoot = false;
       var self = this;
       this.tank.player.game.timeouts.push(setTimeout(function(){
         if(self.tank.weapon==self)
