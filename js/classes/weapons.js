@@ -217,7 +217,7 @@ Guided = function(tank){
       bullet.image = "res/img/guided.png";
       bullet.color = "#555";
       bullet.smokeColor = "#555";
-      bullet.speed = BulletSpeed;
+      bullet.speed = 1.2*TankSpeed;
       bullet.angle = this.tank.angle;
       bullet.goto = -1;
       bullet.step = function(){
@@ -252,19 +252,18 @@ Guided = function(tank){
           var tile = bullet.map.getTileByPos(oldx, oldy);
           var path = tile.pathTo(function(destination){
             for(var i=0; i<destination.objs.length; i++)
-              if(destination.objs[i].isTank)
-                return true;
-            return false;
+              return destination.objs[i].isTank;
           });
           // set next path tile as goto point
           if(path.length > 1){
             bullet.goto = path[1];
           }else{
             // if there is no next tile, hit first object in tile
-            if(tile.objs.length > 0)
+            if(tile.objs.length > 0 && tile.objs[0].isTank)
               bullet.goto = {x:tile.objs[0].x,y:tile.objs[0].y,dx:0,dy:0};
           }
-          bullet.smokeColor = path[path.length-1].objs[0].color;
+          if(path.length > 0)
+            bullet.smokeColor = path[path.length-1].objs[0].color;
         }
         bullet.leaveTrace = function(){
           if(Math.random() > 0.8){
@@ -309,6 +308,7 @@ WreckingBall = function(tank){
         if(tile == -1)
           return;
         var wall = tile.getWall(this.x, this.y);
+        // TODO: check if wall is outer wall! don't remove outer walls
         if(wall != -1){
           // hit a wall: remove it!
           playSound("res/sound/grenade.wav");

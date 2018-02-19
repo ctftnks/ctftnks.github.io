@@ -88,12 +88,12 @@ MultiBonus = function(){
   this.apply = function(tank){
     if(!this.used){
       this.used = true;
-      PowerUpFrequency /= 5.;
-      MaxPowerUps *= 5.;
+      PowerUpFrequency /= 3.;
+      MaxPowerUps *= 3.;
       var self = tank;
       setTimeout(function(){
-        PowerUpFrequency *= 5.;
-        MaxPowerUps /= 5.;
+        PowerUpFrequency *= 3.;
+        MaxPowerUps /= 3.;
       }, 8000);
     }
   }

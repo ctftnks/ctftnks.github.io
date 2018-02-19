@@ -6,7 +6,7 @@ GameFrequency = 5;
 TankWidth = 34;
 TankHeight = 50;
 
-TankSpeed = 160;
+TankSpeed = 170;
 TankTurnSpeed = 3.6;
 BulletSpeed = 240;
 

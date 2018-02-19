@@ -84,12 +84,13 @@ function updateMenu(){
   playersMenu.innerHTML += entry;
   for(var i=0; i<players.length; i++){
     var entry = "";
+    var id = players[i].id;
     entry += "<div class='entry'>";
     entry += "<button class='name' onclick='editPlayerName("+i+")' style='color:"+players[i].color+";''>";
     entry += players[i].name;
     entry += "</button>";
     entry += editableKeymap(players[i].id);
-    entry += "<button class='remove' onclick='removePlayer("+i+")'>";
+    entry += "<button class='remove' onclick='removePlayer("+id+")'>";
     entry += "&times;</button>";
     entry += "</div>";
     playersMenu.innerHTML += entry;
@@ -97,8 +98,8 @@ function updateMenu(){
 }
 
 
-function editPlayerName(playerID){
-  players[playerID].name = prompt("Namen eingeben:");
+function editPlayerName(index){
+  players[index].name = prompt("Namen eingeben:");
   updateScores();
   updateMenu();
 }
