@@ -29,7 +29,7 @@ Player = function(){
   this.id = nplayers++;
   this.name = "Player " + (this.id+1);
   this.color = playercolors[this.id];
-  this.team = this.color;
+  this.team = this.id;
   this.game = undefined;
   this.score = 0;
   this.spree = 0;
@@ -94,6 +94,12 @@ Player = function(){
     for(var i=0; i<this.game.players.length; i++)
       if(this.game.players[i].team == this.team)
         this.game.players[i].score += val;
+  }
+
+  // change color
+  this.changeColor = function(){
+    this.team += 1;
+    this.color = playercolors[this.team % playercolors.length];
   }
 
 }

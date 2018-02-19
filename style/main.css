@@ -77,6 +77,12 @@ body{
   margin-right: 20px;
 }
 
+#playersMenu .team{
+  display: inline-block;
+  width: 30px;
+  margin-right: 20px;
+}
+
 #playersMenu .remove{
   display: inline-block;
   width: 30px;

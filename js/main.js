@@ -76,22 +76,22 @@ function updateMenu(){
   playersMenu.innerHTML = "";
   var entry = "";
   entry += "<div class='entry'>";
+  entry += "<span style='width:50px;display:inline-block;'></span>";
   entry += "<button class='name'>Name</button>";
   entry += editableKeymap(-1);
-  entry += "<span style='width:50px;display:inline-block;'></div>";
+  entry += "<span style='width:50px;display:inline-block;'></span>";
   entry += "</div>";
-  entry += "<br></div>";
   playersMenu.innerHTML += entry;
   for(var i=0; i<players.length; i++){
     var entry = "";
     var id = players[i].id;
     entry += "<div class='entry'>";
-    entry += "<button class='name' onclick='editPlayerName("+i+")' style='color:"+players[i].color+";''>";
+    entry += "<button class='team' onclick='players["+id+"].changeColor();updateMenu();' style='color:"+players[i].color+";'>&bull;</button>";
+    entry += "<button class='name' onclick='editPlayerName("+i+")' style='color:"+players[i].color+";'>";
     entry += players[i].name;
     entry += "</button>";
     entry += editableKeymap(players[i].id);
-    entry += "<button class='remove' onclick='removePlayer("+id+")'>";
-    entry += "&times;</button>";
+    entry += "<button class='remove' onclick='removePlayer("+id+")'>&times;</button>";
     entry += "</div>";
     playersMenu.innerHTML += entry;
   }
