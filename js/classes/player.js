@@ -90,7 +90,7 @@ Player = function(){
     this.spree += 1;
     if(this.spree > 5 && this.spree % 5 == 0){
       this.score += Math.floor(this.spree / 5)
-      playSound("res/sound/killingspree.wav");
+      playSound("res/sound/killingspree.mp3");
     }
     for(var i=0; i<this.game.players.length; i++)
       if(this.game.players[i].team == this.team && this.game.players[i].name != this.name)
