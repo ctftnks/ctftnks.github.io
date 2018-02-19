@@ -151,6 +151,9 @@ Tank = function(player){
     // for each bullet in the list, check if it intersects the tank
     for(var i=0; i<bullets.length; i++){
       if(this.intersects(bullets[i].x, bullets[i].y)){
+        // Friendly fire?
+        if(!FriendlyFire && this.player.team == bullets[i].player.team)
+          return;
         // Hit!
         bullets[i].delete();
         if(this.invincible)
