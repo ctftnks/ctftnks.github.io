@@ -72,6 +72,7 @@ Player = function(){
     this.game.n_playersAlive -= 1;
     this.game.nkills++;
     this.game.canvas.shake();
+    this.score -= 1;
     this.spree = 0;
     updateScores();
     if(this.game.nkills >= MaxKillsPerGame){
@@ -91,14 +92,17 @@ Player = function(){
       this.score += Math.floor(this.spree / 5)
       playSound("res/sound/killingspree.wav");
     }
-    for(var i=0; i<this.game.players.length; i++)
-      if(this.game.players[i].team == this.team)
+    for(var i=0; i<this.game.players.length; i++){
+      console.log(this.game.players[i].team, this.team);
+      if(this.game.players[i].team == this.team && this.game.players[i].name != this.name)
         this.game.players[i].score += val;
+    }
   }
 
   // change color
   this.changeColor = function(){
     this.team += 1;
+    this.team = this.team % playercolors.length;
     this.color = playercolors[this.team % playercolors.length];
   }
 

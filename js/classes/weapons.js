@@ -207,7 +207,7 @@ Mine = function(tank){
   this.fired = false;
   this.exploded = false;
   this.bullet = undefined;
-  this.nshrapnels = 10;
+  this.nshrapnels = 24;
   this.shoot = function(){
     if(!this.fired){
       var bullet = new Bullet(this);
@@ -221,7 +221,7 @@ Mine = function(tank){
       bullet.image = "res/img/mine.png";
       bullet.speed = BulletSpeed;
       bullet.angle = this.tank.angle;
-      bullet.timeout = 10000;
+      bullet.timeout = 180000;
       var self = this;
       bullet.delete = function(){
         self.shoot();
@@ -233,7 +233,7 @@ Mine = function(tank){
         bullet.speed = 0;
         if(self.tank.weapon==self)
           self.tank.defaultWeapon();
-      }, 1000));
+      }, 600));
     }
 
     if(this.fired && this.bullet.age > 1000 && !this.exploded){
@@ -370,7 +370,6 @@ WreckingBall = function(tank){
         // TODO: check if wall is outer wall! don't remove outer walls
         if(wall != -1){
           // is the wall an outer wall?
-          console.log(wall, tile.neighbors[wall]);
           if(typeof(tile.neighbors[wall]) == "undefined" || tile.neighbors[wall] == -1){
             playSound(this.bounceSound);
             // outer wall wall: handle accordingly
@@ -415,7 +414,7 @@ WreckingBall = function(tank){
 // creates walls
 SteelBeam = function(tank){
   Weapon.call(this, tank);
-  this.name = "WallBuilder";
+  this.name = "SteelBeam";
   this.image = "res/img/steelBeam.png";
   this.canShoot = true;
 
@@ -427,8 +426,7 @@ SteelBeam = function(tank){
       while(direction < 0)
         direction += 2*Math.PI;
       var direction = Math.round(-direction / (Math.PI/2.) + 16) % 4;
-      console.log(direction);
-      tile.walls[direction] = true;
+      tile.addWall(direction);
       this.canShoot = false;
       var self = this;
       this.tank.player.game.timeouts.push(setTimeout(function(){

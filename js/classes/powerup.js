@@ -100,33 +100,44 @@ SpeedBonus = function(){
 InvincibleBonus = function(){
   PowerUp.call(this);
   this.image = "res/img/invincible.png";
+  this.applied = false;
   this.apply = function(tank){
-    // TODO: add sound
-    playSound("res/sound/invincible.wav");
-    tank.speed *= 1.1;
+    if(this.applied)
+      return;
+    this.applied = true;
+    playSound("res/sound/invincible.mp3");
+    tank.speed *= 1.14;
     var img = tank.weapon.image;
+    console.log(img);
     tank.weapon.image = "res/img/invincible.png";
     tank.invincible = true;
     var self = tank;
     tank.player.game.timeouts.push(setTimeout(function(){
-      self.speed /= 1.1;
+      self.speed /= 1.14;
       self.invincible = false;
+      console.log(img);
       tank.weapon.image = img;
-    }, 5000));
+    }, 10000));
   }
 }
 TerminatorBonus = function(){
   PowerUp.call(this);
   this.image = "res/img/terminator.png";
+  this.applied = false;
   this.apply = function(tank){
+    if(this.applied)
+      return;
+    this.applied = true;
+    playSound("res/sound/terminator.mp3");
     var self = tank;
+    self.weapon.image = this.image;
     var intvl = setInterval(function(){
       self.weapon.canShoot = true;
       self.weapon.fired = false;
-    }, 650);
+    }, 1000);
     tank.player.game.timeouts.push(setTimeout(function(){
       clearInterval(intvl)
-    }, 4000));
+    }, 60000));
   }
 }
 MultiBonus = function(){
@@ -136,12 +147,13 @@ MultiBonus = function(){
   this.apply = function(tank){
     if(!this.used){
       this.used = true;
-      PowerUpFrequency /= 3.;
-      MaxPowerUps *= 3.;
+      PowerUpFrequency /= 2.;
+      PowerUpFrequency = Math.round(PowerUpFrequency);
+      MaxPowerUps *= 2.;
       var self = tank;
       setTimeout(function(){
-        PowerUpFrequency *= 3.;
-        MaxPowerUps /= 3.;
+        PowerUpFrequency *= 2.;
+        MaxPowerUps /= 2.;
       }, 8000);
     }
   }
@@ -151,8 +163,6 @@ MultiBonus = function(){
 function getRandomPowerUp(){
   var powerups = [
     new LaserBonus(),
-    new LaserBonus(),
-    new MGBonus(),
     new MGBonus(),
     new GrenadeBonus(),
     new MineBonus(),

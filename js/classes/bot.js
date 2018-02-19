@@ -31,7 +31,7 @@ BotTank = function(player){
       var path = tile.pathTo(function(destination){
         for(var i=0; i<destination.objs.length; i++){
           if(destination.objs[i].isTank)
-            return destination.objs[i].player.id != self.player.id;
+            return destination.objs[i].player.team != self.player.team;
         }
         return false;
       });

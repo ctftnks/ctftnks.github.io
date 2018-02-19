@@ -52,7 +52,14 @@ Tank = function(player){
     var oldy = this.y;
     this.x -= direction * this.speed * Math.sin(-this.angle) * GameFrequency / 1000.;
     this.y -= direction * this.speed * Math.cos(-this.angle) * GameFrequency / 1000.;
-    if(!this.invincible && this.checkWallCollision()){
+    if(this.invincible){
+      if(this.x < 0 || this.y < 0 || this.x > this.map.Nx * this.map.dx || this.y > this.map.Ny * this.map.dy){
+        this.x = oldx;
+        this.y = oldy;
+      }
+      return;
+    }
+    if(this.checkWallCollision()){
       this.x = oldx;
       this.y = oldy;
     }
@@ -62,7 +69,7 @@ Tank = function(player){
   this.turn = function(direction){
     var oldangle = this.angle;
     this.angle += direction * TankTurnSpeed * GameFrequency / 1000.;
-    if(this.checkWallCollision())
+    if(!this.invincible && this.checkWallCollision())
       this.angle = oldangle;
   }
 
@@ -151,10 +158,10 @@ Tank = function(player){
         // fancy explosion cloud
         new Cloud(this.player.game, this.x, this.y, n=6);
         // increment score of the shooter
-        if(this.player.name == bullets[i].player.name)
-          bullets[i].player.giveScore(-1);
+        if(this.player.team == bullets[i].player.team)
+          bullets[i].player.score -= 1;
         else{
-          bullets[i].player.giveScore(1);
+          bullets[i].player.giveScore(2);
         }
         // kill the player, delete the tank and bullet
         playSound("res/sound/kill.wav");

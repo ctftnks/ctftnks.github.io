@@ -12,7 +12,7 @@ muted = false;
 TankSpeed = 170;
 TankTurnSpeed = 3.8;
 BulletSpeed = 240;
-PowerUpFrequency = 5000;
+PowerUpFrequency = 4000;
 MaxPowerUps = 8;
 MaxKillsPerGame = 40;
 // Map size
