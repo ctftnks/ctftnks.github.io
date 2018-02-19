@@ -97,6 +97,38 @@ SpeedBonus = function(){
     }, 4000));
   }
 }
+InvincibleBonus = function(){
+  PowerUp.call(this);
+  this.image = "res/img/invincible.png";
+  this.apply = function(tank){
+    // TODO: add sound
+    playSound("res/sound/invincible.wav");
+    tank.speed *= 1.1;
+    var img = tank.weapon.image;
+    tank.weapon.image = "res/img/invincible.png";
+    tank.invincible = true;
+    var self = tank;
+    tank.player.game.timeouts.push(setTimeout(function(){
+      self.speed /= 1.1;
+      self.invincible = false;
+      tank.weapon.image = img;
+    }, 5000));
+  }
+}
+TerminatorBonus = function(){
+  PowerUp.call(this);
+  this.image = "res/img/terminator.png";
+  this.apply = function(tank){
+    var self = tank;
+    var intvl = setInterval(function(){
+      self.weapon.canShoot = true;
+      self.weapon.fired = false;
+    }, 650);
+    tank.player.game.timeouts.push(setTimeout(function(){
+      clearInterval(intvl)
+    }, 4000));
+  }
+}
 MultiBonus = function(){
   PowerUp.call(this);
   this.image = "res/img/multi.png";
@@ -119,6 +151,8 @@ MultiBonus = function(){
 function getRandomPowerUp(){
   var powerups = [
     new LaserBonus(),
+    new LaserBonus(),
+    new MGBonus(),
     new MGBonus(),
     new GrenadeBonus(),
     new MineBonus(),
@@ -126,6 +160,8 @@ function getRandomPowerUp(){
     new WreckingBallBonus(),
     new SteelBeamBonus(),
     new MultiBonus(),
+    new InvincibleBonus(),
+    new TerminatorBonus(),
     new SpeedBonus()
   ];
   var len = powerups.length;

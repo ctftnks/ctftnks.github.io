@@ -18,6 +18,7 @@ Tank = function(player){
   this.weapon = new Gun(this);
   this.speed = TankSpeed;
   this.isTank = true;
+  this.invincible = false;
 
   // draw the tank (rotated) on map
   this.draw = function(canvas, context){
@@ -51,7 +52,7 @@ Tank = function(player){
     var oldy = this.y;
     this.x -= direction * this.speed * Math.sin(-this.angle) * GameFrequency / 1000.;
     this.y -= direction * this.speed * Math.cos(-this.angle) * GameFrequency / 1000.;
-    if(this.checkWallCollision()){
+    if(!this.invincible && this.checkWallCollision()){
       this.x = oldx;
       this.y = oldy;
     }
@@ -144,8 +145,9 @@ Tank = function(player){
     for(var i=0; i<bullets.length; i++){
       if(this.intersects(bullets[i].x, bullets[i].y)){
         // Hit!
-        playSound("res/sound/kill.wav");
         bullets[i].delete();
+        if(this.invincible)
+          return;
         // fancy explosion cloud
         new Cloud(this.player.game, this.x, this.y, n=6);
         // increment score of the shooter
