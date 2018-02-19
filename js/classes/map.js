@@ -191,8 +191,6 @@ Tile = function(i, j, map){
   // recursively find the shortest path to any tile in map where condition is met
   // condition is a function condition(Tile t){} returning boolean
   this.pathTo = function(condition, path=[], minPathLength=-1){
-    if(path == [])
-      console.log("pathTo");
     // add current tile to path
     path.push(this);
     // if the current path is longer than the shortest known path: abort!

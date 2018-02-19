@@ -78,6 +78,14 @@ WreckingBallBonus = function(){
     tank.weapon = new WreckingBall(tank);
   }
 }
+TrebuchetBonus = function(){
+  PowerUp.call(this);
+  this.image = "res/img/trebuchet.png";
+  this.apply = function(tank){
+    playSound("res/sound/reload.wav");
+    tank.weapon = new Trebuchet(tank);
+  }
+}
 SteelBeamBonus = function(){
   PowerUp.call(this);
   this.image = "res/img/steelBeam.png";
@@ -108,14 +116,12 @@ InvincibleBonus = function(){
     playSound("res/sound/invincible.mp3");
     tank.speed *= 1.14;
     var img = tank.weapon.image;
-    console.log(img);
     tank.weapon.image = "res/img/invincible.png";
     tank.invincible = true;
     var self = tank;
     tank.player.game.timeouts.push(setTimeout(function(){
       self.speed /= 1.14;
       self.invincible = false;
-      console.log(img);
       tank.weapon.image = img;
     }, 10000));
   }
@@ -170,6 +176,7 @@ function getRandomPowerUp(){
     new WreckingBallBonus(),
     new SteelBeamBonus(),
     new MultiBonus(),
+    new TrebuchetBonus(),
     new InvincibleBonus(),
     new TerminatorBonus(),
     new SpeedBonus()

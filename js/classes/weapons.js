@@ -436,3 +436,45 @@ SteelBeam = function(tank){
     }
   }
 }
+
+
+// throw over walls
+Trebuchet = function(tank){
+  Weapon.call(this, tank);
+  this.image = "res/img/trebuchet.png";
+  this.name = "Trebuchet";
+  this.canShoot = true;
+  this.fired = false;
+
+  this.shoot = function(){
+    if(this.canShoot && !this.fired){
+      playSound("res/sound/gun.wav");
+      var bullet = new Bullet(this);
+      bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
+      bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
+      bullet.radius = 6;
+      bullet.color = "#333";
+      bullet.speed = BulletSpeed;
+      bullet.angle = this.tank.angle;
+      bullet.timeout = 2000;
+      bullet.checkCollision = function(x, y){}
+      bullet.trace = true;
+      bullet.leaveTrace = function(){
+        if(Math.random() > 0.96){
+          bullet.speed *= 0.92;
+          var smoke = new Smoke(this.x, this.y, timeout=800, radius=bullet.radius, rspeed = 0.6);
+          smoke.color = "rgba(0,0,0,0.3)";
+          bullet.player.game.addObject(smoke);
+        }
+      }
+      this.tank.player.game.addObject(bullet);
+      this.canShoot = false;
+      this.fired = true;
+      var self = this;
+      this.tank.player.game.timeouts.push(setTimeout(function(){
+        if(self.tank.weapon==self)
+          self.tank.defaultWeapon();
+      }, 1000));
+    }
+  }
+}

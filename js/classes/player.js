@@ -92,11 +92,9 @@ Player = function(){
       this.score += Math.floor(this.spree / 5)
       playSound("res/sound/killingspree.wav");
     }
-    for(var i=0; i<this.game.players.length; i++){
-      console.log(this.game.players[i].team, this.team);
+    for(var i=0; i<this.game.players.length; i++)
       if(this.game.players[i].team == this.team && this.game.players[i].name != this.name)
         this.game.players[i].score += val;
-    }
   }
 
   // change color
