@@ -88,7 +88,7 @@ Player = function(){
   this.giveScore = function(val=1){
     this.score += val;
     this.spree += 1;
-    if(this.spree > 5 && this.spree % 5 == 0){
+    if(this.spree >= 5 && this.spree % 5 == 0){
       this.score += Math.floor(this.spree / 5)
       playSound("res/sound/killingspree.mp3");
     }
