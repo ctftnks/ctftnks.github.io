@@ -88,7 +88,7 @@ Laser = function(tank){
       var bullet = new Bullet(this);
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2.;
-      bullet.speed = 15*BulletSpeed;
+      bullet.speed = 18*BulletSpeed;
       bullet.angle = this.tank.angle;
       bullet.radius = 2;
       bullet.color = this.tank.player.color;
@@ -193,6 +193,64 @@ Grenade = function(tank){
         if(self.tank.weapon==self)
           self.tank.defaultWeapon();
       }, 1000));
+      this.bullet.delete();
+    }
+  }
+}
+
+// A mine
+Mine = function(tank){
+  Weapon.call(this, tank);
+  this.image = "res/img/mine.png";
+  this.name = "Mine";
+  this.canShoot = true;
+  this.fired = false;
+  this.exploded = false;
+  this.bullet = undefined;
+  this.nshrapnels = 10;
+  this.shoot = function(){
+    if(!this.fired){
+      var bullet = new Bullet(this);
+      this.bullet = bullet;
+      this.fired = true;
+      this.canShoot = false;
+      bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
+      bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
+      bullet.radius = 6;
+      bullet.color = "#000";
+      bullet.image = "res/img/mine.png";
+      bullet.speed = BulletSpeed;
+      bullet.angle = this.tank.angle;
+      bullet.timeout = 10000;
+      var self = this;
+      bullet.delete = function(){
+        self.shoot();
+        bullet.deleted = true;
+      }
+      this.tank.player.game.addObject(bullet);
+      var self = this;
+      this.tank.player.game.timeouts.push(setTimeout(function(){
+        bullet.speed = 0;
+        if(self.tank.weapon==self)
+          self.tank.defaultWeapon();
+      }, 1000));
+    }
+
+    if(this.fired && this.bullet.age > 1000 && !this.exploded){
+      this.exploded = true;
+      playSound("res/sound/grenade.wav");
+      for(var i=0; i<this.nshrapnels; i++){
+        var shrapnel = new Bullet(this);
+        shrapnel.x = this.bullet.x;
+        shrapnel.y = this.bullet.y;
+        shrapnel.radius = 2;
+        shrapnel.age = 0;
+        shrapnel.speed = 2 * BulletSpeed * (0.8 + 0.4 * Math.random());
+        shrapnel.angle = 2 * Math.PI * Math.random();
+        shrapnel.timeout = 600;
+        // shrapnel.checkCollision = function(x, y){}
+        this.tank.player.game.addObject(shrapnel);
+      }
       this.bullet.delete();
     }
   }

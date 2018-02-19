@@ -54,6 +54,14 @@ GrenadeBonus = function(){
     tank.weapon = new Grenade(tank);
   }
 }
+MineBonus = function(){
+  PowerUp.call(this);
+  this.image = "res/img/mine.png";
+  this.apply = function(tank){
+    playSound("res/sound/reload.wav");
+    tank.weapon = new Mine(tank);
+  }
+}
 GuidedBonus = function(){
   PowerUp.call(this);
   this.image = "res/img/guided.png";
@@ -105,12 +113,8 @@ function getRandomPowerUp(){
     new LaserBonus(),
     new MGBonus(),
     new GrenadeBonus(),
+    new MineBonus(),
     new GuidedBonus(),
-    new WreckingBallBonus(),
-    new WreckingBallBonus(),
-    new WreckingBallBonus(),
-    new WreckingBallBonus(),
-    new WreckingBallBonus(),
     new WreckingBallBonus(),
     new MultiBonus(),
     new SpeedBonus()
