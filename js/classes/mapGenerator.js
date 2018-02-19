@@ -16,7 +16,7 @@ MapGenerator = {
     }
     for(var i=0; i<map.Nx; i++){
       for(var j=0; j<map.Ny-1; j++){
-        if(Math.random() < WallProbability / 2){
+        if(Math.random() < 0.6 / 2){
           map.tiles[i*map.Ny+j].walls[2] = true;
           map.tiles[i*map.Ny+j+1].walls[0] = true;
         }
@@ -24,7 +24,7 @@ MapGenerator = {
     }
     for(var i=0; i<map.Nx-1; i++){
       for(var j=0; j<map.Ny; j++){
-        if(Math.random() < WallProbability / 2){
+        if(Math.random() < 0.6 / 2){
           map.tiles[i*map.Ny+j].walls[3] = true;
           map.tiles[(i+1)*map.Ny+j].walls[1] = true;
         }

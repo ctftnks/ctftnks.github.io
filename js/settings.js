@@ -1,25 +1,20 @@
 
-
+// Game Performance
 FrameFrequency = 30;
 GameFrequency = 5;
 
+// Graphics & Sound
 TankWidth = 34;
 TankHeight = 50;
+muted = false;
 
+// Gameplay
 TankSpeed = 170;
-TankTurnSpeed = 3.6;
+TankTurnSpeed = 3.8;
 BulletSpeed = 240;
-
-WallProbability = 0.6;
-
-TimeAfterLastKill = 2000;
-
 PowerUpFrequency = 5000;
 MaxPowerUps = 8;
-
 MaxKillsPerGame = 40;
-
+// Map size
 MapNxMin = 8;
 MapNxMax = 15;
-
-muted = false;
