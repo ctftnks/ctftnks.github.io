@@ -146,7 +146,7 @@ TerminatorBonus = function(){
       clearInterval(intvl);
       self.defaultWeapon = function(){
         self.weapon = new Gun(self);
-      }
+      };
     }, 60000));
   }
 }
