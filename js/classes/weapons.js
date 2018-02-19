@@ -310,11 +310,26 @@ WreckingBall = function(tank){
         var wall = tile.getWall(this.x, this.y);
         // TODO: check if wall is outer wall! don't remove outer walls
         if(wall != -1){
-          // hit a wall: remove it!
-          playSound("res/sound/grenade.wav");
-          new Cloud(this.player.game, bullet.x, bullet.y, n=3);
-          bullet.delete();
-          tile.addWall(wall, true);
+          // is the wall an outer wall?
+          console.log(wall, tile.neighbors[wall]);
+          if(typeof(tile.neighbors[wall]) == "undefined" || tile.neighbors[wall] == -1){
+            playSound(this.bounceSound);
+            // there seems to be a wall: handle accordingly
+            if(wall == 1 || wall == 3){   // left or right
+              this.angle *= -1;
+              this.x = 2 * x - this.x
+            }
+            if(wall == 0 || wall == 2){   // top or bottom
+              this.angle = Math.PI - this.angle;
+              this.y = 2 * y - this.y
+            }
+          }else{
+            // hit a wall: remove it!
+            playSound("res/sound/grenade.wav");
+            new Cloud(this.player.game, bullet.x, bullet.y, n=3);
+            bullet.delete();
+            tile.addWall(wall, true);
+          }
         }
       }
       bullet.trace = true;
