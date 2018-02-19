@@ -29,8 +29,10 @@ Player = function(){
   this.id = nplayers++;
   this.name = "Player " + (this.id+1);
   this.color = playercolors[this.id];
+  this.team = this.color;
   this.game = undefined;
   this.score = 0;
+  this.spree = 0;
   this.keys = keymaps[this.id];
   this.tank = new Tank(this);
   isBot = false;
@@ -70,6 +72,7 @@ Player = function(){
     this.game.n_playersAlive -= 1;
     this.game.nkills++;
     this.game.canvas.shake();
+    this.spree = 0;
     updateScores();
     if(this.game.nkills >= MaxKillsPerGame){
       this.game.timeouts.push(setTimeout(function(){game.stop();}, TimeAfterLastKill));
@@ -78,6 +81,19 @@ Player = function(){
     this.game.timeouts.push(setTimeout(function(){
       self.spawn();
     }, 3000));
+  }
+
+  // give or subtract score to player, also update killing spree
+  this.giveScore = function(val=1){
+    this.score += val;
+    this.spree += 1;
+    if(this.spree > 5 && this.spree % 5 == 0){
+      this.score += Math.floor(this.spree / 5)
+      playSound("res/sound/killingspree.wav");
+    }
+    for(var i=0; i<this.game.players.length; i++)
+      if(this.game.players[i].team == this.team)
+        this.game.players[i].score += val;
   }
 
 }

@@ -6,8 +6,6 @@ window.onload = function(){
   // game = newGame();
   // setTimeout(function(){game.pause();}, 1000);
   openMenu();
-  document.getElementById('mobileInput').addEventListener('keyup', function (event){Key.onKeyup(event);}, false);
-  document.getElementById('mobileInput').addEventListener('keydown', function (event){Key.onKeydown(event);}, false);
 };
 
 // start a new round
@@ -53,6 +51,8 @@ function updateScores(){
     entry += "<span class='name' style='color:"+players[i].color+";''>";
     entry += players[i].name;
     entry += "</span><span class='score'>";
+    if(players[i].spree > 1)
+      entry += " <span class='spree'>+"+players[i].spree+"</span>"
     entry += players[i].score;
     entry += "</span></div>";
     scoreBoard.innerHTML += entry;

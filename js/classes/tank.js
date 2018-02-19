@@ -150,9 +150,9 @@ Tank = function(player){
         new Cloud(this.player.game, this.x, this.y, n=6);
         // increment score of the shooter
         if(this.player.name == bullets[i].player.name)
-          bullets[i].player.score -= 1;
+          bullets[i].player.giveScore(-1);
         else{
-          bullets[i].player.score += 1;
+          bullets[i].player.giveScore(1);
         }
         // kill the player, delete the tank and bullet
         playSound("res/sound/kill.wav");

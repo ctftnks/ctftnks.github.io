@@ -7,7 +7,7 @@ body{
   position: fixed;
   top: 5%;
   height: 90%;
-  left: 10%;
+  left: 18%;
   width: 80%;
 }
 
@@ -16,7 +16,7 @@ body{
   top: 5%;
   height: 90%;
   left: 0;
-  width: 10%;
+  width: 18%;
   font-weight: bold;
 }
 
@@ -38,9 +38,15 @@ body{
 
 #scoreBoard .entry .score{
   position: absolute;
-  right: 4px;
-  width: 1em;
+  right: 32px;
+  /* width: 1em; */
   text-align: center;
+}
+
+#scoreBoard .entry .score .spree{
+  font-size: 0.5em;
+  color: #FF0000;
+  margin-right: 10px;
 }
 
 .clickable{
