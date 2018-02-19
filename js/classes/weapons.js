@@ -314,7 +314,7 @@ WreckingBall = function(tank){
           console.log(wall, tile.neighbors[wall]);
           if(typeof(tile.neighbors[wall]) == "undefined" || tile.neighbors[wall] == -1){
             playSound(this.bounceSound);
-            // there seems to be a wall: handle accordingly
+            // outer wall wall: handle accordingly
             if(wall == 1 || wall == 3){   // left or right
               this.angle *= -1;
               this.x = 2 * x - this.x
