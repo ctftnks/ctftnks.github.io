@@ -168,6 +168,15 @@ MultiBonus = function(){
     }
   }
 }
+FogBonus = function(){
+  PowerUp.call(this);
+  this.image = "res/img/fog.png";
+  this.used = false;
+  this.apply = function(tank){
+    if(!this.used)
+      fogOfWar(game);
+  }
+}
 
 
 function getRandomPowerUp(){
@@ -183,6 +192,7 @@ function getRandomPowerUp(){
     new TrebuchetBonus(),
     new InvincibleBonus(),
     new TerminatorBonus(),
+    new FogBonus(),
     new SpeedBonus()
   ];
   var len = powerups.length;

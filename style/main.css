@@ -3,7 +3,7 @@ body{
   /* background:#333; */
 }
 
-#gameFrame{
+#gameFrame, #effectFrame{
   position: fixed;
   top: 5%;
   height: 90%;
