@@ -30,7 +30,7 @@ BotTank = function(player){
       var self = this;
       var path = tile.pathTo(function(destination){
         for(var i=0; i<destination.objs.length; i++){
-          if(destination.objs[i].isTank)
+          if(destination.objs[i].isTank && (BotsShootBots || !destination.objs[i].player.isBot))
             return destination.objs[i].player.team != self.player.team;
         }
         return false;
