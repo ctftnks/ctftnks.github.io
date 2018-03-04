@@ -367,12 +367,11 @@ WreckingBall = function(tank){
         if(tile == -1)
           return;
         var wall = tile.getWall(this.x, this.y);
-        // TODO: check if wall is outer wall! don't remove outer walls
         if(wall != -1){
           // is the wall an outer wall?
           if(typeof(tile.neighbors[wall]) == "undefined" || tile.neighbors[wall] == -1){
             playSound(this.bounceSound);
-            // outer wall wall: handle accordingly
+            // outer wall: bounce
             if(wall == 1 || wall == 3){   // left or right
               this.angle *= -1;
               this.x = 2 * x - this.x
