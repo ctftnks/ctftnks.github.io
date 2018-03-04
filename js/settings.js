@@ -16,6 +16,7 @@ PowerUpFrequency = 4000;
 MaxPowerUps = 8;
 MaxKillsPerGame = 40;
 FriendlyFire = true;
+BotsShootBots = true;
 // Map size
 MapNxMin = 8;
 MapNxMax = 15;
