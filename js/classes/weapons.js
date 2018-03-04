@@ -258,7 +258,7 @@ Mine = function(tank){
 
 
 
-// the normal, default gun
+// a guided missile
 Guided = function(tank){
   Weapon.call(this, tank);
   this.image = "res/img/guided.png";
