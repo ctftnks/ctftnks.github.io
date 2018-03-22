@@ -15,7 +15,7 @@ BulletSpeed = 240;
 PowerUpFrequency = 4000;
 MaxPowerUps = 8;
 MaxKillsPerGame = 40;
-FriendlyFire = true;
+FriendlyFire = false;
 BotsShootBots = true;
 // Map size
 MapNxMin = 8;

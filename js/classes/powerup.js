@@ -187,7 +187,6 @@ function getRandomPowerUp(){
     new MineBonus(),
     new GuidedBonus(),
     new WreckingBallBonus(),
-    new SteelBeamBonus(),
     new MultiBonus(),
     new TrebuchetBonus(),
     new InvincibleBonus(),
