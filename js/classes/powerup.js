@@ -182,17 +182,28 @@ FogBonus = function(){
 function getRandomPowerUp(){
   var powerups = [
     new LaserBonus(),
+    new LaserBonus(),
+    new MGBonus(),
     new MGBonus(),
     new GrenadeBonus(),
+    new GrenadeBonus(),
+    new MineBonus(),
     new MineBonus(),
     new GuidedBonus(),
+    new GuidedBonus(),
     new WreckingBallBonus(),
-    new SteelBeamBonus(),
+    new WreckingBallBonus(),
+    // new SteelBeamBonus(),
+    new MultiBonus(),
     new MultiBonus(),
     new TrebuchetBonus(),
+    new TrebuchetBonus(),
+    new InvincibleBonus(),
     new InvincibleBonus(),
     new TerminatorBonus(),
+    new TerminatorBonus(),
     new FogBonus(),
+    new SpeedBonus(),
     new SpeedBonus()
   ];
   var len = powerups.length;
