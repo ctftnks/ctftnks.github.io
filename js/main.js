@@ -10,7 +10,8 @@ window.onload = function(){
 
 // start a new round
 function newGame(){
-  game = new Game(canvas);
+  mode = new Deathmatch();
+  game = new Game(canvas, mode);
   for(var i=0; i<players.length; i++)
     game.addPlayer(players[i]);
   game.start();

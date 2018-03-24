@@ -275,7 +275,7 @@ Guided = function(tank){
       bullet.image = "res/img/guided.png";
       bullet.color = "#555";
       bullet.smokeColor = "#555";
-      bullet.speed = 1.8*TankSpeed;
+      bullet.speed = 1.2*TankSpeed;
       bullet.angle = this.tank.angle;
       bullet.goto = -1;
       bullet.step = function(){
@@ -310,7 +310,9 @@ Guided = function(tank){
           var tile = bullet.map.getTileByPos(oldx, oldy);
           var path = tile.pathTo(function(destination){
             for(var i=0; i<destination.objs.length; i++)
-              return destination.objs[i].isTank;
+              if(destination.objs[i].isTank && (FriendlyFire || destination.objs[i].player.team != bullet.player.team))
+                return true;
+            return false;
           });
           // set next path tile as goto point
           if(path.length > 1){
@@ -319,6 +321,10 @@ Guided = function(tank){
             // if there is no next tile, hit first object in tile
             if(tile.objs.length > 0 && tile.objs[0].isTank)
               bullet.goto = {x:tile.objs[0].x,y:tile.objs[0].y,dx:0,dy:0};
+            else if(tile.objs.length > 1 && tile.objs[1].isTank)
+              bullet.goto = {x:tile.objs[1].x,y:tile.objs[1].y,dx:0,dy:0};
+            else if(tile.objs.length > 2 && tile.objs[2].isTank)
+              bullet.goto = {x:tile.objs[2].x,y:tile.objs[2].y,dx:0,dy:0};
           }
           if(path.length > 0)
             bullet.smokeColor = path[path.length-1].objs[0].color;
