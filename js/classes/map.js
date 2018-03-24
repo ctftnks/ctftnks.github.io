@@ -152,7 +152,7 @@ Tile = function(i, j, map){
   this.draw = function(canvas, context){
     // TODO: draw outer borders thicker
     // tile background color
-    context.fillStyle = "#FBFBFB";
+    context.fillStyle = "#FAFAFA";
     context.fillRect(this.x, this.y, this.dx, this.dy);
     context.fillStyle = "#555";
     if(this.walls[0])
