@@ -152,7 +152,7 @@ Tank = function(player){
     for(var i=0; i<bullets.length; i++){
       if(this.intersects(bullets[i].x, bullets[i].y)){
         // Friendly fire?
-        if(!FriendlyFire && this.player.team == bullets[i].player.team)
+        if(!FriendlyFire && (this.player.team == bullets[i].player.team && this.player.id != bullets[i].player.id))
           return;
         // Hit!
         bullets[i].delete();

@@ -49,11 +49,15 @@ MG = function(tank){
   this.every = 0;
   this.shoot = function(){
     this.every -= GameFrequency;
-    if(this.nshots > 0 && this.every < 0){
+    if(this.nshots > 0 && this.every < 0 && this.canShoot){
       this.every = 50;
       playSound("res/sound/mg.wav");
       var bullet = new Bullet(this);
       this.nshots--;
+      if(this.nshots <= 0){
+        this.nshots = 20;
+        this.canShoot = false;
+      }
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
       bullet.radius = 2;
@@ -70,6 +74,7 @@ MG = function(tank){
       this.tank.player.game.timeouts.push(setTimeout(function(){
         if(self.tank.weapon==self)
           self.tank.defaultWeapon();
+          this.nshots = 20;
       }, 3000));
     }
   }
