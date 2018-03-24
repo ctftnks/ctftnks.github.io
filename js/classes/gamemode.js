@@ -3,6 +3,10 @@ Gamemode = function(game){
   console.log(game)
   this.name = "defaultmode";
   this.game = game;
+  this.step = function(){
+
+  }
+
 
 }
 

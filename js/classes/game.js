@@ -61,7 +61,9 @@ Game = function(canvas){
       // call step() function for every object in order for it to move/etc.
       for(var i=0; i<this.objs.length; i++)
         this.objs[i].step();
-      // add random PowerUp
+      // do gamemode calculations
+      this.mode.step();
+	    // add random PowerUp
       if(this.t % PowerUpFrequency == 0){
         var p = getRandomPowerUp();
         var pos = this.map.spawnPoint();
