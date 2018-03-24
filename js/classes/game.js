@@ -3,7 +3,7 @@
 // contains a list of players, list of objects in the game
 // contains a loop mechanism for time-iteration
 
-Game = function(canvas, mode){
+Game = function(canvas){
 
   // pass canvas class to game, for size / resolution
   this.canvas = canvas;
@@ -21,7 +21,7 @@ Game = function(canvas, mode){
   this.intvls = [];
   this.timeouts = [];
   this.nkills = 0;
-  this.mode = mode;
+  this.mode = new Deathmatch(this);
 
   // add a player (class) to the game
   this.addPlayer = function(player){

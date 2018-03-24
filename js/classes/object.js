@@ -8,6 +8,7 @@ Object = function(){
   this.isBullet = false;
   this.isTank = false;
   this.isPowerUp = false;
+  this.type = "Object";
 
   this.delete = function(){
     this.deleted = true;

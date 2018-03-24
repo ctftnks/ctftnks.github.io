@@ -160,12 +160,8 @@ Tank = function(player){
           return;
         // fancy explosion cloud
         new Cloud(this.player.game, this.x, this.y, n=6);
-        // increment score of the shooter
-        if(this.player.team == bullets[i].player.team)
-          bullets[i].player.score -= 1;
-        else{
-          bullets[i].player.giveScore(2);
-        }
+        // let gamemode handle scoring
+        this.player.game.mode.newKill(bullets[i].player, this.player);
         // kill the player, delete the tank and bullet
         playSound("res/sound/kill.wav");
         bullets[i].delete();
