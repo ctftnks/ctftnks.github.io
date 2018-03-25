@@ -39,14 +39,12 @@ Flag = function(gam, base){
           if(!this.base.hasFlag){
             // return flag to base
             this.reset();
-            // TODO: add return sound
-            playSound("res/sound/kill.wav");
+            playSound("res/sound/returnFlag.wav");
           }
         }else if(tank.hasFlag == false){
           // pick up flag
           this.pickup(tank);
-          // TODO: add pickup sound
-          playSound("res/sound/kill.wav");
+          playSound("res/sound/flag.wav");
         }
       }
     }
@@ -105,8 +103,7 @@ Base = function(game, player, x, y){
         if(tank.hasFlag != false && this.hasFlag){
           // score!
           this.game.mode.giveScore(tank.player);
-          // TODO: add score sound
-          playSound("res/sound/kill.wav");
+          playSound("res/sound/coin.wav");
           tank.hasFlag.reset();
           tank.hasFlag = false;
         }
