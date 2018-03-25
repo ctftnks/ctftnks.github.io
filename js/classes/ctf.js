@@ -8,6 +8,27 @@ Flag = function(gam, base){
   this.game = game;
   this.image = "";
   this.base = base;
+
+  this.step = function(){
+    // TODO: do not poll tile every time!
+    var tile = this.game.map.getTileByPos(this.x, this.y);
+    for(var i=0; i<tile.objs.length; i++){
+      var obj = tile.objs[i];
+      if(obj.isTank && Math.pow(this.x-obj.x, 2) + Math.pow(this.y-obj.y, 2) < Math.pow(2*this.size, 2)){
+        if(obj.player.team == this.team){
+          // return flag to base
+          this.base.hasFlag = true;
+          // TODO: return sound
+          playSound("res/sound/kill.wav");
+        }else if(obj.hasFlag == false){
+          // pick up flag
+          obj.hasFlag = this;
+          // TODO: get flag sound
+          playSound("res/sound/kill.wav");
+        }
+      }
+    }
+  }
 }
 
 
@@ -35,10 +56,11 @@ Base = function(game){
   }
 
   this.step = function(){
+    // TODO: do not poll tile every time!
     var tile = this.game.map.getTileByPos(this.x, this.y);
     for(var i=0; i<tile.objs.length; i++){
       var obj = tile.objs[i];
-      if(obj.isTank){
+      if(obj.isTank && Math.pow(this.x-obj.x, 2) + Math.pow(this.y-obj.y, 2) < Math.pow(2*this.size, 2)){
         if(obj.player.team == this.team){
           if(obj.hasFlag != false){
             // score!
@@ -48,7 +70,7 @@ Base = function(game){
             // TODO: score sound
             playSound("res/sound/kill.wav");
           }
-        }else if(this.hasFlag){
+        }else if(this.hasFlag && obj.hasFlag == false){
           // pick up flag
           obj.hasFlag = this.flag;
           this.hasFlag = false;

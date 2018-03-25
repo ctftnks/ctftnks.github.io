@@ -163,6 +163,13 @@ Tank = function(player){
         new Cloud(this.player.game, this.x, this.y, n=6);
         // let gamemode handle scoring
         this.player.game.mode.newKill(bullets[i].player, this.player);
+        // CTF: if tank has flag, drop it
+        if(this.hasFlag != false){
+          var flag = this.hasFlag;
+          flag.x = this.x;
+          flag.y = this.y;
+          this.game.objs.push(flag);
+        }
         // kill the player, delete the tank and bullet
         playSound("res/sound/kill.wav");
         bullets[i].delete();
