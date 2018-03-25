@@ -10,14 +10,11 @@ window.onload = function(){
 
 // start a new round
 function newGame(){
-  console.log("newGame")
   game = new Game(canvas);
   if(GameMode == "DM")
     game.mode = new Deathmatch(game);
-  console.log("r1")
   if(GameMode == "TDM")
     game.mode = new TeamDeathmatch(game);
-  console.log("r2")
   if(GameMode == "CTF")
     game.mode = new CaptureTheFlag(game);
 

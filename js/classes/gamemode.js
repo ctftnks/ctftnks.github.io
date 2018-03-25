@@ -1,18 +1,11 @@
 Gamemode = function(game){
-  console.log("Mode")
-  console.log(game)
   this.name = "defaultmode";
   this.game = game;
-  this.step = function(){
-
-  }
-
-
+  this.step = function(){}
 }
 
 
 Deathmatch = function(game){
-  console.log("DM")
   Gamemode.call(this, game);
   this.name = "Deathmatch";
 
@@ -38,7 +31,6 @@ Deathmatch = function(game){
 
 
 TeamDeathmatch = function(game){
-  console.log("TDM")
   Gamemode.call(this, game);
   this.name = "TeamDeathmatch";
 

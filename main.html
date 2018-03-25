@@ -37,6 +37,35 @@
 		<div id="menu" style="display:none;">
 			<h1>AZ Tank Game</h1>
 
+			<div id="options">
+				<span class="option">
+					<span class="label">Mode</span>
+					<select onchange="GameMode=this.value">
+						<option value="DM">DM</option>
+						<option value="TDM">TDM</option>
+						<!-- <option value="CTF">CTF</option> -->
+					</select>
+				</span>
+				<span class="option">
+					<span class="label">Sound</span>
+					<select onchange="muted=this.value=='on'">
+						<option value="on">on</option>
+						<option value="off">off</option>
+					</select>
+				</span>
+				<span class="option">
+					<span class="label">Friendly Fire</span>
+					<select onchange="FriendlyFire=this.value=='on'">
+						<option value="on">on</option>
+						<option value="off">off</option>
+					</select>
+				</span>
+
+
+			</div>
+			<br />
+
+
 			<div id="playersMenu">
 
 			</div>
