@@ -30,7 +30,17 @@ Tank = function(player){
     context.rect(-this.width/2, -this.height/2, this.width, this.height);
     context.fillStyle = this.player.color;
     context.fill();
-    if(this.weapon.image != ""){
+    if(this.hasFlag != false){
+      context.beginPath();
+      context.fillStyle = this.hasFlag.color;
+      context.rect(-this.hasFlag.size/2, -this.hasFlag.size/2, this.hasFlag.size/1.1, this.hasFlag.size/2);
+      context.fill();
+      context.beginPath();
+      context.fillStyle = "#000";
+      context.rect(-this.hasFlag.size/2, -this.hasFlag.size/2, this.hasFlag.size/6, this.hasFlag.size*1.1);
+      context.fill();
+    }
+    else if(this.weapon.image != ""){
       var img = new Image;
       img.src = this.weapon.image;
       context.drawImage(img, -this.width / 2, -this.width / 2, this.width, this.width);
@@ -164,12 +174,8 @@ Tank = function(player){
         // let gamemode handle scoring
         this.player.game.mode.newKill(bullets[i].player, this.player);
         // CTF: if tank has flag, drop it
-        if(this.hasFlag != false){
-          var flag = this.hasFlag;
-          flag.x = this.x;
-          flag.y = this.y;
-          this.game.objs.push(flag);
-        }
+        if(this.hasFlag != false)
+          this.hasFlag.drop(this.x, this.y);
         // kill the player, delete the tank and bullet
         playSound("res/sound/kill.wav");
         bullets[i].delete();

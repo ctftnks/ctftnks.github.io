@@ -31,6 +31,7 @@ Player = function(){
   this.color = playercolors[this.id];
   this.team = this.id;
   this.game = undefined;
+  this.base = undefined;
   this.score = 0;
   this.spree = 0;
   this.keys = keymaps[this.id];
@@ -55,6 +56,8 @@ Player = function(){
     this.tank.deleted = false;
     this.tank.map = this.game.map;
     var pos = this.game.map.spawnPoint();
+    // if(typeof(this.base) !== "undefined" && typeof(this.base.x) !== "undefined" && typeof(this.base.y) !== "undefined")
+    //   var pos = {x: this.base.x, y: this.base.y};
     this.tank.x = pos.x;
     this.tank.y = pos.y;
     this.game.addObject(this.tank);

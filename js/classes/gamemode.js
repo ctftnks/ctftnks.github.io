@@ -91,18 +91,44 @@ CaptureTheFlag = function(game){
     // create single base for each team
     for(var i=0; i<game.players.length; i++){
       var baseExists = false;
+      var player = game.players[i];
       for(var j=0; j<bases.length; j++)
-        if(game.players[i].team == bases[j].team)
+        if(player.team == bases[j].team){
           baseExists = true;
+          player.tank.x = bases[j].x;
+          player.tank.y = bases[j].y;
+          player.base = bases[j];
+        }
       if(!baseExists){
-        var b = new Base(game);
-        var pos = game.map.spawnPoint();
-        b.x = pos.x;
-        b.y = pos.y;
-        b.team = game.players[i].team;
-        b.color = game.players[i].color;
+        // find spawnPoint that is far away from existing bases
+        var maxLength = -1;
+        var maxPos = game.map.spawnPoint();
+        for(var k=0; k<20; k++){
+          var pos = game.map.spawnPoint();
+          var tile = game.map.getTileByPos(pos.x, pos.y);
+          var length = 0;
+          for(var j=0; j<bases.length; j++){
+            var stile = this.game.map.getTileByPos(bases[j].x, bases[j].y);
+            var path = tile.pathTo(function(destination){
+              return destination.id == stile.id;
+            });
+            if(path != -1)
+              length += path.length * path.length;
+          }
+          for(var j=0; j<bases.length; j++)
+            if(bases[j].x == pos.x && bases[j].y == pos.y)
+              length = -1;
+          if(length > maxLength){
+            maxLength = length;
+            maxPos = pos;
+          }
+        }
+        var b = new Base(game, player, maxPos.x, maxPos.y);
         bases.push(b);
         game.addObject(b);
+        player.tank.x = maxPos.x;
+        player.tank.y = maxPos.y;
+        player.base = b;
       }
     }
   }
