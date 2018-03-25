@@ -9,7 +9,7 @@ TankHeight = 50;
 muted = false;
 
 // Gameplay
-GameMode = "TDM";
+GameMode = "DM";
 TankSpeed = 170;
 TankTurnSpeed = 3.8;
 BulletSpeed = 240;
