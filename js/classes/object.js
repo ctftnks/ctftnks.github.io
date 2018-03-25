@@ -13,5 +13,5 @@ Object = function(){
   this.delete = function(){
     this.deleted = true;
   }
-
+// Todo: default draw function?
 }
