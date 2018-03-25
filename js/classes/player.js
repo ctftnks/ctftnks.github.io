@@ -73,7 +73,6 @@ Player = function(){
     this.game.nkills++;
     this.game.canvas.shake();
     this.spree = 0;
-    updateScores();
     if(this.game.nkills >= MaxKillsPerGame){
       this.game.timeouts.push(setTimeout(function(){game.stop();newGame();}, 2000));
     }

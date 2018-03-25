@@ -22,7 +22,7 @@ Bullet = function(weapon){
   this.speed = BulletSpeed;
   this.color = "#000";
   // lifetime of the bullet in [ms]
-  this.timeout = 5000;
+  this.timeout = 4500;
   // bullet age starts at negative value, so it doesn't instantly kill the shooter
   this.age = -0;
   // shall the bullet leave a trace of smoke?

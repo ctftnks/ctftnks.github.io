@@ -19,6 +19,7 @@ Tank = function(player){
   this.speed = TankSpeed;
   this.isTank = true;
   this.invincible = false;
+  this.hasFlag = false;
 
   // draw the tank (rotated) on map
   this.draw = function(canvas, context){
