@@ -193,7 +193,6 @@ function getRandomPowerUp(){
     new GuidedBonus(),
     new WreckingBallBonus(),
     new WreckingBallBonus(),
-    // new SteelBeamBonus(),
     new MultiBonus(),
     new MultiBonus(),
     new TrebuchetBonus(),

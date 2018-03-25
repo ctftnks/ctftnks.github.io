@@ -23,7 +23,7 @@ BotTank = function(player){
   this.checkWallCollision = function(){return false;}
   this.step = function(){
     this.lastChecked += GameFrequency;
-    if(this.lastChecked > 400){
+    if(this.lastChecked > 400/BotSpeed){
       this.lastChecked = 0;
       // calculate path to next tank (excluding self)
       var tile = this.map.getTileByPos(this.x, this.y);
@@ -65,10 +65,6 @@ BotTank = function(player){
         }
         var weapon = this.weapon.name;
         this.angle = Math.atan2(-distx, disty)+Math.PI;
-        // // don't shoot directly against a wall
-        // var shootingdirection = (8-parseInt(Math.round(this.angle / (Math.PI/2.)))) % 4;
-        // if(!tile.walls[shootingdirection])
-        //   this.angle += Math.PI/4 * (Math.random()-0.5);
 
         this.shoot();
         if(weapon == "Guided"){
@@ -101,18 +97,18 @@ BotTank = function(player){
       this.angle = this.angle % (2*Math.PI);
       // turn and move in correct direction
       if(Math.abs(this.angle - newangle)<0.6 || Math.abs(Math.abs(this.angle - newangle) - Math.PI*2)<0.6){
-        this.move(1);
+        this.move(1*BotSpeed);
       }
       if(Math.abs(this.angle - newangle)<0.1){
         this.angle = newangle;
       } else if(this.angle < newangle) {
           if(Math.abs(this.angle - newangle)<Math.PI)
-             this.turn(2);
-          else this.turn(-2);
+             this.turn(2*BotSpeed);
+          else this.turn(-2*BotSpeed);
       } else {
           if(Math.abs(this.angle - newangle)<Math.PI)
-             this.turn(-2);
-          else this.turn(2);
+             this.turn(-2*BotSpeed);
+          else this.turn(2*BotSpeed);
       }
     }
 

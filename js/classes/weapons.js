@@ -280,7 +280,7 @@ Guided = function(tank){
       bullet.image = "res/img/guided.png";
       bullet.color = "#555";
       bullet.smokeColor = "#555";
-      bullet.speed = 1.2*TankSpeed;
+      bullet.speed = 1.3*TankSpeed;
       bullet.angle = this.tank.angle;
       bullet.goto = -1;
       bullet.step = function(){
@@ -315,7 +315,7 @@ Guided = function(tank){
           var tile = bullet.map.getTileByPos(oldx, oldy);
           var path = tile.pathTo(function(destination){
             for(var i=0; i<destination.objs.length; i++)
-              if(destination.objs[i].isTank && (FriendlyFire || destination.objs[i].player.team != bullet.player.team))
+              if(destination.objs[i].isTank && (destination.objs[i].player.team != bullet.player.team))
                 return true;
             return false;
           });
@@ -323,13 +323,12 @@ Guided = function(tank){
           if(path.length > 1){
             bullet.goto = path[1];
           }else{
-            // if there is no next tile, hit first object in tile
-            if(tile.objs.length > 0 && tile.objs[0].isTank)
-              bullet.goto = {x:tile.objs[0].x,y:tile.objs[0].y,dx:0,dy:0};
-            else if(tile.objs.length > 1 && tile.objs[1].isTank)
-              bullet.goto = {x:tile.objs[1].x,y:tile.objs[1].y,dx:0,dy:0};
-            else if(tile.objs.length > 2 && tile.objs[2].isTank)
-              bullet.goto = {x:tile.objs[2].x,y:tile.objs[2].y,dx:0,dy:0};
+            // if there is no next tile, hit the tank in the tile
+            for(var i=0; i<tile.objs.length; i++){
+              if(tile.objs[i].isTank){
+                bullet.goto = {x:tile.objs[i].x,y:tile.objs[i].y,dx:0,dy:0};
+              }
+            }
           }
           if(path.length > 0)
             bullet.smokeColor = path[path.length-1].objs[0].color;
