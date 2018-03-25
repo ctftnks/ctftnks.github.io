@@ -10,6 +10,8 @@ window.onload = function(){
 
 // start a new round
 function newGame(){
+  if(typeof game !== 'undefined')
+    game.stop();
   game = new Game(canvas);
   if(GameMode == "DM")
     game.mode = new Deathmatch(game);

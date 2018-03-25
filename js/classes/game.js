@@ -90,7 +90,6 @@ Game = function(canvas){
     for(var i=0; i<this.timeouts.length; i++)
       clearTimeout(this.timeouts[i]);
     console.log("Game stopped!");
-    newGame();
   }
 
 }

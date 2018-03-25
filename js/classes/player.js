@@ -75,7 +75,7 @@ Player = function(){
     this.spree = 0;
     updateScores();
     if(this.game.nkills >= MaxKillsPerGame){
-      this.game.timeouts.push(setTimeout(function(){game.stop();}, 2000));
+      this.game.timeouts.push(setTimeout(function(){game.stop();newGame();}, 2000));
     }
     var self = this;
     this.game.timeouts.push(setTimeout(function(){
