@@ -11,3 +11,4 @@ Zum Starten main.html öffnen.
 - window.onresize
 - better settings
 - spawnshield
+- different sprite for bots?

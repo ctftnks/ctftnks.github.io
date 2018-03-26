@@ -35,6 +35,30 @@ BotTank = function(player){
         }
         return false;
       });
+      var dontShoot = false;
+
+      // extra rule for Capture The Flag
+      if(GameMode == "CTF"){
+        var flagPath = tile.pathTo(function(destination){
+          for(var i=0; i<destination.objs.length; i++){
+            if(self.hasFlag == false && destination.objs[i].type == "Flag" && destination.objs[i].team != self.player.team)
+              return true;
+            if(self.hasFlag != false && destination.objs[i].type == "Base" && destination.objs[i].hasFlag && destination.objs[i].team == self.player.team)
+              return true;
+          }
+          for(var i=0; i<destination.objs.length; i++){
+            if(self.hasFlag != false && destination.objs[i].type == "Flag" && destination.objs[i].team == self.player.team)
+              return true;
+          }
+          return false;
+        });
+        if(path == -1 || typeof(path) === "undefined" || path.length > 5){
+          if(flagPath != -1 && typeof(flagPath) !== "undefined"){
+            dontShoot = true;
+            path = flagPath;
+          }
+        }
+      }
       this.path = path;
 
       var sdist = 3;
@@ -52,7 +76,7 @@ BotTank = function(player){
       if(this.isFleeing)
         this.flee();
 
-      if(path.length < sdist){
+      if(path.length < sdist && !dontShoot){
         // if path is short enough: aim and fire a bullet
         this.goto = -1;
         var target = path[path.length-1].objs[0];
