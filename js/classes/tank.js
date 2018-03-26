@@ -31,6 +31,13 @@ Tank = function(player){
     context.rect(-this.width/2, -this.height/2, this.width, this.height);
     context.fillStyle = this.player.color;
     context.fill();
+    context.beginPath();
+    if(!this.player.isBot){
+      context.fillStyle = "rgba(0, 0, 0, 0.15)";
+      context.rect(-this.width/2, -this.height/2, this.width/5, this.height);
+      context.rect(this.width/2-this.width/5, -this.height/2, this.width/5, this.height);
+      context.fill();
+    }
     if(this.carriedFlag != -1){
       context.beginPath();
       context.fillStyle = this.carriedFlag.color;
@@ -46,7 +53,6 @@ Tank = function(player){
       img.src = this.weapon.image;
       context.drawImage(img, -this.width / 2, -this.width / 2, this.width, this.width);
     }
-
     context.restore();
   }
 

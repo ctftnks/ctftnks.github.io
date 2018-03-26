@@ -75,11 +75,9 @@ Base = function(game, player, x, y){
   this.image = "";
   this.x = x;
   this.y = y;
-  this.flag = new Flag(game, this);
-  this.flag.drop(x, y);
-  this.hasFlag = true;
+  this.flag = undefined;
   this.size = 80;
-  this.tile = -1;
+  this.tile = this.game.map.getTileByPos(this.x, this.y);
 
   this.draw = function(canvas, context){
     context.save();
@@ -95,8 +93,6 @@ Base = function(game, player, x, y){
   }
 
   this.step = function(){
-    if(this.tile == -1)
-      this.tile = this.game.map.getTileByPos(this.x, this.y);
     for(var i=0; i<this.tile.objs.length; i++){
       var tank = this.tile.objs[i];
       if(tank.isTank && tank.player.team == this.team && Math.pow(this.x-tank.x, 2) + Math.pow(this.y-tank.y, 2) < Math.pow(2*this.size, 2)){

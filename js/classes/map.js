@@ -182,4 +182,15 @@ Tile = function(i, j, map){
         min = i;
     return options[min];
   }
+
+  // random walk along the map
+  this.randomWalk = function(distance){
+    if(distance == 0)
+      return this;
+    var r = Math.floor(Math.random() * 4);
+    for(var d=r; d<4+r; d++)
+      if(!this.walls[d] && typeof(this.neighbors[d]) !== "undefined" && this.neighbors[d] != -1)
+        return this.neighbors[d].randomWalk(distance-1);
+    return this;
+  }
 }

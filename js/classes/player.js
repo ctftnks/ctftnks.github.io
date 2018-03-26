@@ -56,8 +56,12 @@ Player = function(){
     this.tank.deleted = false;
     this.tank.map = this.game.map;
     var pos = this.game.map.spawnPoint();
-    // if(typeof(this.base) !== "undefined")
-    //   var pos = {x: this.base.x, y: this.base.y};
+    if(typeof(this.base) !== "undefined" && this.base.tile != -1){
+      pos = this.base.tile;
+      while(pos.id == this.base.tile.id)
+        pos = pos.randomWalk(Math.floor(Math.random()*5));
+      pos = {x: pos.x+pos.dx/2, y: pos.y+pos.dy/2};
+    }
     this.tank.x = pos.x;
     this.tank.y = pos.y;
     this.game.addObject(this.tank);
