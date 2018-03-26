@@ -77,12 +77,13 @@ Player = function(){
     this.game.canvas.shake();
     this.spree = 0;
     if(this.game.nkills >= MaxKillsPerGame){
-      this.game.timeouts.push(setTimeout(function(){game.stop();newGame();}, 2000));
+      game.stop();
+      this.game.timeouts.push(setTimeout(function(){newGame();}, 2000));
     }
     var self = this;
     this.game.timeouts.push(setTimeout(function(){
       self.spawn();
-    }, 3000));
+    }, 1500));
   }
 
   // give or subtract score to player, also update killing spree

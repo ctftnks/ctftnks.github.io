@@ -13,6 +13,6 @@ Zum Starten main.html öffnen.
 - different sprite for bots?
 - rename DM, TDM, CTF to expanded names
 - less white!
-- CTF bots: sprint home when hasFlag
-- CTF bots: extra rules
+- bases for TDM
+- spawn near base for CTF and TDM
 - bonus picker menu
