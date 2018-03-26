@@ -15,4 +15,3 @@ Zum Starten main.html öffnen.
 - bases for TDM
 - spawn near base for CTF and TDM
 - music, especially when holding flag
-- don't spawn powerups and so over other objects
