@@ -18,6 +18,7 @@ Tank = function(player){
   this.weapon = new Gun(this);
   this.speed = TankSpeed;
   this.isTank = true;
+  this.type = "Tank";
   this.invincible = false;
   this.carriedFlag = -1;
 

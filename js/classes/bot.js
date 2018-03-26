@@ -41,15 +41,21 @@ BotTank = function(player){
       if(GameMode == "CTF"){
         var flagPath = tile.pathTo(function(destination){
           for(var i=0; i<destination.objs.length; i++){
+            // if I have no flag: search for enemy flag
             if(self.carriedFlag == -1 && destination.objs[i].type == "Flag" && destination.objs[i].team != self.player.team)
               return true;
+            // if I have a flag and own flag is at own base: return to base
             if(self.carriedFlag != -1 && destination.objs[i].type == "Base" && destination.objs[i].hasFlag && destination.objs[i].team == self.player.team)
               return true;
           }
-          for(var i=0; i<destination.objs.length; i++){
-            if(self.carriedFlag != -1 && destination.objs[i].type == "Flag" && destination.objs[i].team == self.player.team)
-              return true;
-          }
+          // if own flag is not in own base: search it
+          if(!self.base.hasFlag)
+            for(var i=0; i<destination.objs.length; i++){
+              if(destination.objs[i].type == "Flag" && destination.objs[i].team == self.player.team)
+                return true;
+              if(destination.objs[i].type == "Tank" && destination.objs[i].team != self.player.team && destination.objs[i].carriedFlag != -1 && destination.objs[i].carriedFlag.team != self.player.team)
+                return true;
+            }
           return false;
         });
         if(path == -1 || typeof(path) === "undefined" || path.length > 4 || !this.weapon.canShoot || (this.carriedFlag != -1 && path.length > 3)){
