@@ -112,7 +112,7 @@ Tile = function(i, j, map){
   this.draw = function(canvas, context){
     // TODO: draw outer borders thicker
     // tile background color
-    context.fillStyle = "#FAFAFA";
+    context.fillStyle = "#edede8";
     context.fillRect(this.x, this.y, this.dx, this.dy);
     context.fillStyle = "#555";
     if(this.walls[0])
@@ -129,7 +129,7 @@ Tile = function(i, j, map){
   this.addWall = function(direction, remove=false, neighbor=true){
     direction = direction % 4;
     this.walls[direction] = !remove;
-    if(neighbor)
+    if(neighbor && typeof(this.neighbors[direction]) !== "undefined")
       this.neighbors[direction].addWall(direction + 2, remove, false);
   }
 
