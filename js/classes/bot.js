@@ -55,6 +55,9 @@ BotTank = function(player){
         if(path == -1 || typeof(path) === "undefined" || path.length > 5){
           if(flagPath != -1 && typeof(flagPath) !== "undefined"){
             dontShoot = true;
+            for(var k=0; k<flagPath[flagPath.length-1].objs.length; k++)
+	      if(flagPath[flagPath.length-1].objs[k].type == "Flag")
+		flagPath[flagPath.length-1] = ;
             path = flagPath;
           }
         }
