@@ -450,10 +450,10 @@ SteelBeam = function(tank){
 
 
 // throw over walls
-Trebuchet = function(tank){
+Slingshot = function(tank){
   Weapon.call(this, tank);
-  this.image = "res/img/trebuchet.png";
-  this.name = "Trebuchet";
+  this.image = "res/img/slingshot.png";
+  this.name = "Slingshot";
   this.canShoot = true;
   this.fired = false;
 

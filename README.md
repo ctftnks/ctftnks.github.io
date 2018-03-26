@@ -14,4 +14,3 @@ Zum Starten main.html öffnen.
 - less white!
 - bases for TDM
 - spawn near base for CTF and TDM
-- bonus picker menu

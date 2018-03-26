@@ -4,6 +4,7 @@
 		<title>AZ Tank Game</title>
 		<link rel="stylesheet" href="style/main.css">
 		<script src="js/main.js" type="text/javascript"></script>
+		<script src="js/menus.js" type="text/javascript"></script>
 		<script src="js/keybindings.js" type="text/javascript"></script>
 		<script src="js/settings.js" type="text/javascript"></script>
 		<script src="js/effects.js" type="text/javascript"></script>
@@ -42,29 +43,29 @@
 			<h1>AZ Tank Game</h1>
 
 			<div id="options">
-				<span class="option">
+				<div class="option">
 					<span class="label">Mode</span>
 					<select onchange="GameMode=this.value">
 						<option value="DM">DM</option>
 						<option value="TDM">TDM</option>
 						<option value="CTF">CTF</option>
 					</select>
-				</span>
-				<span class="option">
+				</div>
+				<div class="option">
 					<span class="label">Sound</span>
 					<select onchange="muted=this.value!='on'">
 						<option value="on">on</option>
 						<option value="off">off</option>
 					</select>
-				</span>
-				<span class="option">
+				</div>
+				<div class="option">
 					<span class="label">Friendly Fire</span>
 					<select onchange="FriendlyFire=this.value=='on'">
 						<option value="on">on</option>
 						<option value="off">off</option>
 					</select>
-				</span>
-				<span class="option">
+				</div>
+				<div class="option">
 					<span class="label">Bots</span>
 					<select onchange="BotSpeed=parseFloat(this.value)">
 						<option value="0.6" selected="selected">Lame</option>
@@ -74,9 +75,7 @@
 						<option value="1.4">Pro</option>
 						<option value="1.8">Insane</option>
 					</select>
-				</span>
-
-
+				</div>
 			</div>
 			<br />
 
@@ -87,9 +86,11 @@
 			<br><br>
 			<button onclick="addPlayer(true);">Add Bot</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<button onclick="addPlayer();">Add Player</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<button onclick="openWeaponMenu();">Powerups..</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<button onclick="closeMenu();newGame();">Start Game</button>
 			<br><br><br>
 		</div>
+		<div id="weaponMenu" style="display:none;padding-left:2%;padding-right:2%;"></div>
 
 	</body>
 </html>

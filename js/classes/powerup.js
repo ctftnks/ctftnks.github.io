@@ -78,12 +78,12 @@ WreckingBallBonus = function(){
     tank.weapon = new WreckingBall(tank);
   }
 }
-TrebuchetBonus = function(){
+SlingshotBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/trebuchet.png";
+  this.image = "res/img/Slingshot.png";
   this.apply = function(tank){
     playSound("res/sound/reload.wav");
-    tank.weapon = new Trebuchet(tank);
+    tank.weapon = new Slingshot(tank);
   }
 }
 SteelBeamBonus = function(){
@@ -178,34 +178,33 @@ FogBonus = function(){
   }
 }
 
+PowerUps = [
+  {create: function(){return new LaserBonus()}, name: "Laser", weight: 1},
+  {create: function(){return new MGBonus()}, name: "MG", weight: 1},
+  {create: function(){return new GrenadeBonus()}, name: "Grenade", weight: 1},
+  {create: function(){return new MineBonus()}, name: "Mine", weight: 1},
+  {create: function(){return new GuidedBonus()}, name: "Guided", weight: 1},
+  {create: function(){return new WreckingBallBonus()}, name: "WreckingBall", weight: 1},
+  {create: function(){return new MultiBonus()}, name: "Multi", weight: 1},
+  {create: function(){return new SlingshotBonus()}, name: "Slingshot", weight: 1},
+  {create: function(){return new InvincibleBonus()}, name: "Invincible", weight: 1},
+  {create: function(){return new TerminatorBonus()}, name: "Terminator", weight: 1},
+  {create: function(){return new FogBonus()}, name: "FogOfWar", weight: 0.5},
+  {create: function(){return new SpeedBonus()}, name: "SpeedBoost", weight: 1}
+];
 
+
+// get random powerup
 function getRandomPowerUp(){
-  var powerups = [
-    new LaserBonus(),
-    new LaserBonus(),
-    new MGBonus(),
-    new MGBonus(),
-    new GrenadeBonus(),
-    new GrenadeBonus(),
-    new MineBonus(),
-    new MineBonus(),
-    new GuidedBonus(),
-    new GuidedBonus(),
-    new WreckingBallBonus(),
-    new WreckingBallBonus(),
-    new MultiBonus(),
-    new MultiBonus(),
-    new TrebuchetBonus(),
-    new TrebuchetBonus(),
-    new InvincibleBonus(),
-    new InvincibleBonus(),
-    new TerminatorBonus(),
-    new TerminatorBonus(),
-    new FogBonus(),
-    new SpeedBonus(),
-    new SpeedBonus()
-  ];
-  var len = powerups.length;
+  var totalWeights = 0;
+  for(var i=0; i<PowerUps.length; i++)
+    totalWeights += PowerUps[i].weight;
+  var randWeight = Math.random() * totalWeights;
+  var h;
+  for(h=0; randWeight>0; h++)
+    randWeight -= PowerUps[h].weight;
   playSound("res/sound/original/powerup.mp3");
-  return powerups[Math.floor(Math.random() * len)];
+  return PowerUps[h-1].create();
+
+
 }
