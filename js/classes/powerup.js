@@ -80,7 +80,7 @@ WreckingBallBonus = function(){
 }
 SlingshotBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/Slingshot.png";
+  this.image = "res/img/slingshot.png";
   this.apply = function(tank){
     playSound("res/sound/reload.wav");
     tank.weapon = new Slingshot(tank);
