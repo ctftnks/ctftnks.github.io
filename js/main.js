@@ -95,7 +95,7 @@ function updateMenu(){
     var entry = "";
     var id = players[i].id;
     entry += "<div class='entry'>";
-    entry += "<button class='team' onclick='players["+i+"].changeColor();updateMenu();' style='color:"+players[i].color+";'>&bull;</button>";
+    entry += "<button class='team' onclick='players["+i+"].changeColor();updateMenu();' style='color:"+players[i].color+";'>&#9899;</button>";
     entry += "<button class='name' onclick='editPlayerName("+i+")' style='color:"+players[i].color+";'>";
     entry += players[i].name;
     entry += "</button>";

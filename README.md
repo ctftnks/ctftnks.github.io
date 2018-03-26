@@ -12,3 +12,5 @@ Zum Starten main.html öffnen.
 - better settings
 - spawnshield
 - different sprite for bots?
+- rename DM, TDM, CTF to expanded names
+- less white!
