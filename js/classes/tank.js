@@ -19,7 +19,7 @@ Tank = function(player){
   this.speed = TankSpeed;
   this.isTank = true;
   this.invincible = false;
-  this.hasFlag = false;
+  this.carriedFlag = -1;
 
   // draw the tank (rotated) on map
   this.draw = function(canvas, context){
@@ -30,14 +30,14 @@ Tank = function(player){
     context.rect(-this.width/2, -this.height/2, this.width, this.height);
     context.fillStyle = this.player.color;
     context.fill();
-    if(this.hasFlag != false){
+    if(this.carriedFlag != -1){
       context.beginPath();
-      context.fillStyle = this.hasFlag.color;
-      context.rect(-this.hasFlag.size/2, -this.hasFlag.size/2, this.hasFlag.size/1.1, this.hasFlag.size/2);
+      context.fillStyle = this.carriedFlag.color;
+      context.rect(-this.carriedFlag.size/2, -this.carriedFlag.size/2, this.carriedFlag.size/1.1, this.carriedFlag.size/2);
       context.fill();
       context.beginPath();
       context.fillStyle = "#000";
-      context.rect(-this.hasFlag.size/2, -this.hasFlag.size/2, this.hasFlag.size/6, this.hasFlag.size*1.1);
+      context.rect(-this.carriedFlag.size/2, -this.carriedFlag.size/2, this.carriedFlag.size/6, this.carriedFlag.size*1.1);
       context.fill();
     }
     else if(this.weapon.image != ""){
@@ -174,8 +174,8 @@ Tank = function(player){
         // let gamemode handle scoring
         this.player.game.mode.newKill(bullets[i].player, this.player);
         // CTF: if tank has flag, drop it
-        if(this.hasFlag != false)
-          this.hasFlag.drop(this.x, this.y);
+        if(this.carriedFlag != -1)
+          this.carriedFlag.drop(this.x, this.y);
         // kill the player, delete the tank and bullet
         playSound("res/sound/kill.wav");
         bullets[i].delete();

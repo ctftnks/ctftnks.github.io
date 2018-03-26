@@ -19,7 +19,7 @@ Flag = function(gam, base){
   }
   // let tank pick up the flag
   this.pickup = function(tank){
-    tank.hasFlag = this;
+    tank.carriedFlag = this;
     this.base.hasFlag = false;
     this.delete();
   }
@@ -41,7 +41,7 @@ Flag = function(gam, base){
             this.reset();
             playSound("res/sound/resetFlag.wav");
           }
-        }else if(tank.hasFlag == false){
+        }else if(tank.carriedFlag == -1){
           // pick up flag
           this.pickup(tank);
           playSound("res/sound/coin.wav");
@@ -100,12 +100,12 @@ Base = function(game, player, x, y){
     for(var i=0; i<this.tile.objs.length; i++){
       var tank = this.tile.objs[i];
       if(tank.isTank && tank.player.team == this.team && Math.pow(this.x-tank.x, 2) + Math.pow(this.y-tank.y, 2) < Math.pow(2*this.size, 2)){
-        if(tank.hasFlag != false && this.hasFlag){
+        if(tank.carriedFlag != -1 && this.hasFlag){
           // score!
           this.game.mode.giveScore(tank.player);
           playSound("res/sound/fanfare.mp3");
-          tank.hasFlag.reset();
-          tank.hasFlag = false;
+          tank.carriedFlag.reset();
+          tank.carriedFlag = -1;
         }
       }
     }

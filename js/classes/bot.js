@@ -41,18 +41,18 @@ BotTank = function(player){
       if(GameMode == "CTF"){
         var flagPath = tile.pathTo(function(destination){
           for(var i=0; i<destination.objs.length; i++){
-            if(self.hasFlag == false && destination.objs[i].type == "Flag" && destination.objs[i].team != self.player.team)
+            if(self.carriedFlag == -1 && destination.objs[i].type == "Flag" && destination.objs[i].team != self.player.team)
               return true;
-            if(self.hasFlag != false && destination.objs[i].type == "Base" && destination.objs[i].hasFlag && destination.objs[i].team == self.player.team)
+            if(self.carriedFlag != -1 && destination.objs[i].type == "Base" && destination.objs[i].hasFlag && destination.objs[i].team == self.player.team)
               return true;
           }
           for(var i=0; i<destination.objs.length; i++){
-            if(self.hasFlag != false && destination.objs[i].type == "Flag" && destination.objs[i].team == self.player.team)
+            if(self.carriedFlag != -1 && destination.objs[i].type == "Flag" && destination.objs[i].team == self.player.team)
               return true;
           }
           return false;
         });
-        if(path == -1 || typeof(path) === "undefined" || path.length > 4 || !this.weapon.canShoot || (this.hasFlag != false && path.length > 3)){
+        if(path == -1 || typeof(path) === "undefined" || path.length > 4 || !this.weapon.canShoot || (this.carriedFlag != -1 && path.length > 3)){
           if(flagPath != -1 && typeof(flagPath) !== "undefined"){
             dontShoot = true;
             for(var k=0; k<flagPath[flagPath.length-1].objs.length; k++)
