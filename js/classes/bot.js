@@ -56,8 +56,11 @@ BotTank = function(player){
           if(flagPath != -1 && typeof(flagPath) !== "undefined"){
             dontShoot = true;
             for(var k=0; k<flagPath[flagPath.length-1].objs.length; k++)
-	      if(flagPath[flagPath.length-1].objs[k].type == "Flag")
-		flagPath[flagPath.length-1] = ;
+	           if(flagPath[flagPath.length-1].objs[k].type == "Flag"){
+               var fpos = {objs: {}, x: flagPath[flagPath.length-1].objs[k].x, y: flagPath[flagPath.length-1].objs[k].y, dx: 0, dy: 0};
+               flagPath.push(fpos);
+               console.log(fpos);
+             }
             path = flagPath;
           }
         }
@@ -76,7 +79,7 @@ BotTank = function(player){
 
 
       // get reverse path to flee
-      if(this.isFleeing)
+      if(this.isFleeing && GameMode != "CTF")
         this.flee();
 
       if(path.length < sdist && !dontShoot){
