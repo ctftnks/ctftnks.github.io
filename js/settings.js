@@ -16,6 +16,7 @@ BulletSpeed = 260;
 PowerUpFrequency = 4000;
 MaxPowerUps = 8;
 MaxKillsPerGame = 40;
+SpawnShieldTime = 1000;
 FriendlyFire = true;
 BotsShootBots = true;
 BotSpeed = 1;
