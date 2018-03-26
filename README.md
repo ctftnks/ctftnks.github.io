@@ -5,7 +5,6 @@ Zum Starten main.html öffnen.
 
 # TODO:
 - mehr PowerUps
-- bots rotate instantly when aiming.. too hard?
 - mobile support
 - bessere Grafiken: Vektorgrafiken zeichnen
 - window.onresize
@@ -14,3 +13,6 @@ Zum Starten main.html öffnen.
 - different sprite for bots?
 - rename DM, TDM, CTF to expanded names
 - less white!
+- CTF bots: sprint home when hasFlag
+- CTF bots: extra rules
+- bonus picker menu

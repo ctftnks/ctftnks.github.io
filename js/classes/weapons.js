@@ -5,6 +5,7 @@ Weapon = function(tank){
   this.tank = tank;
   this.image = "";
   this.name = "Weapon";
+  this.canShoot = true;
   this.shoot = function(){
 
   }
@@ -47,6 +48,7 @@ MG = function(tank){
   this.fired = false;
   this.nshots = 20;
   this.every = 0;
+  // TODO: if player is bot: rapid fire
   this.shoot = function(){
     this.every -= GameFrequency;
     if(this.nshots > 0 && this.every < 0 && this.canShoot){

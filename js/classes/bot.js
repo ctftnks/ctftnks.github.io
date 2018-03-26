@@ -52,7 +52,7 @@ BotTank = function(player){
           }
           return false;
         });
-        if(path == -1 || typeof(path) === "undefined" || path.length > 5){
+        if(path == -1 || typeof(path) === "undefined" || path.length > 4 || !this.weapon.canShoot || (this.hasFlag != false && path.length > 3)){
           if(flagPath != -1 && typeof(flagPath) !== "undefined"){
             dontShoot = true;
             for(var k=0; k<flagPath[flagPath.length-1].objs.length; k++)
