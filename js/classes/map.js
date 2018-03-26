@@ -6,7 +6,7 @@
 Map = function(canvas){
 
   this.Nx = parseInt(MapNxMin + (MapNxMax-MapNxMin) * Math.random());
-  this.Ny = parseInt((0.4 * Math.random() + 0.6) * this.Nx * canvas.height / canvas.width);
+  this.Ny = parseInt((0.25 * Math.random() + 0.75) * this.Nx * canvas.height / canvas.width);
   this.dx = canvas.width / 10;
   canvas.rescale(10 / this.Nx);
   // this.dy = canvas.height / this.Ny;
