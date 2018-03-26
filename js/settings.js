@@ -22,5 +22,5 @@ BotsShootBots = true;
 BotSpeed = 1;
 // TODO: implement botspeed
 // Map size
-MapNxMin = 8;
+MapNxMin = 9;
 MapNxMax = 15;

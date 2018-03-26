@@ -185,7 +185,7 @@ PowerUps = [
   {create: function(){return new MineBonus()}, name: "Mine", weight: 1},
   {create: function(){return new GuidedBonus()}, name: "Guided", weight: 1},
   {create: function(){return new WreckingBallBonus()}, name: "WreckingBall", weight: 1},
-  {create: function(){return new MultiBonus()}, name: "Multi", weight: 1},
+  {create: function(){return new MultiBonus()}, name: "Multiplier", weight: 1},
   {create: function(){return new SlingshotBonus()}, name: "Slingshot", weight: 1},
   {create: function(){return new InvincibleBonus()}, name: "Invincible", weight: 1},
   {create: function(){return new TerminatorBonus()}, name: "Terminator", weight: 1},

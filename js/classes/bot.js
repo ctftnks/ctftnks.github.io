@@ -23,7 +23,7 @@ BotTank = function(player){
   this.checkWallCollision = function(){return false;}
   this.step = function(){
     this.lastChecked += GameFrequency;
-    if(this.lastChecked > 400/BotSpeed){
+    if(this.lastChecked > 380/BotSpeed){
       this.lastChecked = 0;
       // calculate path to next tank (excluding self)
       var tile = this.map.getTileByPos(this.x, this.y);

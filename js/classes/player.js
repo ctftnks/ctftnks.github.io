@@ -67,10 +67,11 @@ Player = function(){
     this.game.timeouts.push(setTimeout(function(){
       new Cloud(self.game, self.tank.x, self.tank.y, n=4, radius=20, rspeed=2);
     }, 10));
+    // spawn shield
     this.tank.invincible = true;
     this.game.timeouts.push(setTimeout(function(){
       self.tank.invincible = false;
-    }, SpawnShieldTime));
+    }, SpawnShieldTime + 0.2 * (Math.random() - 0.5)));
   }
 
   // kill the player, called when tank is shot
