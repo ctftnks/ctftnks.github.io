@@ -78,46 +78,6 @@ Map = function(canvas){
       ];
     }
   }
-
-  // TODO: move this to the tile class?
-  // TODO: generalize this to find anything? --> bots
-  // get the shortest path to the next tank
-  this.pathToTank = function(listOfTiles, minPathLength=-1){
-    if(minPathLength == -1)
-      minPathLength = this.Nx * this.Ny;
-    else if(listOfTiles.length >= minPathLength)
-      return -1;
-    var currentTile = this.tiles[listOfTiles[listOfTiles.length - 1]];
-    // is a tank in the current tile? Then we're done searching!
-    if(currentTile.containsTank())
-      return listOfTiles;
-    // keep searching
-    var options = [];
-    for(var d=0; d<4; d++)
-      if(!currentTile.walls[d] && currentTile.neighbors[d] != -1){
-        var nn = currentTile.neighbors[d];
-        if(listOfTiles.indexOf(nn.id) == -1){
-          var copy = listOfTiles.slice();
-          copy.push(nn.id);
-          var option = this.pathToTank(copy, minPathLength);
-          if (option != -1){
-            minPathLength = option.length;
-            options.push(option);
-          }
-        }
-      }
-    if(options.length == 0)
-      return -1;
-    var minLen = this.Nx * this.Ny;
-    var minIndex = -1
-    for(var i=0; i<options.length; i++)
-      if(options[i].length < minLen){
-        minLen = options[i].length;
-        minIndex = i;
-      }
-    this.minPathLength = minLen;
-    return options[minIndex];
-  }
 }
 
 // child class for tiles
