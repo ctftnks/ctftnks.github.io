@@ -49,11 +49,11 @@ BotTank = function(player){
               return true;
           }
           // if own flag is not in own base: search it
-          if(!self.base.hasFlag)
+          if(typeof(self.player.base) !== "undefined" && !self.player.base.hasFlag)
             for(var i=0; i<destination.objs.length; i++){
               if(destination.objs[i].type == "Flag" && destination.objs[i].team == self.player.team)
                 return true;
-              if(destination.objs[i].type == "Tank" && destination.objs[i].team != self.player.team && destination.objs[i].carriedFlag != -1 && destination.objs[i].carriedFlag.team != self.player.team)
+              if(destination.objs[i].type == "Tank" && destination.objs[i].carriedFlag != -1 && destination.objs[i].carriedFlag.team == self.player.team)
                 return true;
             }
           return false;
