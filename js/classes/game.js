@@ -91,6 +91,7 @@ Game = function(canvas){
       clearInterval(this.intvls[i]);
     for(var i=0; i<this.timeouts.length; i++)
       clearTimeout(this.timeouts[i]);
+    clearEffects();
     console.log("Game stopped!");
   }
 

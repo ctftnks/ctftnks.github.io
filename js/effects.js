@@ -21,7 +21,6 @@ function newEffectCanvas(){
 }
 
 
-
 function fogOfWar(game){
   var canv = document.getElementById("effectFrame");
   canv.height = game.canvas.canvas.clientHeight;
@@ -67,4 +66,12 @@ function fogOfWar(game){
     ctx.clearRect(0, 0, 2*canv.width, 2*canv.height);
   }, duration);
   return intvl;
+}
+
+function clearEffects(){
+  var canv = document.getElementById("effectFrame");
+  canv.height = game.canvas.canvas.clientHeight;
+  canv.width = game.canvas.canvas.clientWidth;
+  var ctx = canv.getContext("2d");
+  ctx.clearRect(0, 0, 2*canv.width, 2*canv.height);
 }

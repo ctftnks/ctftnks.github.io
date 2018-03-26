@@ -11,3 +11,4 @@ Zum Starten main.html öffnen.
 - better settings
 - less white!
 - music, especially when holding flag
+- delete fog of war after game end

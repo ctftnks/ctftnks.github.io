@@ -174,7 +174,7 @@ FogBonus = function(){
   this.used = false;
   this.apply = function(tank){
     if(!this.used)
-      fogOfWar(game);
+      tank.player.game.intvls.push(fogOfWar(game));
   }
 }
 
