@@ -1,7 +1,7 @@
 
 // Game Performance
 FrameFrequency = 30;
-GameFrequency = 5;
+GameFrequency = 10;
 
 // Graphics & Sound
 TankWidth = 34;
