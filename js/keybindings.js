@@ -107,41 +107,6 @@ function getKeyLabel(key){
   return String.fromCharCode((96 <= key && key <= 105)? key-48 : key);
 }
 
-// edit the keymap from the menu
-function editableKeymap(mapID){
-  if(mapID==-1){
-    var html = "";
-    html += "<button class='keyEditButton'>&uarr;</button>";
-    html += "<button class='keyEditButton'>&larr;</button>";
-    html += "<button class='keyEditButton'>&darr;</button>";
-    html += "<button class='keyEditButton'>&rarr;</button>";
-    html += "<button class='keyEditButton'>Fire</button>";
-    return html
-  }
-  var html = "";
-  for(var i in keymaps[mapID]){
-    html += "<button class='keyEditButton clickable' onclick='editKeymap("+mapID+", "+i+")' onfocusout='editingKeymap=false'>";
-    html += keyLabels[keymaps[mapID][i]];
-    html += "</button>";
-  }
-  return html;
-}
-
-editingKeymap = false;
-editingMapID = -1;
-editingKeyID = -1;
-function editKeymap(mapID, keyID){
-  editingKeymap = true;
-  editingMapID = mapID;
-  editingKeyID = keyID;
-}
-function doEditKeymap(newKeyCode){
-  keymaps[editingMapID][editingKeyID] = newKeyCode;
-  editingKeymap = false;
-  updateMenu();
-}
-
-
 
 var keyLabels = [
   "", // [0]

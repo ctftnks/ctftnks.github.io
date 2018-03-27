@@ -3,6 +3,7 @@
 	<head>
 		<title>AZ Tank Game</title>
 		<link rel="stylesheet" href="style/main.css">
+		<link rel="stylesheet" href="style/menus.css">
 		<script src="js/main.js" type="text/javascript"></script>
 		<script src="js/menus.js" type="text/javascript"></script>
 		<script src="js/keybindings.js" type="text/javascript"></script>
@@ -22,6 +23,9 @@
 		<script src="js/classes/smoke.js" type="text/javascript"></script>
 		<script src="js/classes/tank.js" type="text/javascript"></script>
 		<script src="js/classes/weapons.js" type="text/javascript"></script>
+		<!-- Menus -->
+		<script src="menus/main.js" type="text/javascript"></script>
+		<script src="menus/powerups.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<div id="sideBar">
@@ -39,59 +43,7 @@
 		<canvas id="gameFrame"></canvas>
 		<canvas id="effectFrame"></canvas>
 
-		<div id="closeframe" style="display:none;" onclick="if(typeof(game)!=='undefined') closeMenu(true)"></div>
-		<div id="menu" style="display:none;">
-			<h1>AZ Tank Game</h1>
-
-			<div id="options">
-				<div class="option">
-					<span class="label">Mode</span>
-					<select onchange="GameMode=this.value">
-						<option value="DM">DM</option>
-						<option value="TDM">TDM</option>
-						<option value="CTF">CTF</option>
-					</select>
-				</div>
-				<div class="option">
-					<span class="label">Sound</span>
-					<select onchange="muted=this.value!='on'">
-						<option value="on">on</option>
-						<option value="off">off</option>
-					</select>
-				</div>
-				<div class="option">
-					<span class="label">Friendly Fire</span>
-					<select onchange="FriendlyFire=this.value=='on'">
-						<option value="on">on</option>
-						<option value="off">off</option>
-					</select>
-				</div>
-				<div class="option">
-					<span class="label">Bots</span>
-					<select onchange="BotSpeed=parseFloat(this.value)">
-						<option value="0.6" selected="selected">Lame</option>
-						<option value="0.8" selected="selected">Ok</option>
-						<option value="1" selected="selected">Decent</option>
-						<option value="1.2">Quick</option>
-						<option value="1.4">Pro</option>
-						<option value="1.8">Insane</option>
-					</select>
-				</div>
-			</div>
-			<br />
-
-
-			<div id="playersMenu">
-
-			</div>
-			<br><br>
-			<button onclick="addPlayer(true);">Add Bot</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<button onclick="addPlayer();">Add Player</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<button onclick="openWeaponMenu();">Powerups..</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<button onclick="closeMenu();newGame();">Start Game</button>
-			<br><br><br>
-		</div>
-		<div id="weaponMenu" style="display:none;padding-left:2%;padding-right:2%;"></div>
+		<div id="screenContainer"></div>
 
 	</body>
 </html>
