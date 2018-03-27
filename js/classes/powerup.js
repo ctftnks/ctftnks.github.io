@@ -113,16 +113,23 @@ InvincibleBonus = function(){
     if(this.applied)
       return;
     this.applied = true;
-    playSound("res/sound/invincible.mp3");
+    playMusic("res/sound/invincible.mp3");
     tank.speed *= 1.14;
     var img = tank.weapon.image;
     tank.weapon.image = "res/img/invincible.png";
     tank.invincible = true;
     var self = tank;
+    tank.player.game.intvls.push(setInterval(function(){
+      self.invincible = true;
+    }, 300))
     tank.player.game.timeouts.push(setTimeout(function(){
       self.speed /= 1.14;
       self.invincible = false;
       tank.weapon.image = img;
+      if(bgmusic)
+        playMusic("res/sound/bgmusic.wav");
+      else
+        stopMusic();
     }, 10000));
   }
 }
