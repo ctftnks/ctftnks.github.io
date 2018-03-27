@@ -46,6 +46,8 @@ Game = function(canvas){
       self.step();
     }, GameFrequency);
     playSound("res/sound/gamestart.wav");
+    if(bgmusic)
+      playMusic("res/sound/bgmusic.wav")
     updateScores();
   }
 
@@ -93,6 +95,7 @@ Game = function(canvas){
     for(var i=0; i<this.timeouts.length; i++)
       clearTimeout(this.timeouts[i]);
     clearEffects();
+    stopMusic();
     console.log("Game stopped!");
   }
 

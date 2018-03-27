@@ -7,6 +7,7 @@ GameFrequency = 25;
 TankWidth = 34;
 TankHeight = 50;
 muted = false;
+bgmusic = false;
 
 // Gameplay
 GameMode = "DM";

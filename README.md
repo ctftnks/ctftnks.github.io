@@ -9,3 +9,4 @@ Zum Starten main.html öffnen.
 - better settings
 - less white!
 - music, especially when holding flag
+- fix InvincibleBonus: if caught twice and if caught on respawn

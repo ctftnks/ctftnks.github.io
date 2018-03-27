@@ -8,6 +8,27 @@ function playSound(file){
   }
 }
 
+playingMusic = -1;
+musicAudio = -1;
+function playMusic(file){
+  if(file == playingMusic)
+    return;
+  var audio = new Audio(file);
+  audio.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+  }, false);
+  audio.play();
+  playingMusic = file;
+  musicAudio = audio;
+}
+function stopMusic(){
+  if(musicAudio != -1)
+    musicAudio.pause();
+  musicAudio = -1;
+  playingMusic = -1;
+}
+
 
 effectCanvasID = 0;
 function newEffectCanvas(){
