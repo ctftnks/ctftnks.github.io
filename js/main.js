@@ -67,3 +67,7 @@ function updateScores(){
     scoreBoard.innerHTML += entry;
   }
 }
+
+window.onresize = function(){
+  game.canvas.resize();
+}

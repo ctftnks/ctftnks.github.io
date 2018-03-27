@@ -5,12 +5,13 @@
 
 Map = function(canvas){
 
+  this.canvas = canvas;
   this.Nx = parseInt(MapNxMin + (MapNxMax-MapNxMin) * Math.random());
   this.Ny = parseInt((0.25 * Math.random() + 0.75) * this.Nx * canvas.height / canvas.width);
   this.dx = canvas.width / 10;
-  canvas.rescale(10 / this.Nx);
   // this.dy = canvas.height / this.Ny;
   this.dy = this.dx;
+  canvas.rescale(canvas.width / (this.dx * this.Nx));
   this.tiles = [];
 
   // Tile initialization
@@ -65,6 +66,17 @@ Map = function(canvas){
   this.draw = function(canvas, context){
     for(var i=0; i<this.tiles.length; i++)
       this.tiles[i].draw(canvas, context);
+  }
+
+  // update sizes of map and tiles, for window.onresize
+  this.resize = function(){
+    console.log("Map.resize");
+    // this.canvas.rescale(this.canvas.width / (this.dx * this.Nx));
+    // this.canvas.rescale(this.canvas.height / (this.dy * this.Ny));
+    this.canvas.rescale(Math.min(
+      this.canvas.width / (this.dx * this.Nx),
+      this.canvas.height / (this.dy * this.Ny)
+    ));
   }
 
   // link neighboring tiles

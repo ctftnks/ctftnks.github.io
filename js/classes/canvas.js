@@ -46,6 +46,17 @@ Canvas = function(id){
     this.context.scale(factor, factor);   // scale by new factor
   }
 
+  // update sizes of canvas and map for window.onresize
+  this.resize = function(){
+    this.canvas.height = this.canvas.clientHeight;
+    this.height = this.canvas.clientHeight;
+    this.canvas.width = this.canvas.clientWidth;
+    this.width = this.canvas.clientWidth;
+    if(typeof(game) !== "undefined")
+      game.map.resize();
+      // this.rescale(Math.max(this.width / (game.map.dx * game.map.Nx));
+  }
+
   this.shake = function(){
     var amp = 14;
     var speed = 25;
