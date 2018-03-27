@@ -13,8 +13,8 @@ Start by opening main.html
 
 ## Minor features
 - introduce a Game.time
-- change keymaps order so that numpad is #3
 - Laser needs rework: accuracy
+- Laser should show trajectory prior to shooting
 - better spawn shield: 1 second at least
 - spawn position should be a bit more far from base
 - reset the flag after some time
