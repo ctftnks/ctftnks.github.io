@@ -91,12 +91,12 @@ var Key = {
 var keymaps = [
   [Key.UP, Key.LEFT, Key.DOWN, Key.RIGHT, Key.SPACE],
   [Key.W, Key.A, Key.S, Key.D, Key.Q],
+  [Key.N8, Key.N4, Key.N5, Key.N6, Key.N7],
   [Key.F, Key.C, Key.V, Key.B, Key.X],
   [Key.Z, Key.G, Key.H, Key.J, Key.T],
   [Key.K, Key.M, Key.COMMA, Key.PERIOD, Key.N],
   [Key.R4, Key.E, Key.R, Key.R5, Key.R3],
-  [Key.R8, Key.U, Key.I, Key.R9, Key.R7],
-  [Key.N8, Key.N4, Key.N5, Key.N6, Key.N7]
+  [Key.R8, Key.U, Key.I, Key.R9, Key.R7]
 ]
 
 // event listeners
