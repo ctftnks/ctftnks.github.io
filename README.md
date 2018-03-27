@@ -1,11 +1,42 @@
 # AZ: Tank game
 
-Zum Starten main.html öffnen.
+Start by opening main.html
 
 
 # TODO:
-- mobile support
-- bessere Grafiken: Vektorgrafiken zeichnen
-- better settings
+
+## Bugs:
+- Tanks spawn outside of Map and then get removed from game.objs by spatial sorting
+- TerminatorBonus + GrenadeBonus creates a lot of Grenades ... forever!
+- two players can pick up the same flag from one base simultaneously
+
+## Minor features
+- change keymaps order so that numpad is #3
+- Laser needs rework: accuracy
+- better spawn shield: 1 second at least
+- spawn position should be a bit more far from base
+- reset the flag after some time
+
+## Enhancement:
+- standardized menus: load screens with AJAX, bind selects/inputs to variables
+- better settings: advanced settings screen
+- Quick-Game buttons: 2v2, 3v3 (players vs bots? choose?)
 - less white!
+- stats at end of each map: how many kills, deaths does each player have? How much did each player move, shoot?
+- different tank types (visually): write a class for that?
 - music, especially when holding flag
+- change body.background to #555 or similar
+- adaptive bot difficulties: bots become harder/easier depending on scoreboard
+- REFACTOR REFACTOR REFACTOR!!!
+
+## Long term issues
+- better UI
+- better graphics: hand drawn vector graphics
+- mobile support
+- publishable sounds
+- publish
+
+## Wishes
+- Powerup that creates Portals
+- setting the difficulty per-bot
+- button to change from player to bot
