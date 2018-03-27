@@ -20,7 +20,6 @@ SpawnShieldTime = 1000;
 FriendlyFire = true;
 BotsShootBots = true;
 BotSpeed = 1;
-// TODO: implement botspeed
 // Map size
 MapNxMin = 9;
 MapNxMax = 15;
