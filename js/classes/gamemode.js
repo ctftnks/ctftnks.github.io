@@ -138,7 +138,7 @@ CaptureTheFlag = function(game){
     if(player1.team != player2.team){
       player1.spree += 1;
       if(player1.spree >= 5 && player1.spree % 5 == 0){
-        player1.score += Math.floor(player1.spree / 5)
+        // player1.score += Math.floor(player1.spree / 5)
         playSound("res/sound/killingspree.mp3");
       }
       updateScores();
