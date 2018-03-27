@@ -55,15 +55,15 @@ Player = function(){
       this.tank = new Tank(this);
     this.tank.deleted = false;
     this.tank.map = this.game.map;
-    var pos = this.game.map.spawnPoint();
+    var spos = this.game.map.spawnPoint();
     if(typeof(this.base) !== "undefined" && this.base.tile != -1){
-      pos = this.base.tile;
-      while(pos.id == this.base.tile.id)
-        pos = pos.randomWalk(Math.floor(Math.random()*5));
-      pos = {x: pos.x+pos.dx/2, y: pos.y+pos.dy/2};
+      var spos2 = this.base.tile;
+      while(spos2.id == this.base.tile.id)
+        spos2 = spos2.randomWalk(Math.floor(Math.random()*5));
+      spos = {x: spos2.x+spos2.dx/2, y: spos2.y+spos2.dy/2};
     }
-    this.tank.x = pos.x;
-    this.tank.y = pos.y;
+    this.tank.x = spos.x;
+    this.tank.y = spos.y;
     this.game.addObject(this.tank);
     this.game.n_playersAlive += 1;
     // this.game.addObject(new Smoke(this.x, this.y));
