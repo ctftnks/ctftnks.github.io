@@ -10,6 +10,7 @@ Game = function(canvas){
   this.canvas.game = this;
   // create new random map
   this.map = new Map(this.canvas);
+  this.map.resize();
   // generate a random maze with a random algorithm
   MapGenerator.algorithms[Math.floor(Math.random()*MapGenerator.algorithms.length)](this.map);
   // MapGenerator.primsMaze(this.map);

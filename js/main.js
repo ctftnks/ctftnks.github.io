@@ -69,5 +69,6 @@ function updateScores(){
 }
 
 window.onresize = function(){
-  game.canvas.resize();
+  if(typeof(game) !== "undefined")
+    game.canvas.resize();
 }

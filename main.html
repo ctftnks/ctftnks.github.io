@@ -29,7 +29,7 @@
 				<b>Scores</b>
 			</div>
 			<div id="scoreBoard"></div>
-			<div class="entry clickable" onclick="openMenu()">
+			<div class="entry clickable" onclick="openMenu(true)">
 				Menu
 			</div>
 			<div class="entry clickable" onclick="newGame()">
@@ -39,6 +39,7 @@
 		<canvas id="gameFrame"></canvas>
 		<canvas id="effectFrame"></canvas>
 
+		<div id="closeframe" style="display:none;" onclick="if(typeof(game)!=='undefined') closeMenu(true)"></div>
 		<div id="menu" style="display:none;">
 			<h1>AZ Tank Game</h1>
 

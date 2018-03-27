@@ -3,12 +3,14 @@ function openMenu(pause=false){
   if(pause)
     game.pause();
   document.getElementById("menu").style.display = "block";
+  document.getElementById("closeframe").style.display = "block";
   updateMenu();
 }
 function closeMenu(pause=true){
-  // if(pause && game.paused)
-  //   game.pause();
+  if(pause && typeof(game) !== "undefined" && game.paused)
+    game.pause();
   document.getElementById("menu").style.display = "none";
+  document.getElementById("closeframe").style.display = "none";
 }
 function updateMenu(){
   var pmen = document.getElementById("playersMenu");

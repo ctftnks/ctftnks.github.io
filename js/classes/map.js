@@ -11,7 +11,6 @@ Map = function(canvas){
   this.dx = canvas.width / 10;
   // this.dy = canvas.height / this.Ny;
   this.dy = this.dx;
-  canvas.rescale(canvas.width / (this.dx * this.Nx));
   this.tiles = [];
 
   // Tile initialization
@@ -70,9 +69,6 @@ Map = function(canvas){
 
   // update sizes of map and tiles, for window.onresize
   this.resize = function(){
-    console.log("Map.resize");
-    // this.canvas.rescale(this.canvas.width / (this.dx * this.Nx));
-    // this.canvas.rescale(this.canvas.height / (this.dy * this.Ny));
     this.canvas.rescale(Math.min(
       this.canvas.width / (this.dx * this.Nx),
       this.canvas.height / (this.dy * this.Ny)
