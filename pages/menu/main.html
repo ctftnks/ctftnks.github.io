@@ -2,14 +2,11 @@
 <div class="popup">
 
 
-
-  <div id="menu">
     <h1>CTF Tanks</h1>
 
-    <div id="options">
       <div class="option">
         <span class="label">Mode</span>
-        <select onchange="GameMode=this.value">
+        <select data-bind="GameMode">
           <option value="CTF">CTF</option>
           <option value="DM">DM</option>
           <option value="TDM">TDM</option>
@@ -17,45 +14,41 @@
       </div>
       <div class="option">
         <span class="label">Sound</span>
-        <select onchange="muted=this.value!='on'">
-          <option value="on">on</option>
-          <option value="off">off</option>
+        <select data-bind="muted">
+          <option value="false">on</option>
+          <option value="true">off</option>
         </select>
       </div>
       <div class="option">
         <span class="label">Friendly Fire</span>
-        <select onchange="FriendlyFire=this.value=='on'">
-          <option value="on">on</option>
-          <option value="off">off</option>
+        <select data-bind="FriendlyFire">
+          <option value="true">on</option>
+          <option value="false">off</option>
         </select>
       </div>
       <div class="option">
         <span class="label">Bots</span>
-        <select onchange="BotSpeed=parseFloat(this.value)">
-          <option value="0.6" selected="selected">Lame</option>
-          <option value="0.8" selected="selected">Ok</option>
-          <option value="1" selected="selected">Decent</option>
+        <select data-bind="BotSpeed">
+          <option value="0.6">Lame</option>
+          <option value="0.8">Ok</option>
+          <option value="1">Decent</option>
           <option value="1.2">Quick</option>
           <option value="1.4">Pro</option>
           <option value="1.8">Insane</option>
         </select>
       </div>
-    </div>
+    <br />
     <br />
 
-
-    <div id="playersMenu">
-
-    </div>
-    <br><br>
+    <div id="playersMenu"></div>
+    <br />
+    <br />
     <button onclick="addPlayer(true);">Add Bot</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <button onclick="addPlayer();">Add Player</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <button onclick="openPage('powerups');">Powerups..</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <button onclick="closePage(this);newGame();">Start Game</button>
     <br><br><br>
   </div>
-
-</div>
 
 <script>
   updateMenu();

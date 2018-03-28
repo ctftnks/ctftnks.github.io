@@ -20,6 +20,7 @@ function openPage(name){
         script.onload = function(){
           // execute script tags
           evalscripts(p);
+          databinding();
         };
         document.head.appendChild(script);
         loadedScripts.push(name);
@@ -29,6 +30,7 @@ function openPage(name){
         document.head.appendChild(link);
       }else{
         evalscripts(p);
+        databinding();
       }
     }
   };
@@ -58,4 +60,28 @@ function evalscripts(elem){
   var scripts = elem.getElementsByTagName('script');
   for (var n = 0; n < scripts.length; n++)
     eval(scripts[n].innerHTML);
+}
+
+
+// databinding for menus and options
+function databinding(){
+  // input elements
+  [].forEach.call(document.querySelectorAll('input[data-bind]'), function(elem){
+    var bind = elem.getAttribute("data-bind");
+    elem.value = eval(bind);
+    elem.onchange = function(){
+      eval(bind + "=" + elem.value + ";");
+    };
+  });
+  // select elements
+  [].forEach.call(document.querySelectorAll('select[data-bind]'), function(elem){
+    var bind = elem.getAttribute("data-bind");
+    // var options = elem.children;
+    console.log(elem.value);
+    elem.value = eval(bind);
+    console.log(elem.value);
+    elem.onchange = function(){
+      eval(bind + "=" + elem.value + ";");
+    };
+  });
 }
