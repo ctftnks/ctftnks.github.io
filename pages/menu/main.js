@@ -37,7 +37,10 @@ function updatePlayersMenu(){
     entry += "<button class='name' onclick='editPlayerName("+i+")' style='color:"+players[i].color+";'>";
     entry += players[i].name;
     entry += "</button>";
-    entry += editableKeymap(players[i].id);
+    if(players[i].isBot)
+      entry += editableKeymap(-2);
+    else
+      entry += editableKeymap(players[i].id);
     entry += "<button class='remove' onclick='removePlayer("+id+")'>&times;</button>";
     entry += "</div>";
     pmen.innerHTML += entry;
@@ -54,6 +57,15 @@ function editableKeymap(mapID){
     html += "<button class='keyEditButton notclickable'>&darr;</button>";
     html += "<button class='keyEditButton notclickable'>&rarr;</button>";
     html += "<button class='keyEditButton notclickable'>Fire</button>";
+    return html;
+  }
+  if(mapID==-2){
+    var html = "";
+    html += "<button class='keyEditButton notclickable'>-</button>";
+    html += "<button class='keyEditButton notclickable'>-</button>";
+    html += "<button class='keyEditButton notclickable'>-</button>";
+    html += "<button class='keyEditButton notclickable'>-</button>";
+    html += "<button class='keyEditButton notclickable'>-</button>";
     return html;
   }
   var html = "";
