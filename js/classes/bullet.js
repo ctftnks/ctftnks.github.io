@@ -40,10 +40,8 @@ Bullet = function(weapon){
     }else{
       context.save();
       context.translate(this.x, this.y);
-      var img = new Image;
-      img.src = this.image;
       context.rotate(this.angle);
-      context.drawImage(img, -this.radius*5 / 2, -this.radius*5 / 2, this.radius*5, this.radius*5);
+      context.drawImage(this.image, -this.radius*5 / 2, -this.radius*5 / 2, this.radius*5, this.radius*5);
       context.restore();
     }
   }

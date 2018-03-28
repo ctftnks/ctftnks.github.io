@@ -6,7 +6,7 @@
 PowerUp = function(){
   Object.call(this);
   this.isPowerUp = true;
-  this.image = "";
+  this.image = new Image;
   this.width = 30;
   this.x = undefined;
   this.y = undefined;
@@ -21,9 +21,7 @@ PowerUp = function(){
   this.draw = function(canvas, context){
     context.save();
     context.translate(this.x, this.y);
-    var img = new Image;
-    img.src = this.image;
-    context.drawImage(img, -this.width / 2, -this.width / 2, this.width, this.width);
+    context.drawImage(this.image, -this.width / 2, -this.width / 2, this.width, this.width);
     context.restore();
   }
 
@@ -32,7 +30,7 @@ PowerUp = function(){
 
 LaserBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/laser.png";
+  this.image.src = "res/img/laser.png";
   this.apply = function(tank){
     playSound("res/sound/reload.wav");
     tank.weapon = new Laser(tank);
@@ -40,7 +38,7 @@ LaserBonus = function(){
 }
 MGBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/mg.png";
+  this.image.src = "res/img/mg.png";
   this.apply = function(tank){
     playSound("res/sound/reload.wav");
     tank.weapon = new MG(tank);
@@ -48,7 +46,7 @@ MGBonus = function(){
 }
 GrenadeBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/grenade.png";
+  this.image.src = "res/img/grenade.png";
   this.apply = function(tank){
     playSound("res/sound/reload.wav");
     tank.weapon = new Grenade(tank);
@@ -56,7 +54,7 @@ GrenadeBonus = function(){
 }
 MineBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/mine.png";
+  this.image.src = "res/img/mine.png";
   this.apply = function(tank){
     playSound("res/sound/reload.wav");
     tank.weapon = new Mine(tank);
@@ -64,7 +62,7 @@ MineBonus = function(){
 }
 GuidedBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/guided.png";
+  this.image.src = "res/img/guided.png";
   this.apply = function(tank){
     playSound("res/sound/reload.wav");
     tank.weapon = new Guided(tank);
@@ -72,7 +70,7 @@ GuidedBonus = function(){
 }
 WreckingBallBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/wreckingBall.png";
+  this.image.src = "res/img/wreckingBall.png";
   this.apply = function(tank){
     playSound("res/sound/reload.wav");
     tank.weapon = new WreckingBall(tank);
@@ -80,7 +78,7 @@ WreckingBallBonus = function(){
 }
 SlingshotBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/slingshot.png";
+  this.image.src = "res/img/slingshot.png";
   this.apply = function(tank){
     playSound("res/sound/reload.wav");
     tank.weapon = new Slingshot(tank);
@@ -88,7 +86,7 @@ SlingshotBonus = function(){
 }
 SteelBeamBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/steelBeam.png";
+  this.image.src = "res/img/steelBeam.png";
   this.apply = function(tank){
     playSound("res/sound/reload.wav");
     tank.weapon = new SteelBeam(tank);
@@ -96,7 +94,7 @@ SteelBeamBonus = function(){
 }
 SpeedBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/speed.png";
+  this.image.src = "res/img/speed.png";
   this.apply = function(tank){
     tank.speed *= 1.14;
     var self = tank;
@@ -107,7 +105,7 @@ SpeedBonus = function(){
 }
 InvincibleBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/invincible.png";
+  this.image.src = "res/img/invincible.png";
   this.applied = false;
   this.apply = function(tank){
     if(this.applied)
@@ -115,17 +113,19 @@ InvincibleBonus = function(){
     this.applied = true;
     playMusic("res/sound/invincible.mp3");
     tank.speed *= 1.14;
-    var img = tank.weapon.image;
-    tank.weapon.image = "res/img/invincible.png";
+    var img = tank.weapon.image.src;
+    tank.weapon.image.src = "res/img/invincible.png";
     tank.invincible = true;
     var self = tank;
-    tank.player.game.intvls.push(setInterval(function(){
+    var intvl = setInterval(function(){
       self.invincible = true;
-    }, 300))
+    }, 300);
+    tank.player.game.intvls.push(intvl);
     tank.player.game.timeouts.push(setTimeout(function(){
       self.speed /= 1.14;
       self.invincible = false;
-      tank.weapon.image = img;
+      clearInterval(intvl);
+      tank.weapon.image.src = img;
       if(bgmusic)
         playMusic("res/sound/bgmusic.wav");
       else
@@ -135,7 +135,7 @@ InvincibleBonus = function(){
 }
 TerminatorBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/terminator.png";
+  this.image.src = "res/img/terminator.png";
   this.applied = false;
   this.apply = function(tank){
     if(this.applied)
@@ -159,7 +159,7 @@ TerminatorBonus = function(){
 }
 MultiBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/multi.png";
+  this.image.src = "res/img/multi.png";
   this.used = false;
   this.apply = function(tank){
     if(!this.used){
@@ -177,7 +177,7 @@ MultiBonus = function(){
 }
 FogBonus = function(){
   PowerUp.call(this);
-  this.image = "res/img/fog.png";
+  this.image.src = "res/img/fog.png";
   this.used = false;
   this.apply = function(tank){
     if(!this.used)

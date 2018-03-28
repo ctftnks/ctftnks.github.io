@@ -49,9 +49,7 @@ Tank = function(player){
       context.fill();
     }
     else if(this.weapon.image != ""){
-      var img = new Image;
-      img.src = this.weapon.image;
-      context.drawImage(img, -this.width / 2, -this.width / 2, this.width, this.width);
+      context.drawImage(this.weapon.image, -this.width / 2, -this.width / 2, this.width, this.width);
     }
     context.restore();
   }

@@ -3,7 +3,9 @@
 Weapon = function(tank){
   this.canShoot = true;
   this.tank = tank;
-  this.image = "";
+  this.image = new Image;
+  this.image.src = "";
+  this.img = undefined;
   this.name = "Weapon";
   this.canShoot = true;
   this.shoot = function(){
@@ -18,7 +20,8 @@ Weapon = function(tank){
 Gun = function(tank){
   Weapon.call(this, tank);
   this.name = "Gun";
-  this.image = "res/img/gun.png";
+  this.image = new Image;
+  this.image.src = "res/img/gun.png";
   this.canShoot = true;
 
   this.shoot = function(){
@@ -43,7 +46,8 @@ Gun = function(tank){
 MG = function(tank){
   Weapon.call(this, tank);
   this.name = "MG";
-  this.image = "res/img/mg.png";
+  this.image = new Image;
+  this.image.src = "res/img/mg.png";
   this.canShoot = true;
   this.fired = false;
   this.nshots = 20;
@@ -85,7 +89,8 @@ MG = function(tank){
 // yay, lasers!
 Laser = function(tank){
   Weapon.call(this, tank);
-  this.image = "res/img/laser.png";
+  this.image = new Image;
+  this.image.src = "res/img/laser.png";
   this.name = "Laser";
   this.canShoot = true;
   this.fired = false;
@@ -150,7 +155,8 @@ Laser = function(tank){
 // A grenade that can be remotely detonated
 Grenade = function(tank){
   Weapon.call(this, tank);
-  this.image = "res/img/grenade.png";
+  this.image = new Image;
+  this.image.src = "res/img/grenade.png";
   this.name = "Grenade";
   this.canShoot = true;
   this.fired = false;
@@ -167,7 +173,8 @@ Grenade = function(tank){
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
       bullet.radius = 6;
       bullet.color = "#000";
-      bullet.image = "res/img/grenade.png";
+      bullet.image = new Image;
+      bullet.image.src = "res/img/grenade.png";
       bullet.speed = BulletSpeed;
       bullet.angle = this.tank.angle;
       bullet.timeout = 10000;
@@ -208,7 +215,8 @@ Grenade = function(tank){
 // A mine
 Mine = function(tank){
   Weapon.call(this, tank);
-  this.image = "res/img/mine.png";
+  this.image = new Image;
+  this.image.src = "res/img/mine.png";
   this.name = "Mine";
   this.canShoot = true;
   this.fired = false;
@@ -225,7 +233,8 @@ Mine = function(tank){
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
       bullet.radius = 6;
       bullet.color = "#000";
-      bullet.image = "res/img/mine.png";
+      bullet.image = new Image;
+      bullet.image.src = "res/img/mine.png";
       bullet.speed = BulletSpeed;
       bullet.angle = this.tank.angle;
       bullet.timeout = 180000;
@@ -268,7 +277,8 @@ Mine = function(tank){
 // a guided missile
 Guided = function(tank){
   Weapon.call(this, tank);
-  this.image = "res/img/guided.png";
+  this.image = new Image;
+  this.image.src = "res/img/guided.png";
   this.name = "Guided";
   this.canShoot = true;
 
@@ -279,7 +289,8 @@ Guided = function(tank){
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
       bullet.radius = 6;
-      bullet.image = "res/img/guided.png";
+      bullet.image = new Image;
+      bullet.image.src = "res/img/guided.png";
       bullet.color = "#555";
       bullet.smokeColor = "#555";
       bullet.speed = 1.3*TankSpeed;
@@ -358,7 +369,8 @@ Guided = function(tank){
 // destroys walls
 WreckingBall = function(tank){
   Weapon.call(this, tank);
-  this.image = "res/img/wreckingBall.png";
+  this.image = new Image;
+  this.image.src = "res/img/wreckingBall.png";
   this.name = "WreckingBall";
   this.canShoot = true;
   this.fired = false;
@@ -426,7 +438,8 @@ WreckingBall = function(tank){
 SteelBeam = function(tank){
   Weapon.call(this, tank);
   this.name = "SteelBeam";
-  this.image = "res/img/steelBeam.png";
+  this.image = new Image;
+  this.image.src = "res/img/steelBeam.png";
   this.canShoot = true;
 
   this.shoot = function(){
@@ -452,7 +465,8 @@ SteelBeam = function(tank){
 // throw over walls
 Slingshot = function(tank){
   Weapon.call(this, tank);
-  this.image = "res/img/slingshot.png";
+  this.image = new Image;
+  this.image.src = "res/img/slingshot.png";
   this.name = "Slingshot";
   this.canShoot = true;
   this.fired = false;

@@ -9,7 +9,7 @@ Object = function(){
   this.isTank = false;
   this.isPowerUp = false;
   this.type = "Object";
-  this.image = "";
+  this.image = new Image;
 
   this.delete = function(){
     this.deleted = true;
@@ -19,9 +19,7 @@ Object = function(){
   this.draw = function(canvas, context){
     context.save();
     context.translate(this.x, this.y);
-    var img = new Image;
-    img.src = this.image;
-    context.drawImage(img, -this.width / 2, -this.width / 2, this.width, this.width);
+    context.drawImage(this.img, -this.width / 2, -this.width / 2, this.width, this.width);
     context.restore();
   }
 
