@@ -25,14 +25,14 @@
 - music, especially when holding flag
 - change body.background to #555 or similar
 - adaptive bot difficulties: bots become harder/easier depending on scoreboard
+- update README.md
 - REFACTOR REFACTOR REFACTOR!!!
 
 ## Long term issues
 - better UI
 - better graphics: hand drawn vector graphics
 - mobile support
-- publishable sounds
-- publish
+- publishable sounds & sprites
 
 ## Wishes
 - Powerup that creates Portals
