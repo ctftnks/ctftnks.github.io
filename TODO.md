@@ -5,7 +5,7 @@
 - Tanks spawn outside of Map and then get removed from game.objs by spatial sorting
 - TerminatorBonus + GrenadeBonus creates a lot of Grenades ... forever!
 - two players can pick up the same flag from one base simultaneously
-- Invincible bug: let super mario bonus not go through walls, let Tank.invincible be a time instead of boolean, so it can expire/be prolonged easier. Let tanks not go through walls on startup
+- Invincible bug: let InvincibleBonus not go through walls, let Tank.invincible be a time instead of boolean, so it can expire/be prolonged easier. Let tanks not go through walls on startup
 
 ## Minor features
 - introduce a Game.time
