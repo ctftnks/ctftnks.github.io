@@ -5,7 +5,8 @@ window.onload = function(){
   players = [new Player(), new Player()];
   // game = newGame();
   // setTimeout(function(){game.pause();}, 1000);
-  openMenu();
+  // openMenu();
+  openPage("menu");
 };
 
 // start a new round

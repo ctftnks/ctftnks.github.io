@@ -27,6 +27,7 @@
 - adaptive bot difficulties: bots become harder/easier depending on scoreboard
 - update README.md
 - REFACTOR REFACTOR REFACTOR!!!
+- Two way databinding for menus
 
 ## Long term issues
 - better UI

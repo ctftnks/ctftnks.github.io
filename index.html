@@ -3,9 +3,9 @@
 	<head>
 		<title>AZ Tank Game</title>
 		<link rel="stylesheet" href="style/main.css">
-		<link rel="stylesheet" href="style/menus.css">
+		<link rel="stylesheet" href="style/pages.css">
 		<script src="js/main.js" type="text/javascript"></script>
-		<script src="js/menus.js" type="text/javascript"></script>
+		<script src="js/pages.js" type="text/javascript"></script>
 		<script src="js/keybindings.js" type="text/javascript"></script>
 		<script src="js/settings.js" type="text/javascript"></script>
 		<script src="js/effects.js" type="text/javascript"></script>
@@ -23,11 +23,16 @@
 		<script src="js/classes/smoke.js" type="text/javascript"></script>
 		<script src="js/classes/tank.js" type="text/javascript"></script>
 		<script src="js/classes/weapons.js" type="text/javascript"></script>
-		<!-- Menus -->
-		<script src="menus/main.js" type="text/javascript"></script>
-		<script src="menus/powerups.js" type="text/javascript"></script>
+		<!-- TODO: remove -->
+		<script src="pages/mainMenu.js" type="text/javascript"></script>
+		<script src="pages/powerups.js" type="text/javascript"></script>
 	</head>
 	<body>
+
+		<!-- container for UI pages -->
+		<div id="pageContainer"></div>
+
+		<!-- sidebar -->
 		<div id="sideBar">
 			<div class="entry">
 				<b>Scores</b>
@@ -40,10 +45,10 @@
 				Next Map
 			</div>
 		</div>
+
+		<!-- game related stuff -->
 		<canvas id="gameFrame"></canvas>
 		<canvas id="effectFrame"></canvas>
-
-		<div id="screenContainer"></div>
 
 	</body>
 </html>

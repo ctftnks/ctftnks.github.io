@@ -3,7 +3,7 @@ function openMenu(pause=false){
   if(pause)
     game.pause();
   var id = openScreen(mainMenu);
-  document.querySelector("#screen"+id+" .closeframe").onclick = function(){closeMenu(true)};
+  document.querySelector("#page"+id+" .popupshade").onclick = function(){closeMenu(true)};
   updateMenu();
 }
 function closeMenu(pause=true){
