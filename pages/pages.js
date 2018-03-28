@@ -28,7 +28,6 @@ function openPage(name){
         link.rel  = "stylesheet";
         link.href = "pages/"+name+"/style.css";
         document.head.appendChild(link);
-        console.log(link)
       }else{
         evalscripts(p);
         databinding();

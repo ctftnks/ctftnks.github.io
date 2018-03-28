@@ -1,6 +1,24 @@
 
+function addPlayer(bot=false){
+  if(players.length >= keymaps.length)
+    keymaps.push(keymaps[0].slice());
+  if(bot)
+    players.push(new Bot());
+  else
+    players.push(new Player());
+  updatePlayersMenu();
+}
 
-function updateMenu(){
+function removePlayer(id){
+  var newPlayers = [];
+  for(var i=0; i<players.length; i++)
+    if(players[i].id != id)
+      newPlayers.push(players[i]);
+  players = newPlayers;
+  updatePlayersMenu();
+}
+
+function updatePlayersMenu(){
   var pmen = document.getElementById("playersMenu");
   pmen.innerHTML = "";
   var entry = "";
@@ -15,7 +33,7 @@ function updateMenu(){
     var entry = "";
     var id = players[i].id;
     entry += "<div class='entry'>";
-    entry += "<button class='team' onclick='players["+i+"].changeColor();updateMenu();' style='color:"+players[i].color+";'>&#9899;</button>";
+    entry += "<button class='team' onclick='players["+i+"].changeColor();updatePlayersMenu();' style='color:"+players[i].color+";'>&#9899;</button>";
     entry += "<button class='name' onclick='editPlayerName("+i+")' style='color:"+players[i].color+";'>";
     entry += players[i].name;
     entry += "</button>";
@@ -24,6 +42,7 @@ function updateMenu(){
     entry += "</div>";
     pmen.innerHTML += entry;
   }
+  updateScores();
 }
 
 // edit the keymap from the menu
@@ -57,11 +76,12 @@ function editKeymap(mapID, keyID){
 function doEditKeymap(newKeyCode){
   keymaps[editingMapID][editingKeyID] = newKeyCode;
   editingKeymap = false;
-  updateMenu();
+  updatePlayersMenu();
 }
 
 function editPlayerName(index){
-  players[index].name = prompt("Namen eingeben:");
-  updateScores();
-  updateMenu();
+  var name = prompt("Namen eingeben:");
+  if(name != null)
+    players[index].name = name;
+  updatePlayersMenu();
 }

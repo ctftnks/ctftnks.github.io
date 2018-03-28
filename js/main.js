@@ -3,9 +3,6 @@
 window.onload = function(){
   canvas = new Canvas("gameFrame");
   players = [new Player(), new Player()];
-  // game = newGame();
-  // setTimeout(function(){game.pause();}, 1000);
-  // openMenu();
   openPage("menu");
 };
 
@@ -27,26 +24,6 @@ function newGame(){
   canvas.sync();
   return game;
 }
-
-function addPlayer(bot=false){
-  if(players.length >= keymaps.length)
-    keymaps.push(keymaps[0].slice());
-  if(bot)
-    players.push(new Bot());
-  else
-    players.push(new Player());
-  updateMenu();
-}
-
-function removePlayer(id){
-  var newPlayers = [];
-  for(var i=0; i<players.length; i++)
-    if(players[i].id != id)
-      newPlayers.push(players[i]);
-  players = newPlayers;
-  updateMenu();
-}
-
 function updateScores(){
   var scoreBoard = document.getElementById("scoreBoard");
   scoreBoard.innerHTML = "";
