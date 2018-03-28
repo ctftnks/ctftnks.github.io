@@ -36,6 +36,7 @@ Player = function(){
   this.spree = 0;
   this.keys = keymaps[this.id];
   this.tank = new Tank(this);
+  this.stats = {deaths: 0, kills: 0, miles: 0, shots: 0};
   isBot = false;
 
   // timestep: check if keys pressed and act accordingly
@@ -85,9 +86,9 @@ Player = function(){
     this.game.nkills++;
     this.game.canvas.shake();
     this.spree = 0;
+    this.stats.deaths += 1;
     if(this.game.nkills >= MaxKillsPerGame){
-      game.stop();
-      this.game.timeouts.push(setTimeout(function(){newGame();}, 2000));
+      game.end();
     }
     var self = this;
     this.game.timeouts.push(setTimeout(function(){
@@ -95,21 +96,16 @@ Player = function(){
     }, 1500));
   }
 
-  // give or subtract score to player, also update killing spree
-  this.giveScore = function(val=1){
-    this.score += val;
-    this.spree += 1;
-    if(this.spree >= 5 && this.spree % 5 == 0){
-      this.score += Math.floor(this.spree / 5)
-      playSound("res/sound/killingspree.mp3");
-    }
-  }
-
   // change color
   this.changeColor = function(){
     this.team += 1;
     this.team = this.team % playercolors.length;
     this.color = playercolors[this.team % playercolors.length];
+  }
+
+  // reset stats dictionary to 0
+  this.resetStats = function(){
+    this.stats = this.stats.fromkeys(this.stats, 0);
   }
 
 }

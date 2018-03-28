@@ -18,6 +18,7 @@ PowerUpFrequency = 4000;
 MaxPowerUps = 8;
 MaxKillsPerGame = 100;
 SpawnShieldTime = 1;
+EndScreenTime = 15;
 FriendlyFire = true;
 BotsShootBots = true;
 BotSpeed = 1;

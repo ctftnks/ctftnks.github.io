@@ -64,6 +64,7 @@ Tank = function(player){
 
   // move the tank forward/backwards
   this.move = function(direction){
+    this.player.stats.miles += 1;
     var oldx = this.x;
     var oldy = this.y;
     this.x -= direction * this.speed * Math.sin(-this.angle) * GameFrequency / 1000.;
@@ -93,6 +94,8 @@ Tank = function(player){
   // use the weapon
   this.shoot = function(){
       this.weapon.shoot();
+      if(this.weapon.canShoot)
+        this.player.stats.shots += 1;
   }
 
   // return to the default weapon
@@ -175,6 +178,9 @@ Tank = function(player){
         bullets[i].delete();
         if(this.invincible)
           return;
+        // count stats
+        if(bullets[i].player.team != this.player.team)
+          bullets[i].player.stats.kills += 1;
         // fancy explosion cloud
         new Cloud(this.player.game, this.x, this.y, n=6);
         // let gamemode handle scoring
@@ -184,7 +190,6 @@ Tank = function(player){
           this.carriedFlag.drop(this.x, this.y);
         // kill the player, delete the tank and bullet
         playSound("res/sound/kill.wav");
-        bullets[i].delete();
         this.delete();
         this.player.kill();
         return;

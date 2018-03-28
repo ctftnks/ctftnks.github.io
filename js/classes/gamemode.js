@@ -77,7 +77,7 @@ TeamDeathmatch = function(game){
         // find spawnPoint that is far away from existing bases
         var maxLength = -1;
         var maxPos = game.map.spawnPoint();
-        for(var k=0; k<20; k++){
+        for(var k=0; k<100; k++){
           var pos = game.map.spawnPoint();
           var tile = game.map.getTileByPos(pos.x, pos.y);
           var length = 0;
@@ -164,7 +164,7 @@ CaptureTheFlag = function(game){
         // find spawnPoint that is far away from existing bases
         var maxLength = -1;
         var maxPos = game.map.spawnPoint();
-        for(var k=0; k<20; k++){
+        for(var k=0; k<100; k++){
           var pos = game.map.spawnPoint();
           var tile = game.map.getTileByPos(pos.x, pos.y);
           var length = 0;

@@ -1,0 +1,27 @@
+<div class="popupshade" onclick="closePage(this);newGame();clearInterval(leaderIntvl);clearTimeout(leaderTimeout);"></div>
+<div class="popup">
+
+  <h2 id="leaderboardh2">Leaderboard</h2>
+
+  <span id="leaderboardCounter"></span>
+
+  <div id="leaderboard">
+
+  </div>
+
+
+</div>
+
+<script>
+  updateLeaderboard();
+  var leaderTime = EndScreenTime;
+  document.getElementById("leaderboardh2").innerHTML = "Leaderboard:&nbsp;&nbsp;Game #"+GameID;
+  document.getElementById("leaderboardCounter").innerHTML = leaderTime+"s";
+  leaderIntvl = setInterval(function(){
+    leaderTime -= 1;
+    document.getElementById("leaderboardCounter").innerHTML = leaderTime+"s";
+  }, 1000);
+  leaderTimeout = setTimeout(function(){
+    clearInterval(leaderIntvl);
+  }, (EndScreenTime-1)*1000);
+</script>

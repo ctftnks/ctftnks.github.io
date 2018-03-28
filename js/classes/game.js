@@ -3,6 +3,7 @@
 // contains a list of players, list of objects in the game
 // contains a loop mechanism for time-iteration
 
+GameID = 0;
 Game = function(canvas){
 
   // pass canvas class to game, for size / resolution
@@ -25,6 +26,7 @@ Game = function(canvas){
   this.timeouts = [];
   this.nkills = 0;
   this.mode = new Deathmatch(this);
+  GameID++;
 
   // add a player (class) to the game
   this.addPlayer = function(player){
@@ -40,7 +42,6 @@ Game = function(canvas){
 
   // start the game, starts time-loop
   this.start = function(){
-    console.log("Game started!");
     var self = this;
     this.loop = setInterval(function(){
       self.step();
@@ -83,7 +84,6 @@ Game = function(canvas){
   // pause the game
   this.pause = function(){
     this.paused = !this.paused;
-    console.log("Game paused!");
   }
 
   // stop the game
@@ -96,7 +96,18 @@ Game = function(canvas){
       clearTimeout(this.timeouts[i]);
     clearEffects();
     stopMusic();
-    console.log("Game stopped!");
+  }
+
+  // end the game
+  this.end = function(){
+    this.paused = true;
+    var pageid = openPage("leaderboard");
+    var self = this;
+    setTimeout(function(){
+      self.stop();
+      closePage(pageid);
+      newGame();
+    }, EndScreenTime*1000);
   }
 
 }
