@@ -1,47 +1,77 @@
 <div class="popupshade" onclick="closePage(this);"></div>
-<div class="popup">
+<div class="popup" id="settingsMenu">
 
 
 <h2>Settings</h2>
-  <div class="option">
-    <span class="left">Sound</span>
-    <select class="right" data-bind="muted">
-      <option value="false">on</option>
-      <option value="true">off</option>
-    </select>
+
+  <div id="settingsTable">
+    <div class="leftCol">
+      <div class="option">
+        <span>Tank speed</span>
+        <button class="left" onclick="TankSpeed -= 20; databinding();">-</button>
+        <input class="left right" data-bind="TankSpeed" size="1" readonly/>
+        <button class="right" onclick="TankSpeed += 20; databinding();">+</button>
+      </div><br />
+      <div class="option">
+        <span>Bullet speed</span>
+        <button class="left" onclick="BulletSpeed -= 20; databinding();">-</button>
+        <input class="left right" data-bind="BulletSpeed" size="1" readonly/>
+        <button class="right" onclick="BulletSpeed += 20; databinding();">+</button>
+      </div><br />
+      <div class="option">
+        <span>Spawn shield</span>
+        <button class="left" onclick="SpawnShieldTime -= 0.5; databinding();">-</button>
+        <input class="left right" data-bind="SpawnShieldTime" size="1" readonly/>
+        <button class="right" onclick="SpawnShieldTime += 0.5; databinding();">+</button>
+      </div><br />
+      <div class="option">
+        <span>Map min-size</span>
+        <button class="left" onclick="MapNxMin -= 1; databinding();">-</button>
+        <input class="left right" data-bind="MapNxMin" size="1" readonly/>
+        <button class="right" onclick="MapNxMin += 1; databinding();">+</button>
+      </div><br />
+      <div class="option">
+        <span>Map max-size</span>
+        <button class="left" onclick="MapNxMax -= 1; databinding();">-</button>
+        <input class="left right" data-bind="MapNxMax" size="1" readonly/>
+        <button class="right" onclick="MapNxMax += 1; databinding();">+</button>
+      </div>
+    </div>
+    <div class="rightCol">
+      <div class="option">
+        <span>Kills per game</span>
+        <button class="left" onclick="MaxKillsPerGame -= 10; databinding();">-</button>
+        <input class="left right" data-bind="MaxKillsPerGame" size="1" readonly/>
+        <button class="right" onclick="MaxKillsPerGame += 10; databinding();">+</button>
+      </div><br />
+      <div class="option">
+        <span class="left">Friendly Fire</span>
+        <select class="right" data-bind="FriendlyFire">
+          <option value="true">on</option>
+          <option value="false">off</option>
+        </select>
+      </div><br />
+      <div class="option">
+        <span class="left">Bots shoot bots</span>
+        <select class="right" data-bind="BotsShootBots">
+          <option value="true">on</option>
+          <option value="false">off</option>
+        </select>
+      </div><br />
+      <div class="option">
+        <span class="left">Sound</span>
+        <select class="right" data-bind="muted">
+          <option value="false">on</option>
+          <option value="true">off</option>
+        </select>
+      </div><br />
+      <div class="option">
+        <span class="left">Music</span>
+        <select class="right" data-bind="bgmusic">
+          <option value="true">on</option>
+          <option value="false">off</option>
+        </select>
+      </div><br />
   </div>
-  <!-- <div class="option">
-    <span class="left">Music</span>
-    <select class="right" data-bind="bgmusic">
-      <option value="true">on</option>
-      <option value="false">off</option>
-    </select>
-  </div> -->
-  <div class="option">
-    <span class="left">Friendly Fire</span>
-    <select class="right" data-bind="FriendlyFire">
-      <option value="true">on</option>
-      <option value="false">off</option>
-    </select>
-  </div>
-  <div class="option">
-    <span class="left">Bots</span>
-    <select class="right" data-bind="BotSpeed">
-      <option value="0.6">Lame</option>
-      <option value="0.8">Ok</option>
-      <option value="1">Decent</option>
-      <option value="1.2">Quick</option>
-      <option value="1.4">Pro</option>
-      <option value="1.8">Insane</option>
-    </select>
-  </div>
-  <div class="option">
-    <button class="left" onclick="TankSpeed -= 10; databinding();">-</button>
-    <span class="left right">TankSpeed</span>
-    <input class="left right" data-bind="TankSpeed" size="1" readonly/>
-    <button class="right" onclick="TankSpeed += 10; databinding();">+</button>
-  </div>
-  <!-- <div class="option">
-    <button onclick="openPage('powerups');">Powerups</button>
-  </div> -->
+
 </div>

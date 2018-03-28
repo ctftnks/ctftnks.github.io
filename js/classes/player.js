@@ -59,7 +59,7 @@ Player = function(){
     if(typeof(this.base) !== "undefined" && this.base.tile != -1){
       var spos2 = this.base.tile;
       while(spos2.id == this.base.tile.id)
-        spos2 = spos2.randomWalk(Math.floor(Math.random()*5));
+        spos2 = spos2.randomWalk(Math.floor(Math.random()*6));
       spos = {x: spos2.x+spos2.dx/2, y: spos2.y+spos2.dy/2};
     }
     this.tank.x = spos.x;
@@ -75,7 +75,7 @@ Player = function(){
     this.tank.invincible = true;
     this.game.timeouts.push(setTimeout(function(){
       self.tank.invincible = false;
-    }, SpawnShieldTime + 0.2 * (Math.random() - 0.5)));
+    }, SpawnShieldTime * 1000 + 0.2 * (Math.random() - 0.5)));
   }
 
   // kill the player, called when tank is shot

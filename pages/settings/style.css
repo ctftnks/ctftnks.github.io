@@ -1,0 +1,32 @@
+/* #settingsMenu table{
+  width: 80%;
+  position: relative;
+  left: 10%;
+}
+
+#settingsMenu table td{
+  width: 40%;
+} */
+
+
+#settingsTable{
+  width: 80%;
+  position: relative;
+  left: 10%;
+}
+
+#settingsTable .leftCol{
+  float:left;
+  width: 50%;
+  position: relative;
+  left: 0;
+  top:0;
+}
+
+#settingsTable .rightCol{
+  float:left;
+  width: 50%;
+  position: relative;
+  left: 0;
+  top:0;
+}

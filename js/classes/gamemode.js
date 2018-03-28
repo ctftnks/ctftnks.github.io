@@ -102,7 +102,7 @@ TeamDeathmatch = function(game){
         game.addObject(b);
         var spawnPoint = b.tile;
         while(spawnPoint.id == b.tile.id)
-          spawnPoint = spawnPoint.randomWalk(Math.floor(Math.random()*5));
+          spawnPoint = spawnPoint.randomWalk(Math.floor(Math.random()*6));
         player.tank.x = spawnPoint.x + spawnPoint.dx/2;
         player.tank.y = spawnPoint.y + spawnPoint.dy/2;
         player.base = b;
@@ -192,7 +192,7 @@ CaptureTheFlag = function(game){
         game.addObject(b);
         var spawnPoint = b.tile;
         while(spawnPoint.id == b.tile.id)
-          spawnPoint = spawnPoint.randomWalk(Math.floor(Math.random()*5));
+          spawnPoint = spawnPoint.randomWalk(Math.floor(Math.random()*6));
         player.tank.x = spawnPoint.x + spawnPoint.dx/2;
         player.tank.y = spawnPoint.y + spawnPoint.dy/2;
         player.base = b;

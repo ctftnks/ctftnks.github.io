@@ -12,12 +12,9 @@
 - Laser needs rework: accuracy
 - Laser should show trajectory prior to shooting
 - better spawn shield: 1 second at least
-- spawn position should be a bit more far from base
 - reset the flag after some time
 
 ## Enhancement:
-- standardized menus: load screens with AJAX, bind selects/inputs to variables
-- better settings: advanced settings screen
 - Quick-Game buttons: 2v2, 3v3 (players vs bots? choose?)
 - less white!
 - stats at end of each map: how many kills, deaths does each player have? How much did each player move, shoot?
@@ -27,7 +24,6 @@
 - adaptive bot difficulties: bots become harder/easier depending on scoreboard
 - update README.md
 - REFACTOR REFACTOR REFACTOR!!!
-- Two way databinding for menus
 
 ## Long term issues
 - better UI
