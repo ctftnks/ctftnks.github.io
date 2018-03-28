@@ -1,7 +1,3 @@
-# AZ: Tank game
-
-Start by opening main.html
-
 
 # TODO:
 
