@@ -10,7 +10,7 @@ muted = false;
 bgmusic = false;
 
 // Gameplay
-GameMode = "DM";
+GameMode = "CTF";
 TankSpeed = 170;
 TankTurnSpeed = 3.8;
 BulletSpeed = 260;
