@@ -4,6 +4,8 @@
   position: relative;
   width: 100%;
   left: 0px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 #playersMenu .name{

@@ -19,6 +19,7 @@
   background-color: #FFF;
   box-shadow: 0px 0px 13px 0px rgba(94,94,94,1);
   text-align: center;
+  padding-bottom: 32px;
 }
 
 
@@ -30,27 +31,4 @@
   width: 100%;
   background: rgba(0, 0, 0, 0.2);
   cursor: pointer;
-}
-
-
-.option .element{
-  background: #FBFBFB;
-  border: solid 1px #DDD;
-  box-shadow: 0px 0px 1px 0px rgba(94,94,94,0.06);
-  margin-right: -5px;
-  font-size: 0.8em;
-  padding: 7px;
-}
-
-.option .left{
-  margin-right: -5px;
-  border-right: solid 1px #F0F0F0;
-}
-.option .right{
-  margin-left: -5px;
-  border-left: solid 1px #F0F0F0;
-}
-.option .middle{
-  margin-left: -5px;
-  border-left: solid 1px #F0F0F0;
 }

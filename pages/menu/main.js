@@ -24,7 +24,7 @@ function updatePlayersMenu(){
   var entry = "";
   entry += "<div class='entry'>";
   entry += "<span style='width:50px;display:inline-block;'></span>";
-  entry += "<button class='name'>Name</button>";
+  entry += "<button class='name notclickable'>Name</button>";
   entry += editableKeymap(-1);
   entry += "<span style='width:50px;display:inline-block;'></span>";
   entry += "</div>";
@@ -49,16 +49,16 @@ function updatePlayersMenu(){
 function editableKeymap(mapID){
   if(mapID==-1){
     var html = "";
-    html += "<button class='keyEditButton'>&uarr;</button>";
-    html += "<button class='keyEditButton'>&larr;</button>";
-    html += "<button class='keyEditButton'>&darr;</button>";
-    html += "<button class='keyEditButton'>&rarr;</button>";
-    html += "<button class='keyEditButton'>Fire</button>";
-    return html
+    html += "<button class='keyEditButton notclickable'>&uarr;</button>";
+    html += "<button class='keyEditButton notclickable'>&larr;</button>";
+    html += "<button class='keyEditButton notclickable'>&darr;</button>";
+    html += "<button class='keyEditButton notclickable'>&rarr;</button>";
+    html += "<button class='keyEditButton notclickable'>Fire</button>";
+    return html;
   }
   var html = "";
   for(var i in keymaps[mapID]){
-    html += "<button class='keyEditButton clickable' onclick='editKeymap("+mapID+", "+i+")' onfocusout='editingKeymap=false'>";
+    html += "<button class='keyEditButton' onclick='editKeymap("+mapID+", "+i+")' onfocusout='editingKeymap=false'>";
     html += keyLabels[keymaps[mapID][i]];
     html += "</button>";
   }

@@ -2,27 +2,33 @@
 <div class="popup">
 
   <h2>Powerups:</h2>
-  <div id="powerupsOptions">
 
+  <div id="powerupsOptions"></div>
+
+  <br /><br />
+
+  <div class='option vspace'>
+    <span class="left">Rate</span>
+    <select class="right" data-bind="PowerUpFrequency">
+      <option value="2000">2s</option>
+      <option value="4000">4s</option>
+      <option value="4000">6s</option>
+      <option value="10000">10s</option>
+    </select>
   </div>
-  <br /><br /><div class='option'>
-  <span class='label'>Rate</span>
-  <select onchange="PowerUpFrequency=parseFloat(this.value)*1000">
-  <option value="2">2s</option>
-  <option value="4" selected="selected">4s</option>
-  <option value="4">6s</option>
-  <option value="10">10s</option>
-  </select></div>&nbsp;&nbsp;&nbsp;
-  <div class='option'>
-  <span class='label'>Amount</span>
-  <select onchange="MaxPowerUps=parseInt(this.value)">
-  <option value="2">2</option>
-  <option value="4">4</option>
-  <option value="8" selected="selected">8</option>
-  <option value="16">16</option>
-  <option value="32">32</option>
-  </select></div>&nbsp;&nbsp;&nbsp;
-  <button onclick="closePage(this);">Close</button><br /><br /><br />
+
+  <div class='option vspace'>
+    <span class="left">Amount</span>
+    <select class="right" data-bind="MaxPowerUps">
+      <option value="2">2</option>
+      <option value="4">4</option>
+      <option value="8">8</option>
+      <option value="16">16</option>
+      <option value="32">32</option>
+    </select>
+  </div>
+
+  <button class="option vspace" onclick="closePage(this);">Close</button>
 
 </div>
 
