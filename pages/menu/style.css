@@ -1,0 +1,26 @@
+
+
+#playersMenu{
+  position: relative;
+  width: 100%;
+  left: 0px;
+}
+
+#playersMenu .name{
+  display: inline-block;
+  width: 120px;
+  margin-right: 20px;
+}
+
+#playersMenu .team{
+  display: inline-block;
+  width: 30px;
+  margin-right: 20px;
+}
+
+#playersMenu .remove{
+  display: inline-block;
+  width: 30px;
+  margin-left: 20px;
+  color: #F44336;
+}

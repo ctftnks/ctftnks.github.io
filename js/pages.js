@@ -77,9 +77,7 @@ function databinding(){
   [].forEach.call(document.querySelectorAll('select[data-bind]'), function(elem){
     var bind = elem.getAttribute("data-bind");
     // var options = elem.children;
-    console.log(elem.value);
     elem.value = eval(bind);
-    console.log(elem.value);
     elem.onchange = function(){
       eval(bind + "=" + elem.value + ";");
     };
