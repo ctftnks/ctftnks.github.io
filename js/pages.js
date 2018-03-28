@@ -26,7 +26,7 @@ function closePage(id){
     elem.parentNode.removeChild(elem);
   }
   if(typeof(id) == "object"){
-    var elem = this.parentNode;
+    var elem = id.parentNode;
     elem.parentNode.removeChild(elem);
   }
 }
