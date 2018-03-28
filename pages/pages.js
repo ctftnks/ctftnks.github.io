@@ -25,9 +25,10 @@ function openPage(name){
         document.head.appendChild(script);
         loadedScripts.push(name);
         var link = document.createElement("link");
-        link.rel  = 'stylesheet';
-        link.src = "pages/"+name+"/style.css";
+        link.rel  = "stylesheet";
+        link.href = "pages/"+name+"/style.css";
         document.head.appendChild(link);
+        console.log(link)
       }else{
         evalscripts(p);
         databinding();

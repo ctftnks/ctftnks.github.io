@@ -24,3 +24,13 @@
   margin-left: 20px;
   color: #F44336;
 }
+
+
+.keyEditButton{
+  margin: 2px;
+  width: 60px;
+}
+
+.keyEditButton:focus{
+  background: rgba(153, 204, 255, 0.5);
+}

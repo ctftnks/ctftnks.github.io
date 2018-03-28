@@ -1,4 +1,4 @@
-<div class="popupshade" onclick="closePage(this)"></div>
+<div class="popupshade" onclick="closePage(this);if(typeof(game)==='undefined') newGame(); else game.paused = false;"></div>
 <div class="popup">
 
 
@@ -52,4 +52,5 @@
 
 <script>
   updateMenu();
+  if(typeof(game)!=='undefined') game.paused = true;
 </script>
