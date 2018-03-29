@@ -124,7 +124,6 @@ MapGenerator = {
       MapGenerator.recursiveDivision(map, x1, posY+1, x2, y2);
     }
   },
-
 }
 
 // List of all algorithms
