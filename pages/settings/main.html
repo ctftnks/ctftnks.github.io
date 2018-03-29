@@ -21,7 +21,7 @@
       <div class="option">
         <span>Spawn shield</span>
         <button class="left" onclick="SpawnShieldTime -= 0.5; databinding();">-</button>
-        <input class="left right" data-bind="SpawnShieldTime" size="1" readonly/>
+        <input class="left right" data-bind="SpawnShieldTime" data-suffix="s" size="1" readonly/>
         <button class="right" onclick="SpawnShieldTime += 0.5; databinding();">+</button>
       </div><br />
       <div class="option">
@@ -39,7 +39,7 @@
       <div class="option">
         <span>Leaderboard time</span>
         <button class="left" onclick="EndScreenTime -= 1; databinding();">-</button>
-        <input class="left right" data-bind="EndScreenTime" size="1" readonly/>
+        <input class="left right" data-bind="EndScreenTime" data-suffix="s" size="1" readonly/>
         <button class="right" onclick="EndScreenTime += 1; databinding();">+</button>
       </div><br />
     </div>

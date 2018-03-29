@@ -20,6 +20,7 @@
 - adaptive bot difficulties: bots become harder/easier depending on scoreboard
 - update README.md
 - REFACTOR REFACTOR REFACTOR!!!
+- support for user created, curated maps
 
 ## Long term issues
 - better UI

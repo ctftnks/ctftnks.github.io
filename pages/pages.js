@@ -68,7 +68,9 @@ function databinding(){
   // input elements
   [].forEach.call(document.querySelectorAll('input[data-bind]'), function(elem){
     var bind = elem.getAttribute("data-bind");
-    elem.value = eval(bind);
+    var prefix = elem.hasAttribute("data-prefix") ? elem.getAttribute("data-prefix") : "";
+    var suffix = elem.hasAttribute("data-suffix") ? elem.getAttribute("data-suffix") : "";
+    elem.value = prefix + eval(bind) + suffix;
     elem.onchange = function(){
       eval(bind + "=" + elem.value + ";");
     };
@@ -76,7 +78,6 @@ function databinding(){
   // select elements
   [].forEach.call(document.querySelectorAll('select[data-bind]'), function(elem){
     var bind = elem.getAttribute("data-bind");
-    // var options = elem.children;
     elem.value = eval(bind);
     elem.onchange = function(){
       eval(bind + "=" + elem.value + ";");
