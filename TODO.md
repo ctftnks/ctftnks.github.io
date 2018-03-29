@@ -5,8 +5,6 @@
 - Tanks spawn outside of Map and then get removed from game.objs by spatial sorting
 - TerminatorBonus + GrenadeBonus creates a lot of Grenades ... forever!
 - two players can pick up the same flag from one base simultaneously
-- Invincible bug: let InvincibleBonus not go through walls, let Tank.invincible be a time instead of boolean, so it can expire/be prolonged easier. Let tanks not go through walls on startup
-
 ## Minor features
 - Laser needs rework: accuracy
 - Laser should show trajectory prior to shooting
@@ -32,5 +30,6 @@
 
 ## Wishes
 - Powerup that creates Portals
+- Powerup that lets tank go through walls
 - setting the difficulty per-bot
 - button to change from player to bot

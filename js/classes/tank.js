@@ -19,7 +19,7 @@ Tank = function(player){
   this.speed = TankSpeed;
   this.isTank = true;
   this.type = "Tank";
-  this.invincible = false;
+  this.timers = {spawnshield: -1, invincible: -1};
   this.carriedFlag = -1;
 
   // draw the tank (rotated) on map
@@ -69,13 +69,6 @@ Tank = function(player){
     var oldy = this.y;
     this.x -= direction * this.speed * Math.sin(-this.angle) * GameFrequency / 1000.;
     this.y -= direction * this.speed * Math.cos(-this.angle) * GameFrequency / 1000.;
-    if(this.invincible){
-      if(this.x < 0 || this.y < 0 || this.x > this.map.Nx * this.map.dx || this.y > this.map.Ny * this.map.dy){
-        this.x = oldx;
-        this.y = oldy;
-      }
-      return;
-    }
     if(this.checkWallCollision()){
       this.x = oldx;
       this.y = oldy;
@@ -175,9 +168,9 @@ Tank = function(player){
         if(!FriendlyFire && (this.player.team == bullets[i].player.team && this.player.id != bullets[i].player.id))
           return;
         // Hit!
-        bullets[i].delete();
-        if(this.invincible)
+        if(this.invincible())
           return;
+        bullets[i].delete();
         // count stats
         if(bullets[i].player.team != this.player.team)
           bullets[i].player.stats.kills += 1;
@@ -201,5 +194,11 @@ Tank = function(player){
         powerups[i].delete();
       }
     }
+  }
+
+  // properties: is invincible?
+  this.invincible = function(){
+    var t = this.player.game.t;
+    return this.timers.spawnshield > t || this.timers.invincible > t;
   }
 }

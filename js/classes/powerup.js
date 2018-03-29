@@ -111,26 +111,21 @@ InvincibleBonus = function(){
     if(this.applied)
       return;
     this.applied = true;
+    stopMusic();
     playMusic("res/sound/invincible.mp3");
     tank.speed *= 1.14;
     var img = tank.weapon.image.src;
     tank.weapon.image.src = "res/img/invincible.png";
-    tank.invincible = true;
+    tank.timers.invincible = tank.player.game.t + 10000;
     var self = tank;
-    var intvl = setInterval(function(){
-      self.invincible = true;
-    }, 300);
-    tank.player.game.intvls.push(intvl);
     tank.player.game.timeouts.push(setTimeout(function(){
       self.speed /= 1.14;
-      self.invincible = false;
-      clearInterval(intvl);
       tank.weapon.image.src = img;
       if(bgmusic)
         playMusic("res/sound/bgmusic.wav");
-      else
+      else if(!tank.invincible())
         stopMusic();
-    }, 10000));
+    }, 10100));
   }
 }
 TerminatorBonus = function(){
