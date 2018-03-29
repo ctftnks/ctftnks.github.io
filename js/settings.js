@@ -22,6 +22,7 @@ EndScreenTime = 15;
 FriendlyFire = true;
 BotsShootBots = true;
 BotSpeed = 1;
+ShowTankLabels = false;
 // Map size
 MapNxMin = 9;
 MapNxMax = 15;

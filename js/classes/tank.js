@@ -48,8 +48,23 @@ Tank = function(player){
       context.rect(-this.carriedFlag.size/2, -this.carriedFlag.size/2, this.carriedFlag.size/6, this.carriedFlag.size*1.1);
       context.fill();
     }
+    else if(this.timers.spawnshield > this.player.game.t){
+      context.rotate(Math.pi);
+      context.fillStyle = "#000";
+      context.font = "30px Arial";
+      context.fillText(this.player.name.substr(0,1),-this.width/4, this.height/4);
+      context.rotate(-Math.pi);
+    }
     else if(this.weapon.image != ""){
       context.drawImage(this.weapon.image, -this.width / 2, -this.width / 2, this.width, this.width);
+    }
+    // draw label
+    if(ShowTankLabels){
+      context.rotate(-this.angle);
+      context.fillStyle = this.player.color;
+      context.font = "10px Arial";
+      context.fillText(this.player.name,-16,-40);
+      context.rotate(this.angle);
     }
     context.restore();
   }

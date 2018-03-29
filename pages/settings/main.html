@@ -35,7 +35,13 @@
         <button class="left" onclick="MapNxMax -= 1; databinding();">-</button>
         <input class="left right" data-bind="MapNxMax" size="1" readonly/>
         <button class="right" onclick="MapNxMax += 1; databinding();">+</button>
-      </div>
+      </div><br />
+      <div class="option">
+        <span>Leaderboard time</span>
+        <button class="left" onclick="EndScreenTime -= 1; databinding();">-</button>
+        <input class="left right" data-bind="EndScreenTime" size="1" readonly/>
+        <button class="right" onclick="EndScreenTime += 1; databinding();">+</button>
+      </div><br />
     </div>
     <div class="rightCol">
       <div class="option">
@@ -54,6 +60,13 @@
       <div class="option">
         <span class="left">Bots shoot bots</span>
         <select class="right" data-bind="BotsShootBots">
+          <option value="true">on</option>
+          <option value="false">off</option>
+        </select>
+      </div><br />
+      <div class="option">
+        <span class="left">Tank labels</span>
+        <select class="right" data-bind="ShowTankLabels">
           <option value="true">on</option>
           <option value="false">off</option>
         </select>

@@ -9,6 +9,7 @@
 - Laser needs rework: accuracy
 - Laser should show trajectory prior to shooting
 - when spawning: show first letter of name for identification
+- support for databinding attributes: data-min data-max data-suffix data-prefix
 
 ## Enhancement:
 - less white!
