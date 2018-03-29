@@ -8,7 +8,6 @@
 - Invincible bug: let InvincibleBonus not go through walls, let Tank.invincible be a time instead of boolean, so it can expire/be prolonged easier. Let tanks not go through walls on startup
 
 ## Minor features
-- introduce a Game.time
 - Laser needs rework: accuracy
 - Laser should show trajectory prior to shooting
 - better spawn shield: 1 second at least
