@@ -178,36 +178,42 @@ Grenade = function(tank){
       bullet.speed = BulletSpeed;
       bullet.angle = this.tank.angle;
       bullet.timeout = 10000;
+      bullet.exploded = false;
       var self = this;
+      bullet.explode = function(){
+          if(bullet.exploded)
+            return;
+          bullet.exploded = true;
+          playSound("res/sound/grenade.wav");
+          for(var i=0; i<this.nshrapnels; i++){
+            var shrapnel = new Bullet(self);
+            shrapnel.x = self.bullet.x;
+            shrapnel.y = self.bullet.y;
+            shrapnel.radius = 2;
+            shrapnel.age = 0;
+            shrapnel.speed = 2 * BulletSpeed * (0.8 + 0.4 * Math.random());
+            shrapnel.angle = 2 * Math.PI * Math.random();
+            shrapnel.timeout = 800;
+            shrapnel.checkCollision = function(x, y){}
+            self.tank.player.game.addObject(shrapnel);
+          }
+          clearInterval(self.intvl);
+          var self2 = self;
+          self.tank.player.game.timeouts.push(setTimeout(function(){
+            if(self2.tank.weapon==self2)
+              self2.tank.defaultWeapon();
+          }, 1000));
+          self.bullet.delete();
+      }
       bullet.delete = function(){
-        self.shoot();
+        bullet.explode();
         bullet.deleted = true;
       }
       this.tank.player.game.addObject(bullet);
-      this.intvl = setTimeout(function(){self.shoot();}, 10000);
+      this.intvl = setTimeout(function(){bullet.explode();}, 10000);
     }
     if(this.fired && this.bullet.age > 300 && !this.exploded){
-      this.exploded = true;
-      playSound("res/sound/grenade.wav");
-      for(var i=0; i<this.nshrapnels; i++){
-        var shrapnel = new Bullet(this);
-        shrapnel.x = this.bullet.x;
-        shrapnel.y = this.bullet.y;
-        shrapnel.radius = 2;
-        shrapnel.age = 0;
-        shrapnel.speed = 2 * BulletSpeed * (0.8 + 0.4 * Math.random());
-        shrapnel.angle = 2 * Math.PI * Math.random();
-        shrapnel.timeout = 800;
-        shrapnel.checkCollision = function(x, y){}
-        this.tank.player.game.addObject(shrapnel);
-      }
-      clearInterval(this.intvl);
-      var self = this;
-      this.tank.player.game.timeouts.push(setTimeout(function(){
-        if(self.tank.weapon==self)
-          self.tank.defaultWeapon();
-      }, 1000));
-      this.bullet.delete();
+      this.bullet.explode();
     }
   }
 }
