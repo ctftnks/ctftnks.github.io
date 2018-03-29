@@ -13,7 +13,10 @@ function databinding(){
     elem.onchange = function(){
       var val = elem.value;
       val = dataminmax(val, elem, bind);
-      eval(bind + "=" + val + ";");
+      if(elem.hasAttribute("data-type") && elem.getAttribute("data-type") == "string")
+        eval(bind + "='" + val + "';");
+      else
+        eval(bind + "=" + val + ";");
     };
   });
   // select elements
@@ -22,7 +25,11 @@ function databinding(){
     var val = eval(bind);
     elem.value = val;
     elem.onchange = function(){
-      eval(bind + "=" + elem.value + ";");
+      var val = elem.value;
+      if(elem.hasAttribute("data-type") && elem.getAttribute("data-type") == "string")
+        eval(bind + "='" + val + "';");
+      else
+        eval(bind + "=" + val + ";");
     };
   });
 }
