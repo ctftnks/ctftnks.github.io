@@ -2,7 +2,7 @@
 # TODO:
 
 ## Bugs:
-- two players can pick up the same flag from one base simultaneously
+
 
 ## Minor features
 - Laser needs rework: accuracy
