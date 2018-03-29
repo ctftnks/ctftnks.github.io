@@ -24,6 +24,7 @@ function newGame(){
   canvas.sync();
   return game;
 }
+
 function updateScores(){
   var scoreBoard = document.getElementById("scoreBoard");
   scoreBoard.innerHTML = "";

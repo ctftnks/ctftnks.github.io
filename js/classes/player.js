@@ -7,9 +7,9 @@ playercolors = [
   "#DA1918",  // red
   "#31B32B",  // green
   "#1F87FF",  // blue
-  "#F4641D",  // orange
   "#21B19B",  // teal
   "#A020F0",  // purple
+  "#F4641D",  // orange
   "#713B17",  // brown
   "#E7E52C"  // yellow
 ]

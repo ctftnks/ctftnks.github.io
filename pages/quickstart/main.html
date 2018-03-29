@@ -4,9 +4,15 @@
 
 <h2>Quick Games:</h2>
 
-<!-- TODO: implement! -->
-<button class="option vspace" onclick="newGame();">2v2</button>
-<button class="option vspace" onclick="newGame();">3v3</button>
-<button class="option vspace" onclick="newGame();">2v2v2</button>
+<button class="option vspace" onclick="quickPvP(2, 2);closePage(this);">2P vs 2P</button><br />
+<button class="option vspace" onclick="quickPvP(2, 3);closePage(this);">3P vs 3P</button><br />
+<button class="option vspace" onclick="quickPvP(3, 2);closePage(this);">2P vs 2P vs 2P</button><br />
+<br />
+<button class="option vspace" onclick="quickPvB(2, 2);closePage(this);">2P vs 2C</button><br />
+<button class="option vspace" onclick="quickPvB(2, 3);closePage(this);">3P vs 3C</button><br />
+<br />
+<button class="option vspace" onclick="quickMixed(2, 2);closePage(this);">2M vs 2M</button><br />
+<button class="option vspace" onclick="quickMixed(3, 2);closePage(this);">2M vs 2M vs 2M</button>
+
 
 </div>

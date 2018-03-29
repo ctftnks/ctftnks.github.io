@@ -13,9 +13,9 @@
 - Laser should show trajectory prior to shooting
 - better spawn shield: 1 second at least
 - reset the flag after some time
+- when spawning: show first letter of name for identification
 
 ## Enhancement:
-- Quick-Game buttons: 2v2, 3v3 (players vs bots? choose?)
 - less white!
 - stats at end of each map: how many kills, deaths does each player have? How much did each player move, shoot?
 - different tank types (visually): write a class for that?
