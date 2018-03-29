@@ -11,22 +11,30 @@ Flag = function(gam, base){
   this.size = 24;
   this.x = base.x;
   this.y = base.y;
+  this.picked = false;
+  this.inBase = true;
+  this.resetTimer;
 
   // return flag to base
   this.reset = function(){
     this.base.hasFlag = true;
+    this.inBase = true;
     this.drop(this.base.x, this.base.y);
   }
   // let tank pick up the flag
   this.pickup = function(tank){
     tank.carriedFlag = this;
     this.base.hasFlag = false;
+    this.picked = true;
+    this.inBase = false;
     this.delete();
   }
   this.drop = function(x, y){
     this.deleted = false;
     this.x = x;
     this.y = y;
+    this.resetTimer = this.game.t + 30000;
+    this.picked = false;
     this.game.objs.push(this);
   }
 
@@ -48,6 +56,8 @@ Flag = function(gam, base){
         }
       }
     }
+    if(!this.inBase && !this.picked && this.resetTimer < this.game.t)
+      this.reset();
   }
 
   this.draw = function(canvas, context){

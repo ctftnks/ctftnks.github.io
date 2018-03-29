@@ -4,11 +4,11 @@
 ## Bugs:
 - Tanks spawn outside of Map and then get removed from game.objs by spatial sorting
 - two players can pick up the same flag from one base simultaneously
+- Mine + Terminator Bug
+
 ## Minor features
 - Laser needs rework: accuracy
 - Laser should show trajectory prior to shooting
-- better spawn shield: 1 second at least
-- reset the flag after some time
 - when spawning: show first letter of name for identification
 
 ## Enhancement:
