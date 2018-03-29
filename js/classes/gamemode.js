@@ -82,6 +82,11 @@ TeamDeathmatch = function(game){
           var pos = game.map.spawnPoint();
           var tile = game.map.getTileByPos(pos.x, pos.y);
           var length = 0;
+          var initfirst = false;
+          if(bases.length == 0){
+            bases.push(game.map.spawnPoint());
+            initfirst = true;
+          }
           for(var j=0; j<bases.length; j++){
             var stile = this.game.map.getTileByPos(bases[j].x, bases[j].y);
             var path = tile.pathTo(function(destination){
@@ -90,6 +95,8 @@ TeamDeathmatch = function(game){
             if(path != -1)
               length += path.length * path.length;
           }
+          if(initfirst)
+            bases = [];
           for(var j=0; j<bases.length; j++)
             if(bases[j].x == pos.x && bases[j].y == pos.y)
               length = -1;
@@ -158,10 +165,16 @@ CaptureTheFlag = function(game){
         // find spawnPoint that is far away from existing bases
         var maxLength = -1;
         var maxPos = game.map.spawnPoint();
+        console.log("INIT");
         for(var k=0; k<100; k++){
           var pos = game.map.spawnPoint();
           var tile = game.map.getTileByPos(pos.x, pos.y);
           var length = 0;
+          var initfirst = false;
+          if(bases.length == 0){
+            bases.push(game.map.spawnPoint());
+            initfirst = true;
+          }
           for(var j=0; j<bases.length; j++){
             var stile = this.game.map.getTileByPos(bases[j].x, bases[j].y);
             var path = tile.pathTo(function(destination){
@@ -170,10 +183,13 @@ CaptureTheFlag = function(game){
             if(path != -1)
               length += path.length * path.length;
           }
+          if(initfirst)
+            bases = [];
           for(var j=0; j<bases.length; j++)
             if(bases[j].x == pos.x && bases[j].y == pos.y)
               length = -1;
           if(length > maxLength){
+            console.log("New length:", length);
             maxLength = length;
             maxPos = pos;
           }
