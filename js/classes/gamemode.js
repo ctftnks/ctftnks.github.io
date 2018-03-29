@@ -2,6 +2,7 @@ Gamemode = function(game){
   this.name = "defaultmode";
   this.game = game;
   this.step = function(){}
+  this.init = function(){}
 }
 
 
@@ -109,13 +110,6 @@ TeamDeathmatch = function(game){
       }
     }
   }
-
-  this.step = function(){
-    if(!this.initiated){
-      this.init();
-      this.initiated = true;
-    }
-  }
 }
 
 
@@ -197,13 +191,6 @@ CaptureTheFlag = function(game){
         player.tank.y = spawnPoint.y + spawnPoint.dy/2;
         player.base = b;
       }
-    }
-  }
-
-  this.step = function(){
-    if(!this.initiated){
-      this.init();
-      this.initiated = true;
     }
   }
 }

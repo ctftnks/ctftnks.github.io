@@ -32,7 +32,6 @@ Game = function(canvas){
   this.addPlayer = function(player){
     this.players.push(player);
     player.game = this;
-    player.spawn();
   }
 
   // add any object to the game
@@ -43,6 +42,9 @@ Game = function(canvas){
   // start the game, starts time-loop
   this.start = function(){
     var self = this;
+    this.mode.init();
+    for(var i=0; i<this.players.length; i++)
+      this.players[i].spawn();
     this.loop = setInterval(function(){
       self.step();
     }, GameFrequency);
