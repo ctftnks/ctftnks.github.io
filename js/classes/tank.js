@@ -62,7 +62,7 @@ Tank = function(player){
     if(ShowTankLabels){
       context.rotate(-this.angle);
       context.fillStyle = this.player.color;
-      context.font = "10px Arial";
+      context.font = (12/this.player.game.canvas.scale)+"px Arial";
       context.fillText(this.player.name,-16,-40);
       context.rotate(this.angle);
     }
