@@ -4,7 +4,6 @@
 ## Bugs:
 - Tanks spawn outside of Map and then get removed from game.objs by spatial sorting
 - two players can pick up the same flag from one base simultaneously
-- Mine + Terminator Bug
 
 ## Minor features
 - Laser needs rework: accuracy

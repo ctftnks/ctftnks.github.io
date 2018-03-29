@@ -189,7 +189,7 @@ Grenade = function(tank){
           if(bullet.exploded)
             return;
           bullet.exploded = true;
-          // playSound("res/sound/grenade.wav");
+          playSound("res/sound/grenade.wav");
           for(var i=0; i<self.nshrapnels; i++){
             var shrapnel = new Bullet(self);
             shrapnel.x = self.bullet.x;
@@ -232,7 +232,12 @@ Mine = function(tank){
   this.bullet = undefined;
   this.nshrapnels = 24;
   this.shoot = function(){
-    if(!this.fired){
+    // if(typeof(this.bullet) !== "undefined" && this.bullet.age > 1000 && !this.bullet.exploded){
+    //   this.bullet.explode();
+    //   this.canShoot = false;
+    //   return;
+    // }
+    if(this.canShoot && !this.tank.deleted){
       var bullet = new Bullet(this);
       this.bullet = bullet;
       this.fired = true;
@@ -246,9 +251,36 @@ Mine = function(tank){
       bullet.speed = BulletSpeed;
       bullet.angle = this.tank.angle;
       bullet.timeout = 180000;
+      bullet.exploded = false;
       var self = this;
+      bullet.explode = function(){
+          if(bullet.exploded)
+            return;
+          bullet.exploded = true;
+          playSound("res/sound/grenade.wav");
+          for(var i=0; i<self.nshrapnels; i++){
+            var shrapnel = new Bullet(self);
+            shrapnel.x = self.bullet.x;
+            shrapnel.y = self.bullet.y;
+            shrapnel.radius = 2;
+            shrapnel.age = 0;
+            shrapnel.speed = 2 * BulletSpeed * (0.8 + 0.4 * Math.random());
+            shrapnel.angle = 2 * Math.PI * Math.random();
+            shrapnel.timeout = 600;
+            // shrapnel.checkCollision = function(x, y){}
+            self.tank.player.game.addObject(shrapnel);
+          }
+          var self2 = self;
+          self.tank.player.game.timeouts.push(setTimeout(function(){
+            if(self2.tank.weapon==self2)
+              self2.tank.defaultWeapon();
+          }, 1000));
+          if(!self.bullet.deleted)
+            self.bullet.delete();
+          self.bullet = undefined;
+      }
       bullet.delete = function(){
-        self.shoot();
+        bullet.explode();
         bullet.deleted = true;
       }
       this.tank.player.game.addObject(bullet);
@@ -258,24 +290,6 @@ Mine = function(tank){
         if(self.tank.weapon==self)
           self.tank.defaultWeapon();
       }, 600));
-    }
-
-    if(this.fired && this.bullet.age > 1000 && !this.exploded){
-      this.exploded = true;
-      playSound("res/sound/grenade.wav");
-      for(var i=0; i<this.nshrapnels; i++){
-        var shrapnel = new Bullet(this);
-        shrapnel.x = this.bullet.x;
-        shrapnel.y = this.bullet.y;
-        shrapnel.radius = 2;
-        shrapnel.age = 0;
-        shrapnel.speed = 2 * BulletSpeed * (0.8 + 0.4 * Math.random());
-        shrapnel.angle = 2 * Math.PI * Math.random();
-        shrapnel.timeout = 600;
-        // shrapnel.checkCollision = function(x, y){}
-        this.tank.player.game.addObject(shrapnel);
-      }
-      this.bullet.delete();
     }
   }
 }
