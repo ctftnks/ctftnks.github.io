@@ -165,7 +165,6 @@ CaptureTheFlag = function(game){
         // find spawnPoint that is far away from existing bases
         var maxLength = -1;
         var maxPos = game.map.spawnPoint();
-        console.log("INIT");
         for(var k=0; k<100; k++){
           var pos = game.map.spawnPoint();
           var tile = game.map.getTileByPos(pos.x, pos.y);
@@ -189,7 +188,6 @@ CaptureTheFlag = function(game){
             if(bases[j].x == pos.x && bases[j].y == pos.y)
               length = -1;
           if(length > maxLength){
-            console.log("New length:", length);
             maxLength = length;
             maxPos = pos;
           }
