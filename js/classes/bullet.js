@@ -28,6 +28,7 @@ Bullet = function(weapon){
   // shall the bullet leave a trace of smoke?
   this.trace = false;
   this.bounceSound = "res/sound/bounce.wav";
+  this.lethal = true;
 
   // draw the bullet in the canvas
   this.draw = function(canvas, context){

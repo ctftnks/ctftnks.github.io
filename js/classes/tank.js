@@ -182,6 +182,8 @@ Tank = function(player){
         // Friendly fire?
         if(!FriendlyFire && (this.player.team == bullets[i].player.team && this.player.id != bullets[i].player.id))
           return;
+        if(!bullets[i].lethal)
+          return;
         // Hit!
         if(this.invincible())
           return;
