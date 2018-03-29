@@ -190,7 +190,7 @@ PowerUps = [
   {create: function(){return new MultiBonus()}, name: "Multiplier", weight: 1},
   {create: function(){return new SlingshotBonus()}, name: "Slingshot", weight: 1},
   {create: function(){return new InvincibleBonus()}, name: "Invincible", weight: 1},
-  {create: function(){return new TerminatorBonus()}, name: "Terminator", weight: 100},
+  {create: function(){return new TerminatorBonus()}, name: "Terminator", weight: 50},
   {create: function(){return new FogBonus()}, name: "FogOfWar", weight: 0.5},
   {create: function(){return new SpeedBonus()}, name: "SpeedBoost", weight: 1}
 ];

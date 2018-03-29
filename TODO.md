@@ -3,7 +3,6 @@
 
 ## Bugs:
 - Tanks spawn outside of Map and then get removed from game.objs by spatial sorting
-- TerminatorBonus + GrenadeBonus creates a lot of Grenades ... forever!
 - two players can pick up the same flag from one base simultaneously
 ## Minor features
 - Laser needs rework: accuracy
