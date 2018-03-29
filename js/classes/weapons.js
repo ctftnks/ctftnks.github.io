@@ -100,7 +100,7 @@ Laser = function(tank){
       var bullet = new Bullet(this);
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
       bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2.;
-      bullet.speed = 18*BulletSpeed;
+      bullet.speed = 12*BulletSpeed;
       bullet.angle = this.tank.angle;
       bullet.radius = 2;
       bullet.color = this.tank.player.color;
@@ -116,14 +116,14 @@ Laser = function(tank){
           context.beginPath();
           context.translate(smoke.x, smoke.y);
           context.rotate(angle);
-          context.rect(-smoke.radius/2, -smoke.radius*2, smoke.radius, smoke.radius*4);
+          context.rect(-smoke.radius/2, -smoke.radius*2, smoke.radius, smoke.radius*10);
           context.fillStyle = thisbullet.color;
           context.fill();
           context.restore();
         }
         bullet.player.game.addObject(smoke);
       }
-      bullet.timeout = 400;
+      bullet.timeout = 600;
       bullet.age = 0;
       this.tank.player.game.addObject(bullet);
       this.canShoot = false;
