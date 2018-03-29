@@ -8,12 +8,9 @@
 ## Minor features
 - Laser needs rework: accuracy
 - Laser should show trajectory prior to shooting
-- when spawning: show first letter of name for identification
-- support for databinding attributes: data-min data-max data-suffix data-prefix
 
 ## Enhancement:
 - less white!
-- stats at end of each map: how many kills, deaths does each player have? How much did each player move, shoot?
 - different tank types (visually): write a class for that?
 - music, especially when holding flag
 - change body.background to #555 or similar

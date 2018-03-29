@@ -148,7 +148,6 @@ Laser = function(tank){
       }
     }
   }
-
 }
 
 
