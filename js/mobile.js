@@ -36,7 +36,8 @@ enableMobile = function(){
       var jx = joystick.deltaX();
       var jy = joystick.deltaY();
       var angle = Math.atan2(jy, jx) + Math.PI / 2;
-      t.angle = angle;
+      if(jx != 0 && jy != 0)
+        t.angle = angle;
 
       if(jx*jx+jy*jy > 5)
         Key._pressed[Key.UP] = true;
