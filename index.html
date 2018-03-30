@@ -29,8 +29,23 @@
 		<script src="js/classes/smoke.js" type="text/javascript"></script>
 		<script src="js/classes/tank.js" type="text/javascript"></script>
 		<script src="js/classes/weapons.js" type="text/javascript"></script>
+
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=0.7, maximum-scale=0.7">
+
 	</head>
 	<body>
+
+		<!-- game related stuff -->
+		<canvas id="gameFrame"></canvas>
+		<canvas id="effectFrame"></canvas>
+
+		<div id="mobileControls" style="display:none;">
+			<div id="joystickContainer"></div>
+			<button id="mobileFire">Fire</button>
+			<button id="mobileBack">Back</button>
+		</div>
+
+
 
 		<!-- sidebar -->
 		<div id="sideBar">
@@ -44,18 +59,6 @@
 			<div class="entry clickable" onclick="newGame()">
 				Next Map
 			</div>
-		</div>
-
-		<!-- game related stuff -->
-		<canvas id="gameFrame"></canvas>
-		<canvas id="effectFrame"></canvas>
-
-		<div id="mobileControls" style="display:none;">
-			<button id="mobileFire">Fire</button>
-			<button id="mobileUp">Up</button>
-			<button id="mobileLeft">Left</button>
-			<button id="mobileDown">Down</button>
-			<button id="mobileRight">Right</button>
 		</div>
 
 		<!-- container for UI pages -->
