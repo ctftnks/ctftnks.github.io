@@ -14,6 +14,7 @@ h1, h2{
 .option{
   margin: 8px;
   display: inline-block;
+  white-space: nowrap;
 }
 
 .option span, .option button, .option select, .option input, #playersMenu button, button.option{
