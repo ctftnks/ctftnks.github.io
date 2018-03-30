@@ -1,0 +1,43 @@
+#mobileControls{
+  position: fixed;
+  left: 18%;
+  top: 0%;
+  height: 100%;
+  width: 75%;
+}
+
+
+#mobileFire, #mobileUp, #mobileLeft, #mobileDown, #mobileRight{
+  border-radius: 80px;
+  border: solid 1px #000;
+  width: 80px;
+  height: 80px;
+  opacity: 0.5;
+  background: #fff;
+  position: absolute;
+}
+
+#mobileFire{
+    left: 15%;
+    top: 57%;
+}
+
+#mobileUp{
+    left: 90%;
+    top: 64%;
+}
+
+#mobileDown{
+    left: 80%;
+    top: 74%;
+}
+
+#mobileLeft{
+    left: 2%;
+    top: 64%;
+}
+
+#mobileRight{
+    left: 12%;
+    top: 74%;
+}

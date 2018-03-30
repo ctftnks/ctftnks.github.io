@@ -4,6 +4,7 @@ window.onload = function(){
   canvas = new Canvas("gameFrame");
   players = [new Player(), new Player()];
   openPage("menu");
+  checkMobile();
 };
 
 // start a new round
