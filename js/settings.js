@@ -23,6 +23,7 @@ FriendlyFire = true;
 BotsShootBots = true;
 BotSpeed = 1;
 ShowTankLabels = false;
+MobileJoystick = false;
 // Map size
 MapNxMin = 9;
 MapNxMax = 15;

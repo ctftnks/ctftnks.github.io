@@ -37,7 +37,7 @@ html, body
 }
 
 
-#mobileFire, #mobileBack{
+#mobileFire, #mobileBack, #mobileUp, #mobileLeft, #mobileRight{
   border-radius: 100px;
   border: solid 1px #000;
   width: 100px;
@@ -49,11 +49,48 @@ html, body
 }
 
 #mobileFire{
+  left: 15%;
+  top: 56%;
+}
+
+#mobileBack{
+  left: 76%;
+  top: 75%;
+}
+
+#mobileUp{
+  left: 86%;
+  top: 60%;
+}
+
+#mobileRight{
+  left: 12%;
+  top: 75%;
+}
+
+#mobileLeft{
   left: 4%;
   top: 60%;
 }
 
-#mobileBack{
+#mobileFire.joystick{
+  left: 4%;
+  top: 60%;
+}
+
+#mobileBack.joystick{
   left: 12%;
   top: 75%;
+}
+
+#mobileUp.joystick{
+  display: none;
+}
+
+#mobileRight.joystick{
+  display: none;
+}
+
+#mobileLeft.joystick{
+  display: none;
 }
