@@ -21,7 +21,6 @@
 ## Long term issues
 - better UI
 - better graphics: hand drawn vector graphics
-- mobile support
 - publishable sounds & sprites
 
 ## Wishes
