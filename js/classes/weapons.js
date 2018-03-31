@@ -14,6 +14,9 @@ Weapon = function(tank){
   this.crosshair = function(){
 
   }
+  this.delete = function(){
+
+  }
 }
 
 // the normal, default gun
@@ -94,40 +97,36 @@ Laser = function(tank){
   this.name = "Laser";
   this.canShoot = true;
   this.fired = false;
+  this.trajectory = new Trajectory(this.tank.player.game.map);
+  this.trajectory.x = this.tank.x;
+  this.trajectory.y = this.tank.y;
+  this.trajectory.angle = this.tank.angle;
+  this.trajectory.length = 800;
+  this.trajectory.drawevery = 2;
+  this.trajectory.color = this.tank.player.color;
+  this.tank.player.game.addObject(this.trajectory);
   this.shoot = function(){
     if(!this.fired){
       playSound("res/sound/laser.wav");
-      var bullet = new Bullet(this);
-      bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
-      bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2.;
-      bullet.speed = 12*BulletSpeed;
-      bullet.angle = this.tank.angle;
-      bullet.radius = 2;
-      bullet.color = this.tank.player.color;
-      bullet.trace = true;
-      bullet.bounceSound = "";
-      bullet.leaveTrace = function(){
-        var angle = bullet.angle;
-        var thisbullet = bullet;
-        var smoke = new Smoke(this.x, this.y, timeout=400, radius=thisbullet.radius, rspeed = 0);
-        smoke.color = thisbullet.color;
-        smoke.draw = function(canvas, context){
-          context.save();
-          context.beginPath();
-          context.translate(smoke.x, smoke.y);
-          context.rotate(angle);
-          context.rect(-smoke.radius/2, -smoke.radius*2, smoke.radius, smoke.radius*10);
-          context.fillStyle = thisbullet.color;
-          context.fill();
-          context.restore();
-        }
-        bullet.player.game.addObject(smoke);
+      this.trajectory.length = 1600;
+      this.trajectory.step();
+      for(var i=10; i<this.trajectory.points.length; i++){
+        var p = this.trajectory.points[i];
+        var bullet = new Bullet(this);
+        bullet.x = p.x;
+        bullet.y = p.y;
+        bullet.angle = p.angle;
+        bullet.radius = 2;
+        bullet.timeout = 330;
+        bullet.speed = 0;
+        bullet.color = this.tank.player.color;
+        bullet.bounceSound = "";
+        bullet.age = 0;
+        this.tank.player.game.addObject(bullet);
       }
-      bullet.timeout = 600;
-      bullet.age = 0;
-      this.tank.player.game.addObject(bullet);
       this.canShoot = false;
       this.fired = true;
+      this.trajectory.delete();
       var self = this;
       this.tank.player.game.timeouts.push(setTimeout(function(){
         if(self.tank.weapon==self)
@@ -136,17 +135,13 @@ Laser = function(tank){
     }
   }
   this.crosshair = function(){
-    var x = this.tank.x;
-    var y = this.tank.y;
-    for(var i=0; i<10; i++){
-      x -= 10 * BulletSpeed * Math.sin(-this.tank.angle) * GameFrequency / 1000.;
-      y -= 10 * BulletSpeed * Math.cos(-this.tank.angle) * GameFrequency / 1000.;
-      if(i>3){
-        var smoke = new Smoke(x, y, timeout=5, radius=1, rspeed = 0);
-        smoke.color = "rgba(100,100,100,0.4)";
-        this.tank.player.game.addObject(smoke);
-      }
-    }
+    this.trajectory.x = this.tank.x;
+    this.trajectory.y = this.tank.y;
+    this.trajectory.angle = this.tank.angle;
+    this.trajectory.timeout = 100;
+  }
+  this.delete = function(){
+    this.trajectory.delete();
   }
 }
 

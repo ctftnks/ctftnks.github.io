@@ -5,8 +5,6 @@
 
 
 ## Minor features
-- Laser needs rework: accuracy
-- Laser should show trajectory prior to shooting
 
 ## Enhancement:
 - less white!

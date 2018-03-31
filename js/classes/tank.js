@@ -218,4 +218,9 @@ Tank = function(player){
     var t = this.player.game.t;
     return this.timers.spawnshield > t || this.timers.invincible > t;
   }
+
+  this.delete = function(){
+    this.deleted = true;
+    this.weapon.delete();
+  }
 }
