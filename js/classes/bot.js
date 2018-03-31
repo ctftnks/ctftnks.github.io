@@ -1,11 +1,14 @@
 
 
+NBots = 0;
+
 Bot = function(player){
   Player.call(this);
-  this.name = "Bot " + (this.id+1);
+  this.name = "Bot " + (NBots+1);
   this.tank = new BotTank(this);
   this.isBot = true;
   this.keys = undefined;
+  NBots++;
 
   this.step = function(){
     // no key detection
