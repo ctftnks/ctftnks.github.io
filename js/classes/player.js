@@ -60,7 +60,7 @@ Player = function(){
     if(typeof(this.base) !== "undefined" && this.base.tile != -1){
       var spos2 = this.base.tile;
       while(spos2.id == this.base.tile.id)
-        spos2 = spos2.randomWalk(Math.floor(Math.random()*6));
+        spos2 = spos2.randomWalk(Math.pow(this.game.mode.BaseSpawnDistance, 2) + Math.round(Math.random()));
       spos = {x: spos2.x+spos2.dx/2, y: spos2.y+spos2.dy/2};
     }
     this.tank.x = spos.x;

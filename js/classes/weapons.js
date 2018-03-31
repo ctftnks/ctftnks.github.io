@@ -101,9 +101,9 @@ Laser = function(tank){
   this.trajectory.x = this.tank.x;
   this.trajectory.y = this.tank.y;
   this.trajectory.angle = this.tank.angle;
-  this.trajectory.length = 800;
-  this.trajectory.drawevery = 2;
-  this.trajectory.color = this.tank.player.color;
+  this.trajectory.length = 700;
+  this.trajectory.drawevery = 3;
+  this.trajectory.color = hexToRgbA(this.tank.player.color, 0.4);
   this.tank.player.game.addObject(this.trajectory);
   this.shoot = function(){
     if(!this.fired){
@@ -126,7 +126,6 @@ Laser = function(tank){
       }
       this.canShoot = false;
       this.fired = true;
-      this.trajectory.delete();
       var self = this;
       this.tank.player.game.timeouts.push(setTimeout(function(){
         if(self.tank.weapon==self)
@@ -138,7 +137,8 @@ Laser = function(tank){
     this.trajectory.x = this.tank.x;
     this.trajectory.y = this.tank.y;
     this.trajectory.angle = this.tank.angle;
-    this.trajectory.timeout = 100;
+    if(this.canShoot)
+      this.trajectory.timeout = 100;
   }
   this.delete = function(){
     this.trajectory.delete();

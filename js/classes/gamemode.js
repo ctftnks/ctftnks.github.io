@@ -1,6 +1,7 @@
 Gamemode = function(game){
   this.name = "defaultmode";
   this.game = game;
+  this.BaseSpawnDistance = 2;
   this.step = function(){}
   this.init = function(){}
 }
@@ -36,6 +37,7 @@ TeamDeathmatch = function(game){
   Gamemode.call(this, game);
   this.name = "TeamDeathmatch";
   this.initiated = false;
+  this.BaseSpawnDistance = 2;
 
   // give score to team players
   this.giveScore = function(player, val=1){
@@ -110,7 +112,7 @@ TeamDeathmatch = function(game){
         game.addObject(b);
         var spawnPoint = b.tile;
         while(spawnPoint.id == b.tile.id)
-          spawnPoint = spawnPoint.randomWalk(Math.floor(Math.random()*6));
+          spawnPoint = spawnPoint.randomWalk(this.game.mode.BaseSpawnDistance + Math.round(Math.random()));
         player.tank.x = spawnPoint.x + spawnPoint.dx/2;
         player.tank.y = spawnPoint.y + spawnPoint.dy/2;
         player.base = b;
@@ -125,6 +127,7 @@ CaptureTheFlag = function(game){
   Gamemode.call(this, game);
   this.name = "CaptureTheFlag";
   this.initiated = false;
+  this.BaseSpawnDistance = 7;
 
   // give score to team players
   this.giveScore = function(player, val=1){
@@ -200,7 +203,7 @@ CaptureTheFlag = function(game){
         game.addObject(b);
         var spawnPoint = b.tile;
         while(spawnPoint.id == b.tile.id)
-          spawnPoint = spawnPoint.randomWalk(Math.floor(Math.random()*6));
+          spawnPoint = spawnPoint.randomWalk(this.game.mode.BaseSpawnDistance + Math.round(Math.random()));
         player.tank.x = spawnPoint.x + spawnPoint.dx/2;
         player.tank.y = spawnPoint.y + spawnPoint.dy/2;
         player.base = b;

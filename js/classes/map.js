@@ -197,8 +197,8 @@ Tile = function(i, j, map){
       return this;
     var r = Math.floor(Math.random() * 4);
     for(var d=r; d<4+r; d++)
-      if(!this.walls[d] && typeof(this.neighbors[d]) !== "undefined" && this.neighbors[d] != -1)
-        return this.neighbors[d].randomWalk(distance-1);
+      if(!this.walls[d%4] && typeof(this.neighbors[d%4]) !== "undefined" && this.neighbors[d%4] != -1)
+        return this.neighbors[d%4].randomWalk(distance-1);
     return this;
   }
 }
