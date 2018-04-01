@@ -2,24 +2,15 @@
 <div class="popup">
 
   <!-- example content -->
-  <h2>Popup template</h2>
-  <div class="options">
-    <div class="option">
-      <span class="label">Mode</span>
-      <select onchange="GameMode=this.value">
-        <option value="DM">DM</option>
-        <option value="TDM">TDM</option>
-        <option value="CTF">CTF</option>
-      </select>
-    </div>
-    <div class="option">
-      <span class="label">Sound</span>
-      <select onchange="muted=this.value!='on'">
-        <option value="on">on</option>
-        <option value="off">off</option>
-      </select>
-    </div>
-  </div>
-  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  <h2>Export Map</h2>
+
+  <!-- TODO: suit name to current id? -->
+  Copy this snippet and save as "mapname.csv" and submit a pull request to merge it into the game
+  <textarea id="exportMapText"></textarea>
 
 </div>
+
+
+<script>
+document.getElementById("#exportMapText").innerHTML = mapGenerator.exportMap(game.map);
+</script>
