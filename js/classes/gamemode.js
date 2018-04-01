@@ -211,3 +211,30 @@ CaptureTheFlag = function(game){
     }
   }
 }
+
+// the map editor: implemented as a GameMode
+MapEditor = function(game){
+  Gamemode.call(this, game);
+
+
+  this.init = function(){
+    this.game.players = [];
+    var p = new Player();
+    this.game.addPlayer(p);
+    p.keys = keymaps[0];
+    p.color = playercolors[0];
+  }
+
+
+  this.step = function(){
+    var t = this.game.players[0].tank;
+    if(t.weapon.name != "WallBuilder"){
+      t.weapon = new WallBuilder(t);
+      t.defaultWeapon = function(){
+        t.weapon = new WallBuilder(t);
+      }
+      t.checkWallCollision = function(){return false;}
+    }
+  }
+
+}

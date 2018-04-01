@@ -18,6 +18,8 @@ function newGame(){
     game.mode = new TeamDeathmatch(game);
   if(GameMode == "CTF")
     game.mode = new CaptureTheFlag(game);
+  if(GameMode == "MapEditor")
+    game.mode = new MapEditor(game);
 
   for(var i=0; i<players.length; i++)
     game.addPlayer(players[i]);

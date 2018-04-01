@@ -457,6 +457,7 @@ WallBuilder = function(tank){
   this.image = new Image;
   this.image.src = "res/img/wallBuilder.png";
   this.canShoot = true;
+  console.log("new WallBuilder")
 
   this.shoot = function(){
     if(this.canShoot){
@@ -466,13 +467,17 @@ WallBuilder = function(tank){
       while(direction < 0)
         direction += 2*Math.PI;
       var direction = Math.round(-direction / (Math.PI/2.) + 16) % 4;
-      tile.addWall(direction);
+      if(tile.walls[direction])
+        tile.addWall(direction, true);
+      else
+        tile.addWall(direction, false);
+      // tile.addWall(direction, this.walls[direction]);
       this.canShoot = false;
       var self = this;
       this.tank.player.game.timeouts.push(setTimeout(function(){
         if(self.tank.weapon==self)
           self.tank.defaultWeapon();
-      }, 1000));
+      }, 400));
     }
   }
 }

@@ -73,7 +73,7 @@ Game = function(canvas){
       // do gamemode calculations
       this.mode.step();
 	    // add random PowerUp
-      if(this.t % PowerUpFrequency == 0){
+      if(this.t % PowerUpFrequency == 0 && GameMode != "MapEditor"){
         var p = getRandomPowerUp();
         var pos = this.map.spawnPoint();
         p.x = pos.x;
