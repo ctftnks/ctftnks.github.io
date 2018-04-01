@@ -124,6 +124,74 @@ MapGenerator = {
       MapGenerator.recursiveDivision(map, x1, posY+1, x2, y2);
     }
   },
+
+
+  // export map into bit format
+  exportMap: function(map){
+    var Nx = map.Nx;
+    var Ny = map.Ny;
+    var data = "";
+    for(var j=0; j<Ny; j++){
+      for(var i=0; i<Nx; i++){
+        var number = 0;
+        var t = map.getTileByIndex(i, j);
+        for(var d=0; d<4; d++)
+          number += t.walls[d] * Math.pow(2, d);
+        data += ""+number;
+        if(i < Nx-1)
+          data += " ";
+      }
+      if(j < Ny-1)
+        data += "\n";
+    }
+    return data;
+  },
+
+  // import map from file
+  // if file==-1: random pick;
+  randomImportedMap: function(map, mapID=-1){
+    // prestructure the map with prims Maze --> failsafe
+    MapGenerator.primsMaze(map);
+    // vars to be used later on
+    var newmap;
+    var canv = map.canvas;
+    // request file
+    var xhttp = new XMLHttpRequest();
+    // pick random name
+    var maxMapId = 0;
+    if(mapID == -1)
+      mapID = Math.floor(Math.random() * maxMapId);
+    xhttp.open("GET", "maps/"+mapID+".csv", true);
+    xhttp.send();
+    xhttp.onreadystatechange = function(){
+      if (this.readyState == 4 && this.status == 200){
+        // got data from file, now process it
+        var data = this.responseText;
+        var lines = data.match(/[^\r\n]+/g);
+        var Ny = lines.length;
+        var Nx = lines[0].split(" ").length;
+        newmap = new Map(canv, Nx, Ny);
+        for(var j=0; j<Ny; j++){
+          var line = lines[j].split(" ");
+          for(var i=0; i<Nx; i++){
+            var number = parseInt(line[i]);
+            var t = newmap.getTileByIndex(i, j);
+            for(var d=0; d<4; d++)
+              t.walls[d] = ((number >>> d) % 2) == 1;
+          }
+        }
+        // copy tiles and size to old map
+        map.Nx = newmap.Nx;
+        map.Ny = newmap.Ny;
+        map.tiles = newmap.tiles;
+        map.dx = newmap.dx;
+        map.dy = newmap.dy;
+        map.resize();
+      }
+    };
+  },
+
+
 }
 
 // List of all algorithms

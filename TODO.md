@@ -5,6 +5,7 @@
 
 
 ## Minor features
+- Map Import: either prefetching or non-async
 
 ## Enhancement:
 - less white!
@@ -15,6 +16,7 @@
 - update README.md
 - REFACTOR REFACTOR REFACTOR!!!
 - support for user created, curated maps
+- MapEditor: implement as GameMode
 
 ## Long term issues
 - better UI

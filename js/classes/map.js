@@ -3,11 +3,17 @@
 // also the tiles keep object lists for spatial sorting
 // the canvas is passed to the constructor to provide the size of the canvas
 
-Map = function(canvas){
+Map = function(canvas, Nx=-1, Ny=-1){
 
   this.canvas = canvas;
-  this.Nx = parseInt(MapNxMin + (MapNxMax-MapNxMin) * Math.random());
-  this.Ny = parseInt((0.25 * Math.random() + 0.75) * this.Nx * canvas.height / canvas.width);
+  if(Nx==-1)
+    this.Nx = parseInt(MapNxMin + (MapNxMax-MapNxMin) * Math.random());
+  else
+    this.Nx = Nx;
+  if(Ny==-1)
+    this.Ny = parseInt((0.25 * Math.random() + 0.75) * this.Nx * canvas.height / canvas.width);
+  else
+    this.Ny = Ny;
   this.dx = canvas.width / 10;
   // this.dy = canvas.height / this.Ny;
   this.dy = this.dx;
@@ -21,12 +27,23 @@ Map = function(canvas){
     }
   }
 
-
   // get tile by i,j-index
   this.getTileByIndex = function(i, j){
     if(i < this.Nx && j < this.Ny && i >= 0 && j >= 0)
       return this.tiles[i * this.Ny + j];
     return -1;
+  }
+
+  // link neighboring tiles
+  for(var i=0; i<this.Nx; i++){
+    for(var j=0; j<this.Ny; j++){
+      this.tiles[i*this.Ny+j].neighbors = [
+        this.getTileByIndex(i, j-1),
+        this.getTileByIndex(i-1, j),
+        this.getTileByIndex(i, j+1),
+        this.getTileByIndex(i+1, j)
+      ];
+    }
   }
 
   // get tile by x,y-position
@@ -75,17 +92,6 @@ Map = function(canvas){
     ));
   }
 
-  // link neighboring tiles
-  for(var i=0; i<this.Nx; i++){
-    for(var j=0; j<this.Ny; j++){
-      this.tiles[i*this.Ny+j].neighbors = [
-        this.getTileByIndex(i, j-1),
-        this.getTileByIndex(i-1, j),
-        this.getTileByIndex(i, j+1),
-        this.getTileByIndex(i+1, j)
-      ];
-    }
-  }
 }
 
 // child class for tiles
