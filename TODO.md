@@ -6,6 +6,7 @@
 
 ## Minor features
 - Map Import: either prefetching or non-async
+- recursive division with sometimes more than one hole: better CTF maps?
 
 ## Enhancement:
 - less white!

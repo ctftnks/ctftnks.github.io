@@ -7,11 +7,13 @@ window.onload = function(){
   checkMobile();
 };
 
+
 // start a new round
-function newGame(){
+function newGame(map=-1){
   if(typeof game !== 'undefined')
     game.stop();
-  game = new Game(canvas);
+  console.log(map)
+  game = new Game(canvas, map);
   if(GameMode == "DM")
     game.mode = new Deathmatch(game);
   if(GameMode == "TDM")

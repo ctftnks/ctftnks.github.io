@@ -4,19 +4,22 @@
 // contains a loop mechanism for time-iteration
 
 GameID = 0;
-Game = function(canvas){
+Game = function(canvas, map=-1){
 
   // pass canvas class to game, for size / resolution
   this.canvas = canvas;
   this.canvas.game = this;
   // create new random map
-  this.map = new Map(this.canvas);
+  if(map == -1){
+    console.log(map)
+    this.map = new Map(this.canvas);
+    MapGenerator.algorithms[Math.floor(Math.random()*MapGenerator.algorithms.length)](this.map);
+    // MapGenerator.primsMaze(this.map);
+    // MapGenerator.recursiveDivision(this.map);
+  }else{
+    this.map = map;
+  }
   this.map.resize();
-  // generate a random maze with a random algorithm
-  // MapGenerator.algorithms[Math.floor(Math.random()*MapGenerator.algorithms.length)](this.map);
-  MapGenerator.primsMaze(this.map);
-  // MapGenerator.recursiveDivision(this.map);
-  // MapGenerator.randomImportedMap(this.map);
   this.players = [];
   this.objs = [];
   this.paused = false;

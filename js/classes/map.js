@@ -3,8 +3,9 @@
 // also the tiles keep object lists for spatial sorting
 // the canvas is passed to the constructor to provide the size of the canvas
 
-Map = function(canvas, Nx=-1, Ny=-1){
-
+Map = function(canvas=-1, Nx=-1, Ny=-1){
+  if(canvas == -1)
+    canvas = {width: 1, height: 1};
   this.canvas = canvas;
   if(Nx==-1)
     this.Nx = parseInt(MapNxMin + (MapNxMax-MapNxMin) * Math.random());

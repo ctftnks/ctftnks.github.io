@@ -147,21 +147,26 @@ MapGenerator = {
     return data;
   },
 
+  importedMap: function(map){
+    // copy tiles and size to old map
+    map.Nx = prefetchedMap.Nx;
+    map.Ny = prefetchedMap.Ny;
+    map.tiles = prefetchedMap.tiles;
+    // map.dx = prefetchedMap.dx;
+    // map.dy = prefetchedMap.dy;
+    map.resize();
+  },
+
   // import map from file
   // if file==-1: random pick;
-  randomImportedMap: function(map, mapID=-1){
-    // prestructure the map with prims Maze --> failsafe
-    MapGenerator.primsMaze(map);
-    // vars to be used later on
-    var newmap;
-    var canv = map.canvas;
+  importMap: function(mapname=-1){
     // request file
     var xhttp = new XMLHttpRequest();
-    // pick random name
+    // TODO: pick random name
     var maxMapId = 0;
-    if(mapID == -1)
-      mapID = Math.floor(Math.random() * maxMapId);
-    xhttp.open("GET", "maps/"+mapID+".csv", true);
+    if(mapname == -1)
+      mapname = Math.floor(Math.random() * maxMapId);
+    xhttp.open("GET", "maps/"+mapname+".csv", true);
     xhttp.send();
     xhttp.onreadystatechange = function(){
       if (this.readyState == 4 && this.status == 200){
@@ -170,29 +175,33 @@ MapGenerator = {
         var lines = data.match(/[^\r\n]+/g);
         var Ny = lines.length;
         var Nx = lines[0].split(" ").length;
-        newmap = new Map(canv, Nx, Ny);
+        var map = new Map(game.map.canvas, Nx, Ny);
         for(var j=0; j<Ny; j++){
           var line = lines[j].split(" ");
           for(var i=0; i<Nx; i++){
             var number = parseInt(line[i]);
-            var t = newmap.getTileByIndex(i, j);
+            var t = map.getTileByIndex(i, j);
             for(var d=0; d<4; d++)
               t.walls[d] = ((number >>> d) % 2) == 1;
           }
         }
         // copy tiles and size to old map
-        map.Nx = newmap.Nx;
-        map.Ny = newmap.Ny;
-        map.tiles = newmap.tiles;
-        map.dx = newmap.dx;
-        map.dy = newmap.dy;
-        map.resize();
+        // map.Nx = newmap.Nx;
+        // map.Ny = newmap.Ny;
+        // map.tiles = newmap.tiles;
+        // map.dx = newmap.dx;
+        // map.dy = newmap.dy;
+        // map.resize();
+        // prefetchedMap = map;
+        newGame(map);
       }
     };
   },
 
 
 }
+
+prefetchedMap = undefined;
 
 // List of all algorithms
 MapGenerator.algorithms = [MapGenerator.primsMaze, MapGenerator.recursiveDivision];
