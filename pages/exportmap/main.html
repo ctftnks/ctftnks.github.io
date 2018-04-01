@@ -1,16 +1,15 @@
 <div class="popupshade" onclick="closePage(this)"></div>
 <div class="popup">
 
-  <!-- example content -->
   <h2>Export Map</h2>
 
-  <!-- TODO: suit name to current id? -->
-  Copy this snippet and save as "mapname.csv" and submit a pull request to merge it into the game
+  Copy this snippet and save as "<i>mapname</i>.csv" and submit a pull request to merge it into the game:<br /><br />
   <textarea id="exportMapText"></textarea>
+  <br /><br />
 
 </div>
 
 
 <script>
-document.getElementById("#exportMapText").innerHTML = mapGenerator.exportMap(game.map);
+  document.getElementById("exportMapText").innerHTML = MapGenerator.exportMap(game.map);
 </script>

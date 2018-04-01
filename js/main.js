@@ -12,7 +12,6 @@ window.onload = function(){
 function newGame(map=-1){
   if(typeof game !== 'undefined')
     game.stop();
-  console.log(map)
   game = new Game(canvas, map);
   if(GameMode == "DM")
     game.mode = new Deathmatch(game);

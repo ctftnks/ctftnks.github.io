@@ -218,6 +218,20 @@ MapEditor = function(game){
 
 
   this.init = function(){
+    var map = this.game.map;
+    // Start with a grid with no walls
+    for(var i=0; i<map.Nx*map.Ny; i++)
+        map.tiles[i].walls = [false, false, false, false];
+    // border walls
+    for(var i=0; i<map.Nx; i++){
+      map.getTileByIndex(i, 0).walls[0] = true;
+      map.getTileByIndex(i, map.Ny-1).walls[2] = true;
+    }
+    for(var i=0; i<map.Ny; i++){
+      map.getTileByIndex(0, i).walls[1] = true;
+      map.getTileByIndex(map.Nx-1, i).walls[3] = true;
+    }
+    // add single player
     this.game.players = [];
     var p = new Player();
     this.game.addPlayer(p);

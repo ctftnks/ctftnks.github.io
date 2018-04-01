@@ -11,7 +11,6 @@ Game = function(canvas, map=-1){
   this.canvas.game = this;
   // create new random map
   if(map == -1){
-    console.log(map)
     this.map = new Map(this.canvas);
     MapGenerator.algorithms[Math.floor(Math.random()*MapGenerator.algorithms.length)](this.map);
     // MapGenerator.primsMaze(this.map);

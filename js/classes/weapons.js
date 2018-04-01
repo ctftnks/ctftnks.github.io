@@ -457,21 +457,21 @@ WallBuilder = function(tank){
   this.image = new Image;
   this.image.src = "res/img/wallBuilder.png";
   this.canShoot = true;
-  console.log("new WallBuilder")
 
   this.shoot = function(){
     if(this.canShoot){
-      playSound("res/sound/gun.wav");
       var tile = this.tank.map.getTileByPos(this.tank.x, this.tank.y);
       var direction = this.tank.angle;
       while(direction < 0)
         direction += 2*Math.PI;
       var direction = Math.round(-direction / (Math.PI/2.) + 16) % 4;
+      if(tile.neighbors[direction] == -1)
+        return;
       if(tile.walls[direction])
         tile.addWall(direction, true);
       else
         tile.addWall(direction, false);
-      // tile.addWall(direction, this.walls[direction]);
+      playSound("res/sound/gun.wav");
       this.canShoot = false;
       var self = this;
       this.tank.player.game.timeouts.push(setTimeout(function(){

@@ -144,7 +144,7 @@ Tile = function(i, j, map){
   this.addWall = function(direction, remove=false, neighbor=true){
     direction = direction % 4;
     this.walls[direction] = !remove;
-    if(neighbor && typeof(this.neighbors[direction]) !== "undefined")
+    if(neighbor && typeof(this.neighbors[direction]) !== "undefined" && this.neighbors[direction] != -1)
       this.neighbors[direction].addWall(direction + 2, remove, false);
   }
 
