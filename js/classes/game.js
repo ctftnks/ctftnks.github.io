@@ -14,9 +14,9 @@ Game = function(canvas){
   this.map.resize();
   // generate a random maze with a random algorithm
   // MapGenerator.algorithms[Math.floor(Math.random()*MapGenerator.algorithms.length)](this.map);
-  // MapGenerator.primsMaze(this.map);
+  MapGenerator.primsMaze(this.map);
   // MapGenerator.recursiveDivision(this.map);
-  MapGenerator.randomImportedMap(this.map);
+  // MapGenerator.randomImportedMap(this.map);
   this.players = [];
   this.objs = [];
   this.paused = false;

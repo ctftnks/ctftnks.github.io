@@ -84,12 +84,12 @@ SlingshotBonus = function(){
     tank.weapon = new Slingshot(tank);
   }
 }
-SteelBeamBonus = function(){
+WallBuilderBonus = function(){
   PowerUp.call(this);
-  this.image.src = "res/img/steelBeam.png";
+  this.image.src = "res/img/wallBuilder.png";
   this.apply = function(tank){
     playSound("res/sound/reload.wav");
-    tank.weapon = new SteelBeam(tank);
+    tank.weapon = new WallBuilder(tank);
   }
 }
 SpeedBonus = function(){

@@ -451,11 +451,11 @@ WreckingBall = function(tank){
 
 
 // creates walls
-SteelBeam = function(tank){
+WallBuilder = function(tank){
   Weapon.call(this, tank);
-  this.name = "SteelBeam";
+  this.name = "WallBuilder";
   this.image = new Image;
-  this.image.src = "res/img/steelBeam.png";
+  this.image.src = "res/img/wallBuilder.png";
   this.canShoot = true;
 
   this.shoot = function(){
