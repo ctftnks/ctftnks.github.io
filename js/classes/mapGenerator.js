@@ -126,6 +126,62 @@ MapGenerator = {
   },
 
 
+  // Recursive Division Algorithm with double holes
+  porousRecursiveDivision: function(map, x1=-1, y1=-1, x2=-1, y2=-1){
+    console.log("por")
+    // recursive entry point
+    if(x1 == -1){
+      // init limits
+      x1 = 0;
+      y1 = 0;
+      x2 = map.Nx;
+      y2 = map.Ny;
+      // Start with a grid with no walls
+      for(var i=0; i<map.Nx*map.Ny; i++)
+          map.tiles[i].walls = [false, false, false, false];
+      // border walls
+      for(var i=0; i<map.Nx; i++){
+        map.getTileByIndex(i, 0).walls[0] = true;
+        map.getTileByIndex(i, map.Ny-1).walls[2] = true;
+      }
+      for(var i=0; i<map.Ny; i++){
+        map.getTileByIndex(0, i).walls[1] = true;
+        map.getTileByIndex(map.Nx-1, i).walls[3] = true;
+      }
+    }
+    // recursion end
+    if(x2 - x1 < 2 || y2 - y1 < 2)
+      return;
+    if(x2 - x1 > y2 - y1){
+      // vertical cell-dividing wall
+      var posX = x1 + Math.floor(Math.random() * (x2 - x1 - 1));
+      for(var i=y1; i<y2; i++)
+        map.getTileByIndex(posX, i).addWall(3);
+      var doubleHole = y2 - y1 > 2 ? 3 : 1;
+      for(var k=0; k<doubleHole; k++){
+        // random hole in vertical wall
+        var posY = y1 + Math.floor(Math.random() * (y2 - y1));
+        map.getTileByIndex(posX, posY).addWall(3, true);
+      }
+      MapGenerator.recursiveDivision(map, x1, y1, posX+1, y2);
+      MapGenerator.recursiveDivision(map, posX+1, y1, x2, y2);
+    }else{
+      // horizontal cell-dividing wall
+      var posY = y1 + Math.floor(Math.random() * (y2 - y1 - 1));
+      for(var i=x1; i<x2; i++)
+        map.getTileByIndex(i, posY).addWall(2);
+      var doubleHole = x2 - x1 > 2 ? 3 : 1;
+      for(var k=0; k<doubleHole; k++){
+        // random hole in horizontal wall
+        var posX = x1 + Math.floor(Math.random() * (x2 - x1));
+        map.getTileByIndex(posX, posY).addWall(2, true);
+      }
+      MapGenerator.recursiveDivision(map, x1, y1, x2, posY+1);
+      MapGenerator.recursiveDivision(map, x1, posY+1, x2, y2);
+    }
+  },
+
+
   // export map into bit format
   exportMap: function(map){
     var Nx = map.Nx;
@@ -204,4 +260,4 @@ MapGenerator = {
 prefetchedMap = undefined;
 
 // List of all algorithms
-MapGenerator.algorithms = [MapGenerator.primsMaze, MapGenerator.recursiveDivision];
+MapGenerator.algorithms = [MapGenerator.primsMaze, MapGenerator.recursiveDivision, MapGenerator.porousRecursiveDivision, MapGenerator.porousRecursiveDivision];

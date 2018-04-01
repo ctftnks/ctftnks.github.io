@@ -5,8 +5,7 @@
 
 
 ## Minor features
-- Map Import: either prefetching or non-async
-- recursive division with sometimes more than one hole: better CTF maps?
+- bind ESC Key to Menu
 
 ## Enhancement:
 - less white!
@@ -16,8 +15,6 @@
 - adaptive bot difficulties: bots become harder/easier depending on scoreboard
 - update README.md
 - REFACTOR REFACTOR REFACTOR!!!
-- support for user created, curated maps
-- MapEditor: implement as GameMode
 
 ## Long term issues
 - better UI

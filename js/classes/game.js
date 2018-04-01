@@ -15,6 +15,7 @@ Game = function(canvas, map=-1){
     MapGenerator.algorithms[Math.floor(Math.random()*MapGenerator.algorithms.length)](this.map);
     // MapGenerator.primsMaze(this.map);
     // MapGenerator.recursiveDivision(this.map);
+    // MapGenerator.porousRecursiveDivision(this.map);
   }else{
     this.map = map;
   }
