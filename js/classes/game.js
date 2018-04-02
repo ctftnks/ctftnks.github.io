@@ -84,6 +84,10 @@ Game = function(canvas, map=-1){
         this.addObject(p);
         this.timeouts.push(setTimeout(function(){p.delete();}, PowerUpFrequency*MaxPowerUps));
       }
+      if(Key.isDown(Key.ESCAPE)){
+        openPage('menu');
+        this.paused = true;
+      }
     }
   }
 

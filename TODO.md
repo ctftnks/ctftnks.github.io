@@ -5,7 +5,6 @@
 
 
 ## Minor features
-- bind ESC Key to Menu
 
 ## Enhancement:
 - less white!

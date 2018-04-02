@@ -79,6 +79,11 @@ var Key = {
     if(editingKeymap){
       doEditKeymap(event.keyCode);
     }
+    if(event.keyCode == Key.W){
+      console.log("ggg")
+      event.preventDefault();
+      event.stopPropagation();
+    }
   },
 
   onKeyup: function(event) {

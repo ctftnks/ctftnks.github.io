@@ -7,6 +7,12 @@ window.onload = function(){
   checkMobile();
 };
 
+// prevent accidental leaving
+window.onbeforeunload = function(){
+  if(typeof(game) !== "undefined" && !game.paused)
+    return "";
+}
+
 
 // start a new round
 function newGame(map=-1){
