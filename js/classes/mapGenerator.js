@@ -128,7 +128,6 @@ MapGenerator = {
 
   // Recursive Division Algorithm with double holes
   porousRecursiveDivision: function(map, x1=-1, y1=-1, x2=-1, y2=-1){
-    console.log("por")
     // recursive entry point
     if(x1 == -1){
       // init limits
