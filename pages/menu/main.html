@@ -1,4 +1,4 @@
-<div class="popupshade" onclick="closePage(this);if(typeof(game)==='undefined') newGame(); else game.paused = false;"></div>
+<div class="popupshade" onclick="closePage(this);if(typeof(game)==='undefined'){newGame();}else{game.paused = false;}window.onresize();"></div>
 <div class="popup">
 
 
@@ -32,7 +32,7 @@
     <button class="option vspace" onclick="addPlayer();">Add Player</button>
     <button class="option vspace" onclick="addPlayer(true);">Add Bot</button>
     <button class="option vspace" onclick="openPage('quickstart');">Quick Teams</button>
-    <button class="option vspace" onclick="closePage(this);newGame();">Start Game!</button>
+    <button class="option vspace" onclick="closePage(this);newGame();window.onresize();">Start Game!</button>
   </div>
 
 <script>

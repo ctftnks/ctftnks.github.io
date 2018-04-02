@@ -1,6 +1,8 @@
 body{
   font-family: sans-serif;
-  /* background:#333; */
+  background: #333;
+  background-color: #282936;
+  background-image: url("/res/img/textures/tiled.png");
 }
 
 #gameFrame, #effectFrame{
@@ -18,12 +20,13 @@ body{
   left: 0;
   width: 18%;
   font-weight: bold;
+  color: #FFFFFF;
 }
 
 #sideBar .entry{
   position: relative;
   width: calc(100%-6px);
-  border-bottom: solid 1px #CCC;
+  border-bottom: solid 1px #666;
   padding: 8px;
   margin-left: 6px;
   padding-right: 0px;

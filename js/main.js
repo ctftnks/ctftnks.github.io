@@ -9,7 +9,8 @@ window.onload = function(){
 
 // prevent accidental leaving
 window.onbeforeunload = function(){
-  if(typeof(game) !== "undefined" && !game.paused)
+  var debug = true;
+  if(typeof(game) !== "undefined" && !game.paused && !debug)
     return "";
 }
 
