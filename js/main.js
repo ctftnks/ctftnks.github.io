@@ -19,6 +19,12 @@ window.onbeforeunload = function(){
 
 // start a new round
 function newGame(map=-1){
+  if(GameMode=="MapEditor"){
+    var Nx = prompt("Nx?");
+    var Ny = prompt("Ny?");
+    map = new Map(canvas, Nx, Ny);
+  }
+
   if(typeof game !== 'undefined')
     game.stop();
   game = new Game(canvas, map);
