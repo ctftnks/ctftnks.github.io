@@ -7,7 +7,6 @@
 ## Minor features
 
 ## Enhancement:
-- less white!
 - different tank types (visually): write a class for that?
 - music, especially when holding flag
 - change body.background to #555 or similar
@@ -16,7 +15,6 @@
 - REFACTOR REFACTOR REFACTOR!!!
 
 ## Long term issues
-- better UI
 - better graphics: hand drawn vector graphics
 - publishable sounds & sprites
 

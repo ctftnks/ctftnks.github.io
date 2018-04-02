@@ -3,6 +3,8 @@
 window.onload = function(){
   canvas = new Canvas("gameFrame");
   players = [new Player(), new Player()];
+  var g = newGame();
+  g.paused = true;
   openPage("menu");
   checkMobile();
 };
