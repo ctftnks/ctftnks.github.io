@@ -41,6 +41,9 @@ function newGame(map=-1){
     game.addPlayer(players[i]);
   game.start();
   canvas.sync();
+  if(ResetStatsEachGame)
+    for(var i=0; i<game.players.length; i++)
+      game.players[i].resetStats();
   return game;
 }
 

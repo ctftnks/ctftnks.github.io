@@ -102,7 +102,10 @@ Player = function(){
 
   // reset stats dictionary to 0
   this.resetStats = function(){
-    this.stats = this.stats.fromkeys(this.stats, 0);
+    this.stats.deaths = 0;
+    this.stats.kills = 0;
+    this.stats.miles = 0;
+    this.stats.shots = 0;
   }
 
 }
