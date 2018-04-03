@@ -37,7 +37,7 @@ Gun = function(tank){
       bullet.color = this.tank.player.color;
       bullet.speed = BulletSpeed;
       bullet.angle = this.tank.angle;
-      bullet.timeout = 10000;
+      bullet.timeout = BulletTimeout*1000;
       this.tank.player.game.addObject(bullet);
       this.canShoot = false;
     }
