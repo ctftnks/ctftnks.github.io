@@ -1,4 +1,4 @@
 
 
 
-  maplist = ["Avocado", "Prims-Maze", "Spirals"]
+  maplist = ["Avocado", "Prims-Maze", "Rust", "Spirals"]
