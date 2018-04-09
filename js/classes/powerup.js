@@ -112,7 +112,8 @@ InvincibleBonus = function(){
       return;
     this.applied = true;
     stopMusic();
-    playMusic("res/sound/invincible.mp3");
+    if(!muted)
+      playMusic("res/sound/invincible.mp3");
     tank.speed *= 1.14;
     var img = tank.weapon.image.src;
     tank.weapon.image.src = "res/img/invincible.png";

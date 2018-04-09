@@ -102,7 +102,7 @@ Tank = function(player){
   // use the weapon
   this.shoot = function(){
       this.weapon.shoot();
-      if(this.weapon.canShoot)
+      if(this.weapon.canShoot && this.weapon.name != "MG")
         this.player.stats.shots += 1;
   }
 

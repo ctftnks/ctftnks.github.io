@@ -6,15 +6,15 @@ GameFrequency = 10;
 // Graphics & Sound
 TankWidth = 34;
 TankHeight = 50;
-muted = true;
+muted = false;
 bgmusic = false;
 
 // Gameplay
 GameMode = "CTF";
 TankSpeed = 170;
 TankTurnSpeed = 3.8;
-BulletSpeed = 260;
-BulletTimeout = 10;
+BulletSpeed = 280;
+BulletTimeout = 8;
 PowerUpFrequency = 4000;
 MaxPowerUps = 8;
 MaxKillsPerGame = 100;
