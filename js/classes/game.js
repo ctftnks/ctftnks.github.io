@@ -106,6 +106,8 @@ Game = function(canvas, map=-1){
       clearTimeout(this.timeouts[i]);
     clearEffects();
     stopMusic();
+    for(var i=0; i<this.players.length; i++)
+      this.players[i].base = undefined;
   }
 
   // end the game
