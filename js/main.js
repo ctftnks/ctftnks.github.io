@@ -19,7 +19,7 @@ window.onbeforeunload = function(){
 
 // start a new round
 function newGame(map=-1){
-  if(GameMode=="MapEditor"){
+  if(GameMode=="MapEditor" && map==-1){
     var Nx = prompt("Nx?");
     var Ny = prompt("Ny?");
     map = new Map(canvas, Nx, Ny);
@@ -35,7 +35,7 @@ function newGame(map=-1){
   if(GameMode == "CTF")
     game.mode = new CaptureTheFlag(game);
   if(GameMode == "MapEditor")
-    game.mode = new MapEditor(game);
+    game.mode = new MapEditor(game, map==-1);
 
   for(var i=0; i<players.length; i++)
     game.addPlayer(players[i]);

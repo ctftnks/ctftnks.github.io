@@ -103,6 +103,7 @@ BotTank = function(player){
         this.angle = Math.atan2(-distx, disty)+Math.PI;
 
         this.shoot();
+        this.player.stats.shots += 1;
         if(weapon == "Guided"){
           this.fleeFor(3500);
         } else if(weapon == "Grenade"){

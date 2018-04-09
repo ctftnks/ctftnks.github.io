@@ -81,6 +81,8 @@ Map = function(canvas=-1, Nx=-1, Ny=-1){
 
   // draw the map
   this.draw = function(canvas, context){
+    context.fillStyle = "#edede8";
+    context.fillRect(0, 0, this.Nx*this.dx, this.Ny*this.dy);
     for(var i=0; i<this.tiles.length; i++)
       this.tiles[i].draw(canvas, context);
   }
@@ -125,19 +127,15 @@ Tile = function(i, j, map){
 
   // draw the tile walls (width fixed as 4px)
   this.draw = function(canvas, context){
-    // TODO: draw outer borders thicker
-    // tile background color
-    context.fillStyle = "#edede8";
-    context.fillRect(this.x-2, this.y-2, this.dx+4, this.dy+4);
     context.fillStyle = "#555";
     if(this.walls[0])
-      context.fillRect(this.x-1, this.y-2, this.dx+2, 4);
+      context.fillRect(this.x-2, this.y-2, this.dx+4, 4);
     if(this.walls[1])
-      context.fillRect(this.x-2, this.y-1, 4, this.dy+2);
+      context.fillRect(this.x-2, this.y-2, 4, this.dy+4);
     if(this.walls[2])
-      context.fillRect(this.x-1, this.y-2+this.dy, this.dx+2, 4);
+      context.fillRect(this.x-2, this.y-2+this.dy, this.dx+4, 4);
     if(this.walls[3])
-      context.fillRect(this.x-2+this.dx, this.y-1, 4, this.dy+2);
+      context.fillRect(this.x-2+this.dx, this.y-2, 4, this.dy+4);
   }
 
 

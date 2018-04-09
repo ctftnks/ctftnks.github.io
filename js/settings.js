@@ -14,6 +14,7 @@ GameMode = "CTF";
 TankSpeed = 170;
 TankTurnSpeed = 3.8;
 BulletSpeed = 260;
+BulletTimeout = 10;
 PowerUpFrequency = 4000;
 MaxPowerUps = 8;
 MaxKillsPerGame = 100;
