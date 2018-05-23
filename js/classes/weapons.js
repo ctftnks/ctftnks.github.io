@@ -192,7 +192,7 @@ Grenade = function(tank){
             shrapnel.age = 0;
             shrapnel.speed = 2 * BulletSpeed * (0.8 + 0.4 * Math.random());
             shrapnel.angle = 2 * Math.PI * Math.random();
-            shrapnel.timeout = 800;
+            shrapnel.timeout = 400;
             shrapnel.checkCollision = function(x, y){}
             self.tank.player.game.addObject(shrapnel);
           }
