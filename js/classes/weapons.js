@@ -161,11 +161,13 @@ Grenade = function(tank){
     if(typeof(this.bullet) !== "undefined" && this.bullet.age > 300 && !this.bullet.exploded){
       this.bullet.explode();
       this.canShoot = false;
+      this.fired = true;
       return;
     }
-    if(typeof(this.bullet) === "undefined" && this.canShoot && !this.tank.deleted){
+    if(typeof(this.bullet) === "undefined" && this.canShoot && !this.fired && !this.tank.deleted){
       var bullet = new Bullet(this);
       this.bullet = bullet;
+      console.log(this.fired, this.canShoot)
       this.fired = true;
       this.canShoot = false;
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
@@ -204,6 +206,7 @@ Grenade = function(tank){
           if(!self.bullet.deleted)
             self.bullet.delete();
           self.bullet = undefined;
+          self.canShoot = false;
       }
       bullet.delete = function(){
         bullet.explode();
