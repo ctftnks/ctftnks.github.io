@@ -51,7 +51,7 @@ BotTank = function(player){
             if(self.carriedFlag != -1 && destination.objs[i].type == "Base" && destination.objs[i].hasFlag && destination.objs[i].team == self.player.team)
               return true;
             // if own flag is found somewhere: return it
-            if(destination.objs[i].type == "Flag" && destination.objs[i].team == self.player.team)
+            if(typeof(self.player.base) !== "undefined" && !self.player.base.hasFlag && destination.objs[i].type == "Flag" && destination.objs[i].team == self.player.team)
               return true;
           }
           // if own flag is not in own base: search it
