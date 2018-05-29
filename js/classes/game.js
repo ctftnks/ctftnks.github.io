@@ -12,10 +12,10 @@ Game = function(canvas, map=-1){
   // create new random map
   if(map == -1){
     this.map = new Map(this.canvas);
-    MapGenerator.algorithms[Math.floor(Math.random()*MapGenerator.algorithms.length)](this.map);
+    // MapGenerator.algorithms[Math.floor(Math.random()*MapGenerator.algorithms.length)](this.map);
     // MapGenerator.primsMaze(this.map);
     // MapGenerator.recursiveDivision(this.map);
-    // MapGenerator.porousRecursiveDivision(this.map);
+    MapGenerator.porousRecursiveDivision(this.map);
   }else{
     this.map = map;
   }
