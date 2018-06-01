@@ -90,7 +90,7 @@ Player = function(){
     var self = this;
     this.game.timeouts.push(setTimeout(function(){
       self.spawn();
-    }, 1500));
+    }, 2300));
   }
 
   // change color
