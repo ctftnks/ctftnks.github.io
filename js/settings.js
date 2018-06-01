@@ -12,7 +12,7 @@ bgmusic = false;
 // Gameplay
 GameMode = "CTF";
 TankSpeed = 180;
-TankTurnSpeed = 3.85;
+TankTurnSpeed = 3.9;
 BulletSpeed = 300;
 BulletTimeout = 7;
 PowerUpRate = 4;

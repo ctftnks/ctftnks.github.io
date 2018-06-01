@@ -26,7 +26,7 @@ BotTank = function(player){
   this.checkWallCollision = function(){return false;}
   this.step = function(){
     this.lastChecked += GameFrequency;
-    if(this.lastChecked > 380/BotSpeed){
+    if(this.lastChecked > 360/BotSpeed){
       this.lastChecked = 0;
       // calculate path to next tank (excluding self)
       var tile = this.map.getTileByPos(this.x, this.y);
@@ -99,6 +99,8 @@ BotTank = function(player){
         }
       if(this.weapon.name == "Guided")
         sdist = 16;
+      if(this.weapon.name == "Slingshot")
+        sdist = 8;
       if(Math.random() > 0.6)
         sdist+=1;
 
