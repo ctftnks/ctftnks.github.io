@@ -190,7 +190,7 @@ FogBonus = function(){
 }
 
 PowerUps = [
-  {create: function(){return new LaserBonus()}, name: "Laser", weight: 19999},
+  {create: function(){return new LaserBonus()}, name: "Laser", weight: 1},
   {create: function(){return new MGBonus()}, name: "MG", weight: 1},
   {create: function(){return new GrenadeBonus()}, name: "Grenade", weight: 1},
   {create: function(){return new MineBonus()}, name: "Mine", weight: 1},
