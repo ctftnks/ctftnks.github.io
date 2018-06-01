@@ -101,6 +101,8 @@ BotTank = function(player){
         sdist = 16;
       if(this.weapon.name == "Slingshot")
         sdist = 8;
+      if(this.weapon.name == "WreckingBall")
+        sdist = 99;
       if(Math.random() > 0.6)
         sdist+=1;
 
