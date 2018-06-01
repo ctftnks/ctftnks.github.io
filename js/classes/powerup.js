@@ -96,11 +96,11 @@ SpeedBonus = function(){
   PowerUp.call(this);
   this.image.src = "res/img/speed.png";
   this.apply = function(tank){
-    tank.speed *= 1.14;
+    tank.speed *= 1.10;
     var self = tank;
     tank.player.game.timeouts.push(setTimeout(function(){
-      self.speed /= 1.14;
-    }, 4000));
+      self.speed /= 1.10;
+    }, 8000));
   }
 }
 InvincibleBonus = function(){

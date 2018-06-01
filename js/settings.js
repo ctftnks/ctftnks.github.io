@@ -26,6 +26,7 @@ BotSpeed = 1;
 ShowTankLabels = false;
 MobileJoystick = false;
 ResetStatsEachGame = true;
+AdaptiveBotSpeed = false;
 // Map size
 MapNxMin = 9;
 MapNxMax = 15;

@@ -10,7 +10,6 @@
 - different tank types (visually): write a class for that?
 - music, especially when holding flag
 - change body.background to #555 or similar
-- adaptive bot difficulties: bots become harder/easier depending on scoreboard
 - update README.md
 - REFACTOR REFACTOR REFACTOR!!!
 
@@ -23,3 +22,4 @@
 - Powerup that lets tank go through walls
 - setting the difficulty per-bot
 - button to change from player to bot
+- Network functionality
