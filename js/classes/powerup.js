@@ -11,6 +11,7 @@ PowerUp = function(){
   this.x = undefined;
   this.y = undefined;
   this.radius = 40;
+  this.attractsBots = false;
 
   this.apply = function(tank){
 
@@ -30,6 +31,7 @@ PowerUp = function(){
 
 LaserBonus = function(){
   PowerUp.call(this);
+  this.attractsBots = true;
   this.image.src = "res/img/laser.png";
   this.apply = function(tank){
     playSound("res/sound/reload.wav");
@@ -38,6 +40,7 @@ LaserBonus = function(){
 }
 MGBonus = function(){
   PowerUp.call(this);
+  this.attractsBots = true;
   this.image.src = "res/img/mg.png";
   this.apply = function(tank){
     playSound("res/sound/reload.wav");
@@ -62,6 +65,7 @@ MineBonus = function(){
 }
 GuidedBonus = function(){
   PowerUp.call(this);
+  this.attractsBots = true;
   this.image.src = "res/img/guided.png";
   this.apply = function(tank){
     playSound("res/sound/reload.wav");
@@ -78,6 +82,7 @@ WreckingBallBonus = function(){
 }
 SlingshotBonus = function(){
   PowerUp.call(this);
+  this.attractsBots = true;
   this.image.src = "res/img/slingshot.png";
   this.apply = function(tank){
     playSound("res/sound/reload.wav");
@@ -94,6 +99,7 @@ WallBuilderBonus = function(){
 }
 SpeedBonus = function(){
   PowerUp.call(this);
+  this.attractsBots = true;
   this.image.src = "res/img/speed.png";
   this.apply = function(tank){
     tank.speed *= 1.10;
@@ -105,6 +111,7 @@ SpeedBonus = function(){
 }
 InvincibleBonus = function(){
   PowerUp.call(this);
+  this.attractsBots = true;
   this.image.src = "res/img/invincible.png";
   this.applied = false;
   this.apply = function(tank){
@@ -131,6 +138,7 @@ InvincibleBonus = function(){
 }
 TerminatorBonus = function(){
   PowerUp.call(this);
+  this.attractsBots = true;
   this.image.src = "res/img/terminator.png";
   this.applied = false;
   this.apply = function(tank){
@@ -182,7 +190,7 @@ FogBonus = function(){
 }
 
 PowerUps = [
-  {create: function(){return new LaserBonus()}, name: "Laser", weight: 1},
+  {create: function(){return new LaserBonus()}, name: "Laser", weight: 19999},
   {create: function(){return new MGBonus()}, name: "MG", weight: 1},
   {create: function(){return new GrenadeBonus()}, name: "Grenade", weight: 1},
   {create: function(){return new MineBonus()}, name: "Mine", weight: 1},

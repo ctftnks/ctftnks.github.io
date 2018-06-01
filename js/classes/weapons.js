@@ -55,8 +55,11 @@ MG = function(tank){
   this.fired = false;
   this.nshots = 20;
   this.every = 0;
-  // TODO: if player is bot: rapid fire
   this.shoot = function(){
+    if(this.tank.player.isBot && this.nshots > 10 && this.canShoot){
+      var self = this;
+      setTimeout(function(){self.shoot();}, GameFrequency);
+    }
     this.every -= GameFrequency;
     if(this.nshots > 0 && this.every < 0 && this.canShoot){
       this.every = 50;

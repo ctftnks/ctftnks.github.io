@@ -43,7 +43,7 @@ Player = function(){
   this.step = function(){
     if (Key.isDown(this.keys[0])) this.tank.move(1);
     if (Key.isDown(this.keys[1])) this.tank.turn(-1);
-    if (Key.isDown(this.keys[2])) this.tank.move(-0.5);
+    if (Key.isDown(this.keys[2])) this.tank.move(-0.7);
     if (Key.isDown(this.keys[3])) this.tank.turn(1);
     if (Key.isDown(this.keys[4])) this.tank.shoot();
   }
@@ -80,6 +80,7 @@ Player = function(){
   // check if game should end
   this.kill = function(){
     this.game.n_playersAlive -= 1;
+    this.tank.weapon.canShoot = false;
     this.game.nkills++;
     this.game.canvas.shake();
     this.spree = 0;

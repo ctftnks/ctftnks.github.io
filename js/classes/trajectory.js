@@ -16,6 +16,7 @@ Trajectory = function(map){
   this.map = map;
   this.drawevery = 1;
   this.timeout = 100;
+  this.targets = []
 
   this.draw = function(canvas, context){
     if(this.hidden)
@@ -38,6 +39,7 @@ Trajectory = function(map){
   this.step = function(){
 
     // update points list
+    this.targets = [];
     var point = {x: this.x, y: this.y, angle: this.angle};
     var length = 0;
     this.points = [point];
@@ -66,6 +68,10 @@ Trajectory = function(map){
       }
       length += this.delta;
       this.points.push(nextpoint);
+      // see if any tanks targeted
+      for(var i=0; i<tile.objs.length; i++)
+        if(tile.objs[i].isTank)
+          this.targets.push(tile.objs[i]);
     }
 
     this.timeout -= GameFrequency;

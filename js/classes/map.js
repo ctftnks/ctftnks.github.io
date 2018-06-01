@@ -165,11 +165,13 @@ Tile = function(i, j, map){
 
   // recursively find the shortest path to any tile in map where condition is met
   // condition is a function condition(Tile t){} returning boolean
-  this.pathTo = function(condition, path=[], minPathLength=-1){
+  this.pathTo = function(condition, path=[], minPathLength=-1, maxPathLength=-1){
     // add current tile to path
     path.push(this);
     // if the current path is longer than the shortest known path: abort!
     if(minPathLength != -1 && path.length >= minPathLength)
+      return -1;
+    if(maxPathLength != -1 && path.length > maxPathLength)
       return -1;
     // is this tile what we've been searching for? Then we're done!
     if(condition(this)) return path;
@@ -179,7 +181,7 @@ Tile = function(i, j, map){
     var options = [];
     for(var d=0; d<4; d++)
       if(!this.walls[d] && this.neighbors[d] != -1 && path.indexOf(this.neighbors[d]) == -1){
-        var option = this.neighbors[d].pathTo(condition, path.slice(), minPathLength);
+        var option = this.neighbors[d].pathTo(condition, path.slice(), minPathLength, maxPathLength);
         if (option != -1){
           minPathLength = option.length;
           options.push(option);

@@ -39,6 +39,19 @@ BotTank = function(player){
         return false;
       });
       var dontShoot = false;
+      var foundPowerUp = false;
+
+      var powerupPath = tile.pathTo(function(destination){
+        for(var i=0; i<destination.objs.length; i++){
+          if(destination.objs[i].isPowerUp && destination.objs[i].attractsBots)
+            return true;
+        }
+      }, [], -1, 2);
+      if(powerupPath != -1 && (path == -1 || path.length > 4)){
+        path = powerupPath;
+        dontShoot = true;
+        foundPowerUp = true;
+      }
 
       // extra rule for Capture The Flag
       if(GameMode == "CTF"){
@@ -66,7 +79,7 @@ BotTank = function(player){
           //   }
           return false;
         });
-        if(path == -1 || typeof(path) === "undefined" || path.length > 4 || !this.weapon.canShoot || (this.carriedFlag != -1 && path.length > 3)){
+        if(path == -1 || typeof(path) === "undefined" || path.length > 4 || !this.weapon.canShoot || (this.carriedFlag != -1 && (path.length > 3 || foundPowerUp))){
           if(flagPath != -1 && typeof(flagPath) !== "undefined"){
             dontShoot = true;
             for(var k=0; k<flagPath[flagPath.length-1].objs.length; k++)
@@ -80,11 +93,12 @@ BotTank = function(player){
 
       var sdist = 3;
       if(this.weapon.name == "Laser")
-        sdist = 5;
+        for(var i=0; i<this.weapon.trajectory.targets.length; i++){
+          if(this.weapon.trajectory.targets[i].player.team != this.player.team)
+            sdist = 99;
+        }
       if(this.weapon.name == "Guided")
-        sdist = 5;
-      if(this.weapon.name == "Guided")
-        sdist = 5;
+        sdist = 16;
       if(Math.random() > 0.6)
         sdist+=1;
 
@@ -120,11 +134,14 @@ BotTank = function(player){
         } else {
           this.fleeFor(1000);
         }
+      }else if(path.length < 2){
+        this.goto = path[0];
       }else{
         // else set goto to coordinates of next path frame
         this.goto = path[1];
       }
     }
+
     if(this.goto != -1 && typeof(this.goto) != "undefined"){
       var distx = this.goto.x + this.goto.dx / 2. - this.x;
       var disty = this.goto.y + this.goto.dy / 2. - this.y;
