@@ -43,7 +43,8 @@ function openPage(name){
 function closePage(id){
   if(typeof(id) == "number"){
     var elem = document.getElementById("page"+id);
-    elem.parentNode.removeChild(elem);
+    if(typeof(elem) !== "undefined")
+      elem.parentNode.removeChild(elem);
   }
   if(typeof(id) == "object"){
     var count = 0;
