@@ -104,7 +104,7 @@ BotTank = function(player){
       if(this.weapon.name == "WreckingBall")
         sdist = 99;
       if(Math.random() > 0.6)
-        sdist+=1;
+        sdist += 1;
 
 
       // get reverse path to flee
