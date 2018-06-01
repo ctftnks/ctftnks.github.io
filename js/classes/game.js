@@ -76,18 +76,31 @@ Game = function(canvas, map=-1){
       // do gamemode calculations
       this.mode.step();
 	    // add random PowerUp
-      if(this.t % PowerUpFrequency == 0 && GameMode != "MapEditor"){
+      if(this.t % (1000*PowerUpRate) == 0 && GameMode != "MapEditor"){
         var p = getRandomPowerUp();
         var pos = this.map.spawnPoint();
         p.x = pos.x;
         p.y = pos.y;
         this.addObject(p);
-        this.timeouts.push(setTimeout(function(){p.delete();}, PowerUpFrequency*MaxPowerUps));
+        this.timeouts.push(setTimeout(function(){p.delete();}, 1000*PowerUpRate*MaxPowerUps));
       }
       if(Key.isDown(Key.ESCAPE)){
         openPage('menu');
         this.paused = true;
       }
+      if(this.t % 1000 == GameFrequency){
+        var dt = RoundTime*60 - (this.t-GameFrequency) / 1000;
+        dt = dt < 0 ? 0 : dt;
+        var dtm = Math.floor(dt / 60);
+        var dts = Math.floor(dt - dtm*60);
+        dtm = ""+dtm
+        while(dtm.length < 2) dtm = "0"+dtm
+        dts = ""+dts
+        while(dts.length < 2) dts = "0"+dts
+        document.getElementById("GameTimer").innerHTML = dtm+":"+dts;
+      }
+      if(this.t > RoundTime*60000)
+        this.end();
     }
   }
 

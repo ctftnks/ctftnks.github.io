@@ -62,14 +62,17 @@
 			</div>
 			<div id="scoreBoard"></div>
 			<div class="entry">&nbsp;</div>
+			<div class="entry clickable" onclick="game.t = 0;">
+				Time:&nbsp;&nbsp;<span id="GameTimer">00:00</span>&nbsp;&nbsp;<span style="font-size:0.8em;color:#555;">click for more</span>
+			</div>
+			<div class="entry clickable" onclick="newGame()">
+				Next Map
+			</div><br />
 			<div class="entry clickable" onclick="openPage('importmap')">
 				Import Map
 			</div>
 			<div class="entry clickable" onclick="openPage('exportmap')">
 				Export Map
-			</div>
-			<div class="entry clickable" onclick="newGame()">
-				Next Map
 			</div>
 		</div>
 

@@ -9,9 +9,8 @@
 ## Enhancement:
 - different tank types (visually): write a class for that?
 - music, especially when holding flag
-- change body.background to #555 or similar
 - update README.md
-- REFACTOR REFACTOR REFACTOR!!!
+- let bots pick up powerups on intention
 
 ## Long term issues
 - better graphics: hand drawn vector graphics

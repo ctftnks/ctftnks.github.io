@@ -11,13 +11,13 @@ bgmusic = false;
 
 // Gameplay
 GameMode = "CTF";
-TankSpeed = 170;
-TankTurnSpeed = 3.8;
-BulletSpeed = 280;
-BulletTimeout = 8;
-PowerUpFrequency = 4000;
+TankSpeed = 180;
+TankTurnSpeed = 3.85;
+BulletSpeed = 300;
+BulletTimeout = 7;
+PowerUpRate = 4;
 MaxPowerUps = 8;
-MaxKillsPerGame = 100;
+RoundTime = 5;
 SpawnShieldTime = 1;
 EndScreenTime = 15;
 FriendlyFire = true;
@@ -27,6 +27,7 @@ ShowTankLabels = false;
 MobileJoystick = false;
 ResetStatsEachGame = true;
 AdaptiveBotSpeed = false;
+RespawnTime = 2.5
 // Map size
 MapNxMin = 9;
 MapNxMax = 15;

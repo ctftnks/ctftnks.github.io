@@ -84,13 +84,10 @@ Player = function(){
     this.game.canvas.shake();
     this.spree = 0;
     this.stats.deaths += 1;
-    if(this.game.nkills >= MaxKillsPerGame){
-      game.end();
-    }
     var self = this;
     this.game.timeouts.push(setTimeout(function(){
       self.spawn();
-    }, 2300));
+    }, RespawnTime*1000));
   }
 
   // change color

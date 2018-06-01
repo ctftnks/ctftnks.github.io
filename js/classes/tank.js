@@ -93,8 +93,7 @@ Tank = function(player){
   // rotate the tank
   this.turn = function(direction){
     var oldangle = this.angle;
-    this.angle += direction * TankTurnSpeed * GameFrequency / 1000.;
-    // if(!this.invincible && this.checkWallCollision())
+    this.angle += direction * TankTurnSpeed * GameFrequency / 1000. * TankSpeed / 180.;
     if(this.checkWallCollision())
       this.angle = oldangle;
   }

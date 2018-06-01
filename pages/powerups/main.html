@@ -7,26 +7,20 @@
 
   <br /><br />
 
-  <div class='option vspace'>
-    <span class="left">Rate</span>
-    <select class="right" data-bind="PowerUpFrequency">
-      <option value="2000">2s</option>
-      <option value="4000">4s</option>
-      <option value="4000">6s</option>
-      <option value="10000">10s</option>
-    </select>
+  <div class="option vspace">
+    <span>Rate</span>
+    <button class="left" onclick="PowerUpRate -= 1; databinding();">-</button>
+    <input class="left right" data-bind="PowerUpRate" data-suffix="s" data-min="1" data-max="60" size="1" readonly/>
+    <button class="right" onclick="PowerUpRate += 1; databinding();">+</button>
   </div>
 
-  <div class='option vspace'>
-    <span class="left">Amount</span>
-    <select class="right" data-bind="MaxPowerUps">
-      <option value="2">2</option>
-      <option value="4">4</option>
-      <option value="8">8</option>
-      <option value="16">16</option>
-      <option value="32">32</option>
-    </select>
+  <div class="option vspace">
+    <span>Amount</span>
+    <button class="left" onclick="MaxPowerUps -= 2; databinding();">-</button>
+    <input class="left right" data-bind="MaxPowerUps" data-min="0" size="1" readonly/>
+    <button class="right" onclick="MaxPowerUps += 2; databinding();">+</button>
   </div>
+
 
   <button class="option vspace" onclick="closePage(this);">Close</button>
 
