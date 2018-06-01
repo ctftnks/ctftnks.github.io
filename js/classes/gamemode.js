@@ -20,8 +20,7 @@ Deathmatch = function(game){
       playSound("res/sound/killingspree.mp3");
     }
     updateScores();
-    if(AdaptiveBotSpeed)
-      BotSpeed -= (player.isBot && val > 0) ? 0.1 : -0.1;
+    adaptBotSpeed(player.isBot);
   }
 
   // called when player1 kills player2
@@ -52,8 +51,7 @@ TeamDeathmatch = function(game){
       playSound("res/sound/killingspree.mp3");
     }
     updateScores();
-    if(AdaptiveBotSpeed)
-      BotSpeed -= (player.isBot && val > 0) ? 0.1 : -0.1;
+    adaptBotSpeed(player.isBot);
   }
 
   // called when player1 kills player2
@@ -139,8 +137,7 @@ CaptureTheFlag = function(game){
       if(this.game.players[i].team == player.team)
         this.game.players[i].score += val;
     updateScores();
-    if(AdaptiveBotSpeed)
-      BotSpeed -= (player.isBot && val > 0) ? 0.1 : -0.1;
+    adaptBotSpeed(player.isBot);
   }
 
   // called when player1 kills player2

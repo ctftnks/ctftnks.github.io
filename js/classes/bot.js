@@ -192,27 +192,8 @@ BotTank = function(player){
 }
 
 
-function adaptBotSpeed(game){
-  var ps = game.players;
-  var botScore = 0
-  var playerScore = 0;
-  var nbots = 0;
-  var nplayers = 0;
-  for(var i=0; i<ps.length; i++){
-    if(ps[i].isBot){
-      nbots++;
-      botScore += ps[i].score;
-    }else{
-      nplayers++;
-      playerScore += ps[i].score;
-    }
-  }
-  botScore /= parseFloat(nbots);
-  playerScore /= parseFloat(nplayers);
-  if(botScore > playerScore){
-    BotSpeed -= 0.5;
-  }
-  if(botScore < playerScore){
-    BotSpeed += 0.5;
-  }
+function adaptBotSpeed(increase, val=0.08){
+  if(!AdaptiveBotSpeed)
+    return;
+  BotSpeed += increase ? val : -val;
 }
