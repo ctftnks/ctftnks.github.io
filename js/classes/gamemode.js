@@ -268,7 +268,7 @@ KingOfTheHill = function(game){
   this.giveScore = function(player, val=1){
     player.score += val;
     updateScores();
-    adaptBotSpeed(!player.isBot, 0.01);
+    adaptBotSpeed(!player.isBot, 0.02);
   }
 
   // called when player1 kills player2
