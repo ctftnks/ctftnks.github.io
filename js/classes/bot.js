@@ -228,8 +228,29 @@ BotTank = function(player){
 }
 
 
-function adaptBotSpeed(increase, val=0.08){
+function adaptBotSpeed(team, val=0.1){
   if(!AdaptiveBotSpeed)
     return;
-  BotSpeed += increase ? val : -val;
+
+  var teams = [];
+  var botcounts = [];
+
+  for(var i=0; i<game.players.length; i++){
+    var id = teams.indexOf(game.players[i].team);
+    if(id == -1){
+      id = teams.length;
+      teams.push(game.players[i].team);
+      botcounts.push(0);
+    }
+    botcounts[id] += game.players[i].isBot ? 1 : 0;
+  }
+  var avgbots = 0
+  for(var i=0; i<teams.length; i++)
+    avgbots += botcounts[i] / parseFloat(teams.length);
+  id = teams.indexOf(team);
+  BotSpeed += (avgbots - botcounts[id]) * val;
+  var bs = document.getElementById("BotSpeedometer");
+  bs.style.display = "block";
+  bs.innerHTML = "BotSpeed:&nbsp;&nbsp;"+Math.round(BotSpeed*100)+" %"
+  return BotSpeed;
 }

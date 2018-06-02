@@ -26,7 +26,7 @@ BotSpeed = 1;
 ShowTankLabels = false;
 MobileJoystick = false;
 ResetStatsEachGame = true;
-AdaptiveBotSpeed = false;
+AdaptiveBotSpeed = true;
 RespawnTime = 2.5
 // Map size
 MapNxMin = 9;

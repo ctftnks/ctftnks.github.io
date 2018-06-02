@@ -20,7 +20,7 @@ Deathmatch = function(game){
       playSound("res/sound/killingspree.mp3");
     }
     updateScores();
-    adaptBotSpeed(!player.isBot);
+    adaptBotSpeed(player.team);
   }
 
   // called when player1 kills player2
@@ -51,7 +51,7 @@ TeamDeathmatch = function(game){
       playSound("res/sound/killingspree.mp3");
     }
     updateScores();
-    adaptBotSpeed(!player.isBot);
+    adaptBotSpeed(player.team);
   }
 
   // called when player1 kills player2
@@ -137,7 +137,7 @@ CaptureTheFlag = function(game){
       if(this.game.players[i].team == player.team)
         this.game.players[i].score += val;
     updateScores();
-    adaptBotSpeed(!player.isBot);
+    adaptBotSpeed(player.team);
   }
 
   // called when player1 kills player2
@@ -268,7 +268,6 @@ KingOfTheHill = function(game){
   this.giveScore = function(player, val=1){
     player.score += val;
     updateScores();
-    adaptBotSpeed(!player.isBot, 0.02);
   }
 
   // called when player1 kills player2
@@ -294,10 +293,12 @@ KingOfTheHill = function(game){
       }
     }
     var team = this.bases[0].team;
-    if(equal && team != "#555" && this.game.t % scoreevery == 0)
+    if(equal && team != "#555" && this.game.t % scoreevery == 0){
       for(var i=0; i<this.game.players.length; i++)
         if(this.game.players[i].team == team)
           this.giveScore(this.game.players[i], 1)
+      adaptBotSpeed(team, 0.02);
+    }
   }
 
   this.init = function(){
