@@ -34,6 +34,8 @@ function newGame(map=-1){
     game.mode = new TeamDeathmatch(game);
   if(GameMode == "CTF")
     game.mode = new CaptureTheFlag(game);
+  if(GameMode == "KOTH")
+    game.mode = new KingOfTheHill(game);
   if(GameMode == "MapEditor")
     game.mode = new MapEditor(game, map==-1);
 

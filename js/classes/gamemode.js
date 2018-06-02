@@ -258,3 +258,89 @@ MapEditor = function(game, clearmap=true){
   }
 
 }
+
+KingOfTheHill = function(game){
+  Gamemode.call(this, game);
+  this.name = "KingOfTheHill";
+  this.bases = [];
+
+  // give score to team players
+  this.giveScore = function(player, val=1){
+    player.score += val;
+    updateScores();
+    adaptBotSpeed(!player.isBot, 0.01);
+  }
+
+  // called when player1 kills player2
+  this.newKill = function(player1, player2){
+    if(player1.team != player2.team){
+      player1.spree += 1;
+      if(player1.spree >= 5 && player1.spree % 5 == 0){
+        // player1.score += Math.floor(player1.spree / 5)
+        playSound("res/sound/killingspree.mp3");
+      }
+      updateScores();
+    }
+  }
+
+  this.step = function(){
+    // if all bases same color: score in intervals for team
+    var scoreevery = 2000;
+    var equal = true;
+    for(var i=0; i<this.bases.length; i++){
+      if(this.bases[i].team != this.bases[0].team){
+        equal = false;
+        break;
+      }
+    }
+    var team = this.bases[0].team;
+    if(equal && team != "#555" && this.game.t % scoreevery == 0)
+      for(var i=0; i<this.game.players.length; i++)
+        if(this.game.players[i].team == team)
+          this.giveScore(this.game.players[i], 1)
+  }
+
+  this.init = function(){
+    var bases = [];
+    var game = this.game;
+
+    // create players.length-1 bases
+    for(var ni=0; ni<game.players.length; ni++){
+      // find spawnPoint that is far away from existing bases
+      var maxLength = -1;
+      var maxPos = game.map.spawnPoint();
+      for(var k=0; k<100; k++){
+        var pos = game.map.spawnPoint();
+        var tile = game.map.getTileByPos(pos.x, pos.y);
+        var length = 0;
+        var initfirst = false;
+        if(bases.length == 0){
+          bases.push(game.map.spawnPoint());
+          initfirst = true;
+        }
+        for(var j=0; j<bases.length; j++){
+          var stile = this.game.map.getTileByPos(bases[j].x, bases[j].y);
+          var path = tile.pathTo(function(destination){
+            return destination.id == stile.id;
+          });
+          if(path != -1)
+            length += path.length * path.length;
+        }
+        if(initfirst)
+          bases = [];
+        for(var j=0; j<bases.length; j++)
+          if(bases[j].x == pos.x && bases[j].y == pos.y)
+            length = -1;
+        if(length > maxLength){
+          maxLength = length;
+          maxPos = pos;
+        }
+      }
+      var b = new Hill(game, maxPos.x, maxPos.y);
+      b.hasFlag = false;
+      bases.push(b);
+      game.addObject(b);
+    }
+    this.bases = bases;
+  }
+}

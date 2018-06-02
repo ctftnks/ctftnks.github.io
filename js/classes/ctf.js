@@ -117,3 +117,16 @@ Base = function(game, player, x, y){
     }
   }
 }
+
+Hill = function(game, x, y){
+  Base.call(this, game, {color: "#555", team: "#555"}, x, y);
+  this.step = function(){
+    for(var i=0; i<this.tile.objs.length; i++){
+      var tank = this.tile.objs[i];
+      if(tank.isTank && tank.player.team != this.team && Math.pow(this.x-tank.x, 2) + Math.pow(this.y-tank.y, 2) < Math.pow(2*this.size, 2)){
+        this.team = tank.player.team;
+        this.color = tank.player.color;
+      }
+    }
+  }
+}
