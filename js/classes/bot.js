@@ -69,14 +69,6 @@ BotTank = function(player){
             if(!self.player.base.hasFlag && destination.objs[i].type == "Tank" && destination.objs[i].carriedFlag != -1 && destination.objs[i].carriedFlag.team == self.player.team)
               return true;
           }
-          // // if own flag is not in own base: search it
-          // if(typeof(self.player.base) !== "undefined" && !self.player.base.hasFlag)
-          //   for(var i=0; i<destination.objs.length; i++){
-          //     if(destination.objs[i].type == "Flag" && destination.objs[i].team == self.player.team)
-          //       return true;
-          //     if(destination.objs[i].type == "Tank" && destination.objs[i].carriedFlag != -1 && destination.objs[i].carriedFlag.team == self.player.team)
-          //       return true;
-          //   }
           return false;
         });
         if(path == -1 || typeof(path) === "undefined" || path.length > 4 || !this.weapon.canShoot || (this.carriedFlag != -1 && (path.length > 3 || foundPowerUp))){
@@ -94,15 +86,21 @@ BotTank = function(player){
       var sdist = 3;
       if(this.weapon.name == "Laser")
         for(var i=0; i<this.weapon.trajectory.targets.length; i++){
-          if(this.weapon.trajectory.targets[i].player.team != this.player.team)
+          if(this.weapon.trajectory.targets[i].player.team != this.player.team){
+            dontShoot = false;
             sdist = 99;
+          }
         }
-      if(this.weapon.name == "Guided")
+      if(this.weapon.name == "Guided"){
+        dontShoot = false;
         sdist = 16;
+      }
       if(this.weapon.name == "Slingshot")
         sdist = 8;
-      if(this.weapon.name == "WreckingBall")
+      if(this.weapon.name == "WreckingBall"){
+        dontShoot = false;
         sdist = 99;
+      }
       if(Math.random() > 0.6)
         sdist += 1;
 
