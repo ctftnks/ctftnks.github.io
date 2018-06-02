@@ -120,6 +120,7 @@ Base = function(game, player, x, y){
 
 Hill = function(game, x, y){
   Base.call(this, game, {color: "#555", team: "#555"}, x, y);
+  this.type = "Hill";
   this.step = function(){
     for(var i=0; i<this.tile.objs.length; i++){
       var tank = this.tile.objs[i];

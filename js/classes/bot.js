@@ -81,6 +81,23 @@ BotTank = function(player){
           }
         }
       }
+      // extra rule for Capture The Flag
+      if(GameMode == "KOTH"){
+        var basepath = tile.pathTo(function(destination){
+          for(var i=0; i<destination.objs.length; i++){
+            // search for free bases
+            if(destination.objs[i].type == "Hill" && destination.objs[i].team != self.player.team)
+              return true;
+          }
+          return false;
+        });
+        if(path == -1 || typeof(path) === "undefined" || path.length > 5 || !this.weapon.canShoot || (this.carriedFlag != -1 && (path.length > 4 || foundPowerUp))){
+          if(basepath != -1 && typeof(basepath) !== "undefined"){
+            dontShoot = true;
+            path = basepath;
+          }
+        }
+      }
       this.path = path;
 
       var sdist = 3;
@@ -106,7 +123,7 @@ BotTank = function(player){
 
 
       // get reverse path to flee
-      if(this.isFleeing && GameMode != "CTF")
+      if(this.isFleeing && GameMode != "CTF" && GameMode != "KOTH")
         this.flee();
 
       if(path.length < sdist && !dontShoot){

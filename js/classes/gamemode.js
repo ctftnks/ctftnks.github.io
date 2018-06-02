@@ -305,7 +305,7 @@ KingOfTheHill = function(game){
     var game = this.game;
 
     // create players.length-1 bases
-    for(var ni=0; ni<game.players.length; ni++){
+    for(var ni=0; ni<game.players.length-1; ni++){
       // find spawnPoint that is far away from existing bases
       var maxLength = -1;
       var maxPos = game.map.spawnPoint();
