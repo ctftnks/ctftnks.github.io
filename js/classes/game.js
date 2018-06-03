@@ -135,4 +135,12 @@ Game = function(canvas, map=-1){
     }, EndScreenTime*1000);
   }
 
+  this.resetTime = function(){
+    this.t = 0;
+    for(var i=0; i<this.players.length; i++){
+      this.players[i].tank.timers.invincible = -1;
+      this.players[i].tank.timers.spawnshield = -1;
+    }
+  }
+
 }

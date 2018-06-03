@@ -27,7 +27,7 @@ ShowTankLabels = false;
 MobileJoystick = false;
 ResetStatsEachGame = true;
 AdaptiveBotSpeed = true;
-RespawnTime = 2.5
+RespawnTime = 3
 // Map size
 MapNxMin = 9;
 MapNxMax = 15;

@@ -208,4 +208,13 @@ Tile = function(i, j, map){
         return this.neighbors[d%4].randomWalk(distance-1);
     return this;
   }
+
+  // is object of type 'type' in tile?
+  // if so, return object list id, otherwise -1
+  this.find = function(type){
+    for(var i=0; i<this.objs.length; i++)
+      if(this.objs[i].type == type)
+        return i
+    return -1;
+  }
 }
