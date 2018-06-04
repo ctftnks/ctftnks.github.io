@@ -127,12 +127,7 @@ Game = function(canvas, map=-1){
   this.end = function(){
     this.paused = true;
     var pageid = openPage("leaderboard");
-    var self = this;
-    setTimeout(function(){
-      self.stop();
-      closePage(pageid);
-      newGame();
-    }, EndScreenTime*1000);
+    this.stop();
   }
 
   this.resetTime = function(){
