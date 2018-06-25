@@ -60,8 +60,8 @@ Game = function(canvas, map=-1){
 
   // a single step of the time-loop
   this.step = function(){
-    this.t += GameFrequency;
     if(!this.paused){
+      this.t += GameFrequency;
       // remove deleted objects and
       // initiate spatial sorting of objects within the map class
       this.map.clearObjectLists();
