@@ -24,10 +24,10 @@ playercolors = [
 //   "#FFC107"  // amber
 // ]
 
-Player = function(){
+Player = function () {
 
   this.id = nplayers++;
-  this.name = "Player " + (this.id+1);
+  this.name = "Player " + (this.id + 1);
   this.color = playercolors[this.id];
   this.team = this.id;
   this.game = undefined;
@@ -36,11 +36,11 @@ Player = function(){
   this.spree = 0;
   this.keys = keymaps[this.id];
   this.tank = new Tank(this);
-  this.stats = {deaths: 0, kills: 0, miles: 0, shots: 0};
+  this.stats = { deaths: 0, kills: 0, miles: 0, shots: 0 };
   isBot = false;
 
   // timestep: check if keys pressed and act accordingly
-  this.step = function(){
+  this.step = function () {
     if (Key.isDown(this.keys[0])) this.tank.move(1);
     if (Key.isDown(this.keys[1])) this.tank.turn(-1);
     if (Key.isDown(this.keys[2])) this.tank.move(-0.7);
@@ -49,19 +49,19 @@ Player = function(){
   }
 
   // spawn at some point
-  this.spawn = function(){
-    if(this.isBot)
+  this.spawn = function () {
+    if (this.isBot)
       this.tank = new BotTank(this);
     else
       this.tank = new Tank(this);
     this.tank.deleted = false;
     this.tank.map = this.game.map;
     var spos = this.game.map.spawnPoint();
-    if(typeof(this.base) !== "undefined" && this.base.tile != -1){
+    if (typeof (this.base) !== "undefined" && this.base.tile != -1) {
       var spos2 = this.base.tile;
-      while(spos2.id == this.base.tile.id)
+      while (spos2.id == this.base.tile.id)
         spos2 = spos2.randomWalk(Math.pow(this.game.mode.BaseSpawnDistance, 2) + Math.round(Math.random()));
-      spos = {x: spos2.x+spos2.dx/2, y: spos2.y+spos2.dy/2};
+      spos = { x: spos2.x + spos2.dx / 2, y: spos2.y + spos2.dy / 2 };
     }
     this.tank.x = spos.x;
     this.tank.y = spos.y;
@@ -69,8 +69,8 @@ Player = function(){
     this.game.n_playersAlive += 1;
     // this.game.addObject(new Smoke(this.x, this.y));
     var self = this;
-    this.game.timeouts.push(setTimeout(function(){
-      new Cloud(self.game, self.tank.x, self.tank.y, n=4, radius=20, rspeed=2);
+    this.game.timeouts.push(setTimeout(function () {
+      new Cloud(self.game, self.tank.x, self.tank.y, n = 4, radius = 20, rspeed = 2);
     }, 10));
     // spawn shield
     this.tank.timers.spawnshield = this.game.t + SpawnShieldTime * 1000 + 0.2 * (Math.random() - 0.5);
@@ -78,7 +78,7 @@ Player = function(){
 
   // kill the player, called when tank is shot
   // check if game should end
-  this.kill = function(){
+  this.kill = function () {
     this.game.n_playersAlive -= 1;
     this.tank.weapon.canShoot = false;
     this.game.nkills++;
@@ -86,20 +86,20 @@ Player = function(){
     this.spree = 0;
     this.stats.deaths += 1;
     var self = this;
-    this.game.timeouts.push(setTimeout(function(){
+    this.game.timeouts.push(setTimeout(function () {
       self.spawn();
-    }, RespawnTime*1000));
+    }, RespawnTime * 1000));
   }
 
   // change color
-  this.changeColor = function(){
+  this.changeColor = function () {
     this.team += 1;
     this.team = this.team % playercolors.length;
     this.color = playercolors[this.team % playercolors.length];
   }
 
   // reset stats dictionary to 0
-  this.resetStats = function(){
+  this.resetStats = function () {
     this.stats.deaths = 0;
     this.stats.kills = 0;
     this.stats.miles = 0;

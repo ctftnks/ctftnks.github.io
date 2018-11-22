@@ -14,10 +14,10 @@
 
 <script>
 
-  for(var i=0; i<maplist.length; i++){
+  for (var i = 0; i < maplist.length; i++) {
     var name = maplist[i];
     var entry = "";
-    entry += "<button class='option vspace' onclick=\"MapGenerator.importMap('"+name+"');closePage(this);\">"+name+"</button>"
+    entry += "<button class='option vspace' onclick=\"MapGenerator.importMap('" + name + "');closePage(this);\">" + name + "</button>"
     document.getElementById("importMapList").innerHTML += entry;
   }
 

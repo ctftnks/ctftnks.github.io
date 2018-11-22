@@ -4,7 +4,7 @@
 // contains methods for collision detection with walls and bullets
 // contains a weapon and a method to shoot it
 
-Tank = function(player){
+Tank = function (player) {
   Object.call(this);
 
   this.player = player;
@@ -19,51 +19,51 @@ Tank = function(player){
   this.speed = TankSpeed;
   this.isTank = true;
   this.type = "Tank";
-  this.timers = {spawnshield: -1, invincible: -1};
+  this.timers = { spawnshield: -1, invincible: -1 };
   this.carriedFlag = -1;
 
   // draw the tank (rotated) on map
-  this.draw = function(canvas, context){
+  this.draw = function (canvas, context) {
     context.save();
     context.beginPath();
     context.translate(this.x, this.y);
     context.rotate(this.angle);
-    context.rect(-this.width/2, -this.height/2, this.width, this.height);
+    context.rect(-this.width / 2, -this.height / 2, this.width, this.height);
     context.fillStyle = this.player.color;
     context.fill();
     context.beginPath();
-    if(!this.player.isBot){
+    if (!this.player.isBot) {
       context.fillStyle = "rgba(0, 0, 0, 0.15)";
-      context.rect(-this.width/2, -this.height/2, this.width/5, this.height);
-      context.rect(this.width/2-this.width/5, -this.height/2, this.width/5, this.height);
+      context.rect(-this.width / 2, -this.height / 2, this.width / 5, this.height);
+      context.rect(this.width / 2 - this.width / 5, -this.height / 2, this.width / 5, this.height);
       context.fill();
     }
-    if(this.carriedFlag != -1){
+    if (this.carriedFlag != -1) {
       context.beginPath();
       context.fillStyle = this.carriedFlag.color;
-      context.rect(-this.carriedFlag.size/2, -this.carriedFlag.size/2, this.carriedFlag.size/1.1, this.carriedFlag.size/2);
+      context.rect(-this.carriedFlag.size / 2, -this.carriedFlag.size / 2, this.carriedFlag.size / 1.1, this.carriedFlag.size / 2);
       context.fill();
       context.beginPath();
       context.fillStyle = "#000";
-      context.rect(-this.carriedFlag.size/2, -this.carriedFlag.size/2, this.carriedFlag.size/6, this.carriedFlag.size*1.1);
+      context.rect(-this.carriedFlag.size / 2, -this.carriedFlag.size / 2, this.carriedFlag.size / 6, this.carriedFlag.size * 1.1);
       context.fill();
     }
-    else if(this.timers.spawnshield > this.player.game.t){
+    else if (this.timers.spawnshield > this.player.game.t) {
       context.rotate(Math.pi);
       context.fillStyle = "#000";
       context.font = "30px Arial";
-      context.fillText(this.player.name.substr(0,1),-this.width/4, this.height/4);
+      context.fillText(this.player.name.substr(0, 1), -this.width / 4, this.height / 4);
       context.rotate(-Math.pi);
     }
-    else if(this.weapon.image != ""){
+    else if (this.weapon.image != "") {
       context.drawImage(this.weapon.image, -this.width / 2, -this.width / 2, this.width, this.width);
     }
     // draw label
-    if(ShowTankLabels){
+    if (ShowTankLabels) {
       context.rotate(-this.angle);
       context.fillStyle = this.player.color;
-      context.font = (12/this.player.game.canvas.scale)+"px Arial";
-      context.fillText(this.player.name,-16,-40);
+      context.font = (12 / this.player.game.canvas.scale) + "px Arial";
+      context.fillText(this.player.name, -16, -40);
       context.rotate(this.angle);
     }
     context.restore();
@@ -71,70 +71,70 @@ Tank = function(player){
 
   // let player class check for key presses and move tank
   // check for collisions and handle them
-  this.step = function(){
+  this.step = function () {
     this.player.step();
     this.weapon.crosshair();
     this.checkBulletCollision();
   }
 
   // move the tank forward/backwards
-  this.move = function(direction){
+  this.move = function (direction) {
     this.player.stats.miles += 1;
     var oldx = this.x;
     var oldy = this.y;
     this.x -= direction * this.speed * Math.sin(-this.angle) * GameFrequency / 1000.;
     this.y -= direction * this.speed * Math.cos(-this.angle) * GameFrequency / 1000.;
-    if(this.checkWallCollision()){
+    if (this.checkWallCollision()) {
       this.x = oldx;
       this.y = oldy;
     }
   }
 
   // rotate the tank
-  this.turn = function(direction){
+  this.turn = function (direction) {
     var oldangle = this.angle;
     this.angle += direction * TankTurnSpeed * GameFrequency / 1000. * TankSpeed / 180.;
-    if(this.checkWallCollision())
+    if (this.checkWallCollision())
       this.angle = oldangle;
   }
 
   // use the weapon
-  this.shoot = function(){
-      this.weapon.shoot();
-      if(this.weapon.canShoot && this.weapon.name != "MG")
-        this.player.stats.shots += 1;
+  this.shoot = function () {
+    this.weapon.shoot();
+    if (this.weapon.canShoot && this.weapon.name != "MG")
+      this.player.stats.shots += 1;
   }
 
   // return to the default weapon
-  this.defaultWeapon = function(){
+  this.defaultWeapon = function () {
     this.weapon = new Gun(this);
   }
 
   // get x,y-coordinates of the tanks corners
   // needed for collision detection and weapon firing
-  this.corners = function(){
-      return [
-        {
-          x: this.x - (this.width / 2) * Math.cos(-this.angle) - (this.height / 2) * Math.sin(-this.angle),
-          y: this.y + (this.width / 2) * Math.sin(-this.angle) - (this.height / 2) * Math.cos(-this.angle)
-        },
-        {
-          x: this.x + (this.width / 2) * Math.cos(-this.angle) - (this.height / 2) * Math.sin(-this.angle),
-          y: this.y - (this.width / 2) * Math.sin(-this.angle) - (this.height / 2) * Math.cos(-this.angle)
-        },
-        {
-          x: this.x - (this.width / 2) * Math.cos(-this.angle) + (this.height / 2) * Math.sin(-this.angle),
-          y: this.y + (this.width / 2) * Math.sin(-this.angle) + (this.height / 2) * Math.cos(-this.angle)
-        },
-        {
-          x: this.x + (this.width / 2) * Math.cos(-this.angle) + (this.height / 2) * Math.sin(-this.angle),
-          y: this.y - (this.width / 2) * Math.sin(-this.angle) + (this.height / 2) * Math.cos(-this.angle)
-        }
-      ];
+  this.corners = function () {
+    return [
+      {
+        x: this.x - (this.width / 2) * Math.cos(-this.angle) - (this.height / 2) * Math.sin(-this.angle),
+        y: this.y + (this.width / 2) * Math.sin(-this.angle) - (this.height / 2) * Math.cos(-this.angle)
+      },
+      {
+        x: this.x + (this.width / 2) * Math.cos(-this.angle) - (this.height / 2) * Math.sin(-this.angle),
+        y: this.y - (this.width / 2) * Math.sin(-this.angle) - (this.height / 2) * Math.cos(-this.angle)
+      },
+      {
+        x: this.x - (this.width / 2) * Math.cos(-this.angle) + (this.height / 2) * Math.sin(-this.angle),
+        y: this.y + (this.width / 2) * Math.sin(-this.angle) + (this.height / 2) * Math.cos(-this.angle)
+      },
+      {
+        x: this.x + (this.width / 2) * Math.cos(-this.angle) + (this.height / 2) * Math.sin(-this.angle),
+        y: this.y - (this.width / 2) * Math.sin(-this.angle) + (this.height / 2) * Math.cos(-this.angle)
+      }
+    ];
   }
 
   // does the tank intersect with a point?
-  this.intersects = function(x, y){
+  this.intersects = function (x, y) {
     // center
     var distx = this.x - x;
     var disty = this.y - y;
@@ -145,11 +145,11 @@ Tank = function(player){
 
   // check for collision of the walls:
   // checks if there is a wall between the center of the tank and each corner
-  this.checkWallCollision = function(){
+  this.checkWallCollision = function () {
     var tile = this.map.getTileByPos(this.x, this.y);
     var corners = this.corners();
-    for(var i=0; i<corners.length; i++){
-      if(tile.getWall(corners[i].x, corners[i].y) != -1)
+    for (var i = 0; i < corners.length; i++) {
+      if (tile.getWall(corners[i].x, corners[i].y) != -1)
         return true;
     }
     return false;
@@ -158,44 +158,44 @@ Tank = function(player){
   // check for collision with a bullet
   // uses spatial sorting of the map class
   // only checks thos bullets that lie within the tiles of the corners
-  this.checkBulletCollision = function(){
+  this.checkBulletCollision = function () {
     // create a list of bullets that may hit the tank by looking
     // at the object lists of the tiles of the tanks corners
     var bullets = [];
     var powerups = [];
     var corners = this.corners();
-    for(var m=0; m<4; m++){
+    for (var m = 0; m < 4; m++) {
       var tile = this.map.getTileByPos(corners[m].x, corners[m].y);
-      if(tile != -1){
-        for(var j=0; j<tile.objs.length; j++){
-          if(tile.objs[j].isBullet && tile.objs[j].age > 0)
-          bullets.push(tile.objs[j]);
-          if(tile.objs[j].isPowerUp)
-          powerups.push(tile.objs[j]);
+      if (tile != -1) {
+        for (var j = 0; j < tile.objs.length; j++) {
+          if (tile.objs[j].isBullet && tile.objs[j].age > 0)
+            bullets.push(tile.objs[j]);
+          if (tile.objs[j].isPowerUp)
+            powerups.push(tile.objs[j]);
         }
       }
     }
     // for each bullet in the list, check if it intersects the tank
-    for(var i=0; i<bullets.length; i++){
-      if(this.intersects(bullets[i].x, bullets[i].y)){
+    for (var i = 0; i < bullets.length; i++) {
+      if (this.intersects(bullets[i].x, bullets[i].y)) {
         // Friendly fire?
-        if(!FriendlyFire && (this.player.team == bullets[i].player.team && this.player.id != bullets[i].player.id))
+        if (!FriendlyFire && (this.player.team == bullets[i].player.team && this.player.id != bullets[i].player.id))
           return;
-        if(!bullets[i].lethal)
+        if (!bullets[i].lethal)
           return;
         // Hit!
-        if(this.invincible())
+        if (this.invincible())
           return;
         bullets[i].delete();
         // count stats
-        if(bullets[i].player.team != this.player.team)
+        if (bullets[i].player.team != this.player.team)
           bullets[i].player.stats.kills += 1;
         // fancy explosion cloud
-        new Cloud(this.player.game, this.x, this.y, n=6);
+        new Cloud(this.player.game, this.x, this.y, n = 6);
         // let gamemode handle scoring
         this.player.game.mode.newKill(bullets[i].player, this.player);
         // CTF: if tank has flag, drop it
-        if(this.carriedFlag != -1)
+        if (this.carriedFlag != -1)
           this.carriedFlag.drop(this.x, this.y);
         // kill the player, delete the tank and bullet
         playSound("res/sound/kill.wav");
@@ -204,8 +204,8 @@ Tank = function(player){
         return;
       }
     }
-    for(var i=0; i<powerups.length; i++){
-      if(this.intersects(powerups[i].x, powerups[i].y)){
+    for (var i = 0; i < powerups.length; i++) {
+      if (this.intersects(powerups[i].x, powerups[i].y)) {
         powerups[i].apply(this);
         powerups[i].delete();
       }
@@ -213,12 +213,12 @@ Tank = function(player){
   }
 
   // properties: is invincible?
-  this.invincible = function(){
+  this.invincible = function () {
     var t = this.player.game.t;
     return this.timers.spawnshield > t || this.timers.invincible > t;
   }
 
-  this.delete = function(){
+  this.delete = function () {
     this.deleted = true;
     this.weapon.delete();
   }

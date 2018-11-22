@@ -70,22 +70,22 @@ var Key = {
   ESCAPE: 27,
 
 
-  isDown: function(keyCode) {
+  isDown: function (keyCode) {
     return this._pressed[keyCode];
   },
 
-  onKeydown: function(event) {
+  onKeydown: function (event) {
     this._pressed[event.keyCode] = true;
-    if(editingKeymap){
+    if (editingKeymap) {
       doEditKeymap(event.keyCode);
     }
-    if(event.keyCode == Key.W){
+    if (event.keyCode == Key.W) {
       event.preventDefault();
       event.stopPropagation();
     }
   },
 
-  onKeyup: function(event) {
+  onKeyup: function (event) {
     delete this._pressed[event.keyCode];
   }
 };
@@ -104,11 +104,11 @@ var keymaps = [
 ]
 
 // event listeners
-window.addEventListener('keyup', function(event){Key.onKeyup(event);}, false);
-window.addEventListener('keydown', function(event){Key.onKeydown(event);}, false);
+window.addEventListener('keyup', function (event) { Key.onKeyup(event); }, false);
+window.addEventListener('keydown', function (event) { Key.onKeydown(event); }, false);
 
-function getKeyLabel(key){
-  return String.fromCharCode((96 <= key && key <= 105)? key-48 : key);
+function getKeyLabel(key) {
+  return String.fromCharCode((96 <= key && key <= 105) ? key - 48 : key);
 }
 
 

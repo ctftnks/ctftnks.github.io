@@ -2,50 +2,50 @@
 <div class="popup" id="settingsMenu">
 
 
-<h2>Settings</h2>
+  <h2>Settings</h2>
 
   <div id="settingsTable">
     <div class="leftCol">
       <div class="option">
         <span>Tank speed</span>
         <button class="left" onclick="TankSpeed -= 20; databinding();">-</button>
-        <input class="left right" data-bind="TankSpeed" data-min="0" size="1" readonly/>
+        <input class="left right" data-bind="TankSpeed" data-min="0" size="1" readonly />
         <button class="right" onclick="TankSpeed += 20; databinding();">+</button>
       </div><br />
       <div class="option">
         <span>Bullet speed</span>
         <button class="left" onclick="BulletSpeed -= 20; databinding();">-</button>
-        <input class="left right" data-bind="BulletSpeed" data-min="0" size="1" readonly/>
+        <input class="left right" data-bind="BulletSpeed" data-min="0" size="1" readonly />
         <button class="right" onclick="BulletSpeed += 20; databinding();">+</button>
       </div><br />
       <div class="option">
         <span>Bullet timeout</span>
         <button class="left" onclick="BulletTimeout -= 1; databinding();">-</button>
-        <input class="left right" data-bind="BulletTimeout" data-suffix="s" data-min="1" size="1" readonly/>
+        <input class="left right" data-bind="BulletTimeout" data-suffix="s" data-min="1" size="1" readonly />
         <button class="right" onclick="BulletTimeout += 1; databinding();">+</button>
       </div><br />
       <div class="option">
         <span>Respawn time</span>
         <button class="left" onclick="RespawnTime -= 0.5; databinding();">-</button>
-        <input class="left right" data-bind="RespawnTime" data-min="0"  data-suffix="s" size="1" readonly/>
+        <input class="left right" data-bind="RespawnTime" data-min="0" data-suffix="s" size="1" readonly />
         <button class="right" onclick="RespawnTime += 0.5; databinding();">+</button>
       </div><br />
       <div class="option">
         <span>Spawn shield</span>
         <button class="left" onclick="SpawnShieldTime -= 0.5; databinding();">-</button>
-        <input class="left right" data-bind="SpawnShieldTime" data-min="0"  data-suffix="s" size="1" readonly/>
+        <input class="left right" data-bind="SpawnShieldTime" data-min="0" data-suffix="s" size="1" readonly />
         <button class="right" onclick="SpawnShieldTime += 0.5; databinding();">+</button>
       </div><br />
       <div class="option">
         <span>Map min-size</span>
         <button class="left" onclick="MapNxMin -= 1; databinding();">-</button>
-        <input class="left right" data-bind="MapNxMin" data-min="2"  size="1" readonly/>
+        <input class="left right" data-bind="MapNxMin" data-min="2" size="1" readonly />
         <button class="right" onclick="MapNxMin += 1; databinding();">+</button>
       </div><br />
       <div class="option">
         <span>Map max-size</span>
         <button class="left" onclick="MapNxMax -= 1; databinding();">-</button>
-        <input class="left right" data-bind="MapNxMax" data-min="2"  size="1" readonly/>
+        <input class="left right" data-bind="MapNxMax" data-min="2" size="1" readonly />
         <button class="right" onclick="MapNxMax += 1; databinding();">+</button>
       </div><br />
       <!-- <div class="option">
@@ -59,7 +59,7 @@
       <div class="option">
         <span>Round time</span>
         <button class="left" onclick="RoundTime -= 0.5; databinding();">-</button>
-        <input class="left right" data-bind="RoundTime" data-min="1" data-suffix=" min" size="1" readonly/>
+        <input class="left right" data-bind="RoundTime" data-min="1" data-suffix=" min" size="1" readonly />
         <button class="right" onclick="RoundTime += 0.5; databinding();">+</button>
       </div><br />
       <div class="option">
@@ -111,6 +111,6 @@
           <option value="false">off</option>
         </select>
       </div><br /> -->
-  </div>
+    </div>
 
-</div>
+  </div>

@@ -2,41 +2,41 @@
 <div class="popup">
 
 
-    <h1>CTF Tanks</h1>
+  <h1>CTF Tanks</h1>
 
-      <div class="option">
-        <span class="left">Mode</span>
-        <select class="right" data-bind="GameMode" data-type="string">
-          <option value="CTF">CTF</option>
-          <option value="DM">DM</option>
-          <option value="TDM">TDM</option>
-          <option value="KOTH">KOTH</option>
-          <option value="MapEditor">Editor</option>
-        </select>
-      </div>
-      <div class="option">
-        <span class="left">Bots</span>
-        <select class="right" data-bind="BotSpeed">
-          <option value="0.6">Lame</option>
-          <option value="0.8">Ok</option>
-          <option value="1">Decent</option>
-          <option value="1.2">Quick</option>
-          <option value="1.4">Pro</option>
-          <option value="1.8">Insane</option>
-        </select>
-      </div>
-      <button class="option" onclick="openPage('powerups');">PowerUps</button>
-      <button class="option" onclick="openPage('settings');">Settings</button>
-
-    <div id="playersMenu"></div>
-
-    <button class="option vspace" onclick="addPlayer();">Add Player</button>
-    <button class="option vspace" onclick="addPlayer(true);">Add Bot</button>
-    <button class="option vspace" onclick="openPage('quickstart');">Quick Teams</button>
-    <button class="option vspace" onclick="closePage(this);newGame();window.onresize();">Start Game!</button>
+  <div class="option">
+    <span class="left">Mode</span>
+    <select class="right" data-bind="GameMode" data-type="string">
+      <option value="CTF">CTF</option>
+      <option value="DM">DM</option>
+      <option value="TDM">TDM</option>
+      <option value="KOTH">KOTH</option>
+      <option value="MapEditor">Editor</option>
+    </select>
   </div>
+  <div class="option">
+    <span class="left">Bots</span>
+    <select class="right" data-bind="BotSpeed">
+      <option value="0.6">Lame</option>
+      <option value="0.8">Ok</option>
+      <option value="1">Decent</option>
+      <option value="1.2">Quick</option>
+      <option value="1.4">Pro</option>
+      <option value="1.8">Insane</option>
+    </select>
+  </div>
+  <button class="option" onclick="openPage('powerups');">PowerUps</button>
+  <button class="option" onclick="openPage('settings');">Settings</button>
+
+  <div id="playersMenu"></div>
+
+  <button class="option vspace" onclick="addPlayer();">Add Player</button>
+  <button class="option vspace" onclick="addPlayer(true);">Add Bot</button>
+  <button class="option vspace" onclick="openPage('quickstart');">Quick Teams</button>
+  <button class="option vspace" onclick="closePage(this);newGame();window.onresize();">Start Game!</button>
+</div>
 
 <script>
   updatePlayersMenu();
-  if(typeof(game)!=='undefined') game.paused = true;
+  if (typeof (game) !== 'undefined') game.paused = true;
 </script>

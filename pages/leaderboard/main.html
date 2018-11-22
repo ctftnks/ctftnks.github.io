@@ -15,17 +15,17 @@
 <script>
   updateLeaderboard();
   var leaderTime = EndScreenTime;
-  document.getElementById("leaderboardh2").innerHTML = "Leaderboard:&nbsp;&nbsp;Game #"+GameID;
-  document.getElementById("leaderboardCounter").innerHTML = leaderTime+"s";
-  leaderIntvl = setInterval(function(){
+  document.getElementById("leaderboardh2").innerHTML = "Leaderboard:&nbsp;&nbsp;Game #" + GameID;
+  document.getElementById("leaderboardCounter").innerHTML = leaderTime + "s";
+  leaderIntvl = setInterval(function () {
     leaderTime -= 1;
-    document.getElementById("leaderboardCounter").innerHTML = leaderTime+"s";
+    document.getElementById("leaderboardCounter").innerHTML = leaderTime + "s";
   }, 1000);
-  leaderTimeout = setTimeout(function(){
+  leaderTimeout = setTimeout(function () {
     clearInterval(leaderIntvl);
     closePage(document.getElementById("leaderboardshade").parentNode);
     newGame();
-  }, EndScreenTime*1000);
+  }, EndScreenTime * 1000);
 
 
 </script>
