@@ -4,7 +4,7 @@ window.onload = function () {
   canvas = new Canvas("gameFrame");
   players = [new Player(), new Bot(), new Bot(), new Bot()];
   players[1].color = players[0].color;
-  players[3].color = players[2].color;
+  players[3].team = players[2].team;
   var g = newGame();
   g.paused = true;
   openPage("menu");
