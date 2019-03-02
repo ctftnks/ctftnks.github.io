@@ -75,7 +75,7 @@ MG = function (tank) {
       bullet.radius = 2;
       bullet.speed = BulletSpeed;
       bullet.bounceSound = "";
-      bullet.extrahitbox = -2;
+      bullet.extrahitbox = -3;
       bullet.angle = this.tank.angle + 0.2 * (0.5 - Math.random());
       bullet.timeout = 4000 + 1000 * (0.5 - Math.random());;
       this.tank.player.game.addObject(bullet);
@@ -121,7 +121,7 @@ Laser = function (tank) {
         bullet.y = p.y;
         bullet.angle = p.angle;
         bullet.radius = 2;
-        bullet.extrahitbox = -2;
+        bullet.extrahitbox = -100;
         bullet.timeout = 200;
         bullet.speed = 0;
         bullet.color = this.tank.player.color;
@@ -202,6 +202,7 @@ Grenade = function (tank) {
           shrapnel.speed = 2 * BulletSpeed * (0.8 + 0.4 * Math.random());
           shrapnel.angle = 2 * Math.PI * Math.random();
           shrapnel.timeout = 360 * 280 / BulletSpeed;
+          shrapnel.extrahitbox = -3;
           shrapnel.checkCollision = function (x, y) { }
           self.tank.player.game.addObject(shrapnel);
         }
@@ -272,6 +273,7 @@ Mine = function (tank) {
           shrapnel.speed = 2 * BulletSpeed * (0.8 + 0.4 * Math.random());
           shrapnel.angle = 2 * Math.PI * Math.random();
           shrapnel.timeout = 600;
+          shrapnel.extrahitbox = -3;
           // shrapnel.checkCollision = function(x, y){}
           self.tank.player.game.addObject(shrapnel);
         }
