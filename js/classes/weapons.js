@@ -173,7 +173,6 @@ Grenade = function (tank) {
     if (typeof (this.bullet) === "undefined" && this.canShoot && !this.fired && !this.tank.deleted) {
       var bullet = new Bullet(this);
       this.bullet = bullet;
-      console.log(this.fired, this.canShoot)
       this.fired = true;
       this.canShoot = false;
       bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
@@ -253,9 +252,10 @@ Mine = function (tank) {
       bullet.image.src = "res/img/mine.png";
       bullet.speed = BulletSpeed;
       bullet.angle = this.tank.angle;
-      bullet.timeout = 180000;
+      bullet.timeout = 120000 + 20 * Math.random();
       bullet.exploded = false;
       var self = this;
+      var selfbullet = bullet;
       bullet.explode = function () {
         if (bullet.exploded)
           return;
@@ -263,8 +263,8 @@ Mine = function (tank) {
         playSound("res/sound/grenade.wav");
         for (var i = 0; i < self.nshrapnels; i++) {
           var shrapnel = new Bullet(self);
-          shrapnel.x = self.bullet.x;
-          shrapnel.y = self.bullet.y;
+          shrapnel.x = selfbullet.x;
+          shrapnel.y = selfbullet.y;
           shrapnel.radius = 2;
           shrapnel.age = 0;
           shrapnel.speed = 2 * BulletSpeed * (0.8 + 0.4 * Math.random());
@@ -278,9 +278,9 @@ Mine = function (tank) {
           if (self2.tank.weapon == self2)
             self2.tank.defaultWeapon();
         }, 1000));
-        if (!self.bullet.deleted)
-          self.bullet.delete();
-        self.bullet = undefined;
+        if (!selfbullet.deleted)
+          selfbullet.delete();
+        selfbullet = undefined;
       }
       bullet.delete = function () {
         bullet.explode();
