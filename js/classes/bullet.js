@@ -105,7 +105,7 @@ Bullet = function (weapon) {
     }
     // for each bullet in the list, check if it intersects this one
     for (var i = 0; i < bullets.length; i++) {
-      var rad = 0.5 * this.radius + 0.5 * bullets[i].radius + this.extrahitbox;
+      var rad = 0.65 * this.radius + 0.65 * bullets[i].radius + this.extrahitbox;
       if (Math.sqrt(Math.pow(bullets[i].x - this.x, 2) + Math.pow(bullets[i].y - this.y, 2)) <= rad) {
         if (!bullets[i].lethal)
           return;

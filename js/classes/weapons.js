@@ -75,6 +75,7 @@ MG = function (tank) {
       bullet.radius = 2;
       bullet.speed = BulletSpeed;
       bullet.bounceSound = "";
+      bullet.extrahitbox = -2;
       bullet.angle = this.tank.angle + 0.2 * (0.5 - Math.random());
       bullet.timeout = 4000 + 1000 * (0.5 - Math.random());;
       this.tank.player.game.addObject(bullet);
@@ -120,6 +121,7 @@ Laser = function (tank) {
         bullet.y = p.y;
         bullet.angle = p.angle;
         bullet.radius = 2;
+        bullet.extrahitbox = -2;
         bullet.timeout = 200;
         bullet.speed = 0;
         bullet.color = this.tank.player.color;
