@@ -158,7 +158,7 @@ TerminatorBonus = function () {
       self.defaultWeapon = function () {
         self.weapon = new Gun(self);
       };
-    }, 60000));
+    }, 120000));
   }
 }
 MultiBonus = function () {
@@ -195,7 +195,7 @@ PowerUps = [
   { create: function () { return new GrenadeBonus() }, name: "Grenade", weight: 1 },
   { create: function () { return new MineBonus() }, name: "Mine", weight: 1 },
   { create: function () { return new GuidedBonus() }, name: "Guided", weight: 1 },
-  { create: function () { return new WreckingBallBonus() }, name: "WreckingBall", weight: 1 },
+  { create: function () { return new WreckingBallBonus() }, name: "WreckingBall", weight: 0.5 },
   { create: function () { return new MultiBonus() }, name: "Multiplier", weight: 1 },
   { create: function () { return new SlingshotBonus() }, name: "Slingshot", weight: 1 },
   { create: function () { return new InvincibleBonus() }, name: "Invincible", weight: 1 },

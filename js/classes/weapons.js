@@ -111,7 +111,7 @@ Laser = function (tank) {
   this.shoot = function () {
     if (!this.fired) {
       playSound("res/sound/laser.wav");
-      this.trajectory.length = 1600;
+      this.trajectory.length = 1300;
       this.trajectory.step();
       for (var i = 10; i < this.trajectory.points.length; i++) {
         var p = this.trajectory.points[i];
@@ -120,7 +120,7 @@ Laser = function (tank) {
         bullet.y = p.y;
         bullet.angle = p.angle;
         bullet.radius = 2;
-        bullet.timeout = 330;
+        bullet.timeout = 200;
         bullet.speed = 0;
         bullet.color = this.tank.player.color;
         bullet.bounceSound = "";
@@ -140,8 +140,11 @@ Laser = function (tank) {
     this.trajectory.x = this.tank.x;
     this.trajectory.y = this.tank.y;
     this.trajectory.angle = this.tank.angle;
-    if (this.canShoot)
-      this.trajectory.timeout = 100;
+    this.trajectory.timeout = 100;
+    if (!this.fired)
+      this.trajectory.length = 620;
+    else
+      this.trajectory.length = 0;
   }
   this.delete = function () {
     this.trajectory.delete();
