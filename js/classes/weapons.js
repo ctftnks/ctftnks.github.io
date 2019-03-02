@@ -321,6 +321,7 @@ Guided = function (tank) {
       bullet.speed = 1.1 * TankSpeed;
       bullet.angle = this.tank.angle;
       bullet.goto = -1;
+      bullet.extrahitbox = 10;
       bullet.step = function () {
         bullet.age += GameFrequency;
         if (bullet.age > bullet.timeout)
@@ -344,6 +345,8 @@ Guided = function (tank) {
         }
         // check for wall collisions
         bullet.checkCollision(oldx, oldy);
+        // check for bullet-bullet collisions
+        bullet.checkBulletCollision();
         // calculate path to next tank and set next goto tile
         // at first, it waits a while and then repeats the task every few ms
         if (bullet.age > 1750) {

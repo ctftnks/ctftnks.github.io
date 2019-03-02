@@ -28,6 +28,7 @@ MobileJoystick = false;
 ResetStatsEachGame = true;
 AdaptiveBotSpeed = true;
 RespawnTime = 3
+BulletsCanCollide = true
 // Map size
 MapNxMin = 9;
 MapNxMax = 15;

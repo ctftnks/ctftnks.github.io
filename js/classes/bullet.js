@@ -29,6 +29,8 @@ Bullet = function (weapon) {
   this.trace = false;
   this.bounceSound = "res/sound/bounce.wav";
   this.lethal = true;
+  // hitbox enlargement of the bullet
+  this.extrahitbox = 0;
 
   // draw the bullet in the canvas
   this.draw = function (canvas, context) {
@@ -63,6 +65,8 @@ Bullet = function (weapon) {
     this.y -= this.speed * Math.cos(-this.angle) * GameFrequency / 1000.;
     // check for wall collisions
     this.checkCollision(oldx, oldy);
+    if (BulletsCanCollide)
+      this.checkBulletCollision();
   }
 
   // check for collision with walls, handle them
@@ -83,6 +87,34 @@ Bullet = function (weapon) {
       if (wall == 0 || wall == 2) {   // top or bottom
         this.angle = Math.PI - this.angle;
         this.y = 2 * oldy - this.y
+      }
+    }
+  }
+
+
+  this.checkBulletCollision = function () {
+    // create a list of bullets that may hit this one by looking
+    // at the object lists of the tiles of the tanks corners
+    var bullets = [];
+    var tile = this.map.getTileByPos(this.x, this.y);
+    if (tile != -1) {
+      for (var j = 0; j < tile.objs.length; j++) {
+        if (tile.objs[j].isBullet && tile.objs[j].age > 0 && tile.objs[j] != this)
+          bullets.push(tile.objs[j]);
+      }
+    }
+    // for each bullet in the list, check if it intersects this one
+    for (var i = 0; i < bullets.length; i++) {
+      var rad = 0.5 * this.radius + 0.5 * bullets[i].radius + this.extrahitbox;
+      if (Math.sqrt(Math.pow(bullets[i].x - this.x, 2) + Math.pow(bullets[i].y - this.y, 2)) <= rad) {
+        if (!bullets[i].lethal)
+          return;
+        // Hit!
+        bullets[i].delete();
+        new Cloud(this.player.game, this.x, this.y, n = 1);
+        playSound("res/sound/original/gun.mp3");
+        this.delete();
+        return;
       }
     }
   }
