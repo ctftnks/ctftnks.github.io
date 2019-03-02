@@ -145,13 +145,15 @@ TerminatorBonus = function () {
     if (this.applied)
       return;
     this.applied = true;
+    tank.weapon.rapidfire = true;
     playSound("res/sound/terminator.mp3");
     var self = tank;
     tank.defaultWeapon = function () {
       self.weapon.canShoot = true;
       self.weapon.fired = false;
+      self.weapon.rapidfire = true;
     }
-    self.weapon.image = this.image;
+    // self.weapon.image = this.image;
     tank.player.game.timeouts.push(setTimeout(function () {
       self.defaultWeapon = function () {
         self.weapon = new Gun(self);

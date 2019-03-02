@@ -8,6 +8,7 @@ Weapon = function (tank) {
   this.img = undefined;
   this.name = "Weapon";
   this.canShoot = true;
+  this.rapidfire = false;
   this.shoot = function () {
 
   }
@@ -40,12 +41,21 @@ Gun = function (tank) {
       bullet.timeout = BulletTimeout * 1000;
       this.tank.player.game.addObject(bullet);
       this.canShoot = false;
+      var self = this;
+      if (this.rapidfire) {
+        game.timeouts.push(setTimeout(function () {
+          self.canShoot = true;
+        }, 500));
+        bullet.delete = function () {
+          bullet.deleted = true;
+        }
+      }
     }
   }
 }
 
 
-// a rapid-firing mini-gun
+// a rapid-firing machine gun
 MG = function (tank) {
   Weapon.call(this, tank);
   this.name = "MG";
