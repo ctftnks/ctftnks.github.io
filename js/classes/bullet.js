@@ -127,7 +127,11 @@ Bullet = function (weapon) {
   // delete bullet from map, weapon may shoot again
   this.delete = function () {
     this.deleted = true;
-    this.weapon.canShoot = true;
+    var self = this;
+    setTimeout(function () {
+      self.weapon.canShoot = true;
+    }, 50 * Math.random());
+    // this.weapon.canShoot = true;
   }
 
 }
