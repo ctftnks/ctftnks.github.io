@@ -140,7 +140,17 @@ BotTank = function (player) {
         var weapon = this.weapon.name;
         this.angle = Math.atan2(-distx, disty) + Math.PI;
 
-        this.shoot();
+        // Shoot target...
+        // .. unless it is also a bot...
+        if (typeof (target['player']) != "undefined" && target.player.isBot) {
+          var self = this;
+          // then randomise shooting time, to make bot-fights a bit more fair and random
+          setTimeout(function () { self.shoot() }, 70 * Math.random());
+        } else {
+          // target is not a bot: just shoot it
+          this.shoot();
+        }
+
         this.player.stats.shots += 1;
         if (weapon == "Guided") {
           this.fleeFor(3500);
