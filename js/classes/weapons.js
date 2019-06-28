@@ -427,7 +427,7 @@ WreckingBall = function (tank) {
       bullet.color = "#000";
       bullet.speed = TankSpeed * 1.1;
       bullet.angle = this.tank.angle;
-      bullet.timeout = 10000;
+      bullet.timeout = 1000;
       bullet.checkCollision = function (x, y) {
         var tile = this.map.getTileByPos(x, y);
         if (tile == -1)
