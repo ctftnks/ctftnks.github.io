@@ -142,7 +142,7 @@ BotTank = function (player) {
 
         // Shoot target...
         // .. unless it is also a bot...
-        if (typeof (target['player']) != "undefined" && target.player.isBot) {
+        if (typeof (target) != "undefined" && typeof (target['player']) != "undefined" && target.player.isBot) {
           var self = this;
           // then randomise shooting time, to make bot-fights a bit more fair and random
           setTimeout(function () { self.shoot() }, 70 * Math.random());
