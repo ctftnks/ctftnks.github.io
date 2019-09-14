@@ -28,6 +28,12 @@ Gun = function (tank) {
   this.image.src = "res/img/gun.png";
   this.canShoot = true;
 
+  // Extra rule for face
+  if(this.tank.player.name == "Marc" || this.tank.player.name == "marc"){
+    this.image.src="res/img/Marc.png";
+  }
+  
+
   this.shoot = function () {
     if (this.canShoot) {
       playSound("res/sound/gun.wav");

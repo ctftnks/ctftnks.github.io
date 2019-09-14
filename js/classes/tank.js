@@ -48,12 +48,15 @@ Tank = function (player) {
       context.rect(-this.carriedFlag.size / 2, -this.carriedFlag.size / 2, this.carriedFlag.size / 6, this.carriedFlag.size * 1.1);
       context.fill();
     }
-    else if (this.timers.spawnshield > this.player.game.t) {
+    else if (this.timers.spawnshield > this.player.game.t && this.weapon.image.src.split("/").slice(-1)[0] != "Marc.png") {
       context.rotate(Math.pi);
       context.fillStyle = "#000";
       context.font = "30px Arial";
       context.fillText(this.player.name.substr(0, 1), -this.width / 4, this.height / 4);
       context.rotate(-Math.pi);
+    }
+    else if (this.weapon.image.src.split("/").slice(-1)[0] == "Marc.png") {
+      context.drawImage(this.weapon.image, -this.width / 2, -1.8*this.height / 2, this.width, this.height*1.4);
     }
     else if (this.weapon.image != "") {
       context.drawImage(this.weapon.image, -this.width / 2, -this.width / 2, this.width, this.width);
