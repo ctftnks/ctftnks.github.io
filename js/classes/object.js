@@ -24,4 +24,7 @@ Object = function () {
   }
 
   this.step = function () { }
+
+  // called on window resize event
+  this.resize = function () { }
 }

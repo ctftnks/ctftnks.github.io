@@ -225,4 +225,10 @@ Tank = function (player) {
     this.deleted = true;
     this.weapon.delete();
   }
+
+  this.resize = function () {
+    console.log(this.map.dx)
+    this.width = TankWidth * this.map.dx / 140;
+    this.height = TankHeight * this.map.dx / 140;
+  }
 }

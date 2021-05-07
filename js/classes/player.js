@@ -56,6 +56,7 @@ Player = function () {
       this.tank = new Tank(this);
     this.tank.deleted = false;
     this.tank.map = this.game.map;
+    this.tank.resize();
     var spos = this.game.map.spawnPoint();
     if (typeof (this.base) !== "undefined" && this.base.tile != -1) {
       var spos2 = this.base.tile;
