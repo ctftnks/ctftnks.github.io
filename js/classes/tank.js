@@ -65,7 +65,7 @@ Tank = function (player) {
     if (ShowTankLabels) {
       context.rotate(-this.angle);
       context.fillStyle = this.player.color;
-      context.font = (12 / this.player.game.canvas.scale) + "px Arial";
+      context.font = 12 + "px Arial";
       context.fillText(this.player.name, -16, -40);
       context.rotate(this.angle);
     }
@@ -224,11 +224,5 @@ Tank = function (player) {
   this.delete = function () {
     this.deleted = true;
     this.weapon.delete();
-  }
-
-  this.resize = function () {
-    console.log(this.map.dx)
-    this.width = TankWidth * this.map.dx / 140;
-    this.height = TankHeight * this.map.dx / 140;
   }
 }

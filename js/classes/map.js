@@ -15,7 +15,7 @@ Map = function (canvas = -1, Nx = -1, Ny = -1) {
     this.Ny = parseInt((0.25 * Math.random() + 0.75) * this.Nx * canvas.height / canvas.width);
   else
     this.Ny = Ny;
-  this.dx = canvas.width / 10;
+  this.dx = 130;
   // this.dy = canvas.height / this.Ny;
   this.dy = this.dx;
   this.tiles = [];
