@@ -146,21 +146,22 @@ Tile = function (i, j, map) {
       this.neighbors[direction].addWall(direction + 2, remove, false);
   }
 
-  // is there a wall between the tile and a point at x,y?
+  // is there any walls between the tile and a point at x,y?
   // if so, what kind of wall is it?
-  this.getWall = function (x, y) {
+  this.getWalls = function (x, y) {
     var distx = this.x - x;
     var disty = this.y - y;
+    var walls = [false, false, false, false]
     // walls to walls
     if (disty > 0 && this.walls[0])
-      return 0;
+      walls[0] = true;
     if (distx > 0 && this.walls[1])
-      return 1;
+      walls[1] = true;
     if (disty < -this.dy && this.walls[2])
-      return 2;
+      walls[2] = true;
     if (distx < -this.dx && this.walls[3])
-      return 3;
-    return -1;
+      walls[3] = true;
+    return walls;
   },
 
     // recursively find the shortest path to any tile in map where condition is met

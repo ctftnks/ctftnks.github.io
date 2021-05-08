@@ -76,18 +76,28 @@ Bullet = function (weapon) {
     var tile = this.map.getTileByPos(oldx, oldy);
     if (tile == -1)
       return;
-    var wall = tile.getWall(this.x, this.y);
-    if (wall != -1) {
-      playSound(this.bounceSound);
-      // there seems to be a wall: handle accordingly
-      if (wall == 1 || wall == 3) {   // left or right
-        this.angle *= -1;
-        this.x = 2 * oldx - this.x
-      }
-      if (wall == 0 || wall == 2) {   // top or bottom
-        this.angle = Math.PI - this.angle;
-        this.y = 2 * oldy - this.y
-      }
+    var walls = tile.getWalls(this.x, this.y);
+    // check if there is any wall, otherwise return
+    var nwalls = walls.filter(w => w).length
+    if (nwalls == 0)
+      return;
+    // there seems to be a wall: handle accordingly
+    playSound(this.bounceSound);
+    // check if there is two walls at once
+    if (nwalls == 2){
+      // invert direction
+      this.angle += Math.PI;
+      this.x = oldx;
+      this.y = oldy;
+    }
+    // otherwise there is only one wall
+    else if (walls[1] || walls[3]) {   // left or right
+      this.angle *= -1;
+      this.x = 2 * oldx - this.x
+    }
+    else if (walls[0] || walls[2]) {   // top or bottom
+      this.angle = Math.PI - this.angle;
+      this.y = 2 * oldy - this.y
     }
   }
 

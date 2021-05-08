@@ -53,18 +53,21 @@ Trajectory = function (map) {
       var tile = this.map.getTileByPos(point.x, point.y);
       if (tile == -1)
         return;
-      // console.log("T:", tile);
-      var wall = tile.getWall(nextpoint.x, nextpoint.y);
-      if (wall != -1) {
-        // there seems to be a wall: handle accordingly
-        if (wall == 1 || wall == 3) {   // left or right
-          nextpoint.angle *= -1;
-          nextpoint.x = 2 * point.x - nextpoint.x
-        }
-        if (wall == 0 || wall == 2) {   // top or bottom
-          nextpoint.angle = Math.PI - nextpoint.angle;
-          nextpoint.y = 2 * point.y - nextpoint.y
-        }
+      var walls = tile.getWalls(nextpoint.x, nextpoint.y);
+      var nwalls = walls.filter(w => w).length;
+      // if there seems to be a wall: handle accordingly
+      if (nwalls == 2) {
+        nextpoint.angle += Math.PI;
+        nextpoint.x = point.x;
+        nextpoint.y = point.y;
+      }
+      else if (walls[1] || walls[3]) {   // left or right
+        nextpoint.angle *= -1;
+        nextpoint.x = 2 * point.x - nextpoint.x
+      }
+      else if (walls[0] || walls[2]) {   // top or bottom
+        nextpoint.angle = Math.PI - nextpoint.angle;
+        nextpoint.y = 2 * point.y - nextpoint.y
       }
       length += this.delta;
       this.points.push(nextpoint);

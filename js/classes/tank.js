@@ -152,7 +152,7 @@ Tank = function (player) {
     var tile = this.map.getTileByPos(this.x, this.y);
     var corners = this.corners();
     for (var i = 0; i < corners.length; i++) {
-      if (tile.getWall(corners[i].x, corners[i].y) != -1)
+      if (tile.getWalls(corners[i].x, corners[i].y).filter(w => w).length != 0)
         return true;
     }
     return false;

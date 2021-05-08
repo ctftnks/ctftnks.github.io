@@ -438,7 +438,8 @@ WreckingBall = function (tank) {
         var tile = this.map.getTileByPos(x, y);
         if (tile == -1)
           return;
-        var wall = tile.getWall(this.x, this.y);
+        var walls = tile.getWalls(this.x, this.y);
+        var wall = walls.indexOf(true);
         if (wall != -1) {
           // is the wall an outer wall?
           if (typeof (tile.neighbors[wall]) == "undefined" || tile.neighbors[wall] == -1) {
