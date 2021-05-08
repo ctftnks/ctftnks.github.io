@@ -138,12 +138,17 @@ Tank = function (player) {
 
   // does the tank intersect with a point?
   this.intersects = function (x, y) {
-    // center
-    var distx = this.x - x;
-    var disty = this.y - y;
-    // TODO: find a better algorithm, tank is currently approximated as a circle
-    // anyways, approximation seems to suffice for gameplay
-    return Math.sqrt(Math.pow(distx, 2) + Math.pow(disty, 2)) < 0.5 * (this.height)
+    // checks if (0 < AM*AB < AB*AB) ^ (0 < AM*AD < AD*AD)
+    // see: https://math.stackexchange.com/questions/190111/how-to-check-if-a-point-is-inside-a-rectangle
+    var corners = this.corners();
+    var A = corners[0];
+    var B = corners[1];
+    var D = corners[2];
+    var AMAB = (A.x - x) * (A.x - B.x) + (A.y - y) * (A.y - B.y);
+    var AMAD = (A.x - x) * (A.x - D.x) + (A.y - y) * (A.y - D.y);
+    var ABAB = (A.x - B.x) * (A.x - B.x) + (A.y - B.y) * (A.y - B.y);
+    var ADAD = (A.x - D.x) * (A.x - D.x) + (A.y - D.y) * (A.y - D.y);
+    return (0 < AMAB && AMAB < ABAB && 0 < AMAD && AMAD < ADAD);
   }
 
   // check for collision of the walls:
@@ -151,9 +156,20 @@ Tank = function (player) {
   this.checkWallCollision = function () {
     var tile = this.map.getTileByPos(this.x, this.y);
     var corners = this.corners();
-    for (var i = 0; i < corners.length; i++) {
+    var tiles = [];
+    for (var i = 0; i < 4; i++) {
       if (tile.getWalls(corners[i].x, corners[i].y).filter(w => w).length != 0)
         return true;
+      var tile2 = this.map.getTileByPos(corners[i].x, corners[i].y);
+      if (tile2 != tile)
+        tiles.push(tile2);
+    }
+    // check if any wall corner end intersects with the tank
+    for (var t=0; t<tiles.length; t++) {
+      var corners = tiles[t].corners();
+      for (var d=0; d<4; d++)
+        if (corners[d].w && this.intersects(corners[d].x, corners[d].y))
+          return true;
     }
     return false;
   }

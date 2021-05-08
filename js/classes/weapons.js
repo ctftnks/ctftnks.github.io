@@ -18,6 +18,39 @@ Weapon = function (tank) {
   this.delete = function () {
 
   }
+
+  this.shoot = function () {
+
+  }
+
+  // create a new bullet with all the typical properties
+  this.newBullet = function () {
+    var bullet = new Bullet(this);
+    bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
+    bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2.;
+    bullet.lethal = false;
+    setTimeout(function() {bullet.lethal = true}, 100);
+    bullet.angle = this.tank.angle;
+    bullet.player = this.tank.player;
+    bullet.color = this.tank.player.color;
+    this.tank.player.game.addObject(bullet);
+    return bullet;
+  }
+
+  // if the weapon is deactivated, it can no longer shoot and will soon be removed
+  this.deactivate = function () {
+    
+  }
+
+  // reactivate a deactivated weapon
+  this.reactivate = function () {
+
+  }
+
+  this.delete = function () {
+
+  }
+
 }
 
 // the normal, default gun
@@ -37,15 +70,7 @@ Gun = function (tank) {
   this.shoot = function () {
     if (this.canShoot) {
       playSound("res/sound/gun.wav");
-      var bullet = new Bullet(this);
-      bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
-      bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
-      bullet.radius = 4;
-      bullet.color = this.tank.player.color;
-      bullet.speed = BulletSpeed;
-      bullet.angle = this.tank.angle;
-      bullet.timeout = BulletTimeout * 1000;
-      this.tank.player.game.addObject(bullet);
+      var bullet = this.newBullet();
       this.canShoot = false;
       var self = this;
       if (this.rapidfire) {
@@ -80,21 +105,18 @@ MG = function (tank) {
     if (this.nshots > 0 && this.every < 0 && this.canShoot) {
       this.every = 50;
       playSound("res/sound/mg.wav");
-      var bullet = new Bullet(this);
+      var bullet = this.newBullet();
+      bullet.color = "#000";
       this.nshots--;
       if (this.nshots <= 0) {
         this.nshots = 20;
         this.canShoot = false;
       }
-      bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
-      bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
       bullet.radius = 2;
-      bullet.speed = BulletSpeed;
       bullet.bounceSound = "";
       bullet.extrahitbox = -3;
       bullet.angle = this.tank.angle + 0.2 * (0.5 - Math.random());
       bullet.timeout = 4000 + 1000 * (0.5 - Math.random());;
-      this.tank.player.game.addObject(bullet);
       if (this.fired)
         return;
 
@@ -130,7 +152,7 @@ Laser = function (tank) {
       playSound("res/sound/laser.wav");
       this.trajectory.length = 1300;
       this.trajectory.step();
-      for (var i = 10; i < this.trajectory.points.length; i++) {
+      for (var i = 15; i < this.trajectory.points.length; i++) {
         var p = this.trajectory.points[i];
         var bullet = new Bullet(this);
         bullet.x = p.x;
@@ -189,18 +211,14 @@ Grenade = function (tank) {
       return;
     }
     if (typeof (this.bullet) === "undefined" && this.canShoot && !this.fired && !this.tank.deleted) {
-      var bullet = new Bullet(this);
+      var bullet = this.newBullet();
       this.bullet = bullet;
       this.fired = true;
       this.canShoot = false;
-      bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
-      bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
       bullet.radius = 6;
       bullet.color = "#000";
       bullet.image = new Image;
       bullet.image.src = "res/img/grenade.png";
-      bullet.speed = BulletSpeed;
-      bullet.angle = this.tank.angle;
       bullet.timeout = 10000;
       bullet.exploded = false;
       var self = this;
@@ -236,7 +254,6 @@ Grenade = function (tank) {
         bullet.explode();
         bullet.deleted = true;
       }
-      this.tank.player.game.addObject(bullet);
     }
   }
 }
@@ -259,18 +276,14 @@ Mine = function (tank) {
     //   return;
     // }
     if (this.canShoot && !this.tank.deleted) {
-      var bullet = new Bullet(this);
+      var bullet = this.newBullet();
       this.bullet = bullet;
       this.fired = true;
       this.canShoot = false;
-      bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
-      bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
       bullet.radius = 6;
       bullet.color = "#000";
       bullet.image = new Image;
       bullet.image.src = "res/img/mine.png";
-      bullet.speed = BulletSpeed;
-      bullet.angle = this.tank.angle;
       bullet.timeout = 120000 + 20 * Math.random();
       bullet.exploded = false;
       var self = this;
@@ -306,7 +319,6 @@ Mine = function (tank) {
         bullet.explode();
         bullet.deleted = true;
       }
-      this.tank.player.game.addObject(bullet);
       var self = this;
       this.tank.player.game.timeouts.push(setTimeout(function () {
         bullet.speed = 0;
@@ -330,16 +342,13 @@ Guided = function (tank) {
   this.shoot = function () {
     if (this.canShoot) {
       playSound("res/sound/gun.wav");
-      var bullet = new Bullet(this);
-      bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
-      bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
+      var bullet = this.newBullet();
       bullet.radius = 6;
       bullet.image = new Image;
       bullet.image.src = "res/img/guided.png";
       bullet.color = "#555";
       bullet.smokeColor = "#555";
       bullet.speed = 1.1 * TankSpeed;
-      bullet.angle = this.tank.angle;
       bullet.goto = -1;
       bullet.extrahitbox = 10;
       bullet.step = function () {
@@ -402,7 +411,6 @@ Guided = function (tank) {
           }
         }
       }
-      this.tank.player.game.addObject(bullet);
       this.canShoot = false;
       var self = this;
       this.tank.player.game.timeouts.push(setTimeout(function () {
@@ -426,13 +434,10 @@ WreckingBall = function (tank) {
   this.shoot = function () {
     if (this.canShoot && !this.fired) {
       playSound("res/sound/gun.wav");
-      var bullet = new Bullet(this);
-      bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
-      bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
+      var bullet = this.newBullet();
       bullet.radius = 10;
       bullet.color = "#000";
       bullet.speed = TankSpeed * 1.1;
-      bullet.angle = this.tank.angle;
       bullet.timeout = 1000;
       bullet.checkCollision = function (x, y) {
         var tile = this.map.getTileByPos(x, y);
@@ -470,7 +475,6 @@ WreckingBall = function (tank) {
           bullet.player.game.addObject(smoke);
         }
       }
-      this.tank.player.game.addObject(bullet);
       this.canShoot = false;
       this.fired = true;
       var self = this;
@@ -528,13 +532,10 @@ Slingshot = function (tank) {
   this.shoot = function () {
     if (this.canShoot && !this.fired) {
       playSound("res/sound/gun.wav");
-      var bullet = new Bullet(this);
-      bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
-      bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
+      var bullet = this.newBullet();
       bullet.radius = 6;
       bullet.color = "#333";
       bullet.speed = 2 * BulletSpeed;
-      bullet.angle = this.tank.angle;
       bullet.timeout = 2000;
       bullet.checkCollision = function (x, y) { }
       bullet.trace = true;
@@ -546,7 +547,6 @@ Slingshot = function (tank) {
           bullet.player.game.addObject(smoke);
         }
       }
-      this.tank.player.game.addObject(bullet);
       this.canShoot = false;
       this.fired = true;
       var self = this;

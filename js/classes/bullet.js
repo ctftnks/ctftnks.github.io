@@ -18,7 +18,7 @@ Bullet = function (weapon) {
   this.x = undefined;
   this.y = undefined;
   this.angle = undefined;
-  this.radius = 5;
+  this.radius = 4;
   this.speed = BulletSpeed;
   this.color = "#000";
   // lifetime of the bullet in [ms]

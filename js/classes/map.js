@@ -125,6 +125,16 @@ Tile = function (i, j, map) {
     undefined   // right
   ];
 
+  // return the coordinates of the corners of the tile and whether they're part of some wall
+  this.corners = function () {
+    return [
+      {x: this.x, y: this.y, w: this.walls[0] || this.walls[1]}, // top left
+      {x: this.x, y: this.y+this.dy, w: this.walls[1] || this.walls[2]}, // bottom left
+      {x: this.x+this.dx, y: this.y+this.dy, w: this.walls[2] || this.walls[3]}, // bottom right
+      {x: this.x+this.dx, y: this.y, w: this.walls[3] || this.walls[0]}  // top right
+    ]; 
+  }
+
   // draw the tile walls (width fixed as 4px)
   this.draw = function (canvas, context) {
     context.fillStyle = "#555";
