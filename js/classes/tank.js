@@ -207,6 +207,7 @@ Tank = function (player) {
         // Hit!
         if (this.invincible())
           return;
+        bullets[i].explode();
         bullets[i].delete();
         // count stats
         if (bullets[i].player.team != this.player.team)

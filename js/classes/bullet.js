@@ -53,8 +53,10 @@ Bullet = function (weapon) {
   this.step = function () {
     // is bullet timed out?
     this.age += GameFrequency;
-    if (this.age > this.timeout)
+    if (this.age > this.timeout) {
+      this.explode();
       this.delete();
+    }
     // leave a trace of smoke
     if (this.trace)
       this.leaveTrace();
@@ -120,10 +122,12 @@ Bullet = function (weapon) {
         if (!bullets[i].lethal)
           return;
         // Hit!
+        bullets[i].explode();
+        this.explode();
         bullets[i].delete();
+        this.delete();
         new Cloud(this.player.game, this.x, this.y, n = 1);
         playSound("res/sound/original/gun.mp3");
-        this.delete();
         return;
       }
     }
@@ -137,6 +141,11 @@ Bullet = function (weapon) {
   // delete bullet from map
   this.delete = function () {
     this.deleted = true;
+  }
+
+  // called when the bullet explodes
+  this.explode = function () {
+
   }
 
 }
