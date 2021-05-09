@@ -147,45 +147,37 @@ Laser = function (tank) {
   this.trajectory.color = hexToRgbA(this.tank.player.color, 0.4);
   this.tank.player.game.addObject(this.trajectory);
   this.shoot = function () {
-    if (!this.fired) {
-      playSound("res/sound/laser.wav");
-      this.trajectory.length = 1300;
-      this.trajectory.step();
-      for (var i = 15; i < this.trajectory.points.length; i++) {
-        var p = this.trajectory.points[i];
-        var bullet = new Bullet(this);
-        bullet.x = p.x;
-        bullet.y = p.y;
-        bullet.angle = p.angle;
-        bullet.radius = 2;
-        bullet.extrahitbox = -100;
-        bullet.timeout = 200;
-        bullet.speed = 0;
-        bullet.color = this.tank.player.color;
-        bullet.bounceSound = "";
-        bullet.age = 0;
-        this.tank.player.game.addObject(bullet);
-      }
-      this.active = false;
-      this.fired = true;
-      var self = this;
-      this.tank.player.game.timeouts.push(setTimeout(function () {
-        if (self.tank.weapon == self)
-          self.tank.defaultWeapon();
-      }, 1500));
+    if (!this.active)
+      return;
+    playSound("res/sound/laser.wav");
+    this.trajectory.length = 1300;
+    this.trajectory.step();
+    for (var i = 15; i < this.trajectory.points.length; i++) {
+      var p = this.trajectory.points[i];
+      var bullet = new Bullet(this);
+      bullet.x = p.x;
+      bullet.y = p.y;
+      bullet.angle = p.angle;
+      bullet.radius = 2;
+      bullet.extrahitbox = -100;
+      bullet.timeout = 200;
+      bullet.speed = 0;
+      bullet.color = this.tank.player.color;
+      bullet.bounceSound = "";
+      bullet.age = 0;
+      this.tank.player.game.addObject(bullet);
     }
+    this.deactivate();
   }
   this.crosshair = function () {
     this.trajectory.x = this.tank.x;
     this.trajectory.y = this.tank.y;
     this.trajectory.angle = this.tank.angle;
     this.trajectory.timeout = 100;
-    if (!this.fired)
-      this.trajectory.length = 620;
-    else
-      this.trajectory.length = 0;
+    this.trajectory.length = this.active ? 620 : 0;
   }
   this.delete = function () {
+    this.is_deleted = true;
     this.trajectory.delete();
   }
 }
