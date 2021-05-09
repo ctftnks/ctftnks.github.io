@@ -145,19 +145,12 @@ TerminatorBonus = function () {
     if (this.applied)
       return;
     this.applied = true;
-    tank.weapon.rapidfire = true;
+    tank.rapidfire = true;
     playSound("res/sound/terminator.mp3");
     var self = tank;
-    tank.defaultWeapon = function () {
-      self.weapon.active = true;
-      self.weapon.fired = false;
-      self.weapon.rapidfire = true;
-    }
     // self.weapon.image = this.image;
     tank.player.game.timeouts.push(setTimeout(function () {
-      self.defaultWeapon = function () {
-        self.weapon = new Gun(self);
-      };
+      self.rapidfire = false;
     }, 120000));
   }
 }
@@ -193,7 +186,7 @@ PowerUps = [
   { create: function () { return new LaserBonus() }, name: "Laser", weight: 1 },
   { create: function () { return new MGBonus() }, name: "MG", weight: 1 },
   { create: function () { return new GrenadeBonus() }, name: "Grenade", weight: 1 },
-  { create: function () { return new MineBonus() }, name: "Mine", weight: 1 },
+  { create: function () { return new MineBonus() }, name: "Mine", weight: 10 },
   { create: function () { return new GuidedBonus() }, name: "Guided", weight: 1 },
   { create: function () { return new WreckingBallBonus() }, name: "WreckingBall", weight: 0.5 },
   { create: function () { return new MultiBonus() }, name: "Multiplier", weight: 1 },

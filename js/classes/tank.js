@@ -21,6 +21,7 @@ Tank = function (player) {
   this.type = "Tank";
   this.timers = { spawnshield: -1, invincible: -1 };
   this.carriedFlag = -1;
+  this.weapons = [];
 
   // draw the tank (rotated) on map
   this.draw = function (canvas, context) {

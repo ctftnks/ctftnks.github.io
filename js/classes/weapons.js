@@ -7,7 +7,6 @@ Weapon = function (tank) {
   this.image.src = "";
   this.img = undefined;
   this.active = true;
-  this.rapidfire = false;
   this.is_deleted = false;
 
   this.shoot = function () {
@@ -35,13 +34,12 @@ Weapon = function (tank) {
 
   // if the weapon is deactivated, it can no longer shoot and will soon be removed
   this.deactivate = function () {
-    if (!this.active)
+    if (this.active === false)
       return;
     this.active = false;
     var self = this;
-    if (this.rapidfire){
+    if (this.tank.rapidfire)
       this.tank.player.game.timeouts.push(setTimeout(function () {self.activate();}, 500));
-    }
     else
       this.tank.player.game.timeouts.push(setTimeout(function () {self.delete();}, 3000));
   }
@@ -78,7 +76,7 @@ Gun = function (tank) {
     // bullet explosion leads to weapon reactivation
     var self = this;
     bullet.explode = function () {
-      if (!self.rapidfire)
+      if (!self.tank.rapidfire)
         self.activate();
     }
     return bullet;
@@ -209,8 +207,12 @@ Grenade = function (tank) {
     bullet.radius = 6;
     bullet.color = "#000";
     bullet.timeout = 10000;
+    bullet.exploded = false;
     var self = this;
     bullet.explode = function () {
+      if (bullet.exploded)
+        return;
+      bullet.exploded = true;
       playSound("res/sound/grenade.wav");
       for (var i = 0; i < self.nshrapnels; i++) {
         var shrapnel = new Bullet(self);
@@ -254,7 +256,6 @@ Mine = function (tank) {
   this.name = "Mine";
   this.image = new Image;
   this.image.src = "res/img/mine.png";
-  this.exploded = false;
   this.bullet = undefined;
   this.nshrapnels = 24;
 
@@ -263,10 +264,14 @@ Mine = function (tank) {
     bullet.image = new Image;
     bullet.image.src = "res/img/mine.png";
     bullet.radius = 6;
+    bullet.exploded = false;
     bullet.color = "#000";
     bullet.timeout = 120000 + 20 * Math.random();
     var self = this;
     bullet.explode = function () {
+      if (bullet.exploded)
+        return;
+      bullet.exploded = true;
       playSound("res/sound/grenade.wav");
       for (var i = 0; i < self.nshrapnels; i++) {
         var shrapnel = new Bullet(self);
