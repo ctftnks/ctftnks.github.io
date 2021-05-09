@@ -16,13 +16,13 @@
 
 #playersMenu .team{
   display: inline-block;
-  width: 30px;
+  width: 36px;
   margin-right: 20px;
 }
 
 #playersMenu .remove{
   display: inline-block;
-  width: 30px;
+  width: 36px;
   margin-left: 20px;
   color: #F44336;
 }
