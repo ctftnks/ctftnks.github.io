@@ -101,20 +101,20 @@ BotTank = function (player) {
       this.path = path;
 
       var sdist = 3;
-      if (this.weapon.name == "Laser")
+      if (this.weapon.name == "Laser" && this.weapon.active)
         for (var i = 0; i < this.weapon.trajectory.targets.length; i++) {
           if (this.weapon.trajectory.targets[i].player.team != this.player.team) {
             dontShoot = false;
             sdist = 99;
           }
         }
-      if (this.weapon.name == "Guided") {
+      if (this.weapon.name == "Guided" && this.weapon.active) {
         dontShoot = false;
         sdist = 16;
       }
-      if (this.weapon.name == "Slingshot")
+      if (this.weapon.name == "Slingshot" && this.weapon.active)
         sdist = 8;
-      if (this.weapon.name == "WreckingBall") {
+      if (this.weapon.name == "WreckingBall" && this.weapon.active) {
         dontShoot = false;
         sdist = 99;
       }
