@@ -31,6 +31,10 @@ Tank = function (player) {
     context.rotate(this.angle);
     context.rect(-this.width / 2, -this.height / 2, this.width, this.height);
     context.fillStyle = this.player.color;
+    if (this.timers.invincible > this.player.game.t) {
+      var dt = this.timers.invincible - this.player.game.t / 600.;
+      context.fillStyle = 'hsl('+ parseInt(360*dt) +',100%,40%)';
+    }
     context.fill();
     context.beginPath();
     if (!this.player.isBot) {

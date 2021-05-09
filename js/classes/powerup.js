@@ -122,13 +122,10 @@ InvincibleBonus = function () {
     if (!muted)
       playMusic("res/sound/invincible.mp3");
     tank.speed *= 1.14;
-    var img = tank.weapon.image.src;
-    tank.weapon.image.src = "res/img/invincible.png";
     tank.timers.invincible = tank.player.game.t + 10000;
     var self = tank;
     tank.player.game.timeouts.push(setTimeout(function () {
       self.speed /= 1.14;
-      tank.weapon.image.src = img;
       if (bgmusic)
         playMusic("res/sound/bgmusic.wav");
       else if (!tank.invincible())
@@ -186,7 +183,7 @@ PowerUps = [
   { create: function () { return new LaserBonus() }, name: "Laser", weight: 1 },
   { create: function () { return new MGBonus() }, name: "MG", weight: 1 },
   { create: function () { return new GrenadeBonus() }, name: "Grenade", weight: 1 },
-  { create: function () { return new MineBonus() }, name: "Mine", weight: 10 },
+  { create: function () { return new MineBonus() }, name: "Mine", weight: 1 },
   { create: function () { return new GuidedBonus() }, name: "Guided", weight: 1 },
   { create: function () { return new WreckingBallBonus() }, name: "WreckingBall", weight: 0.5 },
   { create: function () { return new MultiBonus() }, name: "Multiplier", weight: 1 },
