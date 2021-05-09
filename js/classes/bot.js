@@ -71,7 +71,7 @@ BotTank = function (player) {
           }
           return false;
         });
-        if (path == -1 || typeof (path) === "undefined" || path.length > 4 || !this.weapon.canShoot || (this.carriedFlag != -1 && (path.length > 3 || foundPowerUp))) {
+        if (path == -1 || typeof (path) === "undefined" || path.length > 4 || !this.weapon.active || (this.carriedFlag != -1 && (path.length > 3 || foundPowerUp))) {
           if (flagPath != -1 && typeof (flagPath) !== "undefined") {
             dontShoot = true;
             for (var k = 0; k < flagPath[flagPath.length - 1].objs.length; k++)
@@ -91,7 +91,7 @@ BotTank = function (player) {
           }
           return false;
         });
-        if (path == -1 || typeof (path) === "undefined" || path.length > 5 || !this.weapon.canShoot || (this.carriedFlag != -1 && (path.length > 4 || foundPowerUp))) {
+        if (path == -1 || typeof (path) === "undefined" || path.length > 5 || !this.weapon.active || (this.carriedFlag != -1 && (path.length > 4 || foundPowerUp))) {
           if (basepath != -1 && typeof (basepath) !== "undefined") {
             dontShoot = true;
             path = basepath;

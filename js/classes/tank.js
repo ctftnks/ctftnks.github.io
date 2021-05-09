@@ -76,6 +76,8 @@ Tank = function (player) {
   // check for collisions and handle them
   this.step = function () {
     this.player.step();
+    if (this.weapon.is_deleted)
+      this.defaultWeapon();
     this.weapon.crosshair();
     this.checkBulletCollision();
   }
@@ -104,7 +106,7 @@ Tank = function (player) {
   // use the weapon
   this.shoot = function () {
     this.weapon.shoot();
-    if (this.weapon.canShoot && this.weapon.name != "MG")
+    if (this.weapon.active && this.weapon.name != "MG")
       this.player.stats.shots += 1;
   }
 

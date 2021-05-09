@@ -149,7 +149,7 @@ TerminatorBonus = function () {
     playSound("res/sound/terminator.mp3");
     var self = tank;
     tank.defaultWeapon = function () {
-      self.weapon.canShoot = true;
+      self.weapon.active = true;
       self.weapon.fired = false;
       self.weapon.rapidfire = true;
     }

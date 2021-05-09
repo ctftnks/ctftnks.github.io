@@ -80,7 +80,7 @@ Player = function () {
   // check if game should end
   this.kill = function () {
     this.game.n_playersAlive -= 1;
-    this.tank.weapon.canShoot = false;
+    this.tank.weapon.active = false;
     this.game.nkills++;
     this.game.canvas.shake();
     this.spree = 0;

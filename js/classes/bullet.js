@@ -134,14 +134,9 @@ Bullet = function (weapon) {
     this.player.game.addObject(new Smoke(this.x, this.y, timeout = 300, radius = this.radius, rspeed = 1));
   }
 
-  // delete bullet from map, weapon may shoot again
+  // delete bullet from map
   this.delete = function () {
     this.deleted = true;
-    var self = this;
-    setTimeout(function () {
-      self.weapon.canShoot = true;
-    }, 50 * Math.random());
-    // this.weapon.canShoot = true;
   }
 
 }

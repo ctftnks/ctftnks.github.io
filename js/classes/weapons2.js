@@ -1,21 +1,26 @@
 
 // parent class for all weapons
 Weapon = function (tank) {
-  this.name = "Weapon";
+  this.active = true;
   this.tank = tank;
   this.image = new Image;
   this.image.src = "";
   this.img = undefined;
+  this.name = "Weapon";
   this.active = true;
   this.rapidfire = false;
-  this.is_deleted = false;
+  this.shoot = function () {
+
+  }
+  this.crosshair = function () {
+
+  }
+  this.delete = function () {
+
+  }
 
   this.shoot = function () {
-    if (!this.active)
-      return;
-    playSound("res/sound/gun.wav");
-    var bullet = this.newBullet();
-    this.deactivate();
+
   }
 
   // create a new bullet with all the typical properties
@@ -31,31 +36,18 @@ Weapon = function (tank) {
     this.tank.player.game.addObject(bullet);
     return bullet;
   }
-  this.newBulletOrig = this.newBullet;
 
   // if the weapon is deactivated, it can no longer shoot and will soon be removed
   this.deactivate = function () {
-    if (!this.active)
-      return;
-    this.active = false;
-    var self = this;
-    if (this.rapidfire){
-      this.tank.player.game.timeouts.push(setTimeout(function () {self.activate();}, 500));
-    }
-    else
-      this.tank.player.game.timeouts.push(setTimeout(function () {self.delete();}, 3000));
+    
   }
 
   // reactivate a deactivated weapon
-  this.activate = function () {
-    this.active = true;
+  this.reactivate = function () {
+
   }
 
   this.delete = function () {
-    this.is_deleted = true;
-  }
-
-  this.crosshair = function () {
 
   }
 
@@ -67,26 +59,30 @@ Gun = function (tank) {
   this.name = "Gun";
   this.image = new Image;
   this.image.src = "res/img/gun.png";
+  this.active = true;
+
   // Extra rule for face
   if(this.tank.player.name == "Marc" || this.tank.player.name == "marc"){
     this.image.src="res/img/Marc.png";
   }
+  
 
-  this.newBullet = function () {
-    var bullet = this.newBulletOrig();
-    // bullet deletion leads to weapon activation
-    var self = this;
-    bullet.delete = function () {
-      bullet.deleted = true;
-      if (!self.rapidfire)
-        self.activate();
+  this.shoot = function () {
+    if (this.active) {
+      playSound("res/sound/gun.wav");
+      var bullet = this.newBullet();
+      this.active = false;
+      var self = this;
+      if (this.rapidfire) {
+        game.timeouts.push(setTimeout(function () {
+          self.active = true;
+        }, 500));
+        bullet.delete = function () {
+          bullet.deleted = true;
+        }
+      }
     }
-    return bullet;
   }
-
-  // cannot be deleted
-  this.delete = function () {};
-
 }
 
 
@@ -96,38 +92,41 @@ MG = function (tank) {
   this.name = "MG";
   this.image = new Image;
   this.image.src = "res/img/mg.png";
+  this.active = true;
+  this.fired = false;
   this.nshots = 20;
   this.every = 0;
-
-  this.newBullet= function () {
-    var bullet = this.newBulletOrig();
-    bullet.radius = 2;
-    bullet.bounceSound = "";
-    bullet.extrahitbox = -3;
-    bullet.angle = this.tank.angle + 0.2 * (0.5 - Math.random());
-    bullet.timeout = 4000 + 1000 * (0.5 - Math.random());;
-    bullet.color = "#000";
-    return bullet;
-  }
-
   this.shoot = function () {
-    if (!this.active)
-      return;
-    var self = this;
-    if (this.nshots == 20)
-      this.tank.player.game.timeouts.push(setTimeout(function () {self.deactivate();}, 3000));
-    if (this.tank.player.isBot && this.nshots > 10)
-        setTimeout(function () { self.shoot(); }, GameFrequency);
+    if (this.tank.player.isBot && this.nshots > 10 && this.active) {
+      var self = this;
+      setTimeout(function () { self.shoot(); }, GameFrequency);
+    }
     this.every -= GameFrequency;
     if (this.nshots > 0 && this.every < 0 && this.active) {
       this.every = 50;
       playSound("res/sound/mg.wav");
       var bullet = this.newBullet();
+      bullet.color = "#000";
       this.nshots--;
       if (this.nshots <= 0) {
         this.nshots = 20;
-        this.deactivate();
+        this.active = false;
       }
+      bullet.radius = 2;
+      bullet.bounceSound = "";
+      bullet.extrahitbox = -3;
+      bullet.angle = this.tank.angle + 0.2 * (0.5 - Math.random());
+      bullet.timeout = 4000 + 1000 * (0.5 - Math.random());;
+      if (this.fired)
+        return;
+
+      this.fired = true;
+      var self = this;
+      this.tank.player.game.timeouts.push(setTimeout(function () {
+        if (self.tank.weapon == self)
+          self.tank.defaultWeapon();
+        this.nshots = 20;
+      }, 3000));
     }
   }
 }
