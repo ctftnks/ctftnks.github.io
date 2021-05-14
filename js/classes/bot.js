@@ -73,10 +73,12 @@ BotTank = function (player) {
         });
         if (path == -1 || typeof (path) === "undefined" || path.length > 4 || !this.weapon.active || (this.carriedFlag != -1 && (path.length > 3 || foundPowerUp))) {
           if (flagPath != -1 && typeof (flagPath) !== "undefined") {
-            dontShoot = true;
-            for (var k = 0; k < flagPath[flagPath.length - 1].objs.length; k++)
-              if (flagPath[flagPath.length - 1].objs[k].type == "Flag")
+            for (var k = 0; k < flagPath[flagPath.length - 1].objs.length; k++) {
+              if (flagPath[flagPath.length - 1].objs[k].type == "Flag") {
                 flagPath.push({ objs: {}, x: flagPath[flagPath.length - 1].objs[k].x, y: flagPath[flagPath.length - 1].objs[k].y, dx: 0, dy: 0 });
+                dontShoot = true;
+              }
+            }
             path = flagPath;
           }
         }
