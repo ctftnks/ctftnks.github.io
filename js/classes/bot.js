@@ -205,6 +205,8 @@ BotTank = function (player) {
     }
 
     this.player.step();
+    if (this.weapon.is_deleted)
+      this.defaultWeapon();
     this.weapon.crosshair();
     this.checkBulletCollision();
   }

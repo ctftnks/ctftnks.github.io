@@ -9,6 +9,7 @@
 - bots shoot guided missiles at walls
 - Bots can get stuck onto each other
 - Guided Missile spins randomly when there is no target (so do bots)
+- improve Bot's laser aiming
 
 ## Minor features
 - own flags could be required to be brought home in CTF
