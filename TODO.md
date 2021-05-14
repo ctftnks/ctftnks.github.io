@@ -2,11 +2,19 @@
 # TODO:
 
 ## Bugs:
+- Tanks can sometimes run into their own bullets while shooting
 
+## Bots reimplementation
+- Bot implementation is spaghetti code
+- bots shoot guided missiles at walls
+- Bots can get stuck onto each other
+- Guided Missile spins randomly when there is no target (so do bots)
 
 ## Minor features
+- own flags could be required to be brought home in CTF
 
 ## Enhancement:
+- Weapon queue
 - different tank types (visually): write a class for that?
 - music, especially when holding flag
 - update README.md

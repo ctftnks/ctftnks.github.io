@@ -296,84 +296,75 @@ Guided = function (tank) {
   this.image.src = "res/img/guided.png";
   this.active = true;
 
-  this.shoot = function () {
-    if (this.active) {
-      playSound("res/sound/gun.wav");
-      var bullet = this.newBullet();
-      bullet.radius = 6;
-      bullet.image = new Image;
-      bullet.image.src = "res/img/guided.png";
-      bullet.color = "#555";
-      bullet.smokeColor = "#555";
-      bullet.speed = 1.1 * TankSpeed;
-      bullet.goto = -1;
-      bullet.extrahitbox = 10;
-      bullet.step = function () {
-        bullet.age += GameFrequency;
-        if (bullet.age > bullet.timeout)
-          bullet.delete();
-        bullet.leaveTrace();
-        var oldx = bullet.x;
-        var oldy = bullet.y;
-        // normal translation
-        if (bullet.goto == -1) {
-          bullet.x -= bullet.speed * Math.sin(-bullet.angle) * GameFrequency / 1000.;
-          bullet.y -= bullet.speed * Math.cos(-bullet.angle) * GameFrequency / 1000.;
+  this.newBullet = function () {
+    var bullet = this.newBulletOrig();
+    bullet.radius = 6;
+    bullet.image = new Image;
+    bullet.image.src = "res/img/guided.png";
+    bullet.color = "#555";
+    bullet.smokeColor = "#555";
+    bullet.speed = 1.1 * TankSpeed;
+    bullet.goto = -1;
+    bullet.extrahitbox = 10;
+    bullet.step = function () {
+      bullet.age += GameFrequency;
+      if (bullet.age > bullet.timeout)
+        bullet.delete();
+      bullet.leaveTrace();
+      var oldx = bullet.x;
+      var oldy = bullet.y;
+      // normal translation
+      if (bullet.goto == -1) {
+        bullet.x -= bullet.speed * Math.sin(-bullet.angle) * GameFrequency / 1000.;
+        bullet.y -= bullet.speed * Math.cos(-bullet.angle) * GameFrequency / 1000.;
+      } else {
+        // guided translation:
+        // if bullet.goto has point data stored go into it's direction
+        var distx = bullet.goto.x + bullet.goto.dx / 2. - bullet.x;
+        var disty = bullet.goto.y + bullet.goto.dy / 2. - bullet.y;
+        var len = Math.sqrt(distx * distx + disty * disty);
+        bullet.x += bullet.speed * (distx / len) * GameFrequency / 1000.;
+        bullet.y += bullet.speed * (disty / len) * GameFrequency / 1000.;
+        this.angle = Math.atan2(-distx, disty) + Math.PI;
+      }
+      // check for wall collisions
+      bullet.checkCollision(oldx, oldy);
+      // check for bullet-bullet collisions
+      bullet.checkBulletCollision();
+      // calculate path to next tank and set next goto tile
+      // at first, it waits a while and then repeats the task every few ms
+      if (bullet.age > 1750) {
+        bullet.age -= 250;
+        playSound("res/sound/guided.wav");
+        // get current tile and path
+        var tile = bullet.map.getTileByPos(oldx, oldy);
+        var path = tile.pathTo(function (destination) {
+          for (var i = 0; i < destination.objs.length; i++)
+            if (destination.objs[i].isTank && (destination.objs[i].player.team != bullet.player.team))
+              return true;
+          return false;
+        });
+        // set next path tile as goto point
+        if (path.length > 1) {
+          bullet.goto = path[1];
         } else {
-          // guided translation:
-          // if bullet.goto has point data stored go into it's direction
-          var distx = bullet.goto.x + bullet.goto.dx / 2. - bullet.x;
-          var disty = bullet.goto.y + bullet.goto.dy / 2. - bullet.y;
-          var len = Math.sqrt(distx * distx + disty * disty);
-          bullet.x += bullet.speed * (distx / len) * GameFrequency / 1000.;
-          bullet.y += bullet.speed * (disty / len) * GameFrequency / 1000.;
-          this.angle = Math.atan2(-distx, disty) + Math.PI;
-        }
-        // check for wall collisions
-        bullet.checkCollision(oldx, oldy);
-        // check for bullet-bullet collisions
-        bullet.checkBulletCollision();
-        // calculate path to next tank and set next goto tile
-        // at first, it waits a while and then repeats the task every few ms
-        if (bullet.age > 1750) {
-          bullet.age -= 250;
-          playSound("res/sound/guided.wav");
-          // get current tile and path
-          var tile = bullet.map.getTileByPos(oldx, oldy);
-          var path = tile.pathTo(function (destination) {
-            for (var i = 0; i < destination.objs.length; i++)
-              if (destination.objs[i].isTank && (destination.objs[i].player.team != bullet.player.team))
-                return true;
-            return false;
-          });
-          // set next path tile as goto point
-          if (path.length > 1) {
-            bullet.goto = path[1];
-          } else {
-            // if there is no next tile, hit the tank in the tile
-            for (var i = 0; i < tile.objs.length; i++) {
-              if (tile.objs[i].isTank) {
-                bullet.goto = { x: tile.objs[i].x, y: tile.objs[i].y, dx: 0, dy: 0 };
-              }
+          // if there is no next tile, hit the tank in the tile
+          for (var i = 0; i < tile.objs.length; i++) {
+            if (tile.objs[i].isTank) {
+              bullet.goto = { x: tile.objs[i].x, y: tile.objs[i].y, dx: 0, dy: 0 };
             }
           }
-          if (path.length > 0)
-            bullet.smokeColor = path[path.length - 1].objs[0].color;
         }
-        bullet.leaveTrace = function () {
-          if (Math.random() > 0.8) {
-            var smoke = new Smoke(this.x, this.y, timeout = 400, radius = this.radius / 1.4, rspeed = 0.6);
-            smoke.color = bullet.smokeColor;
-            bullet.player.game.addObject(smoke);
-          }
+        if (path.length > 0)
+          bullet.smokeColor = path[path.length - 1].objs[0].color;
+      }
+      bullet.leaveTrace = function () {
+        if (Math.random() > 0.8) {
+          var smoke = new Smoke(this.x, this.y, timeout = 400, radius = this.radius / 1.4, rspeed = 0.6);
+          smoke.color = bullet.smokeColor;
+          bullet.player.game.addObject(smoke);
         }
       }
-      this.active = false;
-      var self = this;
-      this.tank.player.game.timeouts.push(setTimeout(function () {
-        if (self.tank.weapon == self)
-          self.tank.defaultWeapon();
-      }, 1000));
     }
   }
 }
