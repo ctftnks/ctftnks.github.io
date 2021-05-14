@@ -49,7 +49,7 @@ Flag = function (gam, base) {
             this.reset();
             playSound("res/sound/resetFlag.wav");
           }
-        } else if (tank.carriedFlag == -1 && !this.picked) {
+        } else if (tank.carriedFlag == -1 && !this.picked && !tank.deleted) {
           // pick up flag
           this.pickup(tank);
           playSound("res/sound/coin.wav");
