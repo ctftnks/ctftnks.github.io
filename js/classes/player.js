@@ -73,7 +73,7 @@ Player = function () {
       new Cloud(self.game, self.tank.x, self.tank.y, n = 4, radius = 20, rspeed = 2);
     }, 10));
     // spawn shield
-    this.tank.timers.spawnshield = this.game.t + SpawnShieldTime * 1000 + 0.2 * (Math.random() - 0.5);
+    this.tank.timers.spawnshield = this.game.t + SpawnShieldTime * 1000;
   }
 
   // kill the player, called when tank is shot

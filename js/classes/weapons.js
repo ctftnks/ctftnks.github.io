@@ -41,7 +41,7 @@ Weapon = function (tank) {
     if (this.tank.rapidfire)
       this.tank.player.game.timeouts.push(setTimeout(function () {self.activate();}, 500));
     else
-      this.tank.player.game.timeouts.push(setTimeout(function () {self.delete();}, 2000));
+      this.tank.player.game.timeouts.push(setTimeout(function () {self.delete();}, 1800));
   }
 
   // reactivate a deactivated weapon

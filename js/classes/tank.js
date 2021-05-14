@@ -35,14 +35,17 @@ Tank = function (player) {
       var dt = this.timers.invincible - this.player.game.t / 600.;
       context.fillStyle = 'hsl('+ parseInt(360*dt) +',100%,40%)';
     }
+    if (this.spawnshield()) {
+      context.fillStyle = "#555";
+      // context.globalAlpha = 0.5;
+      context.globalAlpha = 0.7*(1 - (this.timers.spawnshield - this.player.game.t) / (SpawnShieldTime * 1000));
+    }
     context.fill();
     context.beginPath();
-    if (!this.player.isBot) {
-      context.fillStyle = "rgba(0, 0, 0, 0.15)";
-      context.rect(-this.width / 2, -this.height / 2, this.width / 5, this.height);
-      context.rect(this.width / 2 - this.width / 5, -this.height / 2, this.width / 5, this.height);
-      context.fill();
-    }
+    context.fillStyle = "rgba(0, 0, 0, 0.15)";
+    context.rect(-this.width / 2, -this.height / 2, this.width / 5, this.height);
+    context.rect(this.width / 2 - this.width / 5, -this.height / 2, this.width / 5, this.height);
+    context.fill();
     if (this.carriedFlag != -1) {
       context.beginPath();
       context.fillStyle = this.carriedFlag.color;
@@ -53,13 +56,6 @@ Tank = function (player) {
       context.rect(-this.carriedFlag.size / 2, -this.carriedFlag.size / 2, this.carriedFlag.size / 6, this.carriedFlag.size * 1.1);
       context.fill();
     }
-    // else if (this.timers.spawnshield > this.player.game.t && this.weapon.image.src.split("/").slice(-1)[0] != "Marc.png") {
-    //   context.rotate(Math.pi);
-    //   context.fillStyle = "#000";
-    //   context.font = "30px Arial";
-    //   context.fillText(this.player.name.substr(0, 1), -this.width / 4, this.height / 4);
-    //   context.rotate(-Math.pi);
-    // }
     else if (this.weapon.image.src.split("/").slice(-1)[0] == "Marc.png") {
       context.drawImage(this.weapon.image, -this.width / 2, -1.8*this.height / 2, this.width, this.height*1.4);
     }
@@ -70,7 +66,7 @@ Tank = function (player) {
     if (ShowTankLabels) {
       context.rotate(-this.angle);
       context.fillStyle = this.player.color;
-      context.font = 12 + "px Arial";
+      context.font = "" + 14 + "px Arial";
       context.fillText(this.player.name, -16, -40);
       context.rotate(this.angle);
     }
@@ -92,8 +88,9 @@ Tank = function (player) {
     this.player.stats.miles += 1;
     var oldx = this.x;
     var oldy = this.y;
-    this.x -= direction * this.speed * Math.sin(-this.angle) * GameFrequency / 1000.;
-    this.y -= direction * this.speed * Math.cos(-this.angle) * GameFrequency / 1000.;
+    var speed = this.spawnshield() ? this.speed : 0;
+    this.x -= direction * speed * Math.sin(-this.angle) * GameFrequency / 1000.;
+    this.y -= direction * speed * Math.cos(-this.angle) * GameFrequency / 1000.;
     if (this.checkWallCollision()) {
       this.x = oldx;
       this.y = oldy;
@@ -110,6 +107,8 @@ Tank = function (player) {
 
   // use the weapon
   this.shoot = function () {
+    if (this.spawnshield())
+      return;
     this.weapon.shoot();
     if (this.weapon.active && this.weapon.name != "MG")
       this.player.stats.shots += 1;
@@ -185,6 +184,8 @@ Tank = function (player) {
   // uses spatial sorting of the map class
   // only checks thos bullets that lie within the tiles of the corners
   this.checkBulletCollision = function () {
+    if (this.spawnshield())
+      return;
     // create a list of bullets that may hit the tank by looking
     // at the object lists of the tiles of the tanks corners
     var bullets = [];
@@ -236,6 +237,11 @@ Tank = function (player) {
     }
   }
 
+  // is the spawnshield active?
+  this.spawnshield = function () {
+    var t = this.player.game.t;
+    return this.timers.spawnshield > t;
+  }
   // properties: is invincible?
   this.invincible = function () {
     var t = this.player.game.t;

@@ -43,13 +43,13 @@ Flag = function (gam, base) {
     for (var i = 0; i < tile.objs.length; i++) {
       var tank = tile.objs[i];
       if (tank.isTank && Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)) {
-        if (tank.player.team == this.team) {
+        if (tank.player.team == this.team && !tank.spawnshield()) {
           if (!this.base.hasFlag) {
             // return flag to base
             this.reset();
             playSound("res/sound/resetFlag.wav");
           }
-        } else if (tank.carriedFlag == -1 && !this.picked && !tank.deleted) {
+        } else if (tank.carriedFlag == -1 && !this.picked && !tank.deleted && !tank.spawnshield()) {
           // pick up flag
           this.pickup(tank);
           playSound("res/sound/coin.wav");
