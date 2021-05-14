@@ -88,7 +88,7 @@ Tank = function (player) {
     this.player.stats.miles += 1;
     var oldx = this.x;
     var oldy = this.y;
-    var speed = this.spawnshield() ? this.speed : 0;
+    var speed = this.spawnshield() ? 0 : this.speed;
     this.x -= direction * speed * Math.sin(-this.angle) * GameFrequency / 1000.;
     this.y -= direction * speed * Math.cos(-this.angle) * GameFrequency / 1000.;
     if (this.checkWallCollision()) {

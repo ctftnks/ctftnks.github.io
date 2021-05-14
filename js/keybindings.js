@@ -77,6 +77,9 @@ var Key = {
   onKeydown: function (event) {
     this._pressed[event.keyCode] = true;
     if (editingKeymap) {
+      // Ctrl is forbidden
+      if (event.keyCode == 17)
+        return;
       doEditKeymap(event.keyCode);
     }
     if (event.keyCode == Key.W) {

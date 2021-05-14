@@ -86,7 +86,7 @@ Game = function (canvas, map = -1) {
       }
       if (Key.isDown(Key.ESCAPE)) {
         openPage('menu');
-        this.paused = true;
+        this.pause();
       }
       if (this.t % 1000 == GameFrequency) {
         var dt = RoundTime * 60 - (this.t - GameFrequency) / 1000;
@@ -107,6 +107,7 @@ Game = function (canvas, map = -1) {
   // pause the game
   this.pause = function () {
     this.paused = !this.paused;
+    stopMusic(); // prevent 'invincible' sound from playing all over
   }
 
   // stop the game
