@@ -73,7 +73,7 @@ Trajectory = function (map) {
       this.points.push(nextpoint);
       // see if any tanks targeted
       for (var i = 0; i < tile.objs.length; i++)
-        if (tile.objs[i].isTank)
+        if (tile.objs[i].type == "Tank")
           this.targets.push(tile.objs[i]);
     }
 

@@ -228,4 +228,32 @@ Tile = function (i, j, map) {
         return i
     return -1;
   }
+
+  // Find any object that matches the condition and return a path of coordinates to it and the object itself as the last coordinate
+  this.xypathToObj = function (condition, maxPathLength = -1) {
+    var tilepath = this.pathTo(function(dest) {
+      for (var i=0; i<dest.objs.length; i++)
+        if (condition(dest.objs[i]))
+          return true;
+    }, [], -1, maxPathLength);
+    if (tilepath == -1)
+      return -1;
+    var xypath = [];
+    for (var i=0; i<tilepath.length; i++) {
+      var tile = tilepath[i];
+      xypath.push({x: tile.x + tile.dx/2., y: tile.y + tile.dy/2.});
+    }
+    var obj = -1;
+    var lasttile = tilepath[tilepath.length - 1];
+    for (var i=0; i<lasttile.objs.length; i++) {
+      if (condition(lasttile.objs[i])) {
+        obj = lasttile.objs[i];
+        break;
+      }
+    }
+    if (obj == -1)
+      return -1;
+    xypath.push(obj);
+    return xypath;
+  }
 }

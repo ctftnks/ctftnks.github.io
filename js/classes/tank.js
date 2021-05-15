@@ -161,6 +161,8 @@ Tank = function (player) {
   // check for collision of the walls:
   // checks if there is a wall between the center of the tank and each corner
   this.checkWallCollision = function () {
+    if (this.player.isBot)
+      return false;
     var tile = this.map.getTileByPos(this.x, this.y);
     var corners = this.corners();
     var tiles = [];
@@ -247,6 +249,10 @@ Tank = function (player) {
   this.invincible = function () {
     var t = this.player.game.t;
     return this.timers.spawnshield > t || this.timers.invincible > t;
+  }
+  // is the player of the tank a bot?
+  this.isBot = function () {
+    return this.player.isBot;
   }
 
   this.delete = function () {

@@ -8,6 +8,7 @@ Weapon = function (tank) {
   this.img = undefined;
   this.active = true;
   this.is_deleted = false;
+  this.bot_shooting_range = 2; // distance at which bots fire the weapon
 
   this.shoot = function () {
     if (!this.active)
@@ -23,7 +24,7 @@ Weapon = function (tank) {
     bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2.;
     bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2.;
     bullet.lethal = false;
-    setTimeout(function() {bullet.lethal = true}, 100);
+    setTimeout(function () { bullet.lethal = true }, 100);
     bullet.angle = this.tank.angle;
     bullet.player = this.tank.player;
     bullet.color = this.tank.player.color;
@@ -39,9 +40,9 @@ Weapon = function (tank) {
     this.active = false;
     var self = this;
     if (this.tank.rapidfire)
-      this.tank.player.game.timeouts.push(setTimeout(function () {self.activate();}, 500));
+      this.tank.player.game.timeouts.push(setTimeout(function () { self.activate(); }, 500));
     else
-      this.tank.player.game.timeouts.push(setTimeout(function () {self.delete();}, 1800));
+      this.tank.player.game.timeouts.push(setTimeout(function () { self.delete(); }, 1800));
   }
 
   // reactivate a deactivated weapon
@@ -67,8 +68,8 @@ Gun = function (tank) {
   this.image = new Image;
   this.image.src = "res/img/gun.png";
   // Extra rule for face
-  if(this.tank.player.name == "Marc" || this.tank.player.name == "marc"){
-    this.image.src="res/img/Marc.png";
+  if (this.tank.player.name == "Marc" || this.tank.player.name == "marc") {
+    this.image.src = "res/img/Marc.png";
   }
 
   this.newBullet = function () {
@@ -83,7 +84,7 @@ Gun = function (tank) {
   }
 
   // cannot be deleted
-  this.delete = function () {};
+  this.delete = function () { };
 
 }
 
@@ -97,7 +98,7 @@ MG = function (tank) {
   this.nshots = 20;
   this.every = 0;
 
-  this.newBullet= function () {
+  this.newBullet = function () {
     var bullet = this.newBulletOrig();
     bullet.radius = 2;
     bullet.bounceSound = "";
@@ -113,9 +114,9 @@ MG = function (tank) {
       return;
     var self = this;
     if (this.nshots == 20)
-      this.tank.player.game.timeouts.push(setTimeout(function () {self.deactivate();}, 3000));
+      this.tank.player.game.timeouts.push(setTimeout(function () { self.deactivate(); }, 3000));
     if (this.tank.player.isBot && this.nshots > 10)
-        setTimeout(function () { self.shoot(); }, GameFrequency);
+      setTimeout(function () { self.shoot(); }, GameFrequency);
     this.every -= GameFrequency;
     if (this.nshots > 0 && this.every < 0 && this.active) {
       this.every = 50;
@@ -225,7 +226,7 @@ Grenade = function (tank) {
 
     return bullet;
   }
-  
+
   this.shoot = function () {
     if (!this.active)
       return;
@@ -295,6 +296,7 @@ Guided = function (tank) {
   this.image = new Image;
   this.image.src = "res/img/guided.png";
   this.active = true;
+  this.bot_shooting_range = 16;
 
   this.newBullet = function () {
     var bullet = this.newBulletOrig();
@@ -378,6 +380,7 @@ WreckingBall = function (tank) {
   this.name = "WreckingBall";
   this.active = true;
   this.fired = false;
+  this.bot_shooting_range = 99;
 
   this.newBullet = function () {
     var bullet = this.newBulletOrig();
@@ -467,6 +470,7 @@ Slingshot = function (tank) {
   this.name = "Slingshot";
   this.active = true;
   this.fired = false;
+  this.bot_shooting_range = 8;
 
   this.newBullet = function () {
     var bullet = this.newBulletOrig();
