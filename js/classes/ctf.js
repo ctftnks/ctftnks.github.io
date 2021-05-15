@@ -17,27 +17,20 @@ Flag = function (gam, base) {
 
   // return flag to base
   this.reset = function () {
-    this.base.hasFlag = true;
     this.inBase = true;
     this.drop(this.base.x, this.base.y);
   }
   // let tank pick up the flag
   this.pickup = function (tank) {
     tank.carriedFlag = this;
-    this.base.hasFlag = false;
     this.picked = true;
     this.inBase = false;
     this.delete();
   }
   this.drop = function (x, y) {
     this.deleted = false;
-    if (this.inBase) {
-      this.x = this.base.x;
-      this.y = this.base.y;
-    } else {
-      this.x = x;
-      this.y = y;
-    }
+    this.x = x;
+    this.y = y;
     this.resetTimer = this.game.t + 30000;
     this.picked = false;
     this.game.objs.push(this);
@@ -48,13 +41,13 @@ Flag = function (gam, base) {
     for (var i = 0; i < tile.objs.length; i++) {
       var tank = tile.objs[i];
       if (tank.isTank && Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)) {
-        if (tank.player.team == this.team && !tank.spawnshield()) {
-          if (!this.base.hasFlag) {
+        if (tank.player.team == this.team) {
+          if (!this.base.hasFlag()) {
             // return flag to base
             this.reset();
             playSound("res/sound/resetFlag.wav");
           }
-        } else if (tank.carriedFlag == -1 && !this.picked && !tank.deleted && !tank.spawnshield()) {
+        } else if (tank.carriedFlag == -1 && !this.picked && !tank.deleted) {
           // pick up flag
           this.pickup(tank);
           playSound("res/sound/coin.wav");
@@ -63,6 +56,10 @@ Flag = function (gam, base) {
     }
     if (!this.inBase && !this.picked && this.resetTimer < this.game.t)
       this.reset();
+    if (this.inBase) {
+      this.x = this.base.x;
+      this.y = this.base.y;
+    }
   }
 
   this.draw = function (canvas, context) {
@@ -111,7 +108,7 @@ Base = function (game, player, x, y) {
     for (var i = 0; i < this.tile.objs.length; i++) {
       var tank = this.tile.objs[i];
       if (tank.isTank && tank.player.team == this.team && Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)) {
-        if (tank.carriedFlag != -1 && this.hasFlag) {
+        if (tank.carriedFlag != -1 && this.hasFlag()) {
           // score!
           this.game.mode.giveScore(tank.player);
           playSound("res/sound/fanfare.mp3");
@@ -120,6 +117,12 @@ Base = function (game, player, x, y) {
         }
       }
     }
+  }
+
+  this.hasFlag = function() {
+    if (typeof(this.flag) === "undefined")
+      return false;
+    return this.flag.inBase;
   }
 }
 

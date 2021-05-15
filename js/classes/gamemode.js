@@ -201,7 +201,6 @@ CaptureTheFlag = function (game) {
         var b = new Base(game, player, maxPos.x, maxPos.y);
         b.flag = new Flag(game, b);
         b.flag.drop(maxPos.x, maxPos.y);
-        b.hasFlag = true;
         bases.push(b);
         game.addObject(b);
         var spawnPoint = b.tile;
@@ -338,7 +337,6 @@ KingOfTheHill = function (game) {
         }
       }
       var b = new Hill(game, maxPos.x, maxPos.y);
-      b.hasFlag = false;
       bases.push(b);
       game.addObject(b);
     }
