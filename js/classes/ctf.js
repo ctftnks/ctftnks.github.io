@@ -31,8 +31,13 @@ Flag = function (gam, base) {
   }
   this.drop = function (x, y) {
     this.deleted = false;
-    this.x = x;
-    this.y = y;
+    if (this.inBase) {
+      this.x = this.base.x;
+      this.y = this.base.y;
+    } else {
+      this.x = x;
+      this.y = y;
+    }
     this.resetTimer = this.game.t + 30000;
     this.picked = false;
     this.game.objs.push(this);
