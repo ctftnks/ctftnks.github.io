@@ -206,6 +206,8 @@ Grenade = function (tank) {
   this.bot.flee_if_active = true;
 
   this.newBullet = function () {
+    if (this.is_deleted)
+      return;
     var bullet = this.newBulletOrig();
     bullet.image = new Image;
     bullet.image.src = "res/img/grenade.png";
