@@ -37,7 +37,7 @@ Player = function () {
   this.keys = keymaps[this.id];
   this.tank = new Tank(this);
   this.stats = { deaths: 0, kills: 0, miles: 0, shots: 0 };
-  isBot = false;
+  this.isBot = false;
 
   // timestep: check if keys pressed and act accordingly
   this.step = function () {
