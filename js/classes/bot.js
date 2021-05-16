@@ -8,7 +8,7 @@ Bot = function (player) {
   this.isBot = true;
   this.keys = undefined;
   this.goto = -1;
-  this.fleeing = false;
+  this.fleeing = { from: -1, condition: -1 };
   NBots++;
 
   this.step = function () {
@@ -57,10 +57,12 @@ Bot = function (player) {
     if (enemyPath != -1) {
       var enemy = enemyPath[enemyPath.length - 1];
       // ...add option to move in its direction
-      opts.push({ f: function () { self.follow(enemyPath); }, weight: 1 });
+      opts.push({ f: function () { self.follow(enemyPath); }, weight: 5 });
       // ...consider shooting if enemy is within range of the weapon
       if (weapon.active) {
         var aimbot = this.aimbot(enemy, enemyPath);
+        if (enemy.carriedFlag != -1)
+          aimbot.weight *= 2;
         if (aimbot.should_shoot)
           opts.push({ f: function () { self.shoot(aimbot.target); }, weight: aimbot.weight });
       }
@@ -88,7 +90,7 @@ Bot = function (player) {
       });
       // add option and put weight depending on situation
       if (ctfPath != -1) {
-        var weight = (carriesFlag || !flagInBase) ? 300 : 50;
+        var weight = (invincible && carriesFlag && flagInBase) ? 600 : (carriesFlag || !flagInBase) ? 300 : 50;
         opts.push({ f: function () { self.follow(ctfPath); }, weight: weight });
       }
 
@@ -105,7 +107,14 @@ Bot = function (player) {
       }
     }
 
-    // TODO: check for bullets & fleeing?
+    // flee from explosive situations
+    var fleePath = this.getFleePath();
+    if (fleePath != -1) {
+      var weight = invincible ? 1 : 400;
+      opts.push({ f: function () { self.follow(fleePath); }, weight: weight });
+    }
+
+    // TODO: check for bullets
 
     // sort the options by weight and act on the option with the highest weight
     if (opts.length > 0) {
@@ -175,16 +184,12 @@ Bot = function (player) {
       // target is not a bot: just shoot it
       tank.shoot();
     }
-    this.stats.shots += 1;
-    if (weapon == "Guided") {
-      this.fleeFor(3500);
-    } else if (weapon == "Grenade") {
-      this.fleeFor(4500);
+    // flee the situation
+    this.flee();
+    if (weapon == "Grenade") {
       this.game.timeouts.push(setTimeout(function () {
         tank.shoot();
       }, 4000));
-    } else {
-      this.fleeFor(1000);
     }
   }
 
@@ -200,12 +205,12 @@ Bot = function (player) {
     var r = Math.random() > 0.6 ? 2 : 1;
     // TODO: more intricate checking for specific weapon types
     // TODO: check if there is something in the way etc...
-    if (path.length <= this.tank.weapon.bot_shooting_range + r)
+    if (path.length <= this.tank.weapon.bot.shooting_range + r && !enemy.invincible())
       result.should_shoot = true;
     // rules for specific weapons
     if (weapon.name == "Laser") {
       for (var i = 0; i < weapon.trajectory.targets.length; i++) {
-        if (weapon.trajectory.targets[i].player.team != this.team) {
+        if (weapon.trajectory.targets[i].player.team != this.team && !enemy.invincible()) {
           // shoot only if enemy would be hit
           result.should_shoot = true;
         } else {
@@ -227,15 +232,49 @@ Bot = function (player) {
     } else if (weapon.name == "Slingshot") {
       result.weight = 1100;
       var dist = Math.hypot(this.tank.x - enemy.x, this.tank.y - enemy.y);
-      result.should_shoot = dist < 400;
+      result.should_shoot = dist < 400 && !enemy.invincible();
     }
     return result;
   }
 
-
   // flee the situation
-  this.fleeFor = function (t) {
-    // TODO: implement
+  this.getFleePath = function (duration = 2) {
+    if (this.fleeing.from == -1 || this.fleeing.condition == -1 || !this.fleeing.condition())
+      return -1;
+    if (!this.tank.weapon.bot.flee_if_active && this.tank.weapon.active)
+      return -1;
+    // push any neighboring tile that is not in the fleeing path
+    var tile = game.map.getTileByPos(this.tank.x, this.tank.y);
+    if (!this.fleeing.from.includes(tile))
+      this.fleeing.from.push(tile);
+    var nextTile = tile;
+    for (var i = 0; i < 4; i++)
+      if (!tile.walls[i] && !this.fleeing.from.includes(tile.neighbors[i]))
+        nextTile = tile.neighbors[i];
+    fleePath = [tile, nextTile];
+    // convert tile path to coordinates path and return
+    for (var i = 0; i < fleePath.length; i++) {
+      var tile = fleePath[i];
+      fleePath[i] = { x: tile.x + tile.dx / 2., y: tile.y + tile.dy / 2. };
+    }
+    return fleePath;
+  }
+
+  // define for how long to flee
+  this.flee = function () {
+    if (this.tank.weapon.bot.fleeing_duration <= 0)
+      return;
+    // generate initial path where tank comes from / where to flee from
+    var tile = game.map.getTileByPos(this.tank.x, this.tank.y);
+    var nextTile = game.map.getTileByPos(this.tank.x + tile.dx * Math.sin(this.tank.angle), this.tank.y - tile.dy * Math.cos(this.tank.angle));
+    this.fleeing.from = [nextTile, tile];
+    // stop fleeing after some duration or if the weapon is activated again
+    var self = this;
+    var weapon = this.tank.weapon;
+    var flee_until = this.game.t + weapon.bot.fleeing_duration;
+    this.fleeing.condition = function () {
+      return self.game.t < flee_until && (!weapon.bot.flee_if_active || weapon.active);
+    };
   }
 
 }
