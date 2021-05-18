@@ -186,11 +186,11 @@ Bot = function (player) {
     }
     // flee the situation
     this.flee();
-    if (weapon == "Grenade") {
-      this.game.timeouts.push(setTimeout(function () {
-        tank.shoot();
-      }, 4000));
-    }
+    // if (weapon == "Grenade") {
+    //   this.game.timeouts.push(setTimeout(function () {
+    //     tank.shoot();
+    //   }, 4000));
+    // }
   }
 
   // evaluate whether it is a good idea to shoot given enemy tank and provide
