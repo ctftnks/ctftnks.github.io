@@ -34,12 +34,12 @@ Tank = function (player) {
     context.fillStyle = this.player.color;
     if (this.timers.invincible > this.player.game.t) {
       var dt = this.timers.invincible - this.player.game.t / 600.;
-      context.fillStyle = 'hsl('+ parseInt(360*dt) +',100%,40%)';
+      context.fillStyle = 'hsl(' + parseInt(360 * dt) + ',100%,40%)';
     }
     if (this.spawnshield()) {
       context.fillStyle = "#555";
       // context.globalAlpha = 0.5;
-      context.globalAlpha = 0.7*(1 - (this.timers.spawnshield - this.player.game.t) / (SpawnShieldTime * 1000));
+      context.globalAlpha = 0.7 * (1 - (this.timers.spawnshield - this.player.game.t) / (SpawnShieldTime * 1000));
     }
     context.fill();
     context.beginPath();
@@ -58,7 +58,7 @@ Tank = function (player) {
       context.fill();
     }
     else if (this.weapon.image.src.split("/").slice(-1)[0] == "Marc.png") {
-      context.drawImage(this.weapon.image, -this.width / 2, -1.8*this.height / 2, this.width, this.height*1.4);
+      context.drawImage(this.weapon.image, -this.width / 2, -1.8 * this.height / 2, this.width, this.height * 1.4);
     }
     else if (this.weapon.image != "") {
       context.drawImage(this.weapon.image, -this.width / 2, -this.width / 2, this.width, this.width);
@@ -92,9 +92,14 @@ Tank = function (player) {
     var speed = this.spawnshield() ? 0 : this.speed;
     this.x -= direction * speed * Math.sin(-this.angle) * GameFrequency / 1000.;
     this.y -= direction * speed * Math.cos(-this.angle) * GameFrequency / 1000.;
-    if (this.checkWallCollision()) {
+    var colliding_corner = this.checkWallCollision();
+    if (colliding_corner != -1) {
       this.x = oldx;
       this.y = oldy;
+      var oldangle = this.angle;
+      this.angle -= 0.1 * ((colliding_corner % 2) - 0.5) * direction;
+      if (this.checkWallCollision() != -1)
+        this.angle = oldangle;
     }
   }
 
@@ -102,8 +107,23 @@ Tank = function (player) {
   this.turn = function (direction) {
     var oldangle = this.angle;
     this.angle += direction * TankTurnSpeed * GameFrequency / 1000. * TankSpeed / 180.;
-    if (this.checkWallCollision())
+    var colliding_corner = this.checkWallCollision();
+    if (colliding_corner != -1) {
       this.angle = oldangle;
+      var oldx = this.x;
+      var oldy = this.y;
+      var sign = (colliding_corner - 2) * direction * 0.05;
+      this.x += sign * Math.cos(-this.angle);
+      this.y += -sign * Math.sin(-this.angle);
+      if (this.checkWallCollision() != -1) {
+        this.x -= 2 * sign * Math.cos(-this.angle);
+        this.y -= -2 * sign * Math.sin(-this.angle);
+        if (this.checkWallCollision() != -1) {
+          this.x = oldx;
+          this.y = oldy;
+        }
+      }
+    }
   }
 
   // use the weapon
@@ -162,25 +182,25 @@ Tank = function (player) {
   // checks if there is a wall between the center of the tank and each corner
   this.checkWallCollision = function () {
     if (this.player.isBot)
-      return false;
+      return -1;
     var tile = this.map.getTileByPos(this.x, this.y);
     var corners = this.corners();
     var tiles = [];
     for (var i = 0; i < 4; i++) {
       if (tile.getWalls(corners[i].x, corners[i].y).filter(w => w).length != 0)
-        return true;
+        return i;
       var tile2 = this.map.getTileByPos(corners[i].x, corners[i].y);
       if (tile2 != tile)
         tiles.push(tile2);
     }
     // check if any wall corner end intersects with the tank
-    for (var t=0; t<tiles.length; t++) {
+    for (var t = 0; t < tiles.length; t++) {
       var corners = tiles[t].corners();
-      for (var d=0; d<4; d++)
-        if (corners[d].w && this.intersects(corners[d].x, corners[d].y))
-          return true;
+      for (var i = 0; i < 4; i++)
+        if (corners[i].w && this.intersects(corners[i].x, corners[i].y))
+          return i;
     }
-    return false;
+    return -1;
   }
 
   // check for collision with a bullet
