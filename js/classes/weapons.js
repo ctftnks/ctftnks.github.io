@@ -162,6 +162,7 @@ Laser = function (tank) {
       return;
     playSound("res/sound/laser.wav");
     this.trajectory.length = 1300;
+    this.trajectory.delta = 2;
     this.trajectory.step();
     for (var i = 15; i < this.trajectory.points.length; i++) {
       var p = this.trajectory.points[i];
@@ -171,7 +172,7 @@ Laser = function (tank) {
       bullet.angle = p.angle;
       bullet.radius = 2;
       bullet.extrahitbox = -100;
-      bullet.timeout = 200;
+      bullet.timeout = 150;
       bullet.speed = 0;
       bullet.color = this.tank.player.color;
       bullet.bounceSound = "";
@@ -203,7 +204,7 @@ Grenade = function (tank) {
   this.bullet = undefined;
   this.nshrapnels = 30;
   this.bot.fleeing_duration = 4000;
-  this.bot.flee_if_active = true;
+  this.bot.flee_if_active = false;
 
   this.newBullet = function () {
     if (this.is_deleted)
