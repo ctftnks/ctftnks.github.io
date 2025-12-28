@@ -3,12 +3,22 @@
 // contains a loop mechanism for time-iteration
 
 var GameID = 0;
+/**
+ * Manages the game state, loop, and objects.
+ */
 class Game {
+  /**
+   * Creates a new Game instance.
+   * @param {Canvas} canvas - The canvas manager.
+   * @param {Map|number} map - The map object or -1 to generate a new one.
+   */
   constructor(canvas, map = -1) {
     // pass canvas class to game, for size / resolution
+    /** @type {Canvas} The canvas manager. */
     this.canvas = canvas;
     this.canvas.game = this;
     // create new random map
+    /** @type {Map} The game map. */
     if (map == -1) {
       this.map = new Map(this.canvas);
       // MapGenerator.algorithms[Math.floor(Math.random()*MapGenerator.algorithms.length)](this.map);
@@ -19,31 +29,49 @@ class Game {
       this.map = map;
     }
     this.map.resize();
+    /** @type {Array<Player>} List of players. */
     this.players = [];
+    /** @type {Array<GameObject>} List of game objects. */
     this.objs = [];
+    /** @type {boolean} Whether the game is paused. */
     this.paused = false;
+    /** @type {number|undefined} Interval ID for the game loop. */
     this.loop = undefined;
+    /** @type {number} Number of players alive. */
     this.n_playersAlive = 0;
+    /** @type {number} Game time counter. */
     this.t = 0;
+    /** @type {Array<number>} List of interval IDs to clear on stop. */
     this.intvls = [];
+    /** @type {Array<number>} List of timeout IDs to clear on stop. */
     this.timeouts = [];
+    /** @type {number} Total kills in the game. */
     this.nkills = 0;
+    /** @type {Gamemode} The current game mode. */
     this.mode = new Deathmatch(this);
     GameID++;
   }
 
-  // add a player (class) to the game
+  /**
+   * Adds a player to the game.
+   * @param {Player} player - The player to add.
+   */
   addPlayer(player) {
     this.players.push(player);
     player.game = this;
   }
 
-  // add any object to the game
+  /**
+   * Adds an object to the game.
+   * @param {GameObject} object - The object to add.
+   */
   addObject(object) {
     this.objs.push(object);
   }
 
-  // start the game, starts time-loop
+  /**
+   * Starts the game loop.
+   */
   start() {
     var self = this;
     this.mode.init();
@@ -56,7 +84,9 @@ class Game {
     updateScores();
   }
 
-  // a single step of the time-loop
+  /**
+   * A single step of the game loop.
+   */
   step() {
     if (!this.paused) {
       this.t += GameFrequency;
@@ -105,13 +135,17 @@ class Game {
     }
   }
 
-  // pause the game
+  /**
+   * Pauses or unpauses the game.
+   */
   pause() {
     this.paused = !this.paused;
     stopMusic(); // prevent 'invincible' sound from playing all over
   }
 
-  // stop the game
+  /**
+   * Stops the game loop and clears intervals/timeouts.
+   */
   stop() {
     this.paused = true;
     clearInterval(this.loop);
@@ -122,13 +156,18 @@ class Game {
     for (var i = 0; i < this.players.length; i++) this.players[i].base = undefined;
   }
 
-  // end the game
+  /**
+   * Ends the game and shows the leaderboard.
+   */
   end() {
     this.paused = true;
     var pageid = openPage("leaderboard");
     this.stop();
   }
 
+  /**
+   * Resets the game time and player timers.
+   */
   resetTime() {
     this.t = 0;
     for (var i = 0; i < this.players.length; i++) {

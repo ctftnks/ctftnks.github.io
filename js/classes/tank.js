@@ -4,29 +4,57 @@
 // contains methods for collision detection with walls and bullets
 // contains a weapon and a method to shoot it
 
+/**
+ * Represents a Tank controlled by a player.
+ * @extends GameObject
+ */
 class Tank extends GameObject {
+  /**
+   * Creates a new Tank.
+   * @param {Player} player - The player owning this tank.
+   */
   constructor(player) {
     super();
 
+    /** @type {Player} The player. */
     this.player = player;
+    /** @type {string} Tank color. */
     this.color = this.player.color;
+    /** @type {Map|undefined} The game map. */
     this.map = undefined;
+    /** @type {number} X coordinate. */
     this.x = 0;
+    /** @type {number} Y coordinate. */
     this.y = 0;
+    /** @type {number} Rotation angle. */
     this.angle = 2 * Math.PI * Math.random();
+    /** @type {number} Tank width. */
     this.width = TankWidth;
+    /** @type {number} Tank height. */
     this.height = TankHeight;
+    /** @type {Weapon} Current weapon. */
     this.weapon = new Gun(this);
+    /** @type {number} Movement speed. */
     this.speed = TankSpeed;
+    /** @type {boolean} Indicates this is a tank. */
     this.isTank = true;
+    /** @type {string} Object type. */
     this.type = "Tank";
+    /** @type {Object} Timers for effects. */
     this.timers = { spawnshield: -1, invincible: -1 };
+    /** @type {Flag|number} The flag currently carried, or -1. */
     this.carriedFlag = -1;
+    /** @type {Array<Weapon>} Inventory of weapons (unused?). */
     this.weapons = [];
+    /** @type {boolean} Whether rapid fire is active. */
     this.rapidfire = false;
   }
 
-  // draw the tank (rotated) on map
+  /**
+   * Draws the tank (rotated) on map.
+   * @param {Object} canvas - The canvas.
+   * @param {CanvasRenderingContext2D} context - The context.
+   */
   draw(canvas, context) {
     context.save();
     context.beginPath();
@@ -74,8 +102,10 @@ class Tank extends GameObject {
     context.restore();
   }
 
-  // let player class check for key presses and move tank
-  // check for collisions and handle them
+  /**
+   * Let player class check for key presses and move tank.
+   * Check for collisions and handle them.
+   */
   step() {
     this.player.step();
     if (this.weapon.is_deleted) this.defaultWeapon();
@@ -83,7 +113,10 @@ class Tank extends GameObject {
     this.checkBulletCollision();
   }
 
-  // move the tank forward/backwards
+  /**
+   * Move the tank forward/backwards.
+   * @param {number} direction - 1 for forward, -1 for backward.
+   */
   move(direction) {
     this.player.stats.miles += 1;
     var oldx = this.x;
@@ -101,7 +134,10 @@ class Tank extends GameObject {
     }
   }
 
-  // rotate the tank
+  /**
+   * Rotate the tank.
+   * @param {number} direction - 1 for right, -1 for left.
+   */
   turn(direction) {
     var oldangle = this.angle;
     this.angle += (((direction * TankTurnSpeed * GameFrequency) / 1000) * TankSpeed) / 180;
@@ -124,20 +160,27 @@ class Tank extends GameObject {
     }
   }
 
-  // use the weapon
+  /**
+   * Use the weapon.
+   */
   shoot() {
     if (this.spawnshield()) return;
     this.weapon.shoot();
     if (this.weapon.active && this.weapon.name != "MG") this.player.stats.shots += 1;
   }
 
-  // return to the default weapon
+  /**
+   * Return to the default weapon.
+   */
   defaultWeapon() {
     this.weapon = new Gun(this);
   }
 
-  // get x,y-coordinates of the tanks corners
-  // needed for collision detection and weapon firing
+  /**
+   * Get x,y-coordinates of the tanks corners.
+   * Needed for collision detection and weapon firing.
+   * @returns {Array<Object>} List of corners {x, y}.
+   */
   corners() {
     return [
       {
@@ -159,7 +202,12 @@ class Tank extends GameObject {
     ];
   }
 
-  // does the tank intersect with a point?
+  /**
+   * Does the tank intersect with a point?
+   * @param {number} x - X coordinate.
+   * @param {number} y - Y coordinate.
+   * @returns {boolean} True if intersecting.
+   */
   intersects(x, y) {
     // checks if (0 < AM*AB < AB*AB) ^ (0 < AM*AD < AD*AD)
     // see: https://math.stackexchange.com/questions/190111/how-to-check-if-a-point-is-inside-a-rectangle
@@ -174,8 +222,11 @@ class Tank extends GameObject {
     return 0 < AMAB && AMAB < ABAB && 0 < AMAD && AMAD < ADAD;
   }
 
-  // check for collision of the walls:
-  // checks if there is a wall between the center of the tank and each corner
+  /**
+   * Check for collision of the walls:
+   * Checks if there is a wall between the center of the tank and each corner.
+   * @returns {number} Index of colliding corner or -1.
+   */
   checkWallCollision() {
     if (this.player.isBot) return -1;
     var tile = this.map.getTileByPos(this.x, this.y);
@@ -194,9 +245,11 @@ class Tank extends GameObject {
     return -1;
   }
 
-  // check for collision with a bullet
-  // uses spatial sorting of the map class
-  // only checks thos bullets that lie within the tiles of the corners
+  /**
+   * Check for collision with a bullet.
+   * Uses spatial sorting of the map class.
+   * Only checks thos bullets that lie within the tiles of the tanks corners.
+   */
   checkBulletCollision() {
     if (this.spawnshield()) return;
     // create a list of bullets that may hit the tank by looking
@@ -244,21 +297,33 @@ class Tank extends GameObject {
     }
   }
 
-  // is the spawnshield active?
+  /**
+   * Is the spawnshield active?
+   * @returns {boolean} True if spawnshield active.
+   */
   spawnshield() {
     var t = this.player.game.t;
     return this.timers.spawnshield > t;
   }
-  // properties: is invincible?
+  /**
+   * Properties: is invincible?
+   * @returns {boolean} True if invincible.
+   */
   invincible() {
     var t = this.player.game.t;
     return this.timers.spawnshield > t || this.timers.invincible > t;
   }
-  // is the player of the tank a bot?
+  /**
+   * Is the player of the tank a bot?
+   * @returns {boolean} True if bot.
+   */
   isBot() {
     return this.player.isBot;
   }
 
+  /**
+   * Deletes the tank.
+   */
   delete() {
     // CTF: if tank has flag, drop it
     if (this.carriedFlag != -1) this.carriedFlag.drop(this.x, this.y);

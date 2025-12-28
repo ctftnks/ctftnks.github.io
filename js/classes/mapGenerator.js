@@ -1,7 +1,13 @@
 // Static class for some map generation methods
 
+/**
+ * Static class containing map generation algorithms.
+ */
 class MapGenerator {
-  // just random walls somewhere
+  /**
+   * Generates a random map with walls.
+   * @param {Map} map - The map to modify.
+   */
   static randomMap(map) {
     // generate walls at frame borders
     for (var i = 0; i < this.Nx; i++) {
@@ -39,6 +45,10 @@ class MapGenerator {
   // Add the neighboring walls of the cell to the wall list.
   // If the cell on the opposite side already was in the maze, remove the wall from the list.
 
+  /**
+   * Generates a maze using Prim's algorithm.
+   * @param {Map} map - The map to modify.
+   */
   static primsMaze(map) {
     // Start with a grid full of walls.
     for (var i = 0; i < map.Nx * map.Ny; i++) map.tiles[i].walls = [true, true, true, true];
@@ -71,7 +81,14 @@ class MapGenerator {
     }
   }
 
-  // Recursive Division Algorithm
+  /**
+   * Generates a map using Recursive Division.
+   * @param {Map} map - The map to modify.
+   * @param {number} x1 - Start X.
+   * @param {number} y1 - Start Y.
+   * @param {number} x2 - End X.
+   * @param {number} y2 - End Y.
+   */
   static recursiveDivision(map, x1 = -1, y1 = -1, x2 = -1, y2 = -1) {
     // recursive entry point
     if (x1 == -1) {
@@ -115,7 +132,14 @@ class MapGenerator {
     }
   }
 
-  // Recursive Division Algorithm with double holes
+  /**
+   * Generates a map using Recursive Division with more holes.
+   * @param {Map} map - The map to modify.
+   * @param {number} x1 - Start X.
+   * @param {number} y1 - Start Y.
+   * @param {number} x2 - End X.
+   * @param {number} y2 - End Y.
+   */
   static porousRecursiveDivision(map, x1 = -1, y1 = -1, x2 = -1, y2 = -1) {
     // recursive entry point
     if (x1 == -1) {
@@ -165,7 +189,11 @@ class MapGenerator {
     }
   }
 
-  // export map into bit format
+  /**
+   * Export map into bit format.
+   * @param {Map} map - The map to export.
+   * @returns {string} The encoded map data.
+   */
   static exportMap(map) {
     var Nx = map.Nx;
     var Ny = map.Ny;
@@ -183,6 +211,10 @@ class MapGenerator {
     return data;
   }
 
+  /**
+   * Applies a prefetched map data to an existing map object.
+   * @param {Map} map - The map to update.
+   */
   static importedMap(map) {
     // copy tiles and size to old map
     map.Nx = prefetchedMap.Nx;
@@ -193,8 +225,10 @@ class MapGenerator {
     map.resize();
   }
 
-  // import map from file
-  // if file==-1: random pick;
+  /**
+   * Import map from file.
+   * @param {string|number} mapname - Map identifier.
+   */
   static importMap(mapname = -1) {
     // request file
     var xhttp = new XMLHttpRequest();
@@ -207,8 +241,7 @@ class MapGenerator {
       if (this.readyState == 4 && this.status == 200) {
         // got data from file, now process it
         var data = this.responseText;
-        var lines = data.match(/[^
-]+/g);
+        var lines = data.match(/[^\r\n]+/g);
         var Ny = lines.length;
         var Nx = lines[0].split(" ").length;
         var map = new Map(game.map.canvas, Nx, Ny);

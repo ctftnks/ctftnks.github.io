@@ -1,20 +1,48 @@
+/**
+ * Base class for game modes.
+ */
 class Gamemode {
+  /**
+   * Creates a new Gamemode.
+   * @param {Game} game - The game instance.
+   */
   constructor(game) {
+    /** @type {string} Name of the game mode. */
     this.name = "defaultmode";
+    /** @type {Game} Game instance. */
     this.game = game;
+    /** @type {number} Distance for base spawning. */
     this.BaseSpawnDistance = 2;
   }
+  /**
+   * Called every game step.
+   */
   step() {}
+  /**
+   * Initializes the game mode.
+   */
   init() {}
 }
 
+/**
+ * Deathmatch game mode.
+ * @extends Gamemode
+ */
 class Deathmatch extends Gamemode {
+  /**
+   * Creates a new Deathmatch mode.
+   * @param {Game} game - The game instance.
+   */
   constructor(game) {
     super(game);
     this.name = "Deathmatch";
   }
 
-  // give score to player
+  /**
+   * Updates player score.
+   * @param {Player} player - The player to give score to.
+   * @param {number} val - The score value.
+   */
   giveScore(player, val = 1) {
     player.score += val;
     player.spree += 1;
@@ -26,14 +54,26 @@ class Deathmatch extends Gamemode {
     adaptBotSpeed(player.team);
   }
 
-  // called when player1 kills player2
+  /**
+   * Handle a new kill event.
+   * @param {Player} player1 - The killer.
+   * @param {Player} player2 - The victim.
+   */
   newKill(player1, player2) {
     if (player1.team == player2.team) this.giveScore(player1, -1);
     else this.giveScore(player1, 1);
   }
 }
 
+/**
+ * Team Deathmatch game mode.
+ * @extends Gamemode
+ */
 class TeamDeathmatch extends Gamemode {
+  /**
+   * Creates a new TeamDeathmatch mode.
+   * @param {Game} game - The game instance.
+   */
   constructor(game) {
     super(game);
     this.name = "TeamDeathmatch";
@@ -41,7 +81,11 @@ class TeamDeathmatch extends Gamemode {
     this.BaseSpawnDistance = 2;
   }
 
-  // give score to team players
+  /**
+   * Updates team score.
+   * @param {Player} player - The player involved (to identify team).
+   * @param {number} val - The score value.
+   */
   giveScore(player, val = 1) {
     for (var i = 0; i < this.game.players.length; i++) if (this.game.players[i].team == player.team) this.game.players[i].score += val;
     player.spree += 1;
@@ -53,13 +97,19 @@ class TeamDeathmatch extends Gamemode {
     adaptBotSpeed(player.team);
   }
 
-  // called when player1 kills player2
+  /**
+   * Handle a new kill event.
+   * @param {Player} player1 - The killer.
+   * @param {Player} player2 - The victim.
+   */
   newKill(player1, player2) {
     if (player1.team == player2.team) this.giveScore(player1, -1);
     else this.giveScore(player1, 1);
   }
 
-  // init bases and spawn players
+  /**
+   * Initialize bases and spawn players.
+   */
   init() {
     var bases = [];
     var game = this.game;
@@ -115,7 +165,15 @@ class TeamDeathmatch extends Gamemode {
   }
 }
 
+/**
+ * Capture the Flag game mode.
+ * @extends Gamemode
+ */
 class CaptureTheFlag extends Gamemode {
+  /**
+   * Creates a new CaptureTheFlag mode.
+   * @param {Game} game - The game instance.
+   */
   constructor(game) {
     super(game);
     this.name = "CaptureTheFlag";
@@ -123,14 +181,22 @@ class CaptureTheFlag extends Gamemode {
     this.BaseSpawnDistance = 7;
   }
 
-  // give score to team players
+  /**
+   * Updates team score.
+   * @param {Player} player - The player involved.
+   * @param {number} val - The score value.
+   */
   giveScore(player, val = 1) {
     for (var i = 0; i < this.game.players.length; i++) if (this.game.players[i].team == player.team) this.game.players[i].score += val;
     updateScores();
     adaptBotSpeed(player.team);
   }
 
-  // called when player1 kills player2
+  /**
+   * Handle a new kill event.
+   * @param {Player} player1 - The killer.
+   * @param {Player} player2 - The victim.
+   */
   newKill(player1, player2) {
     if (player1.team != player2.team) {
       player1.spree += 1;
@@ -142,6 +208,9 @@ class CaptureTheFlag extends Gamemode {
     }
   }
 
+  /**
+   * Initialize bases and spawn players.
+   */
   init() {
     var bases = [];
     var game = this.game;
@@ -199,13 +268,24 @@ class CaptureTheFlag extends Gamemode {
   }
 }
 
-// the map editor: implemented as a GameMode
+/**
+ * Map Editor game mode.
+ * @extends Gamemode
+ */
 class MapEditor extends Gamemode {
+  /**
+   * Creates a new MapEditor mode.
+   * @param {Game} game - The game instance.
+   * @param {boolean} clearmap - Whether to clear the map on init.
+   */
   constructor(game, clearmap = true) {
     super(game);
     this.clearmap = clearmap;
   }
 
+  /**
+   * Initializes the map editor.
+   */
   init() {
     var map = this.game.map;
     if (this.clearmap) {
@@ -229,6 +309,9 @@ class MapEditor extends Gamemode {
     p.color = playercolors[0];
   }
 
+  /**
+   * Logic step for map editor.
+   */
   step() {
     var t = this.game.players[0].tank;
     if (t.weapon.name != "WallBuilder") {
@@ -243,20 +326,36 @@ class MapEditor extends Gamemode {
   }
 }
 
+/**
+ * King of the Hill game mode.
+ * @extends Gamemode
+ */
 class KingOfTheHill extends Gamemode {
+  /**
+   * Creates a new KingOfTheHill mode.
+   * @param {Game} game - The game instance.
+   */
   constructor(game) {
     super(game);
     this.name = "KingOfTheHill";
     this.bases = [];
   }
 
-  // give score to team players
+  /**
+   * Updates player score.
+   * @param {Player} player - The player.
+   * @param {number} val - Score value.
+   */
   giveScore(player, val = 1) {
     player.score += val;
     updateScores();
   }
 
-  // called when player1 kills player2
+  /**
+   * Handle a new kill event.
+   * @param {Player} player1 - The killer.
+   * @param {Player} player2 - The victim.
+   */
   newKill(player1, player2) {
     if (player1.team != player2.team) {
       player1.spree += 1;
@@ -268,6 +367,9 @@ class KingOfTheHill extends Gamemode {
     }
   }
 
+  /**
+   * Updates game state, checking hill control.
+   */
   step() {
     // if all bases same color: score in intervals for team
     var scoreevery = 2000;
@@ -285,6 +387,9 @@ class KingOfTheHill extends Gamemode {
     }
   }
 
+  /**
+   * Initializes hills and spawn points.
+   */
   init() {
     var bases = [];
     var game = this.game;

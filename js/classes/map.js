@@ -3,17 +3,32 @@
 // also the tiles keep object lists for spatial sorting
 // the canvas is passed to the constructor to provide the size of the canvas
 
+/**
+ * Represents the game map.
+ */
 class Map {
+  /**
+   * Creates a new Map.
+   * @param {Object} canvas - The canvas object.
+   * @param {number} Nx - Number of tiles in X direction.
+   * @param {number} Ny - Number of tiles in Y direction.
+   */
   constructor(canvas = -1, Nx = -1, Ny = -1) {
     if (canvas == -1) canvas = { width: 1, height: 1 };
+    /** @type {Object} The canvas. */
     this.canvas = canvas;
+    /** @type {number} Number of tiles in X. */
     if (Nx == -1) this.Nx = parseInt(MapNxMin + (MapNxMax - MapNxMin) * Math.random());
     else this.Nx = Nx;
+    /** @type {number} Number of tiles in Y. */
     if (Ny == -1) this.Ny = parseInt(((0.25 * Math.random() + 0.75) * this.Nx * canvas.height) / canvas.width);
     else this.Ny = Ny;
+    /** @type {number} Tile width. */
     this.dx = 130;
     // this.dy = canvas.height / this.Ny;
+    /** @type {number} Tile height. */
     this.dy = this.dx;
+    /** @type {Array<Tile>} List of tiles. */
     this.tiles = [];
 
     // Tile initialization
@@ -27,13 +42,20 @@ class Map {
     this.linkNeighbors();
   }
 
-  // get tile by i,j-index
+  /**
+   * Gets a tile by its grid index.
+   * @param {number} i - X index.
+   * @param {number} j - Y index.
+   * @returns {Tile|number} The tile or -1 if out of bounds.
+   */
   getTileByIndex(i, j) {
     if (i < this.Nx && j < this.Ny && i >= 0 && j >= 0) return this.tiles[i * this.Ny + j];
     return -1;
   }
 
-  // link neighboring tiles
+  /**
+   * Links neighboring tiles.
+   */
   linkNeighbors() {
     for (var i = 0; i < this.Nx; i++) {
       for (var j = 0; j < this.Ny; j++) {
@@ -47,26 +69,40 @@ class Map {
     }
   }
 
-  // get tile by x,y-position
+  /**
+   * Gets a tile by its world position.
+   * @param {number} x - X coordinate.
+   * @param {number} y - Y coordinate.
+   * @returns {Tile|number} The tile or -1.
+   */
   getTileByPos(x, y) {
     var i = parseInt(x / this.dx);
     var j = parseInt(y / this.dy);
     return this.getTileByIndex(i, j);
   }
 
-  // spatial sorting: clear tile object lists
+  /**
+   * Spatial sorting: clear tile object lists.
+   */
   clearObjectLists() {
     for (var i = 0; i < this.tiles.length; i++) this.tiles[i].objs = [];
   }
 
-  // spatial sorting: add object to corresponding tile list
+  /**
+   * Spatial sorting: add object to corresponding tile list.
+   * @param {GameObject} obj - The object to add.
+   */
   addObject(obj) {
     var tile = this.getTileByPos(obj.x, obj.y);
     if (tile == -1) obj.delete();
     else tile.objs.push(obj);
   }
 
-  // return a random free spawn point
+  /**
+   * Returns a random free spawn point.
+   * @param {number} tries - Recursion counter.
+   * @returns {Object} {x, y} coordinates.
+   */
   spawnPoint(tries = 0) {
     var rInt = parseInt(Math.random() * (this.Nx * this.Ny - 1));
     var tile = this.tiles[rInt];
@@ -75,34 +111,57 @@ class Map {
     return { x: tile.x + this.dx / 2, y: tile.y + this.dy / 2 };
   }
 
-  // draw the map
+  /**
+   * Draws the map.
+   * @param {Object} canvas - The canvas.
+   * @param {CanvasRenderingContext2D} context - The context.
+   */
   draw(canvas, context) {
     context.fillStyle = "#edede8";
     context.fillRect(0, 0, this.Nx * this.dx, this.Ny * this.dy);
     for (var i = 0; i < this.tiles.length; i++) this.tiles[i].draw(canvas, context);
   }
 
-  // update sizes of map and tiles, for window.onresize
+  /**
+   * Update sizes of map and tiles, for window.onresize.
+   */
   resize() {
     this.canvas.rescale(Math.min(this.canvas.width / (this.dx * this.Nx), this.canvas.height / (this.dy * this.Ny)));
   }
 }
 
-// child class for tiles
-// contains position, wall list, neighbor list, object list
-// contains a method to check whether the tile has a wall towards a point
+/**
+ * Child class for tiles.
+ * Contains position, wall list, neighbor list, object list.
+ */
 class Tile {
+  /**
+   * Creates a new Tile.
+   * @param {number} i - X index.
+   * @param {number} j - Y index.
+   * @param {Map} map - The map instance.
+   */
   constructor(i, j, map) {
+    /** @type {number} X index. */
     this.i = i;
+    /** @type {number} Y index. */
     this.j = j;
+    /** @type {Map} The map. */
     this.map = map;
+    /** @type {number} Unique tile ID. */
     this.id = i * map.Ny + j;
+    /** @type {number} X coordinate in pixels. */
     this.x = i * map.dx;
+    /** @type {number} Y coordinate in pixels. */
     this.y = j * map.dy;
+    /** @type {number} Width. */
     this.dx = map.dx;
+    /** @type {number} Height. */
     this.dy = map.dy;
+    /** @type {Array<GameObject>} Objects currently in this tile. */
     this.objs = [];
     // list of walls
+    /** @type {Array<boolean>} Walls [top, left, bottom, right]. */
     this.walls = [
       false, // top
       false, // left
@@ -110,34 +169,19 @@ class Tile {
       false, // right
     ];
     // list of neighbors
+    /** @type {Array<Tile|undefined>} Neighbors [top, left, bottom, right]. */
     this.neighbors = [
       undefined, // top
       undefined, // left
       undefined, // bottom
       undefined, // right
     ];
-    
-    // Explicitly call linkNeighbors if this is the last tile created, 
-    // or rely on Map calling it. 
-    // The original code did linking after loop.
-    // I moved linking logic to Map constructor or method.
-    // Wait, original code:
-    /*
-      for (var i = 0; i < this.Nx; i++) {
-        for (var j = 0; j < this.Ny; j++) {
-           this.tiles.push(new Tile(i, j, this));
-        }
-      }
-      // link neighboring tiles
-      for (var i = 0; i < this.Nx; i++) { ... }
-    */
-    // So I need to add that linking loop to Map constructor or call it.
-    // I added linkNeighbors method to Map and I should call it in Map constructor.
-    // But I can't edit Map constructor in this `write_file` block easily without re-writing Map.
-    // I will rewrite Map constructor to include linking.
   }
 
-  // return the coordinates of the corners of the tile and whether they're part of some wall
+  /**
+   * Return the coordinates of the corners of the tile and whether they're part of some wall.
+   * @returns {Array<Object>} List of corners with {x, y, w}.
+   */
   corners() {
     return [
       { x: this.x, y: this.y, w: this.walls[0] || this.walls[1] }, // top left
@@ -147,7 +191,11 @@ class Tile {
     ];
   }
 
-  // draw the tile walls (width fixed as 4px)
+  /**
+   * Draw the tile walls.
+   * @param {Object} canvas - The canvas.
+   * @param {CanvasRenderingContext2D} context - The context.
+   */
   draw(canvas, context) {
     context.fillStyle = "#555";
     if (this.walls[0]) context.fillRect(this.x - 2, this.y - 2, this.dx + 4, 4);
@@ -156,6 +204,12 @@ class Tile {
     if (this.walls[3]) context.fillRect(this.x - 2 + this.dx, this.y - 2, 4, this.dy + 4);
   }
 
+  /**
+   * Adds or removes a wall.
+   * @param {number} direction - 0: top, 1: left, 2: bottom, 3: right.
+   * @param {boolean} remove - Whether to remove the wall.
+   * @param {boolean} neighbor - Whether to update the neighbor as well.
+   */
   addWall(direction, remove = false, neighbor = true) {
     direction = direction % 4;
     this.walls[direction] = !remove;
@@ -163,8 +217,12 @@ class Tile {
       this.neighbors[direction].addWall(direction + 2, remove, false);
   }
 
-  // is there any walls between the tile and a point at x,y?
-  // if so, what kind of wall is it?
+  /**
+   * Is there any walls between the tile and a point at x,y?
+   * @param {number} x - X coordinate.
+   * @param {number} y - Y coordinate.
+   * @returns {Array<boolean>} List of walls encountered.
+   */
   getWalls(x, y) {
     var distx = this.x - x;
     var disty = this.y - y;
@@ -177,8 +235,14 @@ class Tile {
     return walls;
   }
 
-  // recursively find the shortest path to any tile in map where condition is met
-  // condition is a function condition(Tile t){} returning boolean
+  /**
+   * Recursively find the shortest path to any tile in map where condition is met.
+   * @param {Function} condition - Function returning boolean.
+   * @param {Array} path - Current path.
+   * @param {number} minPathLength - Optimization: abort if path is longer than this.
+   * @param {number} maxPathLength - Max allowed path length.
+   * @returns {Array<Tile>|number} The path or -1 if not found.
+   */
   pathTo(condition, path = [], minPathLength = -1, maxPathLength = -1) {
     // add current tile to path
     path.push(this);
@@ -207,7 +271,11 @@ class Tile {
     return options[min];
   }
 
-  // random walk along the map
+  /**
+   * Random walk along the map.
+   * @param {number} distance - Steps to walk.
+   * @returns {Tile} The final tile.
+   */
   randomWalk(distance) {
     if (distance == 0) return this;
     var r = Math.floor(Math.random() * 4);
@@ -217,14 +285,22 @@ class Tile {
     return this;
   }
 
-  // is object of type 'type' in tile?
-  // if so, return object list id, otherwise -1
+  /**
+   * Is object of type 'type' in tile?
+   * @param {string} type - Object type to search for.
+   * @returns {number} Index of object in list or -1.
+   */
   find(type) {
     for (var i = 0; i < this.objs.length; i++) if (this.objs[i].type == type) return i;
     return -1;
   }
 
-  // Find any object that matches the condition and return a path of coordinates to it and the object itself as the last coordinate
+  /**
+   * Find any object that matches the condition and return a path of coordinates to it.
+   * @param {Function} condition - Match condition.
+   * @param {number} maxPathLength - Max path length.
+   * @returns {Array|number} Path to object or -1.
+   */
   xypathToObj(condition, maxPathLength = -1) {
     var tilepath = this.pathTo(
       function (dest) {

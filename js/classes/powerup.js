@@ -1,21 +1,47 @@
 // a parent class for powerups
 
+/**
+ * Base class for all PowerUps.
+ * @extends GameObject
+ */
 class PowerUp extends GameObject {
+  /**
+   * Creates a new PowerUp.
+   */
   constructor() {
     super();
+    /** @type {boolean} Indicates this is a powerup. */
     this.isPowerUp = true;
+    /** @type {HTMLImageElement} PowerUp icon. */
     this.image = new Image();
+    /** @type {number} Width of the icon. */
     this.width = 30;
+    /** @type {number} X coordinate. */
     this.x = undefined;
+    /** @type {number} Y coordinate. */
     this.y = undefined;
+    /** @type {number} Collision radius. */
     this.radius = 40;
+    /** @type {boolean} Whether bots are attracted to it. */
     this.attractsBots = false;
   }
 
+  /**
+   * Applies the powerup effect to a tank.
+   * @param {Tank} tank - The tank picking up the powerup.
+   */
   apply(tank) {}
 
+  /**
+   * Update step.
+   */
   step() {}
 
+  /**
+   * Draws the powerup.
+   * @param {Object} canvas - The canvas.
+   * @param {CanvasRenderingContext2D} context - The context.
+   */
   draw(canvas, context) {
     context.save();
     context.translate(this.x, this.y);
@@ -24,6 +50,10 @@ class PowerUp extends GameObject {
   }
 }
 
+/**
+ * Laser weapon powerup.
+ * @extends PowerUp
+ */
 class LaserBonus extends PowerUp {
   constructor() {
     super();
@@ -36,6 +66,10 @@ class LaserBonus extends PowerUp {
   }
 }
 
+/**
+ * Machine Gun weapon powerup.
+ * @extends PowerUp
+ */
 class MGBonus extends PowerUp {
   constructor() {
     super();
@@ -48,6 +82,10 @@ class MGBonus extends PowerUp {
   }
 }
 
+/**
+ * Grenade weapon powerup.
+ * @extends PowerUp
+ */
 class GrenadeBonus extends PowerUp {
   constructor() {
     super();
@@ -59,6 +97,10 @@ class GrenadeBonus extends PowerUp {
   }
 }
 
+/**
+ * Mine weapon powerup.
+ * @extends PowerUp
+ */
 class MineBonus extends PowerUp {
   constructor() {
     super();
@@ -70,6 +112,10 @@ class MineBonus extends PowerUp {
   }
 }
 
+/**
+ * Guided Missile weapon powerup.
+ * @extends PowerUp
+ */
 class GuidedBonus extends PowerUp {
   constructor() {
     super();
@@ -82,6 +128,10 @@ class GuidedBonus extends PowerUp {
   }
 }
 
+/**
+ * Wrecking Ball weapon powerup.
+ * @extends PowerUp
+ */
 class WreckingBallBonus extends PowerUp {
   constructor() {
     super();
@@ -93,6 +143,10 @@ class WreckingBallBonus extends PowerUp {
   }
 }
 
+/**
+ * Slingshot weapon powerup.
+ * @extends PowerUp
+ */
 class SlingshotBonus extends PowerUp {
   constructor() {
     super();
@@ -105,6 +159,10 @@ class SlingshotBonus extends PowerUp {
   }
 }
 
+/**
+ * Wall Builder weapon powerup.
+ * @extends PowerUp
+ */
 class WallBuilderBonus extends PowerUp {
   constructor() {
     super();
@@ -116,6 +174,10 @@ class WallBuilderBonus extends PowerUp {
   }
 }
 
+/**
+ * Speed Boost powerup.
+ * @extends PowerUp
+ */
 class SpeedBonus extends PowerUp {
   constructor() {
     super();
@@ -133,6 +195,10 @@ class SpeedBonus extends PowerUp {
   }
 }
 
+/**
+ * Invincibility powerup.
+ * @extends PowerUp
+ */
 class InvincibleBonus extends PowerUp {
   constructor() {
     super();
@@ -158,6 +224,10 @@ class InvincibleBonus extends PowerUp {
   }
 }
 
+/**
+ * Terminator powerup (Rapid Fire).
+ * @extends PowerUp
+ */
 class TerminatorBonus extends PowerUp {
   constructor() {
     super();
@@ -180,6 +250,10 @@ class TerminatorBonus extends PowerUp {
   }
 }
 
+/**
+ * Multiplier powerup (Spawn rate increase).
+ * @extends PowerUp
+ */
 class MultiBonus extends PowerUp {
   constructor() {
     super();
@@ -201,6 +275,10 @@ class MultiBonus extends PowerUp {
   }
 }
 
+/**
+ * Fog of War powerup.
+ * @extends PowerUp
+ */
 class FogBonus extends PowerUp {
   constructor() {
     super();
@@ -299,7 +377,10 @@ const PowerUps = [
   },
 ];
 
-// get random powerup
+/**
+ * Returns a random powerup based on weights.
+ * @returns {PowerUp} A new PowerUp instance.
+ */
 function getRandomPowerUp() {
   var totalWeights = 0;
   for (var i = 0; i < PowerUps.length; i++) totalWeights += PowerUps[i].weight;

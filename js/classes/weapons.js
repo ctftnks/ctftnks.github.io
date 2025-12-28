@@ -1,13 +1,27 @@
 // parent class for all weapons
+/**
+ * Base class for all weapons.
+ */
 class Weapon {
+  /**
+   * Creates a new Weapon.
+   * @param {Tank} tank - The tank owning this weapon.
+   */
   constructor(tank) {
+    /** @type {string} Weapon name. */
     this.name = "Weapon";
+    /** @type {Tank} The tank. */
     this.tank = tank;
+    /** @type {HTMLImageElement} Weapon icon/image. */
     this.image = new Image();
     this.image.src = "";
+    /** @type {HTMLImageElement} Another image ref? */
     this.img = undefined;
+    /** @type {boolean} Whether the weapon is active. */
     this.active = true;
+    /** @type {boolean} Whether the weapon is deleted. */
     this.is_deleted = false;
+    /** @type {Object} Bot behavior settings for this weapon. */
     this.bot = {
       shooting_range: 2, // distance at which bots fire the weapon
       fleeing_duration: 800, // how long should a bot flee after firing this weapon?
@@ -15,6 +29,9 @@ class Weapon {
     };
   }
 
+  /**
+   * Fires the weapon.
+   */
   shoot() {
     if (!this.active) return;
     playSound("res/sound/gun.wav");
@@ -22,7 +39,10 @@ class Weapon {
     this.deactivate();
   }
 
-  // create a new bullet with all the typical properties
+  /**
+   * Creates a new bullet with all the typical properties.
+   * @returns {Bullet} The created bullet.
+   */
   newBullet() {
     var bullet = new Bullet(this);
     bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2;
@@ -38,7 +58,9 @@ class Weapon {
     return bullet;
   }
 
-  // if the weapon is deactivated, it can no longer shoot and will soon be removed
+  /**
+   * Deactivates the weapon (cannot shoot temporarily or until deleted).
+   */
   deactivate() {
     if (this.active === false) return;
     this.active = false;
@@ -57,21 +79,36 @@ class Weapon {
       );
   }
 
-  // reactivate a deactivated weapon
+  /**
+   * Reactivate a deactivated weapon.
+   */
   activate() {
     this.active = true;
   }
 
+  /**
+   * Mark weapon as deleted.
+   */
   delete() {
     this.active = false;
     this.is_deleted = true;
   }
 
+  /**
+   * Draw crosshair or trajectory preview.
+   */
   crosshair() {}
 }
 
-// the normal, default gun
+/**
+ * The normal, default gun.
+ * @extends Weapon
+ */
 class Gun extends Weapon {
+  /**
+   * Creates a new Gun.
+   * @param {Tank} tank - The tank.
+   */
   constructor(tank) {
     super(tank);
     this.name = "Gun";
@@ -94,12 +131,21 @@ class Gun extends Weapon {
     return bullet;
   }
 
-  // cannot be deleted
+  /**
+   * Cannot be deleted.
+   */
   delete() {}
 }
 
-// a rapid-firing machine gun
+/**
+ * A rapid-firing machine gun.
+ * @extends Weapon
+ */
 class MG extends Weapon {
+  /**
+   * Creates a new MG.
+   * @param {Tank} tank - The tank.
+   */
   constructor(tank) {
     super(tank);
     this.name = "MG";
@@ -150,8 +196,15 @@ class MG extends Weapon {
   }
 }
 
-// yay, lasers!
+/**
+ * Laser weapon.
+ * @extends Weapon
+ */
 class Laser extends Weapon {
+  /**
+   * Creates a new Laser.
+   * @param {Tank} tank - The tank.
+   */
   constructor(tank) {
     super(tank);
     this.image = new Image();
@@ -206,8 +259,15 @@ class Laser extends Weapon {
   }
 }
 
-// A grenade that can be remotely detonated
+/**
+ * A grenade that can be remotely detonated.
+ * @extends Weapon
+ */
 class Grenade extends Weapon {
+  /**
+   * Creates a new Grenade weapon.
+   * @param {Tank} tank - The tank.
+   */
   constructor(tank) {
     super(tank);
     this.name = "Grenade";
@@ -267,8 +327,15 @@ class Grenade extends Weapon {
   }
 }
 
-// A mine
+/**
+ * A mine.
+ * @extends Weapon
+ */
 class Mine extends Weapon {
+  /**
+   * Creates a new Mine weapon.
+   * @param {Tank} tank - The tank.
+   */
   constructor(tank) {
     super(tank);
     this.name = "Mine";
@@ -315,8 +382,15 @@ class Mine extends Weapon {
   }
 }
 
-// a guided missile
+/**
+ * A guided missile.
+ * @extends Weapon
+ */
 class Guided extends Weapon {
+  /**
+   * Creates a new Guided Missile weapon.
+   * @param {Tank} tank - The tank.
+   */
   constructor(tank) {
     super(tank);
     this.name = "Guided";
@@ -397,8 +471,15 @@ class Guided extends Weapon {
   }
 }
 
-// destroys walls
+/**
+ * Destroys walls.
+ * @extends Weapon
+ */
 class WreckingBall extends Weapon {
+  /**
+   * Creates a new WreckingBall weapon.
+   * @param {Tank} tank - The tank.
+   */
   constructor(tank) {
     super(tank);
     this.image = new Image();
@@ -457,8 +538,15 @@ class WreckingBall extends Weapon {
   }
 }
 
-// creates walls
+/**
+ * Creates walls.
+ * @extends Weapon
+ */
 class WallBuilder extends Weapon {
+  /**
+   * Creates a new WallBuilder weapon.
+   * @param {Tank} tank - The tank.
+   */
   constructor(tank) {
     super(tank);
     this.name = "WallBuilder";
@@ -488,8 +576,15 @@ class WallBuilder extends Weapon {
   }
 }
 
-// throw over walls
+/**
+ * Throws over walls.
+ * @extends Weapon
+ */
 class Slingshot extends Weapon {
+  /**
+   * Creates a new Slingshot weapon.
+   * @param {Tank} tank - The tank.
+   */
   constructor(tank) {
     super(tank);
     this.image = new Image();

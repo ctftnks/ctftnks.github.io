@@ -1,25 +1,51 @@
 // A trajectory through the map
 // with useful functions to draw or so for lasers
 
+/**
+ * Represents a trajectory for ray-casting or lasers.
+ * @extends GameObject
+ */
 class Trajectory extends GameObject {
+  /**
+   * Creates a new Trajectory.
+   * @param {Map} map - The map to trace on.
+   */
   constructor(map) {
     super();
 
+    /** @type {boolean} Whether to hide the trajectory. */
     this.hidden = false;
+    /** @type {string} Color. */
     this.color = "#000";
+    /** @type {number} Thickness of line. */
     this.thickness = 2;
+    /** @type {number} Maximum length. */
     this.length = 2000;
+    /** @type {number} Start X. */
     this.x = undefined;
+    /** @type {number} Start Y. */
     this.y = undefined;
+    /** @type {number} Angle. */
     this.angle = undefined;
+    /** @type {number} Step size. */
     this.delta = 4;
+    /** @type {Array<Object>} List of points on trajectory. */
     this.points = [];
+    /** @type {Map} The map. */
     this.map = map;
+    /** @type {number} Draw every Nth point. */
     this.drawevery = 1;
+    /** @type {number} Timeout. */
     this.timeout = 100;
+    /** @type {Array<GameObject>} Targets hit. */
     this.targets = [];
   }
 
+  /**
+   * Draws the trajectory.
+   * @param {Object} canvas - The canvas.
+   * @param {CanvasRenderingContext2D} context - The context.
+   */
   draw(canvas, context) {
     if (this.hidden) return;
     for (var i = 0; i < this.points.length; i += this.drawevery) {
@@ -36,6 +62,9 @@ class Trajectory extends GameObject {
     }
   }
 
+  /**
+   * Calculates the trajectory.
+   */
   step() {
     // update points list
     this.targets = [];

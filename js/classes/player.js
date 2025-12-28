@@ -24,23 +24,43 @@ var playercolors = [
 //   "#FFC107"  // amber
 // ]
 
+/**
+ * Represents a Player in the game.
+ */
 class Player {
+  /**
+   * Creates a new Player.
+   */
   constructor() {
+    /** @type {number} Unique player ID. */
     this.id = nplayers++;
+    /** @type {string} Player name. */
     this.name = "Player " + (this.id + 1);
+    /** @type {string} Player color. */
     this.color = playercolors[this.id];
+    /** @type {number|string} Team identifier. */
     this.team = this.id;
+    /** @type {Game} Game instance. */
     this.game = undefined;
+    /** @type {Base|undefined} Player's base. */
     this.base = undefined;
+    /** @type {number} Current score. */
     this.score = 0;
+    /** @type {number} Current kill streak. */
     this.spree = 0;
+    /** @type {Array<number>} Key bindings. */
     this.keys = keymaps[this.id];
+    /** @type {Tank} The tank controlled by the player. */
     this.tank = new Tank(this);
+    /** @type {Object} Player statistics. */
     this.stats = { deaths: 0, kills: 0, miles: 0, shots: 0 };
+    /** @type {boolean} Whether the player is a bot. */
     this.isBot = false;
   }
 
-  // timestep: check if keys pressed and act accordingly
+  /**
+   * Timestep: check if keys pressed and act accordingly.
+   */
   step() {
     if (Key.isDown(this.keys[0])) this.tank.move(1);
     if (Key.isDown(this.keys[1])) this.tank.turn(-1);
@@ -49,7 +69,9 @@ class Player {
     if (Key.isDown(this.keys[4])) this.tank.shoot();
   }
 
-  // spawn at some point
+  /**
+   * Spawn at some point.
+   */
   spawn() {
     this.tank = new Tank(this);
     this.tank.deleted = false;
@@ -76,8 +98,10 @@ class Player {
     this.tank.timers.spawnshield = this.game.t + SpawnShieldTime * 1000;
   }
 
-  // kill the player, called when tank is shot
-  // check if game should end
+  /**
+   * Kill the player, called when tank is shot.
+   * Check if game should end.
+   */
   kill() {
     this.game.n_playersAlive -= 1;
     this.tank.weapon.active = false;
@@ -93,14 +117,18 @@ class Player {
     );
   }
 
-  // change color
+  /**
+   * Change player color/team.
+   */
   changeColor() {
     this.team += 1;
     this.team = this.team % playercolors.length;
     this.color = playercolors[this.team % playercolors.length];
   }
 
-  // reset stats dictionary to 0
+  /**
+   * Reset stats dictionary to 0.
+   */
   resetStats() {
     this.stats.deaths = 0;
     this.stats.kills = 0;

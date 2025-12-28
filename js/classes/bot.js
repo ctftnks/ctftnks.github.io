@@ -1,16 +1,34 @@
 var NBots = 0;
 
+/**
+ * A bot player that controls a tank automatically.
+ * @extends Player
+ */
 class Bot extends Player {
+  /**
+   * Creates a new Bot.
+   * @param {Player} player - The player object (this parameter seems unused in constructor but might be legacy).
+   */
   constructor(player) {
     super();
+    /** @type {string} The name of the bot. */
     this.name = "Bot " + (NBots + 1);
+    /** @type {boolean} Indicates if this player is a bot. */
     this.isBot = true;
+    /** @type {undefined} Keys are undefined for bots. */
     this.keys = undefined;
+    /** @type {Object|number} The target coordinates or object to move towards. */
     this.goto = -1;
+    /** @type {Object} State for fleeing behavior. */
     this.fleeing = { from: -1, condition: -1 };
+    /** @type {number} Timestamp of the last check. */
+    this.lastChecked = 0;
     NBots++;
   }
 
+  /**
+   * Updates the bot's state.
+   */
   step() {
     // check possible actions and decide for one
     this.autopilot();
@@ -18,6 +36,9 @@ class Bot extends Player {
     this.perform_movements();
   }
 
+  /**
+   * Decides the next action for the bot.
+   */
   autopilot() {
     // prevent executing this method too often
     this.lastChecked += GameFrequency;
@@ -151,13 +172,18 @@ class Bot extends Player {
     }
   }
 
-  // set a goto target from a path, the tank will then move towards the target
+  /**
+   * Sets a goto target from a path.
+   * @param {Array} path - The path to follow.
+   */
   follow(path) {
     if (path.length < 2) this.goto = path[0];
     else this.goto = path[1];
   }
 
-  // perform movements towards a goto target (if any)
+  /**
+   * Performs movements towards the goto target.
+   */
   perform_movements() {
     if (this.goto == -1) return;
     var tank = this.tank;
@@ -184,7 +210,10 @@ class Bot extends Player {
     }
   }
 
-  // handle shooting
+  /**
+   * Handles shooting logic.
+   * @param {Object} target - The target to shoot at.
+   */
   shoot(target) {
     this.goto = -1; // don't move anywhere TODO: remove this?
     var tank = this.tank;
@@ -212,8 +241,12 @@ class Bot extends Player {
     // }
   }
 
-  // evaluate whether it is a good idea to shoot given enemy tank and provide
-  // coordinates where to aim, path to enemy can be given optionally
+  /**
+   * Evaluates whether it is a good idea to shoot.
+   * @param {Tank} enemy - The enemy tank.
+   * @param {Array|number} path - Path to the enemy.
+   * @returns {Object} Result with should_shoot, target, and weight.
+   */
   aimbot(enemy, path = -1) {
     var result = { should_shoot: false, target: enemy, weight: 500 };
     var weapon = this.tank.weapon;
@@ -253,7 +286,11 @@ class Bot extends Player {
     return result;
   }
 
-  // flee the situation
+  /**
+   * Calculates a path to flee from danger.
+   * @param {number} duration - Duration of fleeing (not directly used in this logic but signature kept).
+   * @returns {Array|number} The flee path or -1 if no path found.
+   */
   getFleePath(duration = 2) {
     if (this.fleeing.from == -1 || this.fleeing.condition == -1 || !this.fleeing.condition()) return -1;
     if (!this.tank.weapon.bot.flee_if_active && this.tank.weapon.active) return -1;
@@ -271,7 +308,9 @@ class Bot extends Player {
     return fleePath;
   }
 
-  // define for how long to flee
+  /**
+   * Initiates fleeing behavior.
+   */
   flee() {
     if (this.tank.weapon.bot.fleeing_duration <= 0) return;
     // generate initial path where tank comes from / where to flee from
@@ -291,6 +330,12 @@ class Bot extends Player {
   }
 }
 
+/**
+ * Adapts bot speed based on team balance.
+ * @param {number} team - The team ID.
+ * @param {number} val - The adaptation value.
+ * @returns {number} The new bot speed.
+ */
 function adaptBotSpeed(team, val = 0.1) {
   if (!AdaptiveBotSpeed) return;
 

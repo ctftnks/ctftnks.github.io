@@ -4,36 +4,65 @@
 // Tank-Bullet-collision detection is implemented in the tank class
 // as it needs less checks this way
 
+/**
+ * Represents a bullet fired by a tank.
+ * @extends GameObject
+ */
 class Bullet extends GameObject {
+  /**
+   * Creates a new Bullet.
+   * @param {Weapon} weapon - The weapon that fired the bullet.
+   */
   constructor(weapon) {
     // inherit from GameObject class
     super();
+    /** @type {boolean} Indicates this is a bullet. */
     this.isBullet = true;
+    /** @type {string|HTMLImageElement} Image of the bullet. */
     this.image = "";
     // parent objects
+    /** @type {Player} The player who fired the bullet. */
     this.player = weapon.tank.player;
+    /** @type {Map} The game map. */
     this.map = this.player.game.map;
+    /** @type {Weapon} The weapon instance. */
     this.weapon = weapon;
     // to be initialized by weapon when shot
+    /** @type {number} X coordinate. */
     this.x = undefined;
+    /** @type {number} Y coordinate. */
     this.y = undefined;
+    /** @type {number} Movement angle. */
     this.angle = undefined;
+    /** @type {number} Bullet radius. */
     this.radius = 4;
+    /** @type {number} Bullet speed. */
     this.speed = BulletSpeed;
+    /** @type {string} Bullet color. */
     this.color = "#000";
     // lifetime of the bullet in [ms]
+    /** @type {number} Timeout before bullet expires. */
     this.timeout = BulletTimeout * 1000;
     // bullet age starts at negative value, so it doesn't instantly kill the shooter
+    /** @type {number} Current age of the bullet. */
     this.age = -0;
     // shall the bullet leave a trace of smoke?
+    /** @type {boolean} Whether to leave a smoke trace. */
     this.trace = false;
+    /** @type {string} Sound to play on bounce. */
     this.bounceSound = "res/sound/bounce.wav";
+    /** @type {boolean} Whether the bullet is lethal. */
     this.lethal = true;
     // hitbox enlargement of the bullet
+    /** @type {number} Extra hitbox size. */
     this.extrahitbox = 0;
   }
 
-  // draw the bullet in the canvas
+  /**
+   * Draws the bullet on the canvas.
+   * @param {Object} canvas - The canvas.
+   * @param {CanvasRenderingContext2D} context - The 2D context.
+   */
   draw(canvas, context) {
     if (this.image == "") {
       context.beginPath();
@@ -50,7 +79,9 @@ class Bullet extends GameObject {
     }
   }
 
-  // timestepping: translation, aging, collision
+  /**
+   * Timestepping: translation, aging, collision.
+   */
   step() {
     // is bullet timed out?
     this.age += GameFrequency;
@@ -70,9 +101,13 @@ class Bullet extends GameObject {
     if (BulletsCanCollide) this.checkBulletCollision();
   }
 
-  // check for collision with walls, handle them
-  // tests whether last timestep put the bullet in a new tile
-  // and if old and new tile are separated by a wall
+  /**
+   * Check for collision with walls, handle them.
+   * Tests whether last timestep put the bullet in a new tile
+   * and if old and new tile are separated by a wall.
+   * @param {number} oldx - Previous X position.
+   * @param {number} oldy - Previous Y position.
+   */
   checkCollision(oldx, oldy) {
     var tile = this.map.getTileByPos(oldx, oldy);
     if (tile == -1) return;
@@ -101,6 +136,9 @@ class Bullet extends GameObject {
     }
   }
 
+  /**
+   * Checks for collision with other bullets.
+   */
   checkBulletCollision() {
     // create a list of bullets that may hit this one by looking
     // at the object lists of the tiles of the tanks corners
@@ -128,16 +166,22 @@ class Bullet extends GameObject {
     }
   }
 
-  // leave a trace of smoke
+  /**
+   * Leave a trace of smoke.
+   */
   leaveTrace() {
     this.player.game.addObject(new Smoke(this.x, this.y, (timeout = 300), (radius = this.radius), (rspeed = 1)));
   }
 
-  // delete bullet from map
+  /**
+   * Delete bullet from map.
+   */
   delete() {
     this.deleted = true;
   }
 
-  // called when the bullet explodes
+  /**
+   * Called when the bullet explodes.
+   */
   explode() {}
 }
