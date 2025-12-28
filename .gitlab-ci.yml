@@ -1,0 +1,39 @@
+image: node:lts
+
+stages:
+  - build
+  # - test
+  - deploy
+
+# Build the project using Vite
+build:
+  stage: build
+  script:
+    - npm install # Install dependencies
+    - npm run build # Build the project with Vite
+  artifacts:
+    paths:
+      - dist # Save the build output in the dist folder
+  cache:
+    paths:
+      - node_modules/ # Cache node_modules for faster builds
+
+# Run unit tests using Vitest
+# unit-tests:
+#   stage: test
+#   script:
+#     - npm install # Install dependencies again (optional but ensures fresh env)
+#     - npm run test # Run the unit tests with Vitest
+#   cache:
+#     paths:
+#       - node_modules/
+
+# Publish the project to GitLab Pages
+publish-gitlab-pages:
+  stage: deploy
+  script:
+    - mv dist public # GitLab Pages expects the build output to be in the 'public' folder
+  pages:
+    publish: public # Use the 'public' directory for GitLab Pages deployment
+  rules:
+    - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
