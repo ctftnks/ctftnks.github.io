@@ -9,7 +9,6 @@ window.onload = function () {
   var g = newGame();
   g.paused = true;
   openPage("menu");
-  checkMobile();
 };
 
 // prevent accidental leaving

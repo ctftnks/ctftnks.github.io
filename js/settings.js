@@ -23,7 +23,6 @@ FriendlyFire = true;
 BotsShootBots = true;
 BotSpeed = 1;
 ShowTankLabels = true;
-MobileJoystick = false;
 ResetStatsEachGame = true;
 AdaptiveBotSpeed = true;
 RespawnTime = 3;
