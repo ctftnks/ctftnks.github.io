@@ -4,28 +4,30 @@
 // contains methods for collision detection with walls and bullets
 // contains a weapon and a method to shoot it
 
-Tank = function (player) {
-  Object.call(this);
+class Tank extends GameObject {
+  constructor(player) {
+    super();
 
-  this.player = player;
-  this.color = this.player.color;
-  this.map = undefined;
-  this.x = 0;
-  this.y = 0;
-  this.angle = 2 * Math.PI * Math.random();
-  this.width = TankWidth;
-  this.height = TankHeight;
-  this.weapon = new Gun(this);
-  this.speed = TankSpeed;
-  this.isTank = true;
-  this.type = "Tank";
-  this.timers = { spawnshield: -1, invincible: -1 };
-  this.carriedFlag = -1;
-  this.weapons = [];
-  this.rapidfire = false;
+    this.player = player;
+    this.color = this.player.color;
+    this.map = undefined;
+    this.x = 0;
+    this.y = 0;
+    this.angle = 2 * Math.PI * Math.random();
+    this.width = TankWidth;
+    this.height = TankHeight;
+    this.weapon = new Gun(this);
+    this.speed = TankSpeed;
+    this.isTank = true;
+    this.type = "Tank";
+    this.timers = { spawnshield: -1, invincible: -1 };
+    this.carriedFlag = -1;
+    this.weapons = [];
+    this.rapidfire = false;
+  }
 
   // draw the tank (rotated) on map
-  this.draw = function (canvas, context) {
+  draw(canvas, context) {
     context.save();
     context.beginPath();
     context.translate(this.x, this.y);
@@ -70,19 +72,19 @@ Tank = function (player) {
       context.rotate(this.angle);
     }
     context.restore();
-  };
+  }
 
   // let player class check for key presses and move tank
   // check for collisions and handle them
-  this.step = function () {
+  step() {
     this.player.step();
     if (this.weapon.is_deleted) this.defaultWeapon();
     this.weapon.crosshair();
     this.checkBulletCollision();
-  };
+  }
 
   // move the tank forward/backwards
-  this.move = function (direction) {
+  move(direction) {
     this.player.stats.miles += 1;
     var oldx = this.x;
     var oldy = this.y;
@@ -97,10 +99,10 @@ Tank = function (player) {
       this.angle -= 0.1 * ((colliding_corner % 2) - 0.5) * direction;
       if (this.checkWallCollision() != -1) this.angle = oldangle;
     }
-  };
+  }
 
   // rotate the tank
-  this.turn = function (direction) {
+  turn(direction) {
     var oldangle = this.angle;
     this.angle += (((direction * TankTurnSpeed * GameFrequency) / 1000) * TankSpeed) / 180;
     var colliding_corner = this.checkWallCollision();
@@ -120,23 +122,23 @@ Tank = function (player) {
         }
       }
     }
-  };
+  }
 
   // use the weapon
-  this.shoot = function () {
+  shoot() {
     if (this.spawnshield()) return;
     this.weapon.shoot();
     if (this.weapon.active && this.weapon.name != "MG") this.player.stats.shots += 1;
-  };
+  }
 
   // return to the default weapon
-  this.defaultWeapon = function () {
+  defaultWeapon() {
     this.weapon = new Gun(this);
-  };
+  }
 
   // get x,y-coordinates of the tanks corners
   // needed for collision detection and weapon firing
-  this.corners = function () {
+  corners() {
     return [
       {
         x: this.x - (this.width / 2) * Math.cos(-this.angle) - (this.height / 2) * Math.sin(-this.angle),
@@ -155,10 +157,10 @@ Tank = function (player) {
         y: this.y - (this.width / 2) * Math.sin(-this.angle) + (this.height / 2) * Math.cos(-this.angle),
       },
     ];
-  };
+  }
 
   // does the tank intersect with a point?
-  this.intersects = function (x, y) {
+  intersects(x, y) {
     // checks if (0 < AM*AB < AB*AB) ^ (0 < AM*AD < AD*AD)
     // see: https://math.stackexchange.com/questions/190111/how-to-check-if-a-point-is-inside-a-rectangle
     var corners = this.corners();
@@ -170,11 +172,11 @@ Tank = function (player) {
     var ABAB = (A.x - B.x) * (A.x - B.x) + (A.y - B.y) * (A.y - B.y);
     var ADAD = (A.x - D.x) * (A.x - D.x) + (A.y - D.y) * (A.y - D.y);
     return 0 < AMAB && AMAB < ABAB && 0 < AMAD && AMAD < ADAD;
-  };
+  }
 
   // check for collision of the walls:
   // checks if there is a wall between the center of the tank and each corner
-  this.checkWallCollision = function () {
+  checkWallCollision() {
     if (this.player.isBot) return -1;
     var tile = this.map.getTileByPos(this.x, this.y);
     var corners = this.corners();
@@ -190,12 +192,12 @@ Tank = function (player) {
       for (var i = 0; i < 4; i++) if (corners[i].w && this.intersects(corners[i].x, corners[i].y)) return i;
     }
     return -1;
-  };
+  }
 
   // check for collision with a bullet
   // uses spatial sorting of the map class
   // only checks thos bullets that lie within the tiles of the corners
-  this.checkBulletCollision = function () {
+  checkBulletCollision() {
     if (this.spawnshield()) return;
     // create a list of bullets that may hit the tank by looking
     // at the object lists of the tiles of the tanks corners
@@ -240,29 +242,29 @@ Tank = function (player) {
         powerups[i].delete();
       }
     }
-  };
+  }
 
   // is the spawnshield active?
-  this.spawnshield = function () {
+  spawnshield() {
     var t = this.player.game.t;
     return this.timers.spawnshield > t;
-  };
+  }
   // properties: is invincible?
-  this.invincible = function () {
+  invincible() {
     var t = this.player.game.t;
     return this.timers.spawnshield > t || this.timers.invincible > t;
-  };
+  }
   // is the player of the tank a bot?
-  this.isBot = function () {
+  isBot() {
     return this.player.isBot;
-  };
+  }
 
-  this.delete = function () {
+  delete() {
     // CTF: if tank has flag, drop it
     if (this.carriedFlag != -1) this.carriedFlag.drop(this.x, this.y);
     // delete the weapon
     this.weapon.delete();
     // mark the tank as deleted
     this.deleted = true;
-  };
-};
+  }
+}

@@ -4,35 +4,37 @@
 // Tank-Bullet-collision detection is implemented in the tank class
 // as it needs less checks this way
 
-Bullet = function (weapon) {
-  // inherit from Object class
-  Object.call(this);
-  this.isBullet = true;
-  this.image = "";
-  // parent objects
-  this.player = weapon.tank.player;
-  this.map = this.player.game.map;
-  this.weapon = weapon;
-  // to be initialized by weapon when shot
-  this.x = undefined;
-  this.y = undefined;
-  this.angle = undefined;
-  this.radius = 4;
-  this.speed = BulletSpeed;
-  this.color = "#000";
-  // lifetime of the bullet in [ms]
-  this.timeout = BulletTimeout * 1000;
-  // bullet age starts at negative value, so it doesn't instantly kill the shooter
-  this.age = -0;
-  // shall the bullet leave a trace of smoke?
-  this.trace = false;
-  this.bounceSound = "res/sound/bounce.wav";
-  this.lethal = true;
-  // hitbox enlargement of the bullet
-  this.extrahitbox = 0;
+class Bullet extends GameObject {
+  constructor(weapon) {
+    // inherit from GameObject class
+    super();
+    this.isBullet = true;
+    this.image = "";
+    // parent objects
+    this.player = weapon.tank.player;
+    this.map = this.player.game.map;
+    this.weapon = weapon;
+    // to be initialized by weapon when shot
+    this.x = undefined;
+    this.y = undefined;
+    this.angle = undefined;
+    this.radius = 4;
+    this.speed = BulletSpeed;
+    this.color = "#000";
+    // lifetime of the bullet in [ms]
+    this.timeout = BulletTimeout * 1000;
+    // bullet age starts at negative value, so it doesn't instantly kill the shooter
+    this.age = -0;
+    // shall the bullet leave a trace of smoke?
+    this.trace = false;
+    this.bounceSound = "res/sound/bounce.wav";
+    this.lethal = true;
+    // hitbox enlargement of the bullet
+    this.extrahitbox = 0;
+  }
 
   // draw the bullet in the canvas
-  this.draw = function (canvas, context) {
+  draw(canvas, context) {
     if (this.image == "") {
       context.beginPath();
       context.fillStyle = this.color;
@@ -46,10 +48,10 @@ Bullet = function (weapon) {
       context.drawImage(this.image, (-this.radius * 5) / 2, (-this.radius * 5) / 2, this.radius * 5, this.radius * 5);
       context.restore();
     }
-  };
+  }
 
   // timestepping: translation, aging, collision
-  this.step = function () {
+  step() {
     // is bullet timed out?
     this.age += GameFrequency;
     if (this.age > this.timeout) {
@@ -66,12 +68,12 @@ Bullet = function (weapon) {
     // check for wall collisions
     this.checkCollision(oldx, oldy);
     if (BulletsCanCollide) this.checkBulletCollision();
-  };
+  }
 
   // check for collision with walls, handle them
   // tests whether last timestep put the bullet in a new tile
   // and if old and new tile are separated by a wall
-  this.checkCollision = function (oldx, oldy) {
+  checkCollision(oldx, oldy) {
     var tile = this.map.getTileByPos(oldx, oldy);
     if (tile == -1) return;
     var walls = tile.getWalls(this.x, this.y);
@@ -97,9 +99,9 @@ Bullet = function (weapon) {
       this.angle = Math.PI - this.angle;
       this.y = 2 * oldy - this.y;
     }
-  };
+  }
 
-  this.checkBulletCollision = function () {
+  checkBulletCollision() {
     // create a list of bullets that may hit this one by looking
     // at the object lists of the tiles of the tanks corners
     var bullets = [];
@@ -124,18 +126,18 @@ Bullet = function (weapon) {
         return;
       }
     }
-  };
+  }
 
   // leave a trace of smoke
-  this.leaveTrace = function () {
+  leaveTrace() {
     this.player.game.addObject(new Smoke(this.x, this.y, (timeout = 300), (radius = this.radius), (rspeed = 1)));
-  };
+  }
 
   // delete bullet from map
-  this.delete = function () {
+  delete() {
     this.deleted = true;
-  };
+  }
 
   // called when the bullet explodes
-  this.explode = function () {};
-};
+  explode() {}
+}

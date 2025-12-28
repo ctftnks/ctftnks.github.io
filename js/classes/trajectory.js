@@ -1,24 +1,26 @@
 // A trajectory through the map
 // with useful functions to draw or so for lasers
 
-Trajectory = function (map) {
-  Object.call(this);
+class Trajectory extends GameObject {
+  constructor(map) {
+    super();
 
-  this.hidden = false;
-  this.color = "#000";
-  this.thickness = 2;
-  this.length = 2000;
-  this.x = undefined;
-  this.y = undefined;
-  this.angle = undefined;
-  this.delta = 4;
-  this.points = [];
-  this.map = map;
-  this.drawevery = 1;
-  this.timeout = 100;
-  this.targets = [];
+    this.hidden = false;
+    this.color = "#000";
+    this.thickness = 2;
+    this.length = 2000;
+    this.x = undefined;
+    this.y = undefined;
+    this.angle = undefined;
+    this.delta = 4;
+    this.points = [];
+    this.map = map;
+    this.drawevery = 1;
+    this.timeout = 100;
+    this.targets = [];
+  }
 
-  this.draw = function (canvas, context) {
+  draw(canvas, context) {
     if (this.hidden) return;
     for (var i = 0; i < this.points.length; i += this.drawevery) {
       var p = this.points[i];
@@ -32,9 +34,9 @@ Trajectory = function (map) {
       context.fill();
       context.restore();
     }
-  };
+  }
 
-  this.step = function () {
+  step() {
     // update points list
     this.targets = [];
     var point = { x: this.x, y: this.y, angle: this.angle };
@@ -73,5 +75,5 @@ Trajectory = function (map) {
 
     this.timeout -= GameFrequency;
     if (this.timeout < 0) this.delete();
-  };
-};
+  }
+}

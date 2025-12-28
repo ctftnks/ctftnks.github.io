@@ -1,8 +1,8 @@
 // Static class for some map generation methods
 
-MapGenerator = {
+class MapGenerator {
   // just random walls somewhere
-  randomMap: function (map) {
+  static randomMap(map) {
     // generate walls at frame borders
     for (var i = 0; i < this.Nx; i++) {
       this.tiles[i * this.Ny].walls[0] = true;
@@ -28,7 +28,7 @@ MapGenerator = {
         }
       }
     }
-  },
+  }
 
   // Prim's maze algorithm
   // Start with a grid full of walls.
@@ -39,11 +39,11 @@ MapGenerator = {
   // Add the neighboring walls of the cell to the wall list.
   // If the cell on the opposite side already was in the maze, remove the wall from the list.
 
-  primsMaze: function (map) {
+  static primsMaze(map) {
     // Start with a grid full of walls.
     for (var i = 0; i < map.Nx * map.Ny; i++) map.tiles[i].walls = [true, true, true, true];
-    walls = [];
-    inMaze = [];
+    var walls = [];
+    var inMaze = [];
     // Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
     var randomCell = map.tiles[parseInt(Math.random() * (map.Nx * map.Ny - 1))];
     inMaze.push(randomCell.id);
@@ -69,10 +69,10 @@ MapGenerator = {
         walls.splice(randomWallNo, 1);
       }
     }
-  },
+  }
 
   // Recursive Division Algorithm
-  recursiveDivision: function (map, x1 = -1, y1 = -1, x2 = -1, y2 = -1) {
+  static recursiveDivision(map, x1 = -1, y1 = -1, x2 = -1, y2 = -1) {
     // recursive entry point
     if (x1 == -1) {
       // init limits
@@ -113,10 +113,10 @@ MapGenerator = {
       MapGenerator.recursiveDivision(map, x1, y1, x2, posY + 1);
       MapGenerator.recursiveDivision(map, x1, posY + 1, x2, y2);
     }
-  },
+  }
 
   // Recursive Division Algorithm with double holes
-  porousRecursiveDivision: function (map, x1 = -1, y1 = -1, x2 = -1, y2 = -1) {
+  static porousRecursiveDivision(map, x1 = -1, y1 = -1, x2 = -1, y2 = -1) {
     // recursive entry point
     if (x1 == -1) {
       // init limits
@@ -163,10 +163,10 @@ MapGenerator = {
       MapGenerator.recursiveDivision(map, x1, y1, x2, posY + 1);
       MapGenerator.recursiveDivision(map, x1, posY + 1, x2, y2);
     }
-  },
+  }
 
   // export map into bit format
-  exportMap: function (map) {
+  static exportMap(map) {
     var Nx = map.Nx;
     var Ny = map.Ny;
     var data = "";
@@ -181,9 +181,9 @@ MapGenerator = {
       if (j < Ny - 1) data += "\n";
     }
     return data;
-  },
+  }
 
-  importedMap: function (map) {
+  static importedMap(map) {
     // copy tiles and size to old map
     map.Nx = prefetchedMap.Nx;
     map.Ny = prefetchedMap.Ny;
@@ -191,11 +191,11 @@ MapGenerator = {
     // map.dx = prefetchedMap.dx;
     // map.dy = prefetchedMap.dy;
     map.resize();
-  },
+  }
 
   // import map from file
   // if file==-1: random pick;
-  importMap: function (mapname = -1) {
+  static importMap(mapname = -1) {
     // request file
     var xhttp = new XMLHttpRequest();
     // TODO: pick random name
@@ -207,7 +207,8 @@ MapGenerator = {
       if (this.readyState == 4 && this.status == 200) {
         // got data from file, now process it
         var data = this.responseText;
-        var lines = data.match(/[^\r\n]+/g);
+        var lines = data.match(/[^
+]+/g);
         var Ny = lines.length;
         var Nx = lines[0].split(" ").length;
         var map = new Map(game.map.canvas, Nx, Ny);
@@ -230,10 +231,10 @@ MapGenerator = {
         newGame(map);
       }
     };
-  },
-};
+  }
+}
 
-prefetchedMap = undefined;
+var prefetchedMap = undefined;
 
 // List of all algorithms
 MapGenerator.algorithms = [

@@ -1,100 +1,128 @@
 // a parent class for powerups
 
-PowerUp = function () {
-  Object.call(this);
-  this.isPowerUp = true;
-  this.image = new Image();
-  this.width = 30;
-  this.x = undefined;
-  this.y = undefined;
-  this.radius = 40;
-  this.attractsBots = false;
+class PowerUp extends GameObject {
+  constructor() {
+    super();
+    this.isPowerUp = true;
+    this.image = new Image();
+    this.width = 30;
+    this.x = undefined;
+    this.y = undefined;
+    this.radius = 40;
+    this.attractsBots = false;
+  }
 
-  this.apply = function (tank) {};
+  apply(tank) {}
 
-  this.step = function () {};
+  step() {}
 
-  this.draw = function (canvas, context) {
+  draw(canvas, context) {
     context.save();
     context.translate(this.x, this.y);
     context.drawImage(this.image, -this.width / 2, -this.width / 2, this.width, this.width);
     context.restore();
-  };
-};
+  }
+}
 
-LaserBonus = function () {
-  PowerUp.call(this);
-  this.attractsBots = true;
-  this.image.src = "res/img/laser.png";
-  this.apply = function (tank) {
+class LaserBonus extends PowerUp {
+  constructor() {
+    super();
+    this.attractsBots = true;
+    this.image.src = "res/img/laser.png";
+  }
+  apply(tank) {
     playSound("res/sound/reload.wav");
     tank.weapon = new Laser(tank);
-  };
-};
-MGBonus = function () {
-  PowerUp.call(this);
-  this.attractsBots = true;
-  this.image.src = "res/img/mg.png";
-  this.apply = function (tank) {
+  }
+}
+
+class MGBonus extends PowerUp {
+  constructor() {
+    super();
+    this.attractsBots = true;
+    this.image.src = "res/img/mg.png";
+  }
+  apply(tank) {
     playSound("res/sound/reload.wav");
     tank.weapon = new MG(tank);
-  };
-};
-GrenadeBonus = function () {
-  PowerUp.call(this);
-  this.image.src = "res/img/grenade.png";
-  this.apply = function (tank) {
+  }
+}
+
+class GrenadeBonus extends PowerUp {
+  constructor() {
+    super();
+    this.image.src = "res/img/grenade.png";
+  }
+  apply(tank) {
     playSound("res/sound/reload.wav");
     tank.weapon = new Grenade(tank);
-  };
-};
-MineBonus = function () {
-  PowerUp.call(this);
-  this.image.src = "res/img/mine.png";
-  this.apply = function (tank) {
+  }
+}
+
+class MineBonus extends PowerUp {
+  constructor() {
+    super();
+    this.image.src = "res/img/mine.png";
+  }
+  apply(tank) {
     playSound("res/sound/reload.wav");
     tank.weapon = new Mine(tank);
-  };
-};
-GuidedBonus = function () {
-  PowerUp.call(this);
-  this.attractsBots = true;
-  this.image.src = "res/img/guided.png";
-  this.apply = function (tank) {
+  }
+}
+
+class GuidedBonus extends PowerUp {
+  constructor() {
+    super();
+    this.attractsBots = true;
+    this.image.src = "res/img/guided.png";
+  }
+  apply(tank) {
     playSound("res/sound/reload.wav");
     tank.weapon = new Guided(tank);
-  };
-};
-WreckingBallBonus = function () {
-  PowerUp.call(this);
-  this.image.src = "res/img/wreckingBall.png";
-  this.apply = function (tank) {
+  }
+}
+
+class WreckingBallBonus extends PowerUp {
+  constructor() {
+    super();
+    this.image.src = "res/img/wreckingBall.png";
+  }
+  apply(tank) {
     playSound("res/sound/reload.wav");
     tank.weapon = new WreckingBall(tank);
-  };
-};
-SlingshotBonus = function () {
-  PowerUp.call(this);
-  this.attractsBots = true;
-  this.image.src = "res/img/slingshot.png";
-  this.apply = function (tank) {
+  }
+}
+
+class SlingshotBonus extends PowerUp {
+  constructor() {
+    super();
+    this.attractsBots = true;
+    this.image.src = "res/img/slingshot.png";
+  }
+  apply(tank) {
     playSound("res/sound/reload.wav");
     tank.weapon = new Slingshot(tank);
-  };
-};
-WallBuilderBonus = function () {
-  PowerUp.call(this);
-  this.image.src = "res/img/wallBuilder.png";
-  this.apply = function (tank) {
+  }
+}
+
+class WallBuilderBonus extends PowerUp {
+  constructor() {
+    super();
+    this.image.src = "res/img/wallBuilder.png";
+  }
+  apply(tank) {
     playSound("res/sound/reload.wav");
     tank.weapon = new WallBuilder(tank);
-  };
-};
-SpeedBonus = function () {
-  PowerUp.call(this);
-  this.attractsBots = true;
-  this.image.src = "res/img/speed.png";
-  this.apply = function (tank) {
+  }
+}
+
+class SpeedBonus extends PowerUp {
+  constructor() {
+    super();
+    this.attractsBots = true;
+    this.image.src = "res/img/speed.png";
+  }
+  apply(tank) {
     tank.speed *= 1.1;
     var self = tank;
     tank.player.game.timeouts.push(
@@ -102,14 +130,17 @@ SpeedBonus = function () {
         self.speed /= 1.1;
       }, 8000),
     );
-  };
-};
-InvincibleBonus = function () {
-  PowerUp.call(this);
-  this.attractsBots = true;
-  this.image.src = "res/img/invincible.png";
-  this.applied = false;
-  this.apply = function (tank) {
+  }
+}
+
+class InvincibleBonus extends PowerUp {
+  constructor() {
+    super();
+    this.attractsBots = true;
+    this.image.src = "res/img/invincible.png";
+    this.applied = false;
+  }
+  apply(tank) {
     if (this.applied) return;
     this.applied = true;
     stopMusic();
@@ -124,14 +155,17 @@ InvincibleBonus = function () {
         else if (!tank.invincible()) stopMusic();
       }, 10100),
     );
-  };
-};
-TerminatorBonus = function () {
-  PowerUp.call(this);
-  this.attractsBots = true;
-  this.image.src = "res/img/terminator.png";
-  this.applied = false;
-  this.apply = function (tank) {
+  }
+}
+
+class TerminatorBonus extends PowerUp {
+  constructor() {
+    super();
+    this.attractsBots = true;
+    this.image.src = "res/img/terminator.png";
+    this.applied = false;
+  }
+  apply(tank) {
     if (this.applied) return;
     this.applied = true;
     tank.rapidfire = true;
@@ -143,13 +177,16 @@ TerminatorBonus = function () {
         self.rapidfire = false;
       }, 120000),
     );
-  };
-};
-MultiBonus = function () {
-  PowerUp.call(this);
-  this.image.src = "res/img/multi.png";
-  this.used = false;
-  this.apply = function (tank) {
+  }
+}
+
+class MultiBonus extends PowerUp {
+  constructor() {
+    super();
+    this.image.src = "res/img/multi.png";
+    this.used = false;
+  }
+  apply(tank) {
     if (!this.used) {
       this.used = true;
       PowerUpRate /= 2.5;
@@ -161,18 +198,21 @@ MultiBonus = function () {
         MaxPowerUps /= 2.5;
       }, 8000);
     }
-  };
-};
-FogBonus = function () {
-  PowerUp.call(this);
-  this.image.src = "res/img/fog.png";
-  this.used = false;
-  this.apply = function (tank) {
-    if (!this.used) tank.player.game.intvls.push(fogOfWar(game));
-  };
-};
+  }
+}
 
-PowerUps = [
+class FogBonus extends PowerUp {
+  constructor() {
+    super();
+    this.image.src = "res/img/fog.png";
+    this.used = false;
+  }
+  apply(tank) {
+    if (!this.used) tank.player.game.intvls.push(fogOfWar(game));
+  }
+}
+
+const PowerUps = [
   {
     create: function () {
       return new LaserBonus();

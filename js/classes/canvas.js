@@ -2,58 +2,60 @@
 // binds HTML element and handles its size
 // provides loop to keep the frame in sync with the game
 
-Canvas = function (id) {
-  // initialize: get HTML element
-  this.canvas = document.getElementById(id);
-  this.context = this.canvas.getContext("2d");
-  this.canvas.height = this.canvas.clientHeight;
-  this.height = this.canvas.clientHeight;
-  this.canvas.width = this.canvas.clientWidth;
-  this.width = this.canvas.clientWidth;
-  this.game = undefined;
-  this.loop = undefined;
-  this.scale = 1;
+class Canvas {
+  constructor(id) {
+    // initialize: get HTML element
+    this.canvas = document.getElementById(id);
+    this.context = this.canvas.getContext("2d");
+    this.canvas.height = this.canvas.clientHeight;
+    this.height = this.canvas.clientHeight;
+    this.canvas.width = this.canvas.clientWidth;
+    this.width = this.canvas.clientWidth;
+    this.game = undefined;
+    this.loop = undefined;
+    this.scale = 1;
+  }
 
   // Clear canvas and draw all objects
-  this.draw = function () {
+  draw() {
     this.context.clearRect(0, 0, this.canvas.width / this.scale, this.canvas.height / this.scale);
     this.game.map.draw(this.canvas, this.context);
     for (var i = 0; i < this.game.objs.length; i++) this.game.objs[i].draw(this.canvas, this.context);
-  };
+  }
 
   // Keep canvas in sync with game: redraw every few milliseconds
-  this.sync = function () {
+  sync() {
     if (typeof this.loop == "undefined") {
       var self = this;
       this.loop = setInterval(function () {
         self.draw();
       }, FrameFrequency);
     }
-  };
+  }
 
   // Stop syncing of canvas
-  this.stopSync = function () {
+  stopSync() {
     if (typeof this.loop != "undefined") clearInterval(this.loop);
-  };
+  }
 
   // zoom into the canvas
-  this.rescale = function (factor) {
+  rescale(factor) {
     this.scale = factor;
     this.context.setTransform(1, 0, 0, 1, 0, 0); // reset
     this.context.scale(factor, factor); // scale by new factor
-  };
+  }
 
   // update sizes of canvas and map for window.onresize
-  this.resize = function () {
+  resize() {
     this.canvas.height = this.canvas.clientHeight;
     this.height = this.canvas.clientHeight;
     this.canvas.width = this.canvas.clientWidth;
     this.width = this.canvas.clientWidth;
     if (typeof game !== "undefined") game.map.resize();
     // this.rescale(Math.max(this.width / (game.map.dx * game.map.Nx));
-  };
+  }
 
-  this.shake = function () {
+  shake() {
     var amp = 14;
     var speed = 25;
     var duration = 660;
@@ -76,5 +78,5 @@ Canvas = function (id) {
         clearInterval(intvl);
       }, duration),
     );
-  };
-};
+  }
+}

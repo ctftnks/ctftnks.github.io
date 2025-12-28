@@ -2,8 +2,8 @@
 // keeps the players score, color, name, keymap
 // and the tank to be controlled
 
-nplayers = 0;
-playercolors = [
+var nplayers = 0;
+var playercolors = [
   "#DA1918", // red
   "#31B32B", // green
   "#1F87FF", // blue
@@ -24,31 +24,33 @@ playercolors = [
 //   "#FFC107"  // amber
 // ]
 
-Player = function () {
-  this.id = nplayers++;
-  this.name = "Player " + (this.id + 1);
-  this.color = playercolors[this.id];
-  this.team = this.id;
-  this.game = undefined;
-  this.base = undefined;
-  this.score = 0;
-  this.spree = 0;
-  this.keys = keymaps[this.id];
-  this.tank = new Tank(this);
-  this.stats = { deaths: 0, kills: 0, miles: 0, shots: 0 };
-  this.isBot = false;
+class Player {
+  constructor() {
+    this.id = nplayers++;
+    this.name = "Player " + (this.id + 1);
+    this.color = playercolors[this.id];
+    this.team = this.id;
+    this.game = undefined;
+    this.base = undefined;
+    this.score = 0;
+    this.spree = 0;
+    this.keys = keymaps[this.id];
+    this.tank = new Tank(this);
+    this.stats = { deaths: 0, kills: 0, miles: 0, shots: 0 };
+    this.isBot = false;
+  }
 
   // timestep: check if keys pressed and act accordingly
-  this.step = function () {
+  step() {
     if (Key.isDown(this.keys[0])) this.tank.move(1);
     if (Key.isDown(this.keys[1])) this.tank.turn(-1);
     if (Key.isDown(this.keys[2])) this.tank.move(-0.7);
     if (Key.isDown(this.keys[3])) this.tank.turn(1);
     if (Key.isDown(this.keys[4])) this.tank.shoot();
-  };
+  }
 
   // spawn at some point
-  this.spawn = function () {
+  spawn() {
     this.tank = new Tank(this);
     this.tank.deleted = false;
     this.tank.map = this.game.map;
@@ -72,11 +74,11 @@ Player = function () {
     );
     // spawn shield
     this.tank.timers.spawnshield = this.game.t + SpawnShieldTime * 1000;
-  };
+  }
 
   // kill the player, called when tank is shot
   // check if game should end
-  this.kill = function () {
+  kill() {
     this.game.n_playersAlive -= 1;
     this.tank.weapon.active = false;
     this.game.nkills++;
@@ -89,20 +91,20 @@ Player = function () {
         self.spawn();
       }, RespawnTime * 1000),
     );
-  };
+  }
 
   // change color
-  this.changeColor = function () {
+  changeColor() {
     this.team += 1;
     this.team = this.team % playercolors.length;
     this.color = playercolors[this.team % playercolors.length];
-  };
+  }
 
   // reset stats dictionary to 0
-  this.resetStats = function () {
+  resetStats() {
     this.stats.deaths = 0;
     this.stats.kills = 0;
     this.stats.miles = 0;
     this.stats.shots = 0;
-  };
-};
+  }
+}

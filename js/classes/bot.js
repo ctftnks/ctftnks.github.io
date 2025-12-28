@@ -1,22 +1,24 @@
-NBots = 0;
+var NBots = 0;
 
-Bot = function (player) {
-  Player.call(this);
-  this.name = "Bot " + (NBots + 1);
-  this.isBot = true;
-  this.keys = undefined;
-  this.goto = -1;
-  this.fleeing = { from: -1, condition: -1 };
-  NBots++;
+class Bot extends Player {
+  constructor(player) {
+    super();
+    this.name = "Bot " + (NBots + 1);
+    this.isBot = true;
+    this.keys = undefined;
+    this.goto = -1;
+    this.fleeing = { from: -1, condition: -1 };
+    NBots++;
+  }
 
-  this.step = function () {
+  step() {
     // check possible actions and decide for one
     this.autopilot();
     // perform movements, if any are planned
     this.perform_movements();
-  };
+  }
 
-  this.autopilot = function () {
+  autopilot() {
     // prevent executing this method too often
     this.lastChecked += GameFrequency;
     if (this.lastChecked < 72000 / this.tank.speed)
@@ -147,16 +149,16 @@ Bot = function (player) {
       // else do nothing
       this.goto = -1;
     }
-  };
+  }
 
   // set a goto target from a path, the tank will then move towards the target
-  this.follow = function (path) {
+  follow(path) {
     if (path.length < 2) this.goto = path[0];
     else this.goto = path[1];
-  };
+  }
 
   // perform movements towards a goto target (if any)
-  this.perform_movements = function () {
+  perform_movements() {
     if (this.goto == -1) return;
     var tank = this.tank;
     var distx = this.goto.x - tank.x;
@@ -180,10 +182,10 @@ Bot = function (player) {
       if (Math.abs(tank.angle - newangle) < Math.PI) tank.turn(-2 * BotSpeed);
       else tank.turn(2 * BotSpeed);
     }
-  };
+  }
 
   // handle shooting
-  this.shoot = function (target) {
+  shoot(target) {
     this.goto = -1; // don't move anywhere TODO: remove this?
     var tank = this.tank;
     var distx = target.x - tank.x;
@@ -208,11 +210,11 @@ Bot = function (player) {
     //     tank.shoot();
     //   }, 4000));
     // }
-  };
+  }
 
   // evaluate whether it is a good idea to shoot given enemy tank and provide
   // coordinates where to aim, path to enemy can be given optionally
-  this.aimbot = function (enemy, path = -1) {
+  aimbot(enemy, path = -1) {
     var result = { should_shoot: false, target: enemy, weight: 500 };
     var weapon = this.tank.weapon;
     if (path == -1) path = this.tank.map.xypathToObj(enemy);
@@ -249,10 +251,10 @@ Bot = function (player) {
       result.should_shoot = dist < 400 && !enemy.invincible();
     }
     return result;
-  };
+  }
 
   // flee the situation
-  this.getFleePath = function (duration = 2) {
+  getFleePath(duration = 2) {
     if (this.fleeing.from == -1 || this.fleeing.condition == -1 || !this.fleeing.condition()) return -1;
     if (!this.tank.weapon.bot.flee_if_active && this.tank.weapon.active) return -1;
     // push any neighboring tile that is not in the fleeing path
@@ -267,10 +269,10 @@ Bot = function (player) {
       fleePath[i] = { x: tile.x + tile.dx / 2, y: tile.y + tile.dy / 2 };
     }
     return fleePath;
-  };
+  }
 
   // define for how long to flee
-  this.flee = function () {
+  flee() {
     if (this.tank.weapon.bot.fleeing_duration <= 0) return;
     // generate initial path where tank comes from / where to flee from
     var tile = game.map.getTileByPos(this.tank.x, this.tank.y);
@@ -286,8 +288,8 @@ Bot = function (player) {
     this.fleeing.condition = function () {
       return self.game.t < flee_until && (!weapon.bot.flee_if_active || weapon.active);
     };
-  };
-};
+  }
+}
 
 function adaptBotSpeed(team, val = 0.1) {
   if (!AdaptiveBotSpeed) return;

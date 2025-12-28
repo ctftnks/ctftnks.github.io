@@ -1,27 +1,29 @@
 // parent class for all weapons
-Weapon = function (tank) {
-  this.name = "Weapon";
-  this.tank = tank;
-  this.image = new Image();
-  this.image.src = "";
-  this.img = undefined;
-  this.active = true;
-  this.is_deleted = false;
-  this.bot = {
-    shooting_range: 2, // distance at which bots fire the weapon
-    fleeing_duration: 800, // how long should a bot flee after firing this weapon?
-    flee_if_active: false, // should the bot flee even if this weapon is active?
-  };
+class Weapon {
+  constructor(tank) {
+    this.name = "Weapon";
+    this.tank = tank;
+    this.image = new Image();
+    this.image.src = "";
+    this.img = undefined;
+    this.active = true;
+    this.is_deleted = false;
+    this.bot = {
+      shooting_range: 2, // distance at which bots fire the weapon
+      fleeing_duration: 800, // how long should a bot flee after firing this weapon?
+      flee_if_active: false, // should the bot flee even if this weapon is active?
+    };
+  }
 
-  this.shoot = function () {
+  shoot() {
     if (!this.active) return;
     playSound("res/sound/gun.wav");
     var bullet = this.newBullet();
     this.deactivate();
-  };
+  }
 
   // create a new bullet with all the typical properties
-  this.newBullet = function () {
+  newBullet() {
     var bullet = new Bullet(this);
     bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2;
     bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
@@ -34,11 +36,10 @@ Weapon = function (tank) {
     bullet.color = this.tank.player.color;
     this.tank.player.game.addObject(bullet);
     return bullet;
-  };
-  this.newBulletOrig = this.newBullet;
+  }
 
   // if the weapon is deactivated, it can no longer shoot and will soon be removed
-  this.deactivate = function () {
+  deactivate() {
     if (this.active === false) return;
     this.active = false;
     var self = this;
@@ -54,61 +55,65 @@ Weapon = function (tank) {
           self.delete();
         }, 1800),
       );
-  };
+  }
 
   // reactivate a deactivated weapon
-  this.activate = function () {
+  activate() {
     this.active = true;
-  };
+  }
 
-  this.delete = function () {
+  delete() {
     this.active = false;
     this.is_deleted = true;
-  };
+  }
 
-  this.crosshair = function () {};
-};
+  crosshair() {}
+}
 
 // the normal, default gun
-Gun = function (tank) {
-  Weapon.call(this, tank);
-  this.name = "Gun";
-  this.image = new Image();
-  this.image.src = "res/img/gun.png";
-  // Extra rule for face
-  if (this.tank.player.name == "Marc" || this.tank.player.name == "marc") {
-    this.image.src = "res/img/Marc.png";
+class Gun extends Weapon {
+  constructor(tank) {
+    super(tank);
+    this.name = "Gun";
+    this.image = new Image();
+    this.image.src = "res/img/gun.png";
+    // Extra rule for face
+    if (this.tank.player.name == "Marc" || this.tank.player.name == "marc") {
+      this.image.src = "res/img/Marc.png";
+    }
+    this.bot.fleeing_duration = 0;
   }
-  this.bot.fleeing_duration = 0;
 
-  this.newBullet = function () {
-    var bullet = this.newBulletOrig();
+  newBullet() {
+    var bullet = super.newBullet();
     // bullet explosion leads to weapon reactivation
     var self = this;
     bullet.explode = function () {
       if (!self.tank.rapidfire) self.activate();
     };
     return bullet;
-  };
+  }
 
   // cannot be deleted
-  this.delete = function () {};
-};
+  delete() {}
+}
 
 // a rapid-firing machine gun
-MG = function (tank) {
-  Weapon.call(this, tank);
-  this.name = "MG";
-  this.image = new Image();
-  this.image.src = "res/img/mg.png";
-  this.nshots = 20;
-  this.every = 0;
-  this.bot.shooting_range = 2;
-  this.bot.fleeing_duration = 1500;
-  this.bot.flee_if_active = true;
+class MG extends Weapon {
+  constructor(tank) {
+    super(tank);
+    this.name = "MG";
+    this.image = new Image();
+    this.image.src = "res/img/mg.png";
+    this.nshots = 20;
+    this.every = 0;
+    this.bot.shooting_range = 2;
+    this.bot.fleeing_duration = 1500;
+    this.bot.flee_if_active = true;
+  }
 
-  this.newBullet = function () {
-    var bullet = this.newBulletOrig();
+  newBullet() {
+    var bullet = super.newBullet();
     bullet.radius = 2;
     bullet.bounceSound = "";
     bullet.extrahitbox = -3;
@@ -116,9 +121,9 @@ MG = function (tank) {
     bullet.timeout = 4000 + 1000 * (0.5 - Math.random());
     bullet.color = "#000";
     return bullet;
-  };
+  }
 
-  this.shoot = function () {
+  shoot() {
     if (!this.active) return;
     var self = this;
     if (this.nshots == 20)
@@ -142,28 +147,30 @@ MG = function (tank) {
         this.deactivate();
       }
     }
-  };
-};
+  }
+}
 
 // yay, lasers!
-Laser = function (tank) {
-  Weapon.call(this, tank);
-  this.image = new Image();
-  this.image.src = "res/img/laser.png";
-  this.name = "Laser";
-  this.active = true;
-  this.fired = false;
-  this.trajectory = new Trajectory(this.tank.player.game.map);
-  this.trajectory.x = this.tank.x;
-  this.trajectory.y = this.tank.y;
-  this.trajectory.angle = this.tank.angle;
-  this.trajectory.length = 620;
-  this.trajectory.drawevery = 3;
-  this.trajectory.color = hexToRgbA(this.tank.player.color, 0.4);
-  this.tank.player.game.addObject(this.trajectory);
-  this.bot.fleeing_duration = 0;
+class Laser extends Weapon {
+  constructor(tank) {
+    super(tank);
+    this.image = new Image();
+    this.image.src = "res/img/laser.png";
+    this.name = "Laser";
+    this.active = true;
+    this.fired = false;
+    this.trajectory = new Trajectory(this.tank.player.game.map);
+    this.trajectory.x = this.tank.x;
+    this.trajectory.y = this.tank.y;
+    this.trajectory.angle = this.tank.angle;
+    this.trajectory.length = 620;
+    this.trajectory.drawevery = 3;
+    this.trajectory.color = hexToRgbA(this.tank.player.color, 0.4);
+    this.tank.player.game.addObject(this.trajectory);
+    this.bot.fleeing_duration = 0;
+  }
 
-  this.shoot = function () {
+  shoot() {
     if (!this.active) return;
     playSound("res/sound/laser.wav");
     this.trajectory.length = 1300;
@@ -185,34 +192,36 @@ Laser = function (tank) {
       this.tank.player.game.addObject(bullet);
     }
     this.deactivate();
-  };
-  this.crosshair = function () {
+  }
+  crosshair() {
     this.trajectory.x = this.tank.x;
     this.trajectory.y = this.tank.y;
     this.trajectory.angle = this.tank.angle;
     this.trajectory.timeout = 100;
     this.trajectory.length = this.active ? 620 : 0;
-  };
-  this.delete = function () {
+  }
+  delete() {
     this.is_deleted = true;
     this.trajectory.delete();
-  };
-};
+  }
+}
 
 // A grenade that can be remotely detonated
-Grenade = function (tank) {
-  Weapon.call(this, tank);
-  this.name = "Grenade";
-  this.image = new Image();
-  this.image.src = "res/img/grenade.png";
-  this.bullet = undefined;
-  this.nshrapnels = 30;
-  this.bot.fleeing_duration = 4000;
-  this.bot.flee_if_active = false;
+class Grenade extends Weapon {
+  constructor(tank) {
+    super(tank);
+    this.name = "Grenade";
+    this.image = new Image();
+    this.image.src = "res/img/grenade.png";
+    this.bullet = undefined;
+    this.nshrapnels = 30;
+    this.bot.fleeing_duration = 4000;
+    this.bot.flee_if_active = false;
+  }
 
-  this.newBullet = function () {
+  newBullet() {
     if (this.is_deleted) return;
-    var bullet = this.newBulletOrig();
+    var bullet = super.newBullet();
     bullet.image = new Image();
     bullet.image.src = "res/img/grenade.png";
     bullet.radius = 6;
@@ -242,9 +251,9 @@ Grenade = function (tank) {
     };
 
     return bullet;
-  };
+  }
 
-  this.shoot = function () {
+  shoot() {
     if (!this.active) return;
     if (typeof this.bullet === "undefined") {
       this.bullet = this.newBullet();
@@ -255,20 +264,22 @@ Grenade = function (tank) {
       this.deactivate();
       return;
     }
-  };
-};
+  }
+}
 
 // A mine
-Mine = function (tank) {
-  Weapon.call(this, tank);
-  this.name = "Mine";
-  this.image = new Image();
-  this.image.src = "res/img/mine.png";
-  this.bullet = undefined;
-  this.nshrapnels = 24;
+class Mine extends Weapon {
+  constructor(tank) {
+    super(tank);
+    this.name = "Mine";
+    this.image = new Image();
+    this.image.src = "res/img/mine.png";
+    this.bullet = undefined;
+    this.nshrapnels = 24;
+  }
 
-  this.newBullet = function () {
-    var bullet = this.newBulletOrig();
+  newBullet() {
+    var bullet = super.newBullet();
     bullet.image = new Image();
     bullet.image.src = "res/img/mine.png";
     bullet.radius = 6;
@@ -301,21 +312,23 @@ Mine = function (tank) {
       }, 600),
     );
     return bullet;
-  };
-};
+  }
+}
 
 // a guided missile
-Guided = function (tank) {
-  Weapon.call(this, tank);
-  this.name = "Guided";
-  this.image = new Image();
-  this.image.src = "res/img/guided.png";
-  this.active = true;
-  this.bot.shooting_range = 16;
-  this.bot.fleeing_duration = 3000;
+class Guided extends Weapon {
+  constructor(tank) {
+    super(tank);
+    this.name = "Guided";
+    this.image = new Image();
+    this.image.src = "res/img/guided.png";
+    this.active = true;
+    this.bot.shooting_range = 16;
+    this.bot.fleeing_duration = 3000;
+  }
 
-  this.newBullet = function () {
-    var bullet = this.newBulletOrig();
+  newBullet() {
+    var bullet = super.newBullet();
     bullet.radius = 6;
     bullet.image = new Image();
     bullet.image.src = "res/img/guided.png";
@@ -381,22 +394,24 @@ Guided = function (tank) {
         }
       };
     };
-  };
-};
+  }
+}
 
 // destroys walls
-WreckingBall = function (tank) {
-  Weapon.call(this, tank);
-  this.image = new Image();
-  this.image.src = "res/img/wreckingBall.png";
-  this.name = "WreckingBall";
-  this.active = true;
-  this.fired = false;
-  this.bot.shooting_range = 99;
-  this.bot.fleeing_duration = 0;
+class WreckingBall extends Weapon {
+  constructor(tank) {
+    super(tank);
+    this.image = new Image();
+    this.image.src = "res/img/wreckingBall.png";
+    this.name = "WreckingBall";
+    this.active = true;
+    this.fired = false;
+    this.bot.shooting_range = 99;
+    this.bot.fleeing_duration = 0;
+  }
 
-  this.newBullet = function () {
-    var bullet = this.newBulletOrig();
+  newBullet() {
+    var bullet = super.newBullet();
     bullet.radius = 10;
     bullet.color = "#000";
     bullet.speed = TankSpeed * 1.1;
@@ -439,18 +454,20 @@ WreckingBall = function (tank) {
       }
     };
     return bullet;
-  };
-};
+  }
+}
 
 // creates walls
-WallBuilder = function (tank) {
-  Weapon.call(this, tank);
-  this.name = "WallBuilder";
-  this.image = new Image();
-  this.image.src = "res/img/wallBuilder.png";
-  this.active = true;
+class WallBuilder extends Weapon {
+  constructor(tank) {
+    super(tank);
+    this.name = "WallBuilder";
+    this.image = new Image();
+    this.image.src = "res/img/wallBuilder.png";
+    this.active = true;
+  }
 
-  this.shoot = function () {
+  shoot() {
     if (this.active) {
       var tile = this.tank.map.getTileByPos(this.tank.x, this.tank.y);
       var direction = this.tank.angle;
@@ -468,22 +485,24 @@ WallBuilder = function (tank) {
         }, 400),
       );
     }
-  };
-};
+  }
+}
 
 // throw over walls
-Slingshot = function (tank) {
-  Weapon.call(this, tank);
-  this.image = new Image();
-  this.image.src = "res/img/slingshot.png";
-  this.name = "Slingshot";
-  this.active = true;
-  this.fired = false;
-  this.bot.shooting_range = 8;
-  this.bot.fleeing_duration = 0;
+class Slingshot extends Weapon {
+  constructor(tank) {
+    super(tank);
+    this.image = new Image();
+    this.image.src = "res/img/slingshot.png";
+    this.name = "Slingshot";
+    this.active = true;
+    this.fired = false;
+    this.bot.shooting_range = 8;
+    this.bot.fleeing_duration = 0;
+  }
 
-  this.newBullet = function () {
-    var bullet = this.newBulletOrig();
+  newBullet() {
+    var bullet = super.newBullet();
     bullet.radius = 6;
     bullet.color = "#333";
     bullet.speed = 2 * BulletSpeed;
@@ -499,5 +518,5 @@ Slingshot = function (tank) {
       }
     };
     return bullet;
-  };
-};
+  }
+}

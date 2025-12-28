@@ -2,47 +2,49 @@
 // contains a list of players, list of objects in the game
 // contains a loop mechanism for time-iteration
 
-GameID = 0;
-Game = function (canvas, map = -1) {
-  // pass canvas class to game, for size / resolution
-  this.canvas = canvas;
-  this.canvas.game = this;
-  // create new random map
-  if (map == -1) {
-    this.map = new Map(this.canvas);
-    // MapGenerator.algorithms[Math.floor(Math.random()*MapGenerator.algorithms.length)](this.map);
-    // MapGenerator.primsMaze(this.map);
-    // MapGenerator.recursiveDivision(this.map);
-    MapGenerator.porousRecursiveDivision(this.map);
-  } else {
-    this.map = map;
+var GameID = 0;
+class Game {
+  constructor(canvas, map = -1) {
+    // pass canvas class to game, for size / resolution
+    this.canvas = canvas;
+    this.canvas.game = this;
+    // create new random map
+    if (map == -1) {
+      this.map = new Map(this.canvas);
+      // MapGenerator.algorithms[Math.floor(Math.random()*MapGenerator.algorithms.length)](this.map);
+      // MapGenerator.primsMaze(this.map);
+      // MapGenerator.recursiveDivision(this.map);
+      MapGenerator.porousRecursiveDivision(this.map);
+    } else {
+      this.map = map;
+    }
+    this.map.resize();
+    this.players = [];
+    this.objs = [];
+    this.paused = false;
+    this.loop = undefined;
+    this.n_playersAlive = 0;
+    this.t = 0;
+    this.intvls = [];
+    this.timeouts = [];
+    this.nkills = 0;
+    this.mode = new Deathmatch(this);
+    GameID++;
   }
-  this.map.resize();
-  this.players = [];
-  this.objs = [];
-  this.paused = false;
-  this.loop = undefined;
-  this.n_playersAlive = 0;
-  this.t = 0;
-  this.intvls = [];
-  this.timeouts = [];
-  this.nkills = 0;
-  this.mode = new Deathmatch(this);
-  GameID++;
 
   // add a player (class) to the game
-  this.addPlayer = function (player) {
+  addPlayer(player) {
     this.players.push(player);
     player.game = this;
-  };
+  }
 
   // add any object to the game
-  this.addObject = function (object) {
+  addObject(object) {
     this.objs.push(object);
-  };
+  }
 
   // start the game, starts time-loop
-  this.start = function () {
+  start() {
     var self = this;
     this.mode.init();
     for (var i = 0; i < this.players.length; i++) this.players[i].spawn();
@@ -52,10 +54,10 @@ Game = function (canvas, map = -1) {
     playSound("res/sound/gamestart.wav");
     if (bgmusic) playMusic("res/sound/bgmusic.wav");
     updateScores();
-  };
+  }
 
   // a single step of the time-loop
-  this.step = function () {
+  step() {
     if (!this.paused) {
       this.t += GameFrequency;
       // remove deleted objects and
@@ -101,16 +103,16 @@ Game = function (canvas, map = -1) {
       }
       if (this.t > RoundTime * 60000) this.end();
     }
-  };
+  }
 
   // pause the game
-  this.pause = function () {
+  pause() {
     this.paused = !this.paused;
     stopMusic(); // prevent 'invincible' sound from playing all over
-  };
+  }
 
   // stop the game
-  this.stop = function () {
+  stop() {
     this.paused = true;
     clearInterval(this.loop);
     for (var i = 0; i < this.intvls.length; i++) clearInterval(this.intvls[i]);
@@ -118,20 +120,20 @@ Game = function (canvas, map = -1) {
     clearEffects();
     stopMusic();
     for (var i = 0; i < this.players.length; i++) this.players[i].base = undefined;
-  };
+  }
 
   // end the game
-  this.end = function () {
+  end() {
     this.paused = true;
     var pageid = openPage("leaderboard");
     this.stop();
-  };
+  }
 
-  this.resetTime = function () {
+  resetTime() {
     this.t = 0;
     for (var i = 0; i < this.players.length; i++) {
       this.players[i].tank.timers.invincible = -1;
       this.players[i].tank.timers.spawnshield = -1;
     }
-  };
-};
+  }
+}

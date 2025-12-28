@@ -1,17 +1,21 @@
-Gamemode = function (game) {
-  this.name = "defaultmode";
-  this.game = game;
-  this.BaseSpawnDistance = 2;
-  this.step = function () {};
-  this.init = function () {};
-};
+class Gamemode {
+  constructor(game) {
+    this.name = "defaultmode";
+    this.game = game;
+    this.BaseSpawnDistance = 2;
+  }
+  step() {}
+  init() {}
+}
 
-Deathmatch = function (game) {
-  Gamemode.call(this, game);
-  this.name = "Deathmatch";
+class Deathmatch extends Gamemode {
+  constructor(game) {
+    super(game);
+    this.name = "Deathmatch";
+  }
 
   // give score to player
-  this.giveScore = function (player, val = 1) {
+  giveScore(player, val = 1) {
     player.score += val;
     player.spree += 1;
     if (player.spree >= 5 && player.spree % 5 == 0) {
@@ -20,23 +24,25 @@ Deathmatch = function (game) {
     }
     updateScores();
     adaptBotSpeed(player.team);
-  };
+  }
 
   // called when player1 kills player2
-  this.newKill = function (player1, player2) {
+  newKill(player1, player2) {
     if (player1.team == player2.team) this.giveScore(player1, -1);
     else this.giveScore(player1, 1);
-  };
-};
+  }
+}
 
-TeamDeathmatch = function (game) {
-  Gamemode.call(this, game);
-  this.name = "TeamDeathmatch";
-  this.initiated = false;
-  this.BaseSpawnDistance = 2;
+class TeamDeathmatch extends Gamemode {
+  constructor(game) {
+    super(game);
+    this.name = "TeamDeathmatch";
+    this.initiated = false;
+    this.BaseSpawnDistance = 2;
+  }
 
   // give score to team players
-  this.giveScore = function (player, val = 1) {
+  giveScore(player, val = 1) {
     for (var i = 0; i < this.game.players.length; i++) if (this.game.players[i].team == player.team) this.game.players[i].score += val;
     player.spree += 1;
     if (player.spree >= 5 && player.spree % 5 == 0) {
@@ -45,16 +51,16 @@ TeamDeathmatch = function (game) {
     }
     updateScores();
     adaptBotSpeed(player.team);
-  };
+  }
 
   // called when player1 kills player2
-  this.newKill = function (player1, player2) {
+  newKill(player1, player2) {
     if (player1.team == player2.team) this.giveScore(player1, -1);
     else this.giveScore(player1, 1);
-  };
+  }
 
   // init bases and spawn players
-  this.init = function () {
+  init() {
     var bases = [];
     var game = this.game;
 
@@ -106,24 +112,26 @@ TeamDeathmatch = function (game) {
         player.base = b;
       }
     }
-  };
-};
+  }
+}
 
-CaptureTheFlag = function (game) {
-  Gamemode.call(this, game);
-  this.name = "CaptureTheFlag";
-  this.initiated = false;
-  this.BaseSpawnDistance = 7;
+class CaptureTheFlag extends Gamemode {
+  constructor(game) {
+    super(game);
+    this.name = "CaptureTheFlag";
+    this.initiated = false;
+    this.BaseSpawnDistance = 7;
+  }
 
   // give score to team players
-  this.giveScore = function (player, val = 1) {
+  giveScore(player, val = 1) {
     for (var i = 0; i < this.game.players.length; i++) if (this.game.players[i].team == player.team) this.game.players[i].score += val;
     updateScores();
     adaptBotSpeed(player.team);
-  };
+  }
 
   // called when player1 kills player2
-  this.newKill = function (player1, player2) {
+  newKill(player1, player2) {
     if (player1.team != player2.team) {
       player1.spree += 1;
       if (player1.spree >= 5 && player1.spree % 5 == 0) {
@@ -132,9 +140,9 @@ CaptureTheFlag = function (game) {
       }
       updateScores();
     }
-  };
+  }
 
-  this.init = function () {
+  init() {
     var bases = [];
     var game = this.game;
 
@@ -188,15 +196,17 @@ CaptureTheFlag = function (game) {
         player.base = b;
       }
     }
-  };
-};
+  }
+}
 
 // the map editor: implemented as a GameMode
-MapEditor = function (game, clearmap = true) {
-  Gamemode.call(this, game);
-  this.clearmap = clearmap;
+class MapEditor extends Gamemode {
+  constructor(game, clearmap = true) {
+    super(game);
+    this.clearmap = clearmap;
+  }
 
-  this.init = function () {
+  init() {
     var map = this.game.map;
     if (this.clearmap) {
       // Start with a grid with no walls
@@ -217,9 +227,9 @@ MapEditor = function (game, clearmap = true) {
     this.game.addPlayer(p);
     p.keys = keymaps[0];
     p.color = playercolors[0];
-  };
+  }
 
-  this.step = function () {
+  step() {
     var t = this.game.players[0].tank;
     if (t.weapon.name != "WallBuilder") {
       t.weapon = new WallBuilder(t);
@@ -230,22 +240,24 @@ MapEditor = function (game, clearmap = true) {
         return false;
       };
     }
-  };
-};
+  }
+}
 
-KingOfTheHill = function (game) {
-  Gamemode.call(this, game);
-  this.name = "KingOfTheHill";
-  this.bases = [];
+class KingOfTheHill extends Gamemode {
+  constructor(game) {
+    super(game);
+    this.name = "KingOfTheHill";
+    this.bases = [];
+  }
 
   // give score to team players
-  this.giveScore = function (player, val = 1) {
+  giveScore(player, val = 1) {
     player.score += val;
     updateScores();
-  };
+  }
 
   // called when player1 kills player2
-  this.newKill = function (player1, player2) {
+  newKill(player1, player2) {
     if (player1.team != player2.team) {
       player1.spree += 1;
       if (player1.spree >= 5 && player1.spree % 5 == 0) {
@@ -254,9 +266,9 @@ KingOfTheHill = function (game) {
       }
       updateScores();
     }
-  };
+  }
 
-  this.step = function () {
+  step() {
     // if all bases same color: score in intervals for team
     var scoreevery = 2000;
     var equal = true;
@@ -271,9 +283,9 @@ KingOfTheHill = function (game) {
       for (var i = 0; i < this.game.players.length; i++) if (this.game.players[i].team == team) this.giveScore(this.game.players[i], 1);
       adaptBotSpeed(team, 0.02);
     }
-  };
+  }
 
-  this.init = function () {
+  init() {
     var bases = [];
     var game = this.game;
 
@@ -310,5 +322,5 @@ KingOfTheHill = function (game) {
       game.addObject(b);
     }
     this.bases = bases;
-  };
-};
+  }
+}
