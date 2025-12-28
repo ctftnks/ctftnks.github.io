@@ -1,15 +1,19 @@
-<div class="popupshade" id="leaderboardshade" onclick="closePage(this);newGame();clearInterval(leaderIntvl);clearTimeout(leaderTimeout);"></div>
+<div
+  class="popupshade"
+  id="leaderboardshade"
+  onclick="
+    closePage(this);
+    newGame();
+    clearInterval(leaderIntvl);
+    clearTimeout(leaderTimeout);
+  "
+></div>
 <div class="popup">
-
   <h2 id="leaderboardh2">Leaderboard</h2>
 
   <span id="leaderboardCounter"></span>
 
-  <div id="leaderboard">
-
-  </div>
-
-
+  <div id="leaderboard"></div>
 </div>
 
 <script>
@@ -26,6 +30,4 @@
     closePage(document.getElementById("leaderboardshade").parentNode);
     newGame();
   }, EndScreenTime * 1000);
-
-
 </script>

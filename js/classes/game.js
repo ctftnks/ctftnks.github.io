@@ -1,11 +1,9 @@
-
 // A class for a single game round with a single map
 // contains a list of players, list of objects in the game
 // contains a loop mechanism for time-iteration
 
 GameID = 0;
 Game = function (canvas, map = -1) {
-
   // pass canvas class to game, for size / resolution
   this.canvas = canvas;
   this.canvas.game = this;
@@ -36,27 +34,25 @@ Game = function (canvas, map = -1) {
   this.addPlayer = function (player) {
     this.players.push(player);
     player.game = this;
-  }
+  };
 
   // add any object to the game
   this.addObject = function (object) {
     this.objs.push(object);
-  }
+  };
 
   // start the game, starts time-loop
   this.start = function () {
     var self = this;
     this.mode.init();
-    for (var i = 0; i < this.players.length; i++)
-      this.players[i].spawn();
+    for (var i = 0; i < this.players.length; i++) this.players[i].spawn();
     this.loop = setInterval(function () {
       self.step();
     }, GameFrequency);
     playSound("res/sound/gamestart.wav");
-    if (bgmusic)
-      playMusic("res/sound/bgmusic.wav")
+    if (bgmusic) playMusic("res/sound/bgmusic.wav");
     updateScores();
-  }
+  };
 
   // a single step of the time-loop
   this.step = function () {
@@ -66,13 +62,10 @@ Game = function (canvas, map = -1) {
       // initiate spatial sorting of objects within the map class
       this.map.clearObjectLists();
       for (var i = this.objs.length - 1; i >= 0; i--)
-        if (!this.objs[i].deleted)
-          this.map.addObject(this.objs[i]);
-        else
-          this.objs.splice(i, 1);
+        if (!this.objs[i].deleted) this.map.addObject(this.objs[i]);
+        else this.objs.splice(i, 1);
       // call step() function for every object in order for it to move/etc.
-      for (var i = 0; i < this.objs.length; i++)
-        this.objs[i].step();
+      for (var i = 0; i < this.objs.length; i++) this.objs[i].step();
       // do gamemode calculations
       this.mode.step();
       // add random PowerUp
@@ -82,10 +75,17 @@ Game = function (canvas, map = -1) {
         p.x = pos.x;
         p.y = pos.y;
         this.addObject(p);
-        this.timeouts.push(setTimeout(function () { p.delete(); }, 1000 * PowerUpRate * MaxPowerUps));
+        this.timeouts.push(
+          setTimeout(
+            function () {
+              p.delete();
+            },
+            1000 * PowerUpRate * MaxPowerUps,
+          ),
+        );
       }
       if (Key.isDown(Key.ESCAPE)) {
-        openPage('menu');
+        openPage("menu");
         this.pause();
       }
       if (this.t % 1000 == GameFrequency) {
@@ -93,43 +93,39 @@ Game = function (canvas, map = -1) {
         dt = dt < 0 ? 0 : dt;
         var dtm = Math.floor(dt / 60);
         var dts = Math.floor(dt - dtm * 60);
-        dtm = "" + dtm
-        while (dtm.length < 2) dtm = "0" + dtm
-        dts = "" + dts
-        while (dts.length < 2) dts = "0" + dts
+        dtm = "" + dtm;
+        while (dtm.length < 2) dtm = "0" + dtm;
+        dts = "" + dts;
+        while (dts.length < 2) dts = "0" + dts;
         document.getElementById("GameTimer").innerHTML = dtm + ":" + dts;
       }
-      if (this.t > RoundTime * 60000)
-        this.end();
+      if (this.t > RoundTime * 60000) this.end();
     }
-  }
+  };
 
   // pause the game
   this.pause = function () {
     this.paused = !this.paused;
     stopMusic(); // prevent 'invincible' sound from playing all over
-  }
+  };
 
   // stop the game
   this.stop = function () {
     this.paused = true;
     clearInterval(this.loop);
-    for (var i = 0; i < this.intvls.length; i++)
-      clearInterval(this.intvls[i]);
-    for (var i = 0; i < this.timeouts.length; i++)
-      clearTimeout(this.timeouts[i]);
+    for (var i = 0; i < this.intvls.length; i++) clearInterval(this.intvls[i]);
+    for (var i = 0; i < this.timeouts.length; i++) clearTimeout(this.timeouts[i]);
     clearEffects();
     stopMusic();
-    for (var i = 0; i < this.players.length; i++)
-      this.players[i].base = undefined;
-  }
+    for (var i = 0; i < this.players.length; i++) this.players[i].base = undefined;
+  };
 
   // end the game
   this.end = function () {
     this.paused = true;
     var pageid = openPage("leaderboard");
     this.stop();
-  }
+  };
 
   this.resetTime = function () {
     this.t = 0;
@@ -137,6 +133,5 @@ Game = function (canvas, map = -1) {
       this.players[i].tank.timers.invincible = -1;
       this.players[i].tank.timers.spawnshield = -1;
     }
-  }
-
-}
+  };
+};

@@ -1,4 +1,3 @@
-
 // static Key class
 // keeps track of pressed keys
 var Key = {
@@ -69,7 +68,6 @@ var Key = {
   BACKSPACE: 8,
   ESCAPE: 27,
 
-
   isDown: function (keyCode) {
     return this._pressed[keyCode];
   },
@@ -78,8 +76,7 @@ var Key = {
     this._pressed[event.keyCode] = true;
     if (editingKeymap) {
       // Ctrl is forbidden
-      if (event.keyCode == 17)
-        return;
+      if (event.keyCode == 17) return;
       doEditKeymap(event.keyCode);
     }
     if (event.keyCode == Key.W) {
@@ -90,7 +87,7 @@ var Key = {
 
   onKeyup: function (event) {
     delete this._pressed[event.keyCode];
-  }
+  },
 };
 
 // available keymaps
@@ -103,17 +100,28 @@ var keymaps = [
   [Key.Z, Key.G, Key.H, Key.J, Key.T],
   [Key.K, Key.M, Key.COMMA, Key.PERIOD, Key.N],
   [Key.R4, Key.E, Key.R, Key.R5, Key.R3],
-  [Key.R8, Key.U, Key.I, Key.R9, Key.R7]
-]
+  [Key.R8, Key.U, Key.I, Key.R9, Key.R7],
+];
 
 // event listeners
-window.addEventListener('keyup', function (event) { Key.onKeyup(event); }, false);
-window.addEventListener('keydown', function (event) { Key.onKeydown(event); }, false);
+window.addEventListener(
+  "keyup",
+  function (event) {
+    Key.onKeyup(event);
+  },
+  false,
+);
+window.addEventListener(
+  "keydown",
+  function (event) {
+    Key.onKeydown(event);
+  },
+  false,
+);
 
 function getKeyLabel(key) {
-  return String.fromCharCode((96 <= key && key <= 105) ? key - 48 : key);
+  return String.fromCharCode(96 <= key && key <= 105 ? key - 48 : key);
 }
-
 
 var keyLabels = [
   "", // [0]
@@ -371,5 +379,5 @@ var keyLabels = [
   "", // [252]
   "PA1", // [253]
   "WIN_OEM_CLEAR", // [254]
-  "" // [255]
+  "", // [255]
 ];

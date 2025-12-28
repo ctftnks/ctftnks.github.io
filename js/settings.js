@@ -1,4 +1,3 @@
-
 // Game Performance
 FrameFrequency = 30;
 GameFrequency = 10;
@@ -27,8 +26,8 @@ ShowTankLabels = true;
 MobileJoystick = false;
 ResetStatsEachGame = true;
 AdaptiveBotSpeed = true;
-RespawnTime = 3
-BulletsCanCollide = true
+RespawnTime = 3;
+BulletsCanCollide = true;
 // Map size
 MapNxMin = 9;
 MapNxMax = 15;

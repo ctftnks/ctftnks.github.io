@@ -1,16 +1,14 @@
-
-
-#leaderboard table{
+#leaderboard table {
   position: relative;
   width: 80%;
   left: 10%;
 }
 
-#leaderboard td{
+#leaderboard td {
   padding: 8px;
 }
 
-#leaderboardCounter{
+#leaderboardCounter {
   position: absolute;
   top: 24px;
   right: 24px;

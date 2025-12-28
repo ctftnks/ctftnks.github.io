@@ -1,6 +1,5 @@
 <div class="popupshade" onclick="closePage(this)"></div>
 <div class="popup">
-
   <h2>Powerups:</h2>
 
   <div id="powerupsOptions"></div>
@@ -9,21 +8,51 @@
 
   <div class="option vspace">
     <span>Rate</span>
-    <button class="left" onclick="PowerUpRate -= 1; databinding();">-</button>
+    <button
+      class="left"
+      onclick="
+        PowerUpRate -= 1;
+        databinding();
+      "
+    >
+      -
+    </button>
     <input class="left right" data-bind="PowerUpRate" data-suffix="s" data-min="1" data-max="60" size="1" readonly />
-    <button class="right" onclick="PowerUpRate += 1; databinding();">+</button>
+    <button
+      class="right"
+      onclick="
+        PowerUpRate += 1;
+        databinding();
+      "
+    >
+      +
+    </button>
   </div>
 
   <div class="option vspace">
     <span>Amount</span>
-    <button class="left" onclick="MaxPowerUps -= 2; databinding();">-</button>
+    <button
+      class="left"
+      onclick="
+        MaxPowerUps -= 2;
+        databinding();
+      "
+    >
+      -
+    </button>
     <input class="left right" data-bind="MaxPowerUps" data-min="0" size="1" readonly />
-    <button class="right" onclick="MaxPowerUps += 2; databinding();">+</button>
+    <button
+      class="right"
+      onclick="
+        MaxPowerUps += 2;
+        databinding();
+      "
+    >
+      +
+    </button>
   </div>
 
-
-  <button class="option vspace" onclick="closePage(this);">Close</button>
-
+  <button class="option vspace" onclick="closePage(this)">Close</button>
 </div>
 
 <script>

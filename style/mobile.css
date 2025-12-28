@@ -1,43 +1,46 @@
-html, body
-{
-    height: 130%;
-    overflow: hidden;
+html,
+body {
+  height: 130%;
+  overflow: hidden;
 }
 
-#mobileControls{
+#mobileControls {
   position: relative;
   left: 0%;
   top: 0%;
   height: 100%;
   width: 100%;
-  width		: 100%;
-  height		: 100%;
-  overflow	: hidden;
-  padding		: 0;
-  margin		: 0;
-  -webkit-user-select	: none;
-  -moz-user-select	: none;
-  user-select	: none;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
-#joystickContainer{
+#joystickContainer {
   position: relative;
   left: 0%;
   top: 0%;
   height: 100%;
   width: 100%;
-  width		: 100%;
-  height		: 100%;
-  overflow	: hidden;
-  padding		: 0;
-  margin		: 0;
-  -webkit-user-select	: none;
-  -moz-user-select	: none;
-  user-select	: none;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
-
-#mobileFire, #mobileBack, #mobileUp, #mobileLeft, #mobileRight{
+#mobileFire,
+#mobileBack,
+#mobileUp,
+#mobileLeft,
+#mobileRight {
   border-radius: 100px;
   border: solid 1px #000;
   width: 100px;
@@ -48,49 +51,49 @@ html, body
   z-index: 1;
 }
 
-#mobileFire{
+#mobileFire {
   left: 15%;
   top: 56%;
 }
 
-#mobileBack{
+#mobileBack {
   left: 76%;
   top: 75%;
 }
 
-#mobileUp{
+#mobileUp {
   left: 86%;
   top: 60%;
 }
 
-#mobileRight{
+#mobileRight {
   left: 12%;
   top: 75%;
 }
 
-#mobileLeft{
+#mobileLeft {
   left: 4%;
   top: 60%;
 }
 
-#mobileFire.joystick{
+#mobileFire.joystick {
   left: 4%;
   top: 60%;
 }
 
-#mobileBack.joystick{
+#mobileBack.joystick {
   left: 12%;
   top: 75%;
 }
 
-#mobileUp.joystick{
+#mobileUp.joystick {
   display: none;
 }
 
-#mobileRight.joystick{
+#mobileRight.joystick {
   display: none;
 }
 
-#mobileLeft.joystick{
+#mobileLeft.joystick {
   display: none;
 }

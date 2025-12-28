@@ -4,15 +4,15 @@
 
 nplayers = 0;
 playercolors = [
-  "#DA1918",  // red
-  "#31B32B",  // green
-  "#1F87FF",  // blue
-  "#21B19B",  // teal
-  "#A020F0",  // purple
-  "#F4641D",  // orange
-  "#713B17",  // brown
-  "#E7E52C"  // yellow
-]
+  "#DA1918", // red
+  "#31B32B", // green
+  "#1F87FF", // blue
+  "#21B19B", // teal
+  "#A020F0", // purple
+  "#F4641D", // orange
+  "#713B17", // brown
+  "#E7E52C", // yellow
+];
 
 // playercolors = [
 //   "#F44336",  // red
@@ -25,7 +25,6 @@ playercolors = [
 // ]
 
 Player = function () {
-
   this.id = nplayers++;
   this.name = "Player " + (this.id + 1);
   this.color = playercolors[this.id];
@@ -46,7 +45,7 @@ Player = function () {
     if (Key.isDown(this.keys[2])) this.tank.move(-0.7);
     if (Key.isDown(this.keys[3])) this.tank.turn(1);
     if (Key.isDown(this.keys[4])) this.tank.shoot();
-  }
+  };
 
   // spawn at some point
   this.spawn = function () {
@@ -54,7 +53,7 @@ Player = function () {
     this.tank.deleted = false;
     this.tank.map = this.game.map;
     var spos = this.game.map.spawnPoint();
-    if (typeof (this.base) !== "undefined" && this.base.tile != -1) {
+    if (typeof this.base !== "undefined" && this.base.tile != -1) {
       var spos2 = this.base.tile;
       while (spos2.id == this.base.tile.id)
         spos2 = spos2.randomWalk(Math.pow(this.game.mode.BaseSpawnDistance, 2) + Math.round(Math.random()));
@@ -66,12 +65,14 @@ Player = function () {
     this.game.n_playersAlive += 1;
     // this.game.addObject(new Smoke(this.x, this.y));
     var self = this;
-    this.game.timeouts.push(setTimeout(function () {
-      new Cloud(self.game, self.tank.x, self.tank.y, n = 4, radius = 20, rspeed = 2);
-    }, 10));
+    this.game.timeouts.push(
+      setTimeout(function () {
+        new Cloud(self.game, self.tank.x, self.tank.y, (n = 4), (radius = 20), (rspeed = 2));
+      }, 10),
+    );
     // spawn shield
     this.tank.timers.spawnshield = this.game.t + SpawnShieldTime * 1000;
-  }
+  };
 
   // kill the player, called when tank is shot
   // check if game should end
@@ -83,17 +84,19 @@ Player = function () {
     this.spree = 0;
     this.stats.deaths += 1;
     var self = this;
-    this.game.timeouts.push(setTimeout(function () {
-      self.spawn();
-    }, RespawnTime * 1000));
-  }
+    this.game.timeouts.push(
+      setTimeout(function () {
+        self.spawn();
+      }, RespawnTime * 1000),
+    );
+  };
 
   // change color
   this.changeColor = function () {
     this.team += 1;
     this.team = this.team % playercolors.length;
     this.color = playercolors[this.team % playercolors.length];
-  }
+  };
 
   // reset stats dictionary to 0
   this.resetStats = function () {
@@ -101,6 +104,5 @@ Player = function () {
     this.stats.kills = 0;
     this.stats.miles = 0;
     this.stats.shots = 0;
-  }
-
-}
+  };
+};

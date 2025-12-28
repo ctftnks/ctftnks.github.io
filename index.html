@@ -1,89 +1,74 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+  <head>
+    <title>CTF Tanks</title>
+    <link rel="stylesheet" href="style/main.css" />
+    <link rel="stylesheet" href="style/pages.css" />
+    <link rel="stylesheet" href="style/mobile.css" />
+    <link rel="stylesheet" href="style/ui.css" />
 
-<head>
-	<title>CTF Tanks</title>
-	<link rel="stylesheet" href="style/main.css">
-	<link rel="stylesheet" href="style/pages.css">
-	<link rel="stylesheet" href="style/mobile.css">
-	<link rel="stylesheet" href="style/ui.css">
+    <script src="js/main.js?v=1.2" type="text/javascript"></script>
+    <script src="pages/pages.js?v=1.2" type="text/javascript"></script>
+    <script src="js/databinding.js?v=1.2" type="text/javascript"></script>
+    <script src="js/keybindings.js?v=1.2" type="text/javascript"></script>
+    <script src="js/settings.js?v=1.2" type="text/javascript"></script>
+    <script src="js/mobile.js?v=1.2" type="text/javascript"></script>
+    <script src="js/effects.js?v=1.2" type="text/javascript"></script>
 
-	<script src="js/main.js?v=1.2" type="text/javascript"></script>
-	<script src="pages/pages.js?v=1.2" type="text/javascript"></script>
-	<script src="js/databinding.js?v=1.2" type="text/javascript"></script>
-	<script src="js/keybindings.js?v=1.2" type="text/javascript"></script>
-	<script src="js/settings.js?v=1.2" type="text/javascript"></script>
-	<script src="js/mobile.js?v=1.2" type="text/javascript"></script>
-	<script src="js/effects.js?v=1.2" type="text/javascript"></script>
+    <script src="js/classes/bot.js?v=1.2" type="text/javascript"></script>
+    <script src="js/classes/bullet.js?v=1.2" type="text/javascript"></script>
+    <script src="js/classes/canvas.js?v=1.2" type="text/javascript"></script>
+    <script src="js/classes/game.js?v=1.2" type="text/javascript"></script>
+    <script src="js/classes/gamemode.js?v=1.2" type="text/javascript"></script>
+    <script src="js/classes/ctf.js?v=1.2" type="text/javascript"></script>
+    <script src="js/classes/map.js?v=1.2" type="text/javascript"></script>
+    <script src="js/classes/mapGenerator.js?v=1.2" type="text/javascript"></script>
+    <script src="js/classes/object.js?v=1.2" type="text/javascript"></script>
+    <script src="js/classes/player.js?v=1.2" type="text/javascript"></script>
+    <script src="js/classes/powerup.js?v=1.2" type="text/javascript"></script>
+    <script src="js/classes/smoke.js?v=1.2" type="text/javascript"></script>
+    <script src="js/classes/tank.js?v=1.2" type="text/javascript"></script>
+    <script src="js/classes/trajectory.js?v=1.2" type="text/javascript"></script>
+    <script src="js/classes/weapons.js?v=1.2" type="text/javascript"></script>
 
-	<script src="js/classes/bot.js?v=1.2" type="text/javascript"></script>
-	<script src="js/classes/bullet.js?v=1.2" type="text/javascript"></script>
-	<script src="js/classes/canvas.js?v=1.2" type="text/javascript"></script>
-	<script src="js/classes/game.js?v=1.2" type="text/javascript"></script>
-	<script src="js/classes/gamemode.js?v=1.2" type="text/javascript"></script>
-	<script src="js/classes/ctf.js?v=1.2" type="text/javascript"></script>
-	<script src="js/classes/map.js?v=1.2" type="text/javascript"></script>
-	<script src="js/classes/mapGenerator.js?v=1.2" type="text/javascript"></script>
-	<script src="js/classes/object.js?v=1.2" type="text/javascript"></script>
-	<script src="js/classes/player.js?v=1.2" type="text/javascript"></script>
-	<script src="js/classes/powerup.js?v=1.2" type="text/javascript"></script>
-	<script src="js/classes/smoke.js?v=1.2" type="text/javascript"></script>
-	<script src="js/classes/tank.js?v=1.2" type="text/javascript"></script>
-	<script src="js/classes/trajectory.js?v=1.2" type="text/javascript"></script>
-	<script src="js/classes/weapons.js?v=1.2" type="text/javascript"></script>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=0.5, maximum-scale=0.5" />
+  </head>
 
-	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=0.5, maximum-scale=0.5">
+  <body>
+    <!-- game related stuff -->
+    <canvas id="gameFrame"></canvas>
+    <canvas id="effectFrame"></canvas>
 
-</head>
+    <div id="mobileControls" style="display: none">
+      <div id="joystickContainer"></div>
+      <button id="mobileFire">Fire</button>
+      <button id="mobileBack">Back</button>
+      <button id="mobileLeft">Left</button>
+      <button id="mobileRight">Right</button>
+      <button id="mobileUp">Forward</button>
+    </div>
 
-<body>
+    <!-- sidebar -->
+    <div id="sideBar">
+      <div class="entry clickable" onclick="openPage('menu')">Menu</div>
+      <div class="entry">&nbsp;</div>
+      <div class="entry">
+        <b>Scores</b>
+      </div>
+      <div id="scoreBoard"></div>
+      <div class="entry">&nbsp;</div>
+      <div class="entry clickable" onclick="game.resetTime()">
+        Time:&nbsp;&nbsp;<span id="GameTimer">00:00</span>&nbsp;&nbsp;<span style="font-size: 0.8em; color: #555">click for more</span>
+      </div>
+      <div class="entry clickable" onclick="newGame()">Next Map</div>
+      <br />
+      <div class="entry clickable" onclick="openPage('importmap')">Import Map</div>
+      <div class="entry clickable" onclick="openPage('exportmap')">Export Map</div>
+      <br />
+      <div class="entry" style="display: none" id="BotSpeedometer"></div>
+    </div>
 
-	<!-- game related stuff -->
-	<canvas id="gameFrame"></canvas>
-	<canvas id="effectFrame"></canvas>
-
-	<div id="mobileControls" style="display:none;">
-		<div id="joystickContainer"></div>
-		<button id="mobileFire">Fire</button>
-		<button id="mobileBack">Back</button>
-		<button id="mobileLeft">Left</button>
-		<button id="mobileRight">Right</button>
-		<button id="mobileUp">Forward</button>
-	</div>
-
-
-
-	<!-- sidebar -->
-	<div id="sideBar">
-		<div class="entry clickable" onclick="openPage('menu')">
-			Menu
-		</div>
-		<div class="entry">&nbsp;</div>
-		<div class="entry">
-			<b>Scores</b>
-		</div>
-		<div id="scoreBoard"></div>
-		<div class="entry">&nbsp;</div>
-		<div class="entry clickable" onclick="game.resetTime();">
-			Time:&nbsp;&nbsp;<span id="GameTimer">00:00</span>&nbsp;&nbsp;<span style="font-size:0.8em;color:#555;">click for
-				more</span>
-		</div>
-		<div class="entry clickable" onclick="newGame()">
-			Next Map
-		</div><br />
-		<div class="entry clickable" onclick="openPage('importmap')">
-			Import Map
-		</div>
-		<div class="entry clickable" onclick="openPage('exportmap')">
-			Export Map
-		</div><br>
-		<div class="entry" style="display:none;" id="BotSpeedometer"></div>
-
-	</div>
-
-	<!-- container for UI pages -->
-	<div id="pageContainer"></div>
-
-</body>
-
+    <!-- container for UI pages -->
+    <div id="pageContainer"></div>
+  </body>
 </html>

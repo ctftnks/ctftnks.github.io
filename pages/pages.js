@@ -1,5 +1,3 @@
-
-
 // create page div in container, load content into page
 pageID = 0;
 loadedScripts = [];
@@ -41,12 +39,11 @@ function openPage(name) {
 
 // close a page by ID or child
 function closePage(id) {
-  if (typeof (id) == "number") {
+  if (typeof id == "number") {
     var elem = document.getElementById("page" + id);
-    if (elem != null && typeof (elem) !== "undefined")
-      elem.parentNode.removeChild(elem);
+    if (elem != null && typeof elem !== "undefined") elem.parentNode.removeChild(elem);
   }
-  if (typeof (id) == "object") {
+  if (typeof id == "object") {
     var count = 0;
     while (!id.matches(".page") || count > 100) {
       id = id.parentNode;
@@ -58,7 +55,6 @@ function closePage(id) {
 
 // evaluate script tags of element
 function evalscripts(elem) {
-  var scripts = elem.getElementsByTagName('script');
-  for (var n = 0; n < scripts.length; n++)
-    eval(scripts[n].innerHTML);
+  var scripts = elem.getElementsByTagName("script");
+  for (var n = 0; n < scripts.length; n++) eval(scripts[n].innerHTML);
 }

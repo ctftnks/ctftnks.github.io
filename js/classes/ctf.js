@@ -1,5 +1,3 @@
-
-
 Flag = function (gam, base) {
   Object.call(this);
   this.type = "Flag";
@@ -19,14 +17,14 @@ Flag = function (gam, base) {
   this.reset = function () {
     this.inBase = true;
     this.drop(this.base.x, this.base.y);
-  }
+  };
   // let tank pick up the flag
   this.pickup = function (tank) {
     tank.carriedFlag = this;
     this.picked = true;
     this.inBase = false;
     this.delete();
-  }
+  };
   this.drop = function (x, y) {
     this.deleted = false;
     this.x = x;
@@ -34,7 +32,7 @@ Flag = function (gam, base) {
     this.resetTimer = this.game.t + 30000;
     this.picked = false;
     this.game.objs.push(this);
-  }
+  };
 
   this.step = function () {
     var tile = this.game.map.getTileByPos(this.x, this.y);
@@ -54,13 +52,12 @@ Flag = function (gam, base) {
         }
       }
     }
-    if (!this.inBase && !this.picked && this.resetTimer < this.game.t)
-      this.reset();
+    if (!this.inBase && !this.picked && this.resetTimer < this.game.t) this.reset();
     if (this.inBase) {
       this.x = this.base.x;
       this.y = this.base.y;
     }
-  }
+  };
 
   this.draw = function (canvas, context) {
     context.save();
@@ -74,9 +71,8 @@ Flag = function (gam, base) {
     context.rect(-this.size / 2, -this.size / 2, this.size / 6, this.size * 1.1);
     context.fill();
     context.restore();
-  }
-}
-
+  };
+};
 
 Base = function (game, player, x, y) {
   Object.call(this);
@@ -102,12 +98,16 @@ Base = function (game, player, x, y) {
     context.rect(this.size / 2, this.size / 2, -this.size, -8);
     context.fill();
     context.restore();
-  }
+  };
 
   this.step = function () {
     for (var i = 0; i < this.tile.objs.length; i++) {
       var tank = this.tile.objs[i];
-      if (tank.isTank && tank.player.team == this.team && Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)) {
+      if (
+        tank.isTank &&
+        tank.player.team == this.team &&
+        Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)
+      ) {
         if (tank.carriedFlag != -1 && this.hasFlag()) {
           // score!
           this.game.mode.giveScore(tank.player);
@@ -117,14 +117,13 @@ Base = function (game, player, x, y) {
         }
       }
     }
-  }
+  };
 
-  this.hasFlag = function() {
-    if (typeof(this.flag) === "undefined")
-      return false;
+  this.hasFlag = function () {
+    if (typeof this.flag === "undefined") return false;
     return this.flag.inBase;
-  }
-}
+  };
+};
 
 Hill = function (game, x, y) {
   Base.call(this, game, { color: "#555", team: "#555" }, x, y);
@@ -132,10 +131,14 @@ Hill = function (game, x, y) {
   this.step = function () {
     for (var i = 0; i < this.tile.objs.length; i++) {
       var tank = this.tile.objs[i];
-      if (tank.isTank && tank.player.team != this.team && Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)) {
+      if (
+        tank.isTank &&
+        tank.player.team != this.team &&
+        Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)
+      ) {
         this.team = tank.player.team;
         this.color = tank.player.color;
       }
     }
-  }
-}
+  };
+};

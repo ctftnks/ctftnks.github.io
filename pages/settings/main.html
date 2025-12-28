@@ -1,60 +1,178 @@
-<div class="popupshade" onclick="closePage(this);"></div>
+<div class="popupshade" onclick="closePage(this)"></div>
 <div class="popup" id="settingsMenu">
-
-
   <h2>Settings</h2>
 
   <div id="settingsTable">
     <div class="leftCol">
       <div class="option">
         <span>Tank speed</span>
-        <button class="left" onclick="TankSpeed -= 20; databinding();">-</button>
+        <button
+          class="left"
+          onclick="
+            TankSpeed -= 20;
+            databinding();
+          "
+        >
+          -
+        </button>
         <input class="left right" data-bind="TankSpeed" data-min="0" size="1" readonly />
-        <button class="right" onclick="TankSpeed += 20; databinding();">+</button>
-      </div><br />
+        <button
+          class="right"
+          onclick="
+            TankSpeed += 20;
+            databinding();
+          "
+        >
+          +
+        </button>
+      </div>
+      <br />
       <div class="option">
         <span>Bullet speed</span>
-        <button class="left" onclick="BulletSpeed -= 20; databinding();">-</button>
+        <button
+          class="left"
+          onclick="
+            BulletSpeed -= 20;
+            databinding();
+          "
+        >
+          -
+        </button>
         <input class="left right" data-bind="BulletSpeed" data-min="0" size="1" readonly />
-        <button class="right" onclick="BulletSpeed += 20; databinding();">+</button>
-      </div><br />
+        <button
+          class="right"
+          onclick="
+            BulletSpeed += 20;
+            databinding();
+          "
+        >
+          +
+        </button>
+      </div>
+      <br />
       <div class="option">
         <span>Bullet timeout</span>
-        <button class="left" onclick="BulletTimeout -= 1; databinding();">-</button>
+        <button
+          class="left"
+          onclick="
+            BulletTimeout -= 1;
+            databinding();
+          "
+        >
+          -
+        </button>
         <input class="left right" data-bind="BulletTimeout" data-suffix="s" data-min="1" size="1" readonly />
-        <button class="right" onclick="BulletTimeout += 1; databinding();">+</button>
-      </div><br />
+        <button
+          class="right"
+          onclick="
+            BulletTimeout += 1;
+            databinding();
+          "
+        >
+          +
+        </button>
+      </div>
+      <br />
       <div class="option">
         <span>Respawn time</span>
-        <button class="left" onclick="RespawnTime -= 0.5; databinding();">-</button>
+        <button
+          class="left"
+          onclick="
+            RespawnTime -= 0.5;
+            databinding();
+          "
+        >
+          -
+        </button>
         <input class="left right" data-bind="RespawnTime" data-min="0" data-suffix="s" size="1" readonly />
-        <button class="right" onclick="RespawnTime += 0.5; databinding();">+</button>
-      </div><br />
+        <button
+          class="right"
+          onclick="
+            RespawnTime += 0.5;
+            databinding();
+          "
+        >
+          +
+        </button>
+      </div>
+      <br />
       <div class="option">
         <span>Spawn shield</span>
-        <button class="left" onclick="SpawnShieldTime -= 0.5; databinding();">-</button>
+        <button
+          class="left"
+          onclick="
+            SpawnShieldTime -= 0.5;
+            databinding();
+          "
+        >
+          -
+        </button>
         <input class="left right" data-bind="SpawnShieldTime" data-min="0" data-suffix="s" size="1" readonly />
-        <button class="right" onclick="SpawnShieldTime += 0.5; databinding();">+</button>
-      </div><br />
+        <button
+          class="right"
+          onclick="
+            SpawnShieldTime += 0.5;
+            databinding();
+          "
+        >
+          +
+        </button>
+      </div>
+      <br />
       <div class="option">
         <span>Map min-size</span>
-        <button class="left" onclick="MapNxMin -= 1; databinding();">-</button>
+        <button
+          class="left"
+          onclick="
+            MapNxMin -= 1;
+            databinding();
+          "
+        >
+          -
+        </button>
         <input class="left right" data-bind="MapNxMin" data-min="2" size="1" readonly />
-        <button class="right" onclick="MapNxMin += 1; databinding();">+</button>
-      </div><br />
+        <button
+          class="right"
+          onclick="
+            MapNxMin += 1;
+            databinding();
+          "
+        >
+          +
+        </button>
+      </div>
+      <br />
       <div class="option">
         <span>Map max-size</span>
-        <button class="left" onclick="MapNxMax -= 1; databinding();">-</button>
+        <button
+          class="left"
+          onclick="
+            MapNxMax -= 1;
+            databinding();
+          "
+        >
+          -
+        </button>
         <input class="left right" data-bind="MapNxMax" data-min="2" size="1" readonly />
-        <button class="right" onclick="MapNxMax += 1; databinding();">+</button>
-      </div><br />
+        <button
+          class="right"
+          onclick="
+            MapNxMax += 1;
+            databinding();
+          "
+        >
+          +
+        </button>
+      </div>
+      <br />
       <div class="option">
         <span class="left">Show tank labels</span>
         <select class="right" data-bind="ShowTankLabels">
           <option value="true">on</option>
           <option value="false">off</option>
         </select>
-      </div><br />
+      </div>
+      <br />
       <!-- <div class="option">
         <span>Leaderboard time</span>
         <button class="left" onclick="EndScreenTime -= 1; databinding();">-</button>
@@ -66,57 +184,97 @@
       <div class="option">
         <div class="option">
           <span>Respawn time</span>
-          <button class="left" onclick="RespawnTime -= 0.5; databinding();">-</button>
+          <button
+            class="left"
+            onclick="
+              RespawnTime -= 0.5;
+              databinding();
+            "
+          >
+            -
+          </button>
           <input class="left right" data-bind="RespawnTime" data-min="0" data-suffix=" s" size="1" readonly />
-          <button class="right" onclick="RespawnTime += 0.5; databinding();">+</button>
-        </div><br />
+          <button
+            class="right"
+            onclick="
+              RespawnTime += 0.5;
+              databinding();
+            "
+          >
+            +
+          </button>
+        </div>
+        <br />
         <span>Round time</span>
-        <button class="left" onclick="RoundTime -= 0.5; databinding();">-</button>
+        <button
+          class="left"
+          onclick="
+            RoundTime -= 0.5;
+            databinding();
+          "
+        >
+          -
+        </button>
         <input class="left right" data-bind="RoundTime" data-min="1" data-suffix=" min" size="1" readonly />
-        <button class="right" onclick="RoundTime += 0.5; databinding();">+</button>
-      </div><br />
+        <button
+          class="right"
+          onclick="
+            RoundTime += 0.5;
+            databinding();
+          "
+        >
+          +
+        </button>
+      </div>
+      <br />
       <div class="option">
         <span class="left">Reset score each round</span>
         <select class="right" data-bind="ResetStatsEachGame">
           <option value="true">on</option>
           <option value="false">off</option>
         </select>
-      </div><br />
+      </div>
+      <br />
       <div class="option">
         <span class="left">Adaptive bot speed</span>
         <select class="right" data-bind="AdaptiveBotSpeed">
           <option value="false">off</option>
           <option value="true">on</option>
         </select>
-      </div><br />
+      </div>
+      <br />
       <div class="option">
         <span class="left">Bots shoot bots</span>
         <select class="right" data-bind="BotsShootBots">
           <option value="true">on</option>
           <option value="false">off</option>
         </select>
-      </div><br />
+      </div>
+      <br />
       <div class="option">
         <span class="left">Bullet Collisions</span>
         <select class="right" data-bind="BulletsCanCollide">
           <option value="true">on</option>
           <option value="false">off</option>
         </select>
-      </div><br />
+      </div>
+      <br />
       <div class="option">
         <span class="left">Friendly Fire</span>
         <select class="right" data-bind="FriendlyFire">
           <option value="true">on</option>
           <option value="false">off</option>
         </select>
-      </div><br />
+      </div>
+      <br />
       <div class="option">
         <span class="left">Sound</span>
         <select class="right" data-bind="muted">
           <option value="false">on</option>
           <option value="true">off</option>
         </select>
-      </div><br />
+      </div>
+      <br />
       <!-- <div class="option">
         <span class="left">Music</span>
         <select class="right" data-bind="bgmusic">
@@ -125,5 +283,5 @@
         </select>
       </div><br /> -->
     </div>
-
   </div>
+</div>

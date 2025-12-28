@@ -2,10 +2,9 @@ Gamemode = function (game) {
   this.name = "defaultmode";
   this.game = game;
   this.BaseSpawnDistance = 2;
-  this.step = function () { }
-  this.init = function () { }
-}
-
+  this.step = function () {};
+  this.init = function () {};
+};
 
 Deathmatch = function (game) {
   Gamemode.call(this, game);
@@ -16,23 +15,19 @@ Deathmatch = function (game) {
     player.score += val;
     player.spree += 1;
     if (player.spree >= 5 && player.spree % 5 == 0) {
-      player.score += Math.floor(player.spree / 5)
+      player.score += Math.floor(player.spree / 5);
       playSound("res/sound/killingspree.mp3");
     }
     updateScores();
     adaptBotSpeed(player.team);
-  }
+  };
 
   // called when player1 kills player2
   this.newKill = function (player1, player2) {
-    if (player1.team == player2.team)
-      this.giveScore(player1, -1);
-    else
-      this.giveScore(player1, 1);
-  }
-}
-
-
+    if (player1.team == player2.team) this.giveScore(player1, -1);
+    else this.giveScore(player1, 1);
+  };
+};
 
 TeamDeathmatch = function (game) {
   Gamemode.call(this, game);
@@ -42,25 +37,21 @@ TeamDeathmatch = function (game) {
 
   // give score to team players
   this.giveScore = function (player, val = 1) {
-    for (var i = 0; i < this.game.players.length; i++)
-      if (this.game.players[i].team == player.team)
-        this.game.players[i].score += val;
+    for (var i = 0; i < this.game.players.length; i++) if (this.game.players[i].team == player.team) this.game.players[i].score += val;
     player.spree += 1;
     if (player.spree >= 5 && player.spree % 5 == 0) {
-      player.score += Math.floor(player.spree / 5)
+      player.score += Math.floor(player.spree / 5);
       playSound("res/sound/killingspree.mp3");
     }
     updateScores();
     adaptBotSpeed(player.team);
-  }
+  };
 
   // called when player1 kills player2
   this.newKill = function (player1, player2) {
-    if (player1.team == player2.team)
-      this.giveScore(player1, -1);
-    else
-      this.giveScore(player1, 1);
-  }
+    if (player1.team == player2.team) this.giveScore(player1, -1);
+    else this.giveScore(player1, 1);
+  };
 
   // init bases and spawn players
   this.init = function () {
@@ -96,14 +87,10 @@ TeamDeathmatch = function (game) {
             var path = tile.pathTo(function (destination) {
               return destination.id == stile.id;
             });
-            if (path != -1)
-              length += path.length * path.length;
+            if (path != -1) length += path.length * path.length;
           }
-          if (initfirst)
-            bases = [];
-          for (var j = 0; j < bases.length; j++)
-            if (bases[j].x == pos.x && bases[j].y == pos.y)
-              length = -1;
+          if (initfirst) bases = [];
+          for (var j = 0; j < bases.length; j++) if (bases[j].x == pos.x && bases[j].y == pos.y) length = -1;
           if (length > maxLength) {
             maxLength = length;
             maxPos = pos;
@@ -113,17 +100,14 @@ TeamDeathmatch = function (game) {
         bases.push(b);
         game.addObject(b);
         var spawnPoint = b.tile;
-        while (spawnPoint.id == b.tile.id)
-          spawnPoint = spawnPoint.randomWalk(this.game.mode.BaseSpawnDistance + Math.round(Math.random()));
+        while (spawnPoint.id == b.tile.id) spawnPoint = spawnPoint.randomWalk(this.game.mode.BaseSpawnDistance + Math.round(Math.random()));
         player.tank.x = spawnPoint.x + spawnPoint.dx / 2;
         player.tank.y = spawnPoint.y + spawnPoint.dy / 2;
         player.base = b;
       }
     }
-  }
-}
-
-
+  };
+};
 
 CaptureTheFlag = function (game) {
   Gamemode.call(this, game);
@@ -133,12 +117,10 @@ CaptureTheFlag = function (game) {
 
   // give score to team players
   this.giveScore = function (player, val = 1) {
-    for (var i = 0; i < this.game.players.length; i++)
-      if (this.game.players[i].team == player.team)
-        this.game.players[i].score += val;
+    for (var i = 0; i < this.game.players.length; i++) if (this.game.players[i].team == player.team) this.game.players[i].score += val;
     updateScores();
     adaptBotSpeed(player.team);
-  }
+  };
 
   // called when player1 kills player2
   this.newKill = function (player1, player2) {
@@ -150,7 +132,7 @@ CaptureTheFlag = function (game) {
       }
       updateScores();
     }
-  }
+  };
 
   this.init = function () {
     var bases = [];
@@ -185,14 +167,10 @@ CaptureTheFlag = function (game) {
             var path = tile.pathTo(function (destination) {
               return destination.id == stile.id;
             });
-            if (path != -1)
-              length += path.length * path.length;
+            if (path != -1) length += path.length * path.length;
           }
-          if (initfirst)
-            bases = [];
-          for (var j = 0; j < bases.length; j++)
-            if (bases[j].x == pos.x && bases[j].y == pos.y)
-              length = -1;
+          if (initfirst) bases = [];
+          for (var j = 0; j < bases.length; j++) if (bases[j].x == pos.x && bases[j].y == pos.y) length = -1;
           if (length > maxLength) {
             maxLength = length;
             maxPos = pos;
@@ -204,28 +182,25 @@ CaptureTheFlag = function (game) {
         bases.push(b);
         game.addObject(b);
         var spawnPoint = b.tile;
-        while (spawnPoint.id == b.tile.id)
-          spawnPoint = spawnPoint.randomWalk(this.game.mode.BaseSpawnDistance + Math.round(Math.random()));
+        while (spawnPoint.id == b.tile.id) spawnPoint = spawnPoint.randomWalk(this.game.mode.BaseSpawnDistance + Math.round(Math.random()));
         player.tank.x = spawnPoint.x + spawnPoint.dx / 2;
         player.tank.y = spawnPoint.y + spawnPoint.dy / 2;
         player.base = b;
       }
     }
-  }
-}
+  };
+};
 
 // the map editor: implemented as a GameMode
 MapEditor = function (game, clearmap = true) {
   Gamemode.call(this, game);
   this.clearmap = clearmap;
 
-
   this.init = function () {
     var map = this.game.map;
     if (this.clearmap) {
       // Start with a grid with no walls
-      for (var i = 0; i < map.Nx * map.Ny; i++)
-        map.tiles[i].walls = [false, false, false, false];
+      for (var i = 0; i < map.Nx * map.Ny; i++) map.tiles[i].walls = [false, false, false, false];
       // border walls
       for (var i = 0; i < map.Nx; i++) {
         map.getTileByIndex(i, 0).walls[0] = true;
@@ -242,8 +217,7 @@ MapEditor = function (game, clearmap = true) {
     this.game.addPlayer(p);
     p.keys = keymaps[0];
     p.color = playercolors[0];
-  }
-
+  };
 
   this.step = function () {
     var t = this.game.players[0].tank;
@@ -251,12 +225,13 @@ MapEditor = function (game, clearmap = true) {
       t.weapon = new WallBuilder(t);
       t.defaultWeapon = function () {
         t.weapon = new WallBuilder(t);
-      }
-      t.checkWallCollision = function () { return false; }
+      };
+      t.checkWallCollision = function () {
+        return false;
+      };
     }
-  }
-
-}
+  };
+};
 
 KingOfTheHill = function (game) {
   Gamemode.call(this, game);
@@ -267,7 +242,7 @@ KingOfTheHill = function (game) {
   this.giveScore = function (player, val = 1) {
     player.score += val;
     updateScores();
-  }
+  };
 
   // called when player1 kills player2
   this.newKill = function (player1, player2) {
@@ -279,7 +254,7 @@ KingOfTheHill = function (game) {
       }
       updateScores();
     }
-  }
+  };
 
   this.step = function () {
     // if all bases same color: score in intervals for team
@@ -293,12 +268,10 @@ KingOfTheHill = function (game) {
     }
     var team = this.bases[0].team;
     if (equal && team != "#555" && this.game.t % scoreevery == 0) {
-      for (var i = 0; i < this.game.players.length; i++)
-        if (this.game.players[i].team == team)
-          this.giveScore(this.game.players[i], 1)
+      for (var i = 0; i < this.game.players.length; i++) if (this.game.players[i].team == team) this.giveScore(this.game.players[i], 1);
       adaptBotSpeed(team, 0.02);
     }
-  }
+  };
 
   this.init = function () {
     var bases = [];
@@ -323,14 +296,10 @@ KingOfTheHill = function (game) {
           var path = tile.pathTo(function (destination) {
             return destination.id == stile.id;
           });
-          if (path != -1)
-            length += path.length * path.length;
+          if (path != -1) length += path.length * path.length;
         }
-        if (initfirst)
-          bases = [];
-        for (var j = 0; j < bases.length; j++)
-          if (bases[j].x == pos.x && bases[j].y == pos.y)
-            length = -1;
+        if (initfirst) bases = [];
+        for (var j = 0; j < bases.length; j++) if (bases[j].x == pos.x && bases[j].y == pos.y) length = -1;
         if (length > maxLength) {
           maxLength = length;
           maxPos = pos;
@@ -341,5 +310,5 @@ KingOfTheHill = function (game) {
       game.addObject(b);
     }
     this.bases = bases;
-  }
-}
+  };
+};

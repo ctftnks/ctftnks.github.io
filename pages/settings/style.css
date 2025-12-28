@@ -8,25 +8,24 @@
   width: 40%;
 } */
 
-
-#settingsTable{
+#settingsTable {
   width: 80%;
   position: relative;
   left: 10%;
 }
 
-#settingsTable .leftCol{
-  float:left;
+#settingsTable .leftCol {
+  float: left;
   width: 50%;
   position: relative;
   left: 0;
-  top:0;
+  top: 0;
 }
 
-#settingsTable .rightCol{
-  float:left;
+#settingsTable .rightCol {
+  float: left;
   width: 50%;
   position: relative;
   left: 0;
-  top:0;
+  top: 0;
 }

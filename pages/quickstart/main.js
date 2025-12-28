@@ -1,6 +1,3 @@
-
-
-
 function clearPlayers() {
   players = [];
 }
@@ -21,16 +18,13 @@ function quickPvP(nteams, teamsize) {
   updatePlayersMenu();
 }
 
-
 function quickPvB(nteams, teamsize) {
   players = [];
   nplayers = 0;
   for (var i = 0; i < nteams; i++) {
     for (var j = 0; j < teamsize; j++) {
-      if (i < nteams / 2)
-        players.push(new Player());
-      else
-        players.push(new Bot());
+      if (i < nteams / 2) players.push(new Player());
+      else players.push(new Bot());
       var p = players[players.length - 1];
       if (j > 0) {
         p.team = players[players.length - 2].team;
@@ -46,10 +40,8 @@ function quickMixed(nteams, teamsize) {
   nplayers = 0;
   for (var i = 0; i < nteams; i++) {
     for (var j = 0; j < teamsize; j++) {
-      if (j < teamsize / 2)
-        players.push(new Player());
-      else
-        players.push(new Bot());
+      if (j < teamsize / 2) players.push(new Player());
+      else players.push(new Bot());
       var p = players[players.length - 1];
       if (j > 0) {
         p.team = players[players.length - 2].team;
@@ -65,10 +57,8 @@ function quickUnevenMixed(nteams, teamsize) {
   nplayers = 0;
   for (var i = 0; i < nteams; i++) {
     for (var j = 0; j < teamsize; j++) {
-      if (j < teamsize / 2 && i == 0)
-        players.push(new Player());
-      else
-        players.push(new Bot());
+      if (j < teamsize / 2 && i == 0) players.push(new Player());
+      else players.push(new Bot());
       var p = players[players.length - 1];
       if (j > 0) {
         p.team = players[players.length - 2].team;

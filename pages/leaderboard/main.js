@@ -1,5 +1,3 @@
-
-
 function updateLeaderboard() {
   players.sort(function (a, b) {
     return a.score < b.score;

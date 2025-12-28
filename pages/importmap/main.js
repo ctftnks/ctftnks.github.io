@@ -1,4 +1,1 @@
-
-
-
-maplist = ["Avocado", "Prims-Maze", "Rust", "Spirals"]
+maplist = ["Avocado", "Prims-Maze", "Rust", "Spirals"];
