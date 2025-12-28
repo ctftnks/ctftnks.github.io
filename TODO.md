@@ -1,6 +1,6 @@
-# TODO:
+# TODO
 
-## Bugs:
+## Bugs
 
 ## Bots reimplementation
 
