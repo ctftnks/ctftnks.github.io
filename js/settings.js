@@ -5,7 +5,7 @@ GameFrequency = 10;
 // Graphics & Sound
 TankWidth = 34;
 TankHeight = 50;
-muted = false;
+muted = true;
 bgmusic = false;
 
 // Gameplay
