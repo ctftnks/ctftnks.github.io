@@ -1,4 +1,4 @@
-import { editingKeymap } from "./state.js";
+import { store } from "./state.js";
 
 // static Key class
 // keeps track of pressed keys
@@ -76,7 +76,7 @@ export var Key = {
 
   onKeydown: function (event) {
     this._pressed[event.keyCode] = true;
-    if (editingKeymap) {
+    if (store.editingKeymap) {
       // Ctrl is forbidden
       if (event.keyCode == 17) return;
       if (window.doEditKeymap) window.doEditKeymap(event.keyCode);
@@ -233,7 +233,7 @@ export var keyLabels = [
   "NUM8", // [104]
   "NUM9", // [105]
   "MULTIPLY", // [106]
-  "ADD", // [107]
+  "ADD", // [108]
   "SEPARATOR", // [108]
   "SUBTRACT", // [109]
   "DECIMAL", // [110]

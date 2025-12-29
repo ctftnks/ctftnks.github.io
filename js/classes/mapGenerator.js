@@ -1,5 +1,5 @@
 import Map from "./map.js";
-import { game } from "../state.js";
+import { store } from "../state.js";
 
 // Static class for some map generation methods
 
@@ -247,9 +247,9 @@ export default class MapGenerator {
         var lines = data.match(/[^\r\n]+/g);
         var Ny = lines.length;
         var Nx = lines[0].split(" ").length;
-        
+
         // Safety check for game
-        var canvas = (game && game.map) ? game.map.canvas : -1;
+        var canvas = store.game && store.game.map ? store.game.map.canvas : -1;
         var map = new Map(canvas, Nx, Ny);
         for (var j = 0; j < Ny; j++) {
           var line = lines[j].split(" ");

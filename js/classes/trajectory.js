@@ -1,13 +1,10 @@
-import GameObject from "./object.js";
-import { GameFrequency } from "../constants.js";
-
-// A trajectory through the map
-// with useful functions to draw or so for lasers
-
 /**
  * Represents a trajectory for ray-casting or lasers.
  * @extends GameObject
  */
+import GameObject from "./object.js";
+import { GameFrequency } from "../constants.js";
+
 export default class Trajectory extends GameObject {
   /**
    * Creates a new Trajectory.

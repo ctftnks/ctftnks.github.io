@@ -1,4 +1,4 @@
-import { Settings } from "../constants.js";
+import { store } from "../state.js";
 
 // A class for the Map,
 // discretized in Nx * Ny tiles, which can be separated by walls (walls)
@@ -20,7 +20,7 @@ export default class Map {
     /** @type {Object} The canvas. */
     this.canvas = canvas;
     /** @type {number} Number of tiles in X. */
-    if (Nx == -1) this.Nx = parseInt(Settings.MapNxMin + (Settings.MapNxMax - Settings.MapNxMin) * Math.random());
+    if (Nx == -1) this.Nx = parseInt(store.settings.MapNxMin + (store.settings.MapNxMax - store.settings.MapNxMin) * Math.random());
     else this.Nx = Nx;
     /** @type {number} Number of tiles in Y. */
     if (Ny == -1) this.Ny = parseInt(((0.25 * Math.random() + 0.75) * this.Nx * canvas.height) / canvas.width);
@@ -40,7 +40,7 @@ export default class Map {
         this.tiles.push(new Tile(i, j, this));
       }
     }
-    
+
     this.linkNeighbors();
   }
 

@@ -2,7 +2,7 @@ import GameObject from "./object.js";
 import { Smoke, Cloud } from "./smoke.js";
 import { playSound } from "../effects.js";
 import { GameFrequency } from "../constants.js";
-import { Settings } from "../constants.js";
+import { store, Settings } from "../state.js";
 
 // a parent class for all bullets flying through the map
 // contains position, ang,e speed, timeout and parent weapon

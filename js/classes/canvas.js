@@ -1,5 +1,5 @@
 import { FrameFrequency } from "../constants.js";
-import { game } from "../state.js";
+import { store } from "../state.js";
 
 // A class for the canvas in which the game is drawn
 // binds HTML element and handles its size
@@ -79,7 +79,7 @@ export default class Canvas {
     this.height = this.canvas.clientHeight;
     this.canvas.width = this.canvas.clientWidth;
     this.width = this.canvas.clientWidth;
-    if (typeof game !== "undefined") game.map.resize();
+    if (typeof store.game !== "undefined") store.game.map.resize();
     // this.rescale(Math.max(this.width / (game.map.dx * game.map.Nx));
   }
 

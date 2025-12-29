@@ -1,4 +1,4 @@
-import { Settings } from "./constants.js";
+import { store, Settings } from "./state.js";
 
 // databinding for menus and options
 export function databinding() {
@@ -35,6 +35,7 @@ export function databinding() {
       } else {
           Settings[bind] = Number(val);
       }
+      store.saveSettings();
     };
   });
   
@@ -58,6 +59,7 @@ export function databinding() {
           else if (val === "false") Settings[bind] = false;
           else Settings[bind] = Number(val);
       }
+      store.saveSettings();
     };
   });
 }

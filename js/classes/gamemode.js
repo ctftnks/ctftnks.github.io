@@ -382,16 +382,18 @@ export class KingOfTheHill extends Gamemode {
     // if all bases same color: score in intervals for team
     var scoreevery = 2000;
     var equal = true;
-    for (var i = 0; i < this.bases.length; i++) {
-      if (this.bases[i].team != this.bases[0].team) {
-        equal = false;
-        break;
+    if (this.bases.length > 0) {
+      for (var i = 0; i < this.bases.length; i++) {
+        if (this.bases[i].team != this.bases[0].team) {
+          equal = false;
+          break;
+        }
       }
-    }
-    var team = this.bases[0].team;
-    if (equal && team != "#555" && this.game.t % scoreevery == 0) {
-      for (var i = 0; i < this.game.players.length; i++) if (this.game.players[i].team == team) this.giveScore(this.game.players[i], 1);
-      adaptBotSpeed(team, 0.02);
+      var team = this.bases[0].team;
+      if (equal && team != "#555" && this.game.t % scoreevery == 0) {
+        for (var i = 0; i < this.game.players.length; i++) if (this.game.players[i].team == team) this.giveScore(this.game.players[i], 1);
+        adaptBotSpeed(team, 0.02);
+      }
     }
   }
 

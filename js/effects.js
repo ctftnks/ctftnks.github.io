@@ -1,5 +1,4 @@
-import { Settings } from "./constants.js";
-import { game } from "./state.js";
+import { store, Settings } from "./state.js";
 
 export function playSound(file) {
   if (file != "" && !Settings.muted) {
@@ -84,9 +83,9 @@ export function fogOfWar(game) {
 
 export function clearEffects() {
   var canv = document.getElementById("effectFrame");
-  if (game && game.canvas && game.canvas.canvas) {
-    canv.height = game.canvas.canvas.clientHeight;
-    canv.width = game.canvas.canvas.clientWidth;
+  if (store.game && store.game.canvas && store.game.canvas.canvas) {
+    canv.height = store.game.canvas.canvas.clientHeight;
+    canv.width = store.game.canvas.canvas.clientWidth;
   }
   var ctx = canv.getContext("2d");
   ctx.clearRect(0, 0, 2 * canv.width, 2 * canv.height);

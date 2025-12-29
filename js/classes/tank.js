@@ -2,12 +2,8 @@ import GameObject from "./object.js";
 import { Gun } from "./weapons.js";
 import { Cloud } from "./smoke.js";
 import { playSound } from "../effects.js";
-import {
-  TankWidth,
-  TankHeight,
-  Settings,
-  GameFrequency,
-} from "../constants.js";
+import { TankWidth, TankHeight, GameFrequency } from "../constants.js";
+import { Settings } from "../state.js";
 
 // A class for tanks which act as the player character
 // Recieves a player in its constructor
@@ -91,21 +87,11 @@ export default class Tank extends GameObject {
     if (this.carriedFlag != -1) {
       context.beginPath();
       context.fillStyle = this.carriedFlag.color;
-      context.rect(
-        -this.carriedFlag.size / 2,
-        -this.carriedFlag.size / 2,
-        this.carriedFlag.size / 1.1,
-        this.carriedFlag.size / 2,
-      );
+      context.rect(-this.carriedFlag.size / 2, -this.carriedFlag.size / 2, this.carriedFlag.size / 1.1, this.carriedFlag.size / 2);
       context.fill();
       context.beginPath();
       context.fillStyle = "#000";
-      context.rect(
-        -this.carriedFlag.size / 2,
-        -this.carriedFlag.size / 2,
-        this.carriedFlag.size / 6,
-        this.carriedFlag.size * 1.1,
-      );
+      context.rect(-this.carriedFlag.size / 2, -this.carriedFlag.size / 2, this.carriedFlag.size / 6, this.carriedFlag.size * 1.1);
       context.fill();
     } else if (this.weapon.image.src.split("/").slice(-1)[0] == "Marc.png") {
       context.drawImage(this.weapon.image, -this.width / 2, (-1.8 * this.height) / 2, this.width, this.height * 1.4);
@@ -291,12 +277,7 @@ export default class Tank extends GameObject {
     for (var i = 0; i < bullets.length; i++) {
       if (this.intersects(bullets[i].x, bullets[i].y)) {
         // Friendly fire?
-        if (
-          !Settings.FriendlyFire &&
-          this.player.team == bullets[i].player.team &&
-          this.player.id != bullets[i].player.id
-        )
-          return;
+        if (!Settings.FriendlyFire && this.player.team == bullets[i].player.team && this.player.id != bullets[i].player.id) return;
         if (!bullets[i].lethal) return;
         // Hit!
         if (this.invincible()) return;

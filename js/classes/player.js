@@ -1,8 +1,8 @@
 import Tank from "./tank.js";
 import { Key, keymaps } from "../keybindings.js";
 import { Smoke, Cloud } from "./smoke.js";
-import { playercolors, Settings } from "../constants.js";
-import { nplayers, setNPlayers } from "../state.js";
+import { playercolors } from "../constants.js";
+import { store, Settings } from "../state.js";
 
 // A class for a player.
 // keeps the players score, color, name, keymap
@@ -17,8 +17,8 @@ export default class Player {
    */
   constructor() {
     /** @type {number} Unique player ID. */
-    this.id = nplayers;
-    setNPlayers(nplayers + 1);
+    this.id = store.nplayers;
+    store.nplayers += 1;
     /** @type {string} Player name. */
     this.name = "Player " + (this.id + 1);
     /** @type {string} Player color. */
@@ -34,7 +34,7 @@ export default class Player {
     /** @type {number} Current kill streak. */
     this.spree = 0;
     /** @type {Array<number>} Key bindings. */
-    this.keys = keymaps[this.id];
+    this.keys = keymaps[this.id] || keymaps[0].slice();
     /** @type {Tank} The tank controlled by the player. */
     this.tank = new Tank(this);
     /** @type {Object} Player statistics. */

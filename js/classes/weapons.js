@@ -2,7 +2,8 @@ import Bullet from "./bullet.js";
 import Trajectory from "./trajectory.js";
 import { playSound, hexToRgbA } from "../effects.js";
 import { Smoke, Cloud } from "./smoke.js";
-import { GameFrequency, Settings } from "../constants.js";
+import { GameFrequency } from "../constants.js";
+import { Settings } from "../state.js";
 
 // parent class for all weapons
 /**

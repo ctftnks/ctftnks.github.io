@@ -1,6 +1,6 @@
 import Player from "./player.js";
-import { Settings, GameFrequency } from "../constants.js";
-import { game } from "../state.js";
+import { GameFrequency } from "../constants.js";
+import { store, Settings } from "../state.js";
 
 var NBots = 0;
 
@@ -274,7 +274,7 @@ export default class Bot extends Player {
     } else if (weapon.name == "Guided" || weapon.name == "WreckingBall") {
       result.should_shoot = false;
       result.weight = 200;
-      var tile = game.map.getTileByPos(this.tank.x, this.tank.y);
+      var tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
       for (var i = 0; i < 4; i++) {
         if (tile.walls[i] ^ (weapon.name == "Guided")) {
           result.should_shoot = true;
@@ -299,7 +299,7 @@ export default class Bot extends Player {
     if (this.fleeing.from == -1 || this.fleeing.condition == -1 || !this.fleeing.condition()) return -1;
     if (!this.tank.weapon.bot.flee_if_active && this.tank.weapon.active) return -1;
     // push any neighboring tile that is not in the fleeing path
-    var tile = game.map.getTileByPos(this.tank.x, this.tank.y);
+    var tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
     if (!this.fleeing.from.includes(tile)) this.fleeing.from.push(tile);
     var nextTile = tile;
     for (var i = 0; i < 4; i++) if (!tile.walls[i] && !this.fleeing.from.includes(tile.neighbors[i])) nextTile = tile.neighbors[i];
@@ -318,8 +318,8 @@ export default class Bot extends Player {
   flee() {
     if (this.tank.weapon.bot.fleeing_duration <= 0) return;
     // generate initial path where tank comes from / where to flee from
-    var tile = game.map.getTileByPos(this.tank.x, this.tank.y);
-    var nextTile = game.map.getTileByPos(
+    var tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
+    var nextTile = store.game.map.getTileByPos(
       this.tank.x + tile.dx * Math.sin(this.tank.angle),
       this.tank.y - tile.dy * Math.cos(this.tank.angle),
     );
@@ -346,21 +346,23 @@ export function adaptBotSpeed(team, val = 0.1) {
   var teams = [];
   var botcounts = [];
 
-  for (var i = 0; i < game.players.length; i++) {
-    var id = teams.indexOf(game.players[i].team);
+  for (var i = 0; i < store.game.players.length; i++) {
+    var id = teams.indexOf(store.game.players[i].team);
     if (id == -1) {
       id = teams.length;
-      teams.push(game.players[i].team);
+      teams.push(store.game.players[i].team);
       botcounts.push(0);
     }
-    botcounts[id] += game.players[i].isBot ? 1 : 0;
+    botcounts[id] += store.game.players[i].isBot ? 1 : 0;
   }
   var avgbots = 0;
   for (var i = 0; i < teams.length; i++) avgbots += botcounts[i] / parseFloat(teams.length);
-  id = teams.indexOf(team);
+  var id = teams.indexOf(team);
   Settings.BotSpeed += (avgbots - botcounts[id]) * val;
   var bs = document.getElementById("BotSpeedometer");
-  bs.style.display = "block";
-  bs.innerHTML = "BotSpeed:&nbsp;&nbsp;" + Math.round(Settings.BotSpeed * 100) + " %";
+  if (bs) {
+    bs.style.display = "block";
+    bs.innerHTML = "BotSpeed:&nbsp;&nbsp;" + Math.round(Settings.BotSpeed * 100) + " %";
+  }
   return Settings.BotSpeed;
 }

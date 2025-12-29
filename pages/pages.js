@@ -1,6 +1,7 @@
-import { databinding } from "../js/databinding.js";
-
 // create page div in container, load content into page
+import { databinding } from "../js/databinding.js";
+import { store } from "../js/state.js";
+
 let pageID = 0;
 let loadedScripts = [];
 
@@ -18,17 +19,8 @@ export function openPage(name) {
       if (loadedScripts.indexOf(name) == -1) {
         var script = document.createElement("script");
         script.src = "pages/" + name + "/main.js";
-        
-        // Capture existing globals to detect new ones
-        const existingGlobals = Object.keys(window);
-        
+
         script.onload = function () {
-          // Detect new globals and expose them explicitly if needed, 
-          // though usually <script> adds them to window anyway.
-          // But since some might be local if they are modules (not here), 
-          // or we want to ensure visibility.
-          const newGlobals = Object.keys(window).filter(key => !existingGlobals.includes(key));
-          
           // execute script tags
           evalscripts(p);
           databinding();

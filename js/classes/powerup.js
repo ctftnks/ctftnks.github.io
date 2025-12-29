@@ -1,7 +1,7 @@
 import GameObject from "./object.js";
-import { Settings } from "../constants.js";
+import { Settings } from "../state.js";
 import { playSound, playMusic, stopMusic, fogOfWar } from "../effects.js";
-import { game } from "../state.js";
+import { store } from "../state.js";
 import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot, WallBuilder } from "./weapons.js";
 
 // a parent class for powerups
@@ -272,7 +272,6 @@ export class MultiBonus extends PowerUp {
       Settings.PowerUpRate /= 2.5;
       Settings.PowerUpRate = Math.round(1000 * Settings.PowerUpRate) / 1000;
       Settings.MaxPowerUps *= 2.5;
-      var self = tank;
       setTimeout(function () {
         Settings.PowerUpRate *= 2.5;
         Settings.MaxPowerUps /= 2.5;
@@ -292,7 +291,7 @@ export class FogBonus extends PowerUp {
     this.used = false;
   }
   apply(tank) {
-    if (!this.used) tank.player.game.intvls.push(fogOfWar(game));
+    if (!this.used) tank.player.game.intvls.push(fogOfWar(store.game));
   }
 }
 
