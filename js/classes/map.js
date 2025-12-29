@@ -1,3 +1,5 @@
+import { Settings } from "../constants.js";
+
 // A class for the Map,
 // discretized in Nx * Ny tiles, which can be separated by walls (walls)
 // also the tiles keep object lists for spatial sorting
@@ -6,7 +8,7 @@
 /**
  * Represents the game map.
  */
-class Map {
+export default class Map {
   /**
    * Creates a new Map.
    * @param {Object} canvas - The canvas object.
@@ -18,7 +20,7 @@ class Map {
     /** @type {Object} The canvas. */
     this.canvas = canvas;
     /** @type {number} Number of tiles in X. */
-    if (Nx == -1) this.Nx = parseInt(MapNxMin + (MapNxMax - MapNxMin) * Math.random());
+    if (Nx == -1) this.Nx = parseInt(Settings.MapNxMin + (Settings.MapNxMax - Settings.MapNxMin) * Math.random());
     else this.Nx = Nx;
     /** @type {number} Number of tiles in Y. */
     if (Ny == -1) this.Ny = parseInt(((0.25 * Math.random() + 0.75) * this.Nx * canvas.height) / canvas.width);
@@ -134,7 +136,7 @@ class Map {
  * Child class for tiles.
  * Contains position, wall list, neighbor list, object list.
  */
-class Tile {
+export class Tile {
   /**
    * Creates a new Tile.
    * @param {number} i - X index.

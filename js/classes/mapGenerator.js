@@ -1,9 +1,12 @@
+import Map from "./map.js";
+import { game } from "../state.js";
+
 // Static class for some map generation methods
 
 /**
  * Static class containing map generation algorithms.
  */
-class MapGenerator {
+export default class MapGenerator {
   /**
    * Generates a random map with walls.
    * @param {Map} map - The map to modify.
@@ -261,13 +264,13 @@ class MapGenerator {
         // map.dy = newmap.dy;
         // map.resize();
         // prefetchedMap = map;
-        newGame(map);
+        if (window.newGame) window.newGame(map);
       }
     };
   }
 }
 
-var prefetchedMap = undefined;
+export var prefetchedMap = undefined;
 
 // List of all algorithms
 MapGenerator.algorithms = [

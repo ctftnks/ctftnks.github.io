@@ -1,9 +1,12 @@
+import GameObject from "./object.js";
+import { GameFrequency } from "../constants.js";
+
 // a class for fancy smoke circles on the map
 /**
  * Represents a smoke particle.
  * @extends GameObject
  */
-class Smoke extends GameObject {
+export class Smoke extends GameObject {
   /**
    * Creates a new Smoke particle.
    * @param {number} x - X coordinate.
@@ -66,7 +69,7 @@ class Smoke extends GameObject {
  * @param {number} rspeed - Shrink speed.
  * @param {string|number} color - Color override.
  */
-const Cloud = function (game, x, y, n = 4, radius = 20, rspeed = 0.3, color = -1) {
+export const Cloud = function (game, x, y, n = 4, radius = 20, rspeed = 0.3, color = -1) {
   for (var i = 0; i < n; i++) {
     var rx = x + radius * 2 * (Math.random() - 0.5);
     var ry = y + radius * 2 * (Math.random() - 0.5);

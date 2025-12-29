@@ -18,7 +18,7 @@
 
 <script>
   updateLeaderboard();
-  var leaderTime = EndScreenTime;
+  var leaderTime = Settings.EndScreenTime;
   document.getElementById("leaderboardh2").innerHTML = "Leaderboard:&nbsp;&nbsp;Game #" + GameID;
   document.getElementById("leaderboardCounter").innerHTML = leaderTime + "s";
   leaderIntvl = setInterval(function () {
@@ -29,5 +29,5 @@
     clearInterval(leaderIntvl);
     closePage(document.getElementById("leaderboardshade").parentNode);
     newGame();
-  }, EndScreenTime * 1000);
+  }, Settings.EndScreenTime * 1000);
 </script>

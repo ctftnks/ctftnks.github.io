@@ -1,7 +1,15 @@
+import Player from "./player.js";
+import { Flag, Base, Hill } from "./ctf.js";
+import { playSound } from "../effects.js";
+import { adaptBotSpeed } from "./bot.js";
+import { keymaps } from "../keybindings.js";
+import { playercolors } from "../constants.js";
+import { WallBuilder } from "./weapons.js";
+
 /**
  * Base class for game modes.
  */
-class Gamemode {
+export class Gamemode {
   /**
    * Creates a new Gamemode.
    * @param {Game} game - The game instance.
@@ -28,7 +36,7 @@ class Gamemode {
  * Deathmatch game mode.
  * @extends Gamemode
  */
-class Deathmatch extends Gamemode {
+export class Deathmatch extends Gamemode {
   /**
    * Creates a new Deathmatch mode.
    * @param {Game} game - The game instance.
@@ -50,7 +58,7 @@ class Deathmatch extends Gamemode {
       player.score += Math.floor(player.spree / 5);
       playSound("res/sound/killingspree.mp3");
     }
-    updateScores();
+    if (window.updateScores) window.updateScores();
     adaptBotSpeed(player.team);
   }
 
@@ -69,7 +77,7 @@ class Deathmatch extends Gamemode {
  * Team Deathmatch game mode.
  * @extends Gamemode
  */
-class TeamDeathmatch extends Gamemode {
+export class TeamDeathmatch extends Gamemode {
   /**
    * Creates a new TeamDeathmatch mode.
    * @param {Game} game - The game instance.
@@ -93,7 +101,7 @@ class TeamDeathmatch extends Gamemode {
       player.score += Math.floor(player.spree / 5);
       playSound("res/sound/killingspree.mp3");
     }
-    updateScores();
+    if (window.updateScores) window.updateScores();
     adaptBotSpeed(player.team);
   }
 
@@ -169,7 +177,7 @@ class TeamDeathmatch extends Gamemode {
  * Capture the Flag game mode.
  * @extends Gamemode
  */
-class CaptureTheFlag extends Gamemode {
+export class CaptureTheFlag extends Gamemode {
   /**
    * Creates a new CaptureTheFlag mode.
    * @param {Game} game - The game instance.
@@ -188,7 +196,7 @@ class CaptureTheFlag extends Gamemode {
    */
   giveScore(player, val = 1) {
     for (var i = 0; i < this.game.players.length; i++) if (this.game.players[i].team == player.team) this.game.players[i].score += val;
-    updateScores();
+    if (window.updateScores) window.updateScores();
     adaptBotSpeed(player.team);
   }
 
@@ -204,7 +212,7 @@ class CaptureTheFlag extends Gamemode {
         // player1.score += Math.floor(player1.spree / 5)
         playSound("res/sound/killingspree.mp3");
       }
-      updateScores();
+      if (window.updateScores) window.updateScores();
     }
   }
 
@@ -272,7 +280,7 @@ class CaptureTheFlag extends Gamemode {
  * Map Editor game mode.
  * @extends Gamemode
  */
-class MapEditor extends Gamemode {
+export class MapEditor extends Gamemode {
   /**
    * Creates a new MapEditor mode.
    * @param {Game} game - The game instance.
@@ -330,7 +338,7 @@ class MapEditor extends Gamemode {
  * King of the Hill game mode.
  * @extends Gamemode
  */
-class KingOfTheHill extends Gamemode {
+export class KingOfTheHill extends Gamemode {
   /**
    * Creates a new KingOfTheHill mode.
    * @param {Game} game - The game instance.
@@ -348,7 +356,7 @@ class KingOfTheHill extends Gamemode {
    */
   giveScore(player, val = 1) {
     player.score += val;
-    updateScores();
+    if (window.updateScores) window.updateScores();
   }
 
   /**
@@ -363,7 +371,7 @@ class KingOfTheHill extends Gamemode {
         // player1.score += Math.floor(player1.spree / 5)
         playSound("res/sound/killingspree.mp3");
       }
-      updateScores();
+      if (window.updateScores) window.updateScores();
     }
   }
 

@@ -1,13 +1,16 @@
-function playSound(file) {
-  if (file != "" && !muted) {
+import { Settings } from "./constants.js";
+import { game } from "./state.js";
+
+export function playSound(file) {
+  if (file != "" && !Settings.muted) {
     var audio = new Audio(file);
     audio.play();
   }
 }
 
-playingMusic = -1;
-musicAudio = -1;
-function playMusic(file) {
+export let playingMusic = -1;
+export let musicAudio = -1;
+export function playMusic(file) {
   if (file == playingMusic) return;
   var audio = new Audio(file);
   audio.addEventListener(
@@ -22,24 +25,24 @@ function playMusic(file) {
   playingMusic = file;
   musicAudio = audio;
 }
-function stopMusic() {
+export function stopMusic() {
   if (musicAudio != -1) musicAudio.pause();
   musicAudio = -1;
   playingMusic = -1;
 }
 
-effectCanvasID = 0;
-function newEffectCanvas() {
+export let effectCanvasID = 0;
+export function newEffectCanvas() {
   var canv = document.createElement("canvas");
   effectCanvasID++;
-  id = "effectCanvas" + effectCanvasID;
+  var id = "effectCanvas" + effectCanvasID;
   canv.id = id;
   canv.setAttribute("class", "effectCanvas");
   document.body.appendChild(canv);
   return canv;
 }
 
-function fogOfWar(game) {
+export function fogOfWar(game) {
   var canv = document.getElementById("effectFrame");
   canv.height = game.canvas.canvas.clientHeight;
   canv.width = game.canvas.canvas.clientWidth;
@@ -47,9 +50,8 @@ function fogOfWar(game) {
   var duration = 10000;
   var frequency = 30;
   var time = 0;
-  var ctx = canv.getContext("2d");
-  var height = this.canvas.clientHeight;
-  var width = this.canvas.clientWidth;
+  var height = game.canvas.clientHeight; // Fixed access to canvas
+  var width = game.canvas.clientWidth;
 
   var ctx = canv.getContext("2d");
   ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -84,15 +86,20 @@ function fogOfWar(game) {
   return intvl;
 }
 
-function clearEffects() {
+export function clearEffects() {
   var canv = document.getElementById("effectFrame");
-  canv.height = game.canvas.canvas.clientHeight;
-  canv.width = game.canvas.canvas.clientWidth;
+  // Assuming game is available via import or globally if not passed. 
+  // However, `fogOfWar` took `game` as param, `clearEffects` uses `game` global in original code.
+  // We imported `game` from `state.js`.
+  if (game && game.canvas) {
+    canv.height = game.canvas.canvas.clientHeight;
+    canv.width = game.canvas.canvas.clientWidth;
+  }
   var ctx = canv.getContext("2d");
   ctx.clearRect(0, 0, 2 * canv.width, 2 * canv.height);
 }
 
-function hexToRgbA(hex, a) {
+export function hexToRgbA(hex, a) {
   var c;
   if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
     c = hex.substring(1).split("");

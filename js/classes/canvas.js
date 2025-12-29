@@ -1,3 +1,6 @@
+import { FrameFrequency } from "../constants.js";
+import { game } from "../state.js";
+
 // A class for the canvas in which the game is drawn
 // binds HTML element and handles its size
 // provides loop to keep the frame in sync with the game
@@ -5,7 +8,7 @@
 /**
  * Manages the game canvas and rendering loop.
  */
-class Canvas {
+export default class Canvas {
   /**
    * Creates a new Canvas manager.
    * @param {string} id - The ID of the canvas element.

@@ -1,3 +1,9 @@
+import GameObject from "./object.js";
+import { Smoke, Cloud } from "./smoke.js";
+import { playSound } from "../effects.js";
+import { GameFrequency } from "../constants.js";
+import { Settings } from "../constants.js";
+
 // a parent class for all bullets flying through the map
 // contains position, ang,e speed, timeout and parent weapon
 // provides collision detection with the walls
@@ -8,7 +14,7 @@
  * Represents a bullet fired by a tank.
  * @extends GameObject
  */
-class Bullet extends GameObject {
+export default class Bullet extends GameObject {
   /**
    * Creates a new Bullet.
    * @param {Weapon} weapon - The weapon that fired the bullet.
@@ -37,12 +43,12 @@ class Bullet extends GameObject {
     /** @type {number} Bullet radius. */
     this.radius = 4;
     /** @type {number} Bullet speed. */
-    this.speed = BulletSpeed;
+    this.speed = Settings.BulletSpeed;
     /** @type {string} Bullet color. */
     this.color = "#000";
     // lifetime of the bullet in [ms]
     /** @type {number} Timeout before bullet expires. */
-    this.timeout = BulletTimeout * 1000;
+    this.timeout = Settings.BulletTimeout * 1000;
     // bullet age starts at negative value, so it doesn't instantly kill the shooter
     /** @type {number} Current age of the bullet. */
     this.age = -0;
@@ -98,7 +104,7 @@ class Bullet extends GameObject {
     this.y -= (this.speed * Math.cos(-this.angle) * GameFrequency) / 1000;
     // check for wall collisions
     this.checkCollision(oldx, oldy);
-    if (BulletsCanCollide) this.checkBulletCollision();
+    if (Settings.BulletsCanCollide) this.checkBulletCollision();
   }
 
   /**

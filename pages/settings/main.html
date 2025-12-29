@@ -9,7 +9,7 @@
         <button
           class="left"
           onclick="
-            TankSpeed -= 20;
+            Settings.TankSpeed -= 20;
             databinding();
           "
         >
@@ -19,7 +19,7 @@
         <button
           class="right"
           onclick="
-            TankSpeed += 20;
+            Settings.TankSpeed += 20;
             databinding();
           "
         >
@@ -32,7 +32,7 @@
         <button
           class="left"
           onclick="
-            BulletSpeed -= 20;
+            Settings.BulletSpeed -= 20;
             databinding();
           "
         >
@@ -42,7 +42,7 @@
         <button
           class="right"
           onclick="
-            BulletSpeed += 20;
+            Settings.BulletSpeed += 20;
             databinding();
           "
         >
@@ -55,7 +55,7 @@
         <button
           class="left"
           onclick="
-            BulletTimeout -= 1;
+            Settings.BulletTimeout -= 1;
             databinding();
           "
         >
@@ -65,7 +65,7 @@
         <button
           class="right"
           onclick="
-            BulletTimeout += 1;
+            Settings.BulletTimeout += 1;
             databinding();
           "
         >
@@ -78,7 +78,7 @@
         <button
           class="left"
           onclick="
-            RespawnTime -= 0.5;
+            Settings.RespawnTime -= 0.5;
             databinding();
           "
         >
@@ -88,7 +88,7 @@
         <button
           class="right"
           onclick="
-            RespawnTime += 0.5;
+            Settings.RespawnTime += 0.5;
             databinding();
           "
         >
@@ -101,7 +101,7 @@
         <button
           class="left"
           onclick="
-            SpawnShieldTime -= 0.5;
+            Settings.SpawnShieldTime -= 0.5;
             databinding();
           "
         >
@@ -111,7 +111,7 @@
         <button
           class="right"
           onclick="
-            SpawnShieldTime += 0.5;
+            Settings.SpawnShieldTime += 0.5;
             databinding();
           "
         >
@@ -124,7 +124,7 @@
         <button
           class="left"
           onclick="
-            MapNxMin -= 1;
+            Settings.MapNxMin -= 1;
             databinding();
           "
         >
@@ -134,7 +134,7 @@
         <button
           class="right"
           onclick="
-            MapNxMin += 1;
+            Settings.MapNxMin += 1;
             databinding();
           "
         >
@@ -147,7 +147,7 @@
         <button
           class="left"
           onclick="
-            MapNxMax -= 1;
+            Settings.MapNxMax -= 1;
             databinding();
           "
         >
@@ -157,7 +157,7 @@
         <button
           class="right"
           onclick="
-            MapNxMax += 1;
+            Settings.MapNxMax += 1;
             databinding();
           "
         >
@@ -175,9 +175,9 @@
       <br />
       <!-- <div class="option">
         <span>Leaderboard time</span>
-        <button class="left" onclick="EndScreenTime -= 1; databinding();">-</button>
+        <button class="left" onclick="Settings.EndScreenTime -= 1; databinding();">-</button>
         <input class="left right" data-bind="EndScreenTime" data-min="0"  data-suffix="s" size="1" readonly/>
-        <button class="right" onclick="EndScreenTime += 1; databinding();">+</button>
+        <button class="right" onclick="Settings.EndScreenTime += 1; databinding();">+</button>
       </div><br /> -->
     </div>
     <div class="rightCol">
@@ -187,7 +187,7 @@
           <button
             class="left"
             onclick="
-              RespawnTime -= 0.5;
+              Settings.RespawnTime -= 0.5;
               databinding();
             "
           >
@@ -197,7 +197,7 @@
           <button
             class="right"
             onclick="
-              RespawnTime += 0.5;
+              Settings.RespawnTime += 0.5;
               databinding();
             "
           >
@@ -209,7 +209,7 @@
         <button
           class="left"
           onclick="
-            RoundTime -= 0.5;
+            Settings.RoundTime -= 0.5;
             databinding();
           "
         >
@@ -219,7 +219,7 @@
         <button
           class="right"
           onclick="
-            RoundTime += 0.5;
+            Settings.RoundTime += 0.5;
             databinding();
           "
         >

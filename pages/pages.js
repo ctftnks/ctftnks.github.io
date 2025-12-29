@@ -1,7 +1,10 @@
+import { databinding } from "../js/databinding.js";
+
 // create page div in container, load content into page
-pageID = 0;
-loadedScripts = [];
-function openPage(name) {
+let pageID = 0;
+let loadedScripts = [];
+
+export function openPage(name) {
   var id = pageID++;
   var p = "<div class='page' id='page" + id + "'></div>";
   document.getElementById("pageContainer").innerHTML += p;
@@ -15,7 +18,17 @@ function openPage(name) {
       if (loadedScripts.indexOf(name) == -1) {
         var script = document.createElement("script");
         script.src = "pages/" + name + "/main.js";
+        
+        // Capture existing globals to detect new ones
+        const existingGlobals = Object.keys(window);
+        
         script.onload = function () {
+          // Detect new globals and expose them explicitly if needed, 
+          // though usually <script> adds them to window anyway.
+          // But since some might be local if they are modules (not here), 
+          // or we want to ensure visibility.
+          const newGlobals = Object.keys(window).filter(key => !existingGlobals.includes(key));
+          
           // execute script tags
           evalscripts(p);
           databinding();
@@ -38,7 +51,7 @@ function openPage(name) {
 }
 
 // close a page by ID or child
-function closePage(id) {
+export function closePage(id) {
   if (typeof id == "number") {
     var elem = document.getElementById("page" + id);
     if (elem != null && typeof elem !== "undefined") elem.parentNode.removeChild(elem);
@@ -54,7 +67,10 @@ function closePage(id) {
 }
 
 // evaluate script tags of element
-function evalscripts(elem) {
+export function evalscripts(elem) {
   var scripts = elem.getElementsByTagName("script");
   for (var n = 0; n < scripts.length; n++) eval(scripts[n].innerHTML);
 }
+
+window.openPage = openPage;
+window.closePage = closePage;

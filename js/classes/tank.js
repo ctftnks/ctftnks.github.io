@@ -1,3 +1,14 @@
+import GameObject from "./object.js";
+import { Gun } from "./weapons.js";
+import { Cloud } from "./smoke.js";
+import { playSound } from "../effects.js";
+import {
+  TankWidth,
+  TankHeight,
+  Settings,
+  GameFrequency,
+} from "../constants.js";
+
 // A class for tanks which act as the player character
 // Recieves a player in its constructor
 // contains position, angle, speed of the tank and provides methods to move it
@@ -8,7 +19,7 @@
  * Represents a Tank controlled by a player.
  * @extends GameObject
  */
-class Tank extends GameObject {
+export default class Tank extends GameObject {
   /**
    * Creates a new Tank.
    * @param {Player} player - The player owning this tank.
@@ -35,7 +46,7 @@ class Tank extends GameObject {
     /** @type {Weapon} Current weapon. */
     this.weapon = new Gun(this);
     /** @type {number} Movement speed. */
-    this.speed = TankSpeed;
+    this.speed = Settings.TankSpeed;
     /** @type {boolean} Indicates this is a tank. */
     this.isTank = true;
     /** @type {string} Object type. */
@@ -69,7 +80,7 @@ class Tank extends GameObject {
     if (this.spawnshield()) {
       context.fillStyle = "#555";
       // context.globalAlpha = 0.5;
-      context.globalAlpha = 0.7 * (1 - (this.timers.spawnshield - this.player.game.t) / (SpawnShieldTime * 1000));
+      context.globalAlpha = 0.7 * (1 - (this.timers.spawnshield - this.player.game.t) / (Settings.SpawnShieldTime * 1000));
     }
     context.fill();
     context.beginPath();
@@ -80,11 +91,21 @@ class Tank extends GameObject {
     if (this.carriedFlag != -1) {
       context.beginPath();
       context.fillStyle = this.carriedFlag.color;
-      context.rect(-this.carriedFlag.size / 2, -this.carriedFlag.size / 2, this.carriedFlag.size / 1.1, this.carriedFlag.size / 2);
+      context.rect(
+        -this.carriedFlag.size / 2,
+        -this.carriedFlag.size / 2,
+        this.carriedFlag.size / 1.1,
+        this.carriedFlag.size / 2,
+      );
       context.fill();
       context.beginPath();
       context.fillStyle = "#000";
-      context.rect(-this.carriedFlag.size / 2, -this.carriedFlag.size / 2, this.carriedFlag.size / 6, this.carriedFlag.size * 1.1);
+      context.rect(
+        -this.carriedFlag.size / 2,
+        -this.carriedFlag.size / 2,
+        this.carriedFlag.size / 6,
+        this.carriedFlag.size * 1.1,
+      );
       context.fill();
     } else if (this.weapon.image.src.split("/").slice(-1)[0] == "Marc.png") {
       context.drawImage(this.weapon.image, -this.width / 2, (-1.8 * this.height) / 2, this.width, this.height * 1.4);
@@ -92,7 +113,7 @@ class Tank extends GameObject {
       context.drawImage(this.weapon.image, -this.width / 2, -this.width / 2, this.width, this.width);
     }
     // draw label
-    if (ShowTankLabels) {
+    if (Settings.ShowTankLabels) {
       context.rotate(-this.angle);
       context.fillStyle = this.player.color;
       context.font = "" + 14 + "px Arial";
@@ -140,7 +161,7 @@ class Tank extends GameObject {
    */
   turn(direction) {
     var oldangle = this.angle;
-    this.angle += (((direction * TankTurnSpeed * GameFrequency) / 1000) * TankSpeed) / 180;
+    this.angle += (((direction * Settings.TankTurnSpeed * GameFrequency) / 1000) * Settings.TankSpeed) / 180;
     var colliding_corner = this.checkWallCollision();
     if (colliding_corner != -1) {
       this.angle = oldangle;
@@ -270,7 +291,12 @@ class Tank extends GameObject {
     for (var i = 0; i < bullets.length; i++) {
       if (this.intersects(bullets[i].x, bullets[i].y)) {
         // Friendly fire?
-        if (!FriendlyFire && this.player.team == bullets[i].player.team && this.player.id != bullets[i].player.id) return;
+        if (
+          !Settings.FriendlyFire &&
+          this.player.team == bullets[i].player.team &&
+          this.player.id != bullets[i].player.id
+        )
+          return;
         if (!bullets[i].lethal) return;
         // Hit!
         if (this.invincible()) return;
@@ -279,7 +305,7 @@ class Tank extends GameObject {
         // count stats
         if (bullets[i].player.team != this.player.team) bullets[i].player.stats.kills += 1;
         // fancy explosion cloud
-        new Cloud(this.player.game, this.x, this.y, (n = 6));
+        new Cloud(this.player.game, this.x, this.y, 6);
         // let gamemode handle scoring
         this.player.game.mode.newKill(bullets[i].player, this.player);
         // kill the player, delete the tank and bullet

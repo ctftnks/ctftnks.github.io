@@ -1,8 +1,11 @@
+import GameObject from "./object.js";
+import { playSound } from "../effects.js";
+
 /**
  * Represents a Flag in Capture the Flag mode.
  * @extends GameObject
  */
-class Flag extends GameObject {
+export class Flag extends GameObject {
   /**
    * Creates a new Flag.
    * @param {Game} game - The game instance.
@@ -121,7 +124,7 @@ class Flag extends GameObject {
  * Represents a Base in the game.
  * @extends GameObject
  */
-class Base extends GameObject {
+export class Base extends GameObject {
   /**
    * Creates a new Base.
    * @param {Game} game - The game instance.
@@ -207,7 +210,7 @@ class Base extends GameObject {
  * Represents a Hill in King of the Hill mode.
  * @extends Base
  */
-class Hill extends Base {
+export class Hill extends Base {
   /**
    * Creates a new Hill.
    * @param {Game} game - The game instance.

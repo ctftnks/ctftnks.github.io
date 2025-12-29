@@ -2,7 +2,7 @@
  * Parent class for all objects in the game.
  * Base class for Tanks, Bullets, PowerUps, etc.
  */
-class GameObject {
+export default class GameObject {
   /**
    * Creates a new GameObject.
    */

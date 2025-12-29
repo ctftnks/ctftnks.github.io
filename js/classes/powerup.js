@@ -1,10 +1,16 @@
+import GameObject from "./object.js";
+import { Settings } from "../constants.js";
+import { playSound, playMusic, stopMusic, fogOfWar } from "../effects.js";
+import { game } from "../state.js";
+import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot, WallBuilder } from "./weapons.js";
+
 // a parent class for powerups
 
 /**
  * Base class for all PowerUps.
  * @extends GameObject
  */
-class PowerUp extends GameObject {
+export class PowerUp extends GameObject {
   /**
    * Creates a new PowerUp.
    */
@@ -54,7 +60,7 @@ class PowerUp extends GameObject {
  * Laser weapon powerup.
  * @extends PowerUp
  */
-class LaserBonus extends PowerUp {
+export class LaserBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
@@ -70,7 +76,7 @@ class LaserBonus extends PowerUp {
  * Machine Gun weapon powerup.
  * @extends PowerUp
  */
-class MGBonus extends PowerUp {
+export class MGBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
@@ -86,7 +92,7 @@ class MGBonus extends PowerUp {
  * Grenade weapon powerup.
  * @extends PowerUp
  */
-class GrenadeBonus extends PowerUp {
+export class GrenadeBonus extends PowerUp {
   constructor() {
     super();
     this.image.src = "res/img/grenade.png";
@@ -101,7 +107,7 @@ class GrenadeBonus extends PowerUp {
  * Mine weapon powerup.
  * @extends PowerUp
  */
-class MineBonus extends PowerUp {
+export class MineBonus extends PowerUp {
   constructor() {
     super();
     this.image.src = "res/img/mine.png";
@@ -116,7 +122,7 @@ class MineBonus extends PowerUp {
  * Guided Missile weapon powerup.
  * @extends PowerUp
  */
-class GuidedBonus extends PowerUp {
+export class GuidedBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
@@ -132,7 +138,7 @@ class GuidedBonus extends PowerUp {
  * Wrecking Ball weapon powerup.
  * @extends PowerUp
  */
-class WreckingBallBonus extends PowerUp {
+export class WreckingBallBonus extends PowerUp {
   constructor() {
     super();
     this.image.src = "res/img/wreckingBall.png";
@@ -147,7 +153,7 @@ class WreckingBallBonus extends PowerUp {
  * Slingshot weapon powerup.
  * @extends PowerUp
  */
-class SlingshotBonus extends PowerUp {
+export class SlingshotBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
@@ -163,7 +169,7 @@ class SlingshotBonus extends PowerUp {
  * Wall Builder weapon powerup.
  * @extends PowerUp
  */
-class WallBuilderBonus extends PowerUp {
+export class WallBuilderBonus extends PowerUp {
   constructor() {
     super();
     this.image.src = "res/img/wallBuilder.png";
@@ -178,7 +184,7 @@ class WallBuilderBonus extends PowerUp {
  * Speed Boost powerup.
  * @extends PowerUp
  */
-class SpeedBonus extends PowerUp {
+export class SpeedBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
@@ -199,7 +205,7 @@ class SpeedBonus extends PowerUp {
  * Invincibility powerup.
  * @extends PowerUp
  */
-class InvincibleBonus extends PowerUp {
+export class InvincibleBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
@@ -210,14 +216,14 @@ class InvincibleBonus extends PowerUp {
     if (this.applied) return;
     this.applied = true;
     stopMusic();
-    if (!muted) playMusic("res/sound/invincible.mp3");
+    if (!Settings.muted) playMusic("res/sound/invincible.mp3");
     tank.speed *= 1.14;
     tank.timers.invincible = tank.player.game.t + 10000;
     var self = tank;
     tank.player.game.timeouts.push(
       setTimeout(function () {
         self.speed /= 1.14;
-        if (bgmusic) playMusic("res/sound/bgmusic.wav");
+        if (Settings.bgmusic) playMusic("res/sound/bgmusic.wav");
         else if (!tank.invincible()) stopMusic();
       }, 10100),
     );
@@ -228,7 +234,7 @@ class InvincibleBonus extends PowerUp {
  * Terminator powerup (Rapid Fire).
  * @extends PowerUp
  */
-class TerminatorBonus extends PowerUp {
+export class TerminatorBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
@@ -254,7 +260,7 @@ class TerminatorBonus extends PowerUp {
  * Multiplier powerup (Spawn rate increase).
  * @extends PowerUp
  */
-class MultiBonus extends PowerUp {
+export class MultiBonus extends PowerUp {
   constructor() {
     super();
     this.image.src = "res/img/multi.png";
@@ -263,13 +269,13 @@ class MultiBonus extends PowerUp {
   apply(tank) {
     if (!this.used) {
       this.used = true;
-      PowerUpRate /= 2.5;
-      PowerUpRate = Math.round(1000 * PowerUpRate) / 1000;
-      MaxPowerUps *= 2.5;
+      Settings.PowerUpRate /= 2.5;
+      Settings.PowerUpRate = Math.round(1000 * Settings.PowerUpRate) / 1000;
+      Settings.MaxPowerUps *= 2.5;
       var self = tank;
       setTimeout(function () {
-        PowerUpRate *= 2.5;
-        MaxPowerUps /= 2.5;
+        Settings.PowerUpRate *= 2.5;
+        Settings.MaxPowerUps /= 2.5;
       }, 8000);
     }
   }
@@ -279,7 +285,7 @@ class MultiBonus extends PowerUp {
  * Fog of War powerup.
  * @extends PowerUp
  */
-class FogBonus extends PowerUp {
+export class FogBonus extends PowerUp {
   constructor() {
     super();
     this.image.src = "res/img/fog.png";
@@ -290,7 +296,7 @@ class FogBonus extends PowerUp {
   }
 }
 
-const PowerUps = [
+export const PowerUps = [
   {
     create: function () {
       return new LaserBonus();
@@ -381,7 +387,7 @@ const PowerUps = [
  * Returns a random powerup based on weights.
  * @returns {PowerUp} A new PowerUp instance.
  */
-function getRandomPowerUp() {
+export function getRandomPowerUp() {
   var totalWeights = 0;
   for (var i = 0; i < PowerUps.length; i++) totalWeights += PowerUps[i].weight;
   var randWeight = Math.random() * totalWeights;

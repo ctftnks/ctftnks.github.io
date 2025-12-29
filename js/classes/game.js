@@ -1,3 +1,11 @@
+import Map from "./map.js";
+import MapGenerator from "./mapGenerator.js";
+import { Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill, MapEditor } from "./gamemode.js";
+import { getRandomPowerUp } from "./powerup.js";
+import { GameFrequency, Settings } from "../constants.js";
+import { Key } from "../keybindings.js";
+import { playSound, playMusic, stopMusic, clearEffects } from "../effects.js";
+
 // A class for a single game round with a single map
 // contains a list of players, list of objects in the game
 // contains a loop mechanism for time-iteration
@@ -6,7 +14,7 @@ var GameID = 0;
 /**
  * Manages the game state, loop, and objects.
  */
-class Game {
+export default class Game {
   /**
    * Creates a new Game instance.
    * @param {Canvas} canvas - The canvas manager.
@@ -80,8 +88,8 @@ class Game {
       self.step();
     }, GameFrequency);
     playSound("res/sound/gamestart.wav");
-    if (bgmusic) playMusic("res/sound/bgmusic.wav");
-    updateScores();
+    if (Settings.bgmusic) playMusic("res/sound/bgmusic.wav");
+    if (window.updateScores) window.updateScores();
   }
 
   /**
@@ -101,7 +109,7 @@ class Game {
       // do gamemode calculations
       this.mode.step();
       // add random PowerUp
-      if (this.t % (1000 * PowerUpRate) == 0 && GameMode != "MapEditor") {
+      if (this.t % (1000 * Settings.PowerUpRate) == 0 && Settings.GameMode != "MapEditor") {
         var p = getRandomPowerUp();
         var pos = this.map.spawnPoint();
         p.x = pos.x;
@@ -112,16 +120,16 @@ class Game {
             function () {
               p.delete();
             },
-            1000 * PowerUpRate * MaxPowerUps,
+            1000 * Settings.PowerUpRate * Settings.MaxPowerUps,
           ),
         );
       }
       if (Key.isDown(Key.ESCAPE)) {
-        openPage("menu");
+        if (window.openPage) window.openPage("menu");
         this.pause();
       }
       if (this.t % 1000 == GameFrequency) {
-        var dt = RoundTime * 60 - (this.t - GameFrequency) / 1000;
+        var dt = Settings.RoundTime * 60 - (this.t - GameFrequency) / 1000;
         dt = dt < 0 ? 0 : dt;
         var dtm = Math.floor(dt / 60);
         var dts = Math.floor(dt - dtm * 60);
@@ -131,7 +139,7 @@ class Game {
         while (dts.length < 2) dts = "0" + dts;
         document.getElementById("GameTimer").innerHTML = dtm + ":" + dts;
       }
-      if (this.t > RoundTime * 60000) this.end();
+      if (this.t > Settings.RoundTime * 60000) this.end();
     }
   }
 
@@ -161,7 +169,9 @@ class Game {
    */
   end() {
     this.paused = true;
-    var pageid = openPage("leaderboard");
+    if (window.openPage) {
+      var pageid = window.openPage("leaderboard");
+    }
     this.stop();
   }
 

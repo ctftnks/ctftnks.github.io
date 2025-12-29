@@ -1,43 +1,28 @@
+import Tank from "./tank.js";
+import { Key, keymaps } from "../keybindings.js";
+import { Smoke, Cloud } from "./smoke.js";
+import { playercolors, Settings } from "../constants.js";
+import { nplayers, setNPlayers } from "../state.js";
+
 // A class for a player.
 // keeps the players score, color, name, keymap
 // and the tank to be controlled
 
-var nplayers = 0;
-var playercolors = [
-  "#DA1918", // red
-  "#31B32B", // green
-  "#1F87FF", // blue
-  "#21B19B", // teal
-  "#A020F0", // purple
-  "#F4641D", // orange
-  "#713B17", // brown
-  "#E7E52C", // yellow
-];
-
-// playercolors = [
-//   "#F44336",  // red
-//   "#4CAF50",  // green
-//   "#2196F3",  // blue
-//   "#FF9800",  // orange
-//   "#009688",  // teal
-//   "#9C27B0",  // purple
-//   "#FFC107"  // amber
-// ]
-
 /**
  * Represents a Player in the game.
  */
-class Player {
+export default class Player {
   /**
    * Creates a new Player.
    */
   constructor() {
     /** @type {number} Unique player ID. */
-    this.id = nplayers++;
+    this.id = nplayers;
+    setNPlayers(nplayers + 1);
     /** @type {string} Player name. */
     this.name = "Player " + (this.id + 1);
     /** @type {string} Player color. */
-    this.color = playercolors[this.id];
+    this.color = playercolors[this.id % playercolors.length];
     /** @type {number|string} Team identifier. */
     this.team = this.id;
     /** @type {Game} Game instance. */
@@ -91,11 +76,11 @@ class Player {
     var self = this;
     this.game.timeouts.push(
       setTimeout(function () {
-        new Cloud(self.game, self.tank.x, self.tank.y, (n = 4), (radius = 20), (rspeed = 2));
+        new Cloud(self.game, self.tank.x, self.tank.y, 4, 20, 2);
       }, 10),
     );
     // spawn shield
-    this.tank.timers.spawnshield = this.game.t + SpawnShieldTime * 1000;
+    this.tank.timers.spawnshield = this.game.t + Settings.SpawnShieldTime * 1000;
   }
 
   /**
@@ -113,7 +98,7 @@ class Player {
     this.game.timeouts.push(
       setTimeout(function () {
         self.spawn();
-      }, RespawnTime * 1000),
+      }, Settings.RespawnTime * 1000),
     );
   }
 

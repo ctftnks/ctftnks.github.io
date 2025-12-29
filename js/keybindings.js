@@ -1,6 +1,8 @@
+import { editingKeymap } from "./state.js";
+
 // static Key class
 // keeps track of pressed keys
-var Key = {
+export var Key = {
   _pressed: {},
 
   A: 65,
@@ -77,7 +79,7 @@ var Key = {
     if (editingKeymap) {
       // Ctrl is forbidden
       if (event.keyCode == 17) return;
-      doEditKeymap(event.keyCode);
+      if (window.doEditKeymap) window.doEditKeymap(event.keyCode);
     }
     if (event.keyCode == Key.W) {
       event.preventDefault();
@@ -92,7 +94,7 @@ var Key = {
 
 // available keymaps
 // order: up, left, down, right, fire
-var keymaps = [
+export var keymaps = [
   [Key.UP, Key.LEFT, Key.DOWN, Key.RIGHT, Key.SPACE],
   [Key.W, Key.A, Key.S, Key.D, Key.Q],
   [Key.N8, Key.N4, Key.N5, Key.N6, Key.N7],
@@ -119,11 +121,11 @@ window.addEventListener(
   false,
 );
 
-function getKeyLabel(key) {
+export function getKeyLabel(key) {
   return String.fromCharCode(96 <= key && key <= 105 ? key - 48 : key);
 }
 
-var keyLabels = [
+export var keyLabels = [
   "", // [0]
   "", // [1]
   "", // [2]

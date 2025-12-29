@@ -1,8 +1,14 @@
+import Bullet from "./bullet.js";
+import Trajectory from "./trajectory.js";
+import { playSound, hexToRgbA } from "../effects.js";
+import { Smoke, Cloud } from "./smoke.js";
+import { GameFrequency, Settings } from "../constants.js";
+
 // parent class for all weapons
 /**
  * Base class for all weapons.
  */
-class Weapon {
+export class Weapon {
   /**
    * Creates a new Weapon.
    * @param {Tank} tank - The tank owning this weapon.
@@ -104,7 +110,7 @@ class Weapon {
  * The normal, default gun.
  * @extends Weapon
  */
-class Gun extends Weapon {
+export class Gun extends Weapon {
   /**
    * Creates a new Gun.
    * @param {Tank} tank - The tank.
@@ -141,7 +147,7 @@ class Gun extends Weapon {
  * A rapid-firing machine gun.
  * @extends Weapon
  */
-class MG extends Weapon {
+export class MG extends Weapon {
   /**
    * Creates a new MG.
    * @param {Tank} tank - The tank.
@@ -200,7 +206,7 @@ class MG extends Weapon {
  * Laser weapon.
  * @extends Weapon
  */
-class Laser extends Weapon {
+export class Laser extends Weapon {
   /**
    * Creates a new Laser.
    * @param {Tank} tank - The tank.
@@ -263,7 +269,7 @@ class Laser extends Weapon {
  * A grenade that can be remotely detonated.
  * @extends Weapon
  */
-class Grenade extends Weapon {
+export class Grenade extends Weapon {
   /**
    * Creates a new Grenade weapon.
    * @param {Tank} tank - The tank.
@@ -299,9 +305,9 @@ class Grenade extends Weapon {
         shrapnel.y = bullet.y;
         shrapnel.radius = 2;
         shrapnel.age = 0;
-        shrapnel.speed = 2 * BulletSpeed * (0.8 + 0.4 * Math.random());
+        shrapnel.speed = 2 * Settings.BulletSpeed * (0.8 + 0.4 * Math.random());
         shrapnel.angle = 2 * Math.PI * Math.random();
-        shrapnel.timeout = (360 * 280) / BulletSpeed;
+        shrapnel.timeout = (360 * 280) / Settings.BulletSpeed;
         shrapnel.extrahitbox = -3;
         shrapnel.checkCollision = function (x, y) {};
         self.tank.player.game.addObject(shrapnel);
@@ -331,7 +337,7 @@ class Grenade extends Weapon {
  * A mine.
  * @extends Weapon
  */
-class Mine extends Weapon {
+export class Mine extends Weapon {
   /**
    * Creates a new Mine weapon.
    * @param {Tank} tank - The tank.
@@ -364,7 +370,7 @@ class Mine extends Weapon {
         shrapnel.y = bullet.y;
         shrapnel.radius = 2;
         shrapnel.age = 0;
-        shrapnel.speed = 2 * BulletSpeed * (0.8 + 0.4 * Math.random());
+        shrapnel.speed = 2 * Settings.BulletSpeed * (0.8 + 0.4 * Math.random());
         shrapnel.angle = 2 * Math.PI * Math.random();
         shrapnel.timeout = 600;
         shrapnel.extrahitbox = -3;
@@ -386,7 +392,7 @@ class Mine extends Weapon {
  * A guided missile.
  * @extends Weapon
  */
-class Guided extends Weapon {
+export class Guided extends Weapon {
   /**
    * Creates a new Guided Missile weapon.
    * @param {Tank} tank - The tank.
@@ -408,7 +414,7 @@ class Guided extends Weapon {
     bullet.image.src = "res/img/guided.png";
     bullet.color = "#555";
     bullet.smokeColor = "#555";
-    bullet.speed = 1.1 * TankSpeed;
+    bullet.speed = 1.1 * Settings.TankSpeed;
     bullet.goto = -1;
     bullet.extrahitbox = 10;
     bullet.step = function () {
@@ -475,7 +481,7 @@ class Guided extends Weapon {
  * Destroys walls.
  * @extends Weapon
  */
-class WreckingBall extends Weapon {
+export class WreckingBall extends Weapon {
   /**
    * Creates a new WreckingBall weapon.
    * @param {Tank} tank - The tank.
@@ -495,7 +501,7 @@ class WreckingBall extends Weapon {
     var bullet = super.newBullet();
     bullet.radius = 10;
     bullet.color = "#000";
-    bullet.speed = TankSpeed * 1.1;
+    bullet.speed = Settings.TankSpeed * 1.1;
     bullet.timeout = 1000;
     bullet.checkCollision = function (x, y) {
       var tile = bullet.map.getTileByPos(x, y);
@@ -542,7 +548,7 @@ class WreckingBall extends Weapon {
  * Creates walls.
  * @extends Weapon
  */
-class WallBuilder extends Weapon {
+export class WallBuilder extends Weapon {
   /**
    * Creates a new WallBuilder weapon.
    * @param {Tank} tank - The tank.
@@ -580,7 +586,7 @@ class WallBuilder extends Weapon {
  * Throws over walls.
  * @extends Weapon
  */
-class Slingshot extends Weapon {
+export class Slingshot extends Weapon {
   /**
    * Creates a new Slingshot weapon.
    * @param {Tank} tank - The tank.
@@ -600,7 +606,7 @@ class Slingshot extends Weapon {
     var bullet = super.newBullet();
     bullet.radius = 6;
     bullet.color = "#333";
-    bullet.speed = 2 * BulletSpeed;
+    bullet.speed = 2 * Settings.BulletSpeed;
     bullet.timeout = 2000;
     bullet.checkCollision = function (x, y) {};
     bullet.trace = true;

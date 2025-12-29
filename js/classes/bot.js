@@ -1,10 +1,14 @@
+import Player from "./player.js";
+import { Settings, GameFrequency } from "../constants.js";
+import { game } from "../state.js";
+
 var NBots = 0;
 
 /**
  * A bot player that controls a tank automatically.
  * @extends Player
  */
-class Bot extends Player {
+export default class Bot extends Player {
   /**
    * Creates a new Bot.
    * @param {Player} player - The player object (this parameter seems unused in constructor but might be legacy).
@@ -197,16 +201,16 @@ class Bot extends Player {
     tank.angle = tank.angle % (2 * Math.PI);
     // turn and move in correct direction
     if (Math.abs(tank.angle - newangle) < 0.6 || Math.abs(Math.abs(tank.angle - newangle) - Math.PI * 2) < 0.6) {
-      tank.move(1 * BotSpeed);
+      tank.move(1 * Settings.BotSpeed);
     }
     if (Math.abs(tank.angle - newangle) < 0.1) {
       tank.angle = newangle;
     } else if (tank.angle < newangle) {
-      if (Math.abs(tank.angle - newangle) < Math.PI) tank.turn(2 * BotSpeed);
-      else tank.turn(-2 * BotSpeed);
+      if (Math.abs(tank.angle - newangle) < Math.PI) tank.turn(2 * Settings.BotSpeed);
+      else tank.turn(-2 * Settings.BotSpeed);
     } else {
-      if (Math.abs(tank.angle - newangle) < Math.PI) tank.turn(-2 * BotSpeed);
-      else tank.turn(2 * BotSpeed);
+      if (Math.abs(tank.angle - newangle) < Math.PI) tank.turn(-2 * Settings.BotSpeed);
+      else tank.turn(2 * Settings.BotSpeed);
     }
   }
 
@@ -299,7 +303,7 @@ class Bot extends Player {
     if (!this.fleeing.from.includes(tile)) this.fleeing.from.push(tile);
     var nextTile = tile;
     for (var i = 0; i < 4; i++) if (!tile.walls[i] && !this.fleeing.from.includes(tile.neighbors[i])) nextTile = tile.neighbors[i];
-    fleePath = [tile, nextTile];
+    var fleePath = [tile, nextTile];
     // convert tile path to coordinates path and return
     for (var i = 0; i < fleePath.length; i++) {
       var tile = fleePath[i];
@@ -336,8 +340,8 @@ class Bot extends Player {
  * @param {number} val - The adaptation value.
  * @returns {number} The new bot speed.
  */
-function adaptBotSpeed(team, val = 0.1) {
-  if (!AdaptiveBotSpeed) return;
+export function adaptBotSpeed(team, val = 0.1) {
+  if (!Settings.AdaptiveBotSpeed) return;
 
   var teams = [];
   var botcounts = [];
@@ -354,9 +358,9 @@ function adaptBotSpeed(team, val = 0.1) {
   var avgbots = 0;
   for (var i = 0; i < teams.length; i++) avgbots += botcounts[i] / parseFloat(teams.length);
   id = teams.indexOf(team);
-  BotSpeed += (avgbots - botcounts[id]) * val;
+  Settings.BotSpeed += (avgbots - botcounts[id]) * val;
   var bs = document.getElementById("BotSpeedometer");
   bs.style.display = "block";
-  bs.innerHTML = "BotSpeed:&nbsp;&nbsp;" + Math.round(BotSpeed * 100) + " %";
-  return BotSpeed;
+  bs.innerHTML = "BotSpeed:&nbsp;&nbsp;" + Math.round(Settings.BotSpeed * 100) + " %";
+  return Settings.BotSpeed;
 }
