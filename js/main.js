@@ -29,18 +29,18 @@ window.PowerUps = PowerUps;
 window.store = store;
 
 // Bridge for legacy code and dynamic HTML/JS
-['game', 'canvas', 'players', 'nplayers', 'editingKeymap', 'GameID'].forEach(key => {
+["game", "canvas", "players", "nplayers", "editingKeymap", "GameID"].forEach((key) => {
   Object.defineProperty(window, key, {
     get: () => store[key],
-    set: (v) => store[key] = v,
-    configurable: true
+    set: (v) => (store[key] = v),
+    configurable: true,
   });
 });
 
 // generate canvas object and players list
 window.onload = function () {
   store.canvas = new Canvas("gameFrame");
-  
+
   store.players = [new Player(), new Bot(), new Bot(), new Bot()];
   store.players[1].color = store.players[0].color;
   store.players[1].team = store.players[0].team;
@@ -68,7 +68,7 @@ export function newGame(map = -1) {
 
   if (typeof store.game !== "undefined") store.game.stop();
   store.game = new Game(store.canvas, map);
-  
+
   if (Settings.GameMode == "DM") store.game.mode = new Deathmatch(store.game);
   if (Settings.GameMode == "TDM") store.game.mode = new TeamDeathmatch(store.game);
   if (Settings.GameMode == "CTF") store.game.mode = new CaptureTheFlag(store.game);
