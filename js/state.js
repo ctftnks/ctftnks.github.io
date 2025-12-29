@@ -2,6 +2,7 @@ export let game;
 export let canvas;
 export let players = [];
 export let nplayers = 0;
+export let GameID = 0;
 export let editingKeymap = false;
 
 export function setGame(newGame) {
@@ -18,6 +19,10 @@ export function setPlayers(newPlayers) {
 
 export function setNPlayers(value) {
   nplayers = value;
+}
+
+export function setGameID(value) {
+  GameID = value;
 }
 
 export function setEditingKeymap(value) {

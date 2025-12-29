@@ -50,14 +50,10 @@ export function fogOfWar(game) {
   var duration = 10000;
   var frequency = 30;
   var time = 0;
-  var height = game.canvas.clientHeight; // Fixed access to canvas
-  var width = game.canvas.clientWidth;
-
   var ctx = canv.getContext("2d");
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.scale(game.canvas.scale, game.canvas.scale);
   var ambientLight = 1;
-  var intensity = 1;
   var intvl = setInterval(function () {
     ctx.clearRect(0, 0, 2 * canv.width, 2 * canv.height);
     if (time < 300) ambientLight -= frequency / 300;
@@ -88,10 +84,7 @@ export function fogOfWar(game) {
 
 export function clearEffects() {
   var canv = document.getElementById("effectFrame");
-  // Assuming game is available via import or globally if not passed. 
-  // However, `fogOfWar` took `game` as param, `clearEffects` uses `game` global in original code.
-  // We imported `game` from `state.js`.
-  if (game && game.canvas) {
+  if (game && game.canvas && game.canvas.canvas) {
     canv.height = game.canvas.canvas.clientHeight;
     canv.width = game.canvas.canvas.clientWidth;
   }

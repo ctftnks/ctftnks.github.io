@@ -7,7 +7,7 @@ import MapGenerator from "./classes/mapGenerator.js";
 import { Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill, MapEditor } from "./classes/gamemode.js";
 import { openPage } from "../pages/pages.js";
 import { Settings } from "./constants.js";
-import { game, canvas, players, setGame, setCanvas, setPlayers, editingKeymap, setEditingKeymap, nplayers, setNPlayers } from "./state.js";
+import { game, canvas, players, setGame, setCanvas, setPlayers, editingKeymap, setEditingKeymap, nplayers, setNPlayers, GameID, setGameID } from "./state.js";
 import { Key, keymaps, keyLabels } from "./keybindings.js";
 import { PowerUps } from "./classes/powerup.js";
 
@@ -47,6 +47,10 @@ Object.defineProperty(window, 'editingKeymap', {
 Object.defineProperty(window, 'nplayers', {
   get: () => nplayers,
   set: (v) => setNPlayers(v)
+});
+Object.defineProperty(window, 'GameID', {
+  get: () => GameID,
+  set: (v) => setGameID(v)
 });
 
 // generate canvas object and players list

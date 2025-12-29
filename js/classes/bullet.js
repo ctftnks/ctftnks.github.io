@@ -165,7 +165,7 @@ export default class Bullet extends GameObject {
         this.explode();
         bullets[i].delete();
         this.delete();
-        new Cloud(this.player.game, this.x, this.y, (n = 1));
+        new Cloud(this.player.game, this.x, this.y, 1);
         playSound("res/sound/original/gun.mp3");
         return;
       }
@@ -176,7 +176,7 @@ export default class Bullet extends GameObject {
    * Leave a trace of smoke.
    */
   leaveTrace() {
-    this.player.game.addObject(new Smoke(this.x, this.y, (timeout = 300), (radius = this.radius), (rspeed = 1)));
+    this.player.game.addObject(new Smoke(this.x, this.y, 300, this.radius, 1));
   }
 
   /**

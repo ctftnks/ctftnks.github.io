@@ -468,7 +468,7 @@ export class Guided extends Weapon {
       }
       bullet.leaveTrace = function () {
         if (Math.random() > 0.8) {
-          var smoke = new Smoke(this.x, this.y, (timeout = 400), (radius = this.radius / 1.4), (rspeed = 0.6));
+          var smoke = new Smoke(this.x, this.y, 400, this.radius / 1.4, 0.6);
           smoke.color = bullet.smokeColor;
           bullet.player.game.addObject(smoke);
         }
@@ -526,7 +526,7 @@ export class WreckingBall extends Weapon {
         } else {
           // hit a wall: remove it!
           playSound("res/sound/grenade.wav");
-          new Cloud(this.player.game, bullet.x, bullet.y, (n = 3));
+          new Cloud(this.player.game, bullet.x, bullet.y, 3);
           bullet.delete();
           tile.addWall(wall, true);
         }
@@ -535,7 +535,7 @@ export class WreckingBall extends Weapon {
     bullet.trace = true;
     bullet.leaveTrace = function () {
       if (Math.random() > 0.96) {
-        var smoke = new Smoke(this.x, this.y, (timeout = 800), (radius = bullet.radius), (rspeed = 0.6));
+        var smoke = new Smoke(this.x, this.y, 800, bullet.radius, 0.6);
         smoke.color = "rgba(0,0,0,0.3)";
         bullet.player.game.addObject(smoke);
       }
@@ -613,7 +613,7 @@ export class Slingshot extends Weapon {
     bullet.leaveTrace = function () {
       if (Math.random() > 0.96) {
         bullet.speed *= 0.92;
-        var smoke = new Smoke(this.x, this.y, (timeout = 800), (radius = bullet.radius), (rspeed = 0.6));
+        var smoke = new Smoke(this.x, this.y, 800, bullet.radius, 0.6);
         smoke.color = "rgba(0,0,0,0.3)";
         bullet.player.game.addObject(smoke);
       }

@@ -5,12 +5,12 @@ import { getRandomPowerUp } from "./powerup.js";
 import { GameFrequency, Settings } from "../constants.js";
 import { Key } from "../keybindings.js";
 import { playSound, playMusic, stopMusic, clearEffects } from "../effects.js";
+import { GameID, setGameID } from "../state.js";
 
 // A class for a single game round with a single map
 // contains a list of players, list of objects in the game
 // contains a loop mechanism for time-iteration
 
-var GameID = 0;
 /**
  * Manages the game state, loop, and objects.
  */
@@ -57,7 +57,7 @@ export default class Game {
     this.nkills = 0;
     /** @type {Gamemode} The current game mode. */
     this.mode = new Deathmatch(this);
-    GameID++;
+    setGameID(GameID + 1);
   }
 
   /**

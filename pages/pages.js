@@ -69,7 +69,7 @@ export function closePage(id) {
 // evaluate script tags of element
 export function evalscripts(elem) {
   var scripts = elem.getElementsByTagName("script");
-  for (var n = 0; n < scripts.length; n++) eval(scripts[n].innerHTML);
+  for (var n = 0; n < scripts.length; n++) (0, eval)(scripts[n].innerHTML);
 }
 
 window.openPage = openPage;

@@ -13,13 +13,13 @@ export default class MapGenerator {
    */
   static randomMap(map) {
     // generate walls at frame borders
-    for (var i = 0; i < this.Nx; i++) {
-      this.tiles[i * this.Ny].walls[0] = true;
-      this.tiles[i * this.Ny + this.Nx - 1].walls[2] = true;
+    for (var i = 0; i < map.Nx; i++) {
+      map.tiles[i * map.Ny].walls[0] = true;
+      map.tiles[i * map.Ny + map.Nx - 1].walls[2] = true;
     }
-    for (var j = 0; j < this.Ny; j++) {
-      this.tiles[j].walls[1] = true;
-      this.tiles[(this.Nx - 1) * this.Ny + j].walls[3] = true;
+    for (var j = 0; j < map.Ny; j++) {
+      map.tiles[j].walls[1] = true;
+      map.tiles[(map.Nx - 1) * map.Ny + j].walls[3] = true;
     }
     for (var i = 0; i < map.Nx; i++) {
       for (var j = 0; j < map.Ny - 1; j++) {
@@ -247,7 +247,10 @@ export default class MapGenerator {
         var lines = data.match(/[^\r\n]+/g);
         var Ny = lines.length;
         var Nx = lines[0].split(" ").length;
-        var map = new Map(game.map.canvas, Nx, Ny);
+        
+        // Safety check for game
+        var canvas = (game && game.map) ? game.map.canvas : -1;
+        var map = new Map(canvas, Nx, Ny);
         for (var j = 0; j < Ny; j++) {
           var line = lines[j].split(" ");
           for (var i = 0; i < Nx; i++) {
