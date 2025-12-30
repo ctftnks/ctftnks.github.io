@@ -2,13 +2,15 @@
 
 CTF-TNKS is a fast-paced, tank battle browser game featuring multiple game modes, including Capture the Flag, Deathmatch, and King of the Hill. It is built with modern vanilla web technologies.
 
-## 🛠 Features
+Play the game now at: [ctftnks.github.io](https://ctftnks.github.io)
+
+## Features
 
 - **Multiple Game Modes:** CTF, Deathmatch, Team Deathmatch, King of the Hill, and a built-in Map Editor.
 - **Smart AI Bots:** Adaptive bot speed and strategic behavior.
 - **Dynamic Power-ups:** Laser, Machine Gun, Guided Missiles, Wrecking Ball, and more.
 
-## 📦 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -50,7 +52,7 @@ Run the unit test suite:
 npm test
 ```
 
-## 🎮 How to Play
+## How to Play
 
 1. **Menu:** Use the menu to select a game mode and configure players/bots.
 2. **Controls:** Default controls for Player 1 are Arrow Keys to move and Space to fire. These can be remapped in the Menu.
