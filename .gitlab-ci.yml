@@ -19,14 +19,14 @@ build:
       - node_modules/ # Cache node_modules for faster builds
 
 # Run unit tests using Vitest
-# unit-tests:
-#   stage: test
-#   script:
-#     - npm install # Install dependencies again (optional but ensures fresh env)
-#     - npm run test # Run the unit tests with Vitest
-#   cache:
-#     paths:
-#       - node_modules/
+unit-tests:
+  stage: test
+  script:
+    - npm install # Install dependencies again (optional but ensures fresh env)
+    - npm run test # Run the unit tests with Vitest
+  cache:
+    paths:
+      - node_modules/
 
 # Publish the project to GitLab Pages
 publish-gitlab-pages:

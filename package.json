@@ -25,6 +25,7 @@
   "homepage": "https://github.com/ctftnks/ctftnks.github.io#readme",
   "devDependencies": {
     "@vitest/coverage-v8": "^4.0.16",
+    "jsdom": "^27.4.0",
     "prettier": "^3.7.4",
     "vite": "^7.3.0",
     "vitest": "^4.0.16"

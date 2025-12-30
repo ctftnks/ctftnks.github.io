@@ -13,5 +13,9 @@ export default defineConfig(({ mode }) => {
     server: {
       open: true, // open the browser automatically when the server starts
     },
+    test: {
+      environment: "jsdom",
+      globals: true,
+    },
   };
 });
