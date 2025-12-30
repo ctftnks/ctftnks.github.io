@@ -6,7 +6,7 @@ window.maplist = maplist;
 
 export function init(container) {
   container.innerHTML = template;
-  
+
   const listElem = document.getElementById("importMapList");
   for (let i = 0; i < maplist.length; i++) {
     const name = maplist[i];

@@ -97,8 +97,7 @@ export class TeamDeathmatch extends Gamemode {
    * @param {number} val - The score value.
    */
   giveScore(player, val = 1) {
-    for (let i = 0; i < this.game.players.length; i++)
-      if (this.game.players[i].team === player.team) this.game.players[i].score += val;
+    for (let i = 0; i < this.game.players.length; i++) if (this.game.players[i].team === player.team) this.game.players[i].score += val;
     player.spree += 1;
     if (player.spree >= 5 && player.spree % 5 === 0) {
       player.score += Math.floor(player.spree / 5);
@@ -199,8 +198,7 @@ export class CaptureTheFlag extends Gamemode {
    * @param {number} val - The score value.
    */
   giveScore(player, val = 1) {
-    for (let i = 0; i < this.game.players.length; i++)
-      if (this.game.players[i].team === player.team) this.game.players[i].score += val;
+    for (let i = 0; i < this.game.players.length; i++) if (this.game.players[i].team === player.team) this.game.players[i].score += val;
     if (window.updateScores) window.updateScores();
     adaptBotSpeed(player.team);
   }
@@ -397,8 +395,7 @@ export class KingOfTheHill extends Gamemode {
       }
       const team = this.bases[0].team;
       if (equal && team !== "#555" && this.game.t % scoreevery === 0) {
-        for (let i = 0; i < this.game.players.length; i++)
-          if (this.game.players[i].team === team) this.giveScore(this.game.players[i], 1);
+        for (let i = 0; i < this.game.players.length; i++) if (this.game.players[i].team === team) this.giveScore(this.game.players[i], 1);
         adaptBotSpeed(team, 0.02);
       }
     }

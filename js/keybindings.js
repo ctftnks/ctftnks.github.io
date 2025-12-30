@@ -17,19 +17,19 @@ export const Key = {
 
   onKeydown: function (event) {
     this._pressed.add(event.code);
-    
+
     if (store.editingKeymap) {
       // Prevent default behavior while remapping keys
       event.preventDefault();
       // 'ControlLeft' or 'ControlRight' are usually forbidden in this game's logic
-      if (event.code.startsWith('Control')) return;
-      
+      if (event.code.startsWith("Control")) return;
+
       if (window.doEditKeymap) window.doEditKeymap(event.code);
     }
-    
-    // Legacy specific prevention for 'W' key if needed, 
+
+    // Legacy specific prevention for 'W' key if needed,
     // but using code 'KeyW' is more robust.
-    if (event.code === 'KeyW') {
+    if (event.code === "KeyW") {
       event.preventDefault();
       event.stopPropagation();
     }
@@ -45,14 +45,14 @@ export const Key = {
  * order: up, left, down, right, fire
  */
 export const keymaps = [
-  ['ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'Space'],
-  ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyQ'],
-  ['Numpad8', 'Numpad4', 'Numpad5', 'Numpad6', 'Numpad7'],
-  ['KeyF', 'KeyC', 'KeyV', 'KeyB', 'KeyX'],
-  ['KeyZ', 'KeyG', 'KeyH', 'KeyJ', 'KeyT'],
-  ['KeyK', 'KeyM', 'Comma', 'Period', 'KeyN'],
-  ['Digit4', 'KeyE', 'KeyR', 'Digit5', 'Digit3'],
-  ['Digit8', 'KeyU', 'KeyI', 'Digit9', 'Digit7'],
+  ["ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight", "Space"],
+  ["KeyW", "KeyA", "KeyS", "KeyD", "KeyQ"],
+  ["Numpad8", "Numpad4", "Numpad5", "Numpad6", "Numpad7"],
+  ["KeyF", "KeyC", "KeyV", "KeyB", "KeyX"],
+  ["KeyZ", "KeyG", "KeyH", "KeyJ", "KeyT"],
+  ["KeyK", "KeyM", "Comma", "Period", "KeyN"],
+  ["Digit4", "KeyE", "KeyR", "Digit5", "Digit3"],
+  ["Digit8", "KeyU", "KeyI", "Digit9", "Digit7"],
 ];
 
 // event listeners
@@ -61,12 +61,12 @@ window.addEventListener("keydown", (e) => Key.onKeydown(e), false);
 
 /**
  * Returns a user-friendly label for a given key code.
- * @param {string} code 
+ * @param {string} code
  * @returns {string}
  */
 export function getKeyLabel(code) {
   if (!code) return "";
-  
+
   // Clean up common codes
   // KeyW -> W, ArrowUp -> Up, Digit1 -> 1, Numpad1 -> Num1
   let label = code
@@ -74,7 +74,7 @@ export function getKeyLabel(code) {
     .replace(/^Arrow/, "")
     .replace(/^Digit/, "")
     .replace(/^Numpad/, "Num");
-    
+
   if (label === "Space") return "Space";
   return label.toUpperCase();
 }

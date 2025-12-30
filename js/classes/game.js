@@ -90,7 +90,7 @@ export default class Game {
     }, GameFrequency);
     playSound(SOUNDS.gamestart);
     if (Settings.bgmusic) {
-        // playMusic(SOUNDS.bgmusic);
+      // playMusic(SOUNDS.bgmusic);
     }
     if (window.updateScores) window.updateScores();
   }

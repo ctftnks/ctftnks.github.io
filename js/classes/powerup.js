@@ -225,9 +225,8 @@ export class InvincibleBonus extends PowerUp {
       setTimeout(function () {
         self.speed /= 1.14;
         if (Settings.bgmusic) {
-            // playMusic(SOUNDS.bgmusic); // Assuming we might want to add bgmusic later.
-        }
-        else if (!tank.invincible()) stopMusic();
+          // playMusic(SOUNDS.bgmusic); // Assuming we might want to add bgmusic later.
+        } else if (!tank.invincible()) stopMusic();
       }, 10100),
     );
   }
