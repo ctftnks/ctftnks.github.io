@@ -33,7 +33,7 @@ export default class Player {
     this.score = 0;
     /** @type {number} Current kill streak. */
     this.spree = 0;
-    /** @type {Array<number>} Key bindings. */
+    /** @type {Array<string>} Key bindings (KeyboardEvent.code strings). */
     this.keys = keymaps[this.id] || keymaps[0].slice();
     /** @type {Tank} The tank controlled by the player. */
     this.tank = new Tank(this);

@@ -3,6 +3,7 @@ import "./style.css";
 import Bot from "../../js/classes/bot.js";
 import Player from "../../js/classes/player.js";
 import { updateScores } from "../../js/main.js";
+import { keymaps, getKeyLabel } from "../../js/keybindings.js";
 
 export function init(container) {
   container.innerHTML = template;
@@ -79,9 +80,9 @@ function editableKeymap(mapID) {
     return html;
   }
   let html = "";
-  for (const i in keymaps[mapID]) {
+  for (let i = 0; i < keymaps[mapID].length; i++) {
     html += "<button class='keyEditButton' onclick='editKeymap(" + mapID + ", " + i + ")' onfocusout='window.editingKeymap=false'>";
-    html += keyLabels[keymaps[mapID][i]];
+    html += getKeyLabel(keymaps[mapID][i]);
     html += "</button>";
   }
   return html;

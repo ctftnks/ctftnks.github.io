@@ -7,7 +7,7 @@ import MapGenerator from "./classes/mapGenerator.js";
 import { Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill, MapEditor } from "./classes/gamemode.js";
 import { openPage } from "../pages/pages.js";
 import { store, Settings } from "./state.js";
-import { Key, keymaps, keyLabels } from "./keybindings.js";
+import { Key, keymaps } from "./keybindings.js";
 import { PowerUps } from "./classes/powerup.js";
 
 // Expose classes and variables to window for non-module dynamic scripts in pages/
@@ -24,7 +24,6 @@ window.MapEditor = MapEditor;
 window.Settings = Settings;
 window.Key = Key;
 window.keymaps = keymaps;
-window.keyLabels = keyLabels;
 window.PowerUps = PowerUps;
 window.store = store;
 

@@ -127,7 +127,7 @@ export default class Game {
           ),
         );
       }
-      if (Key.isDown(Key.ESCAPE)) {
+      if (Key.isDown("Escape")) {
         if (window.openPage) window.openPage("menu");
         this.pause();
       }
