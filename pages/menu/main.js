@@ -81,7 +81,12 @@ function editableKeymap(mapID) {
   }
   let html = "";
   for (let i = 0; i < keymaps[mapID].length; i++) {
-    html += "<button class='keyEditButton' onclick='editKeymap(" + mapID + ", " + i + ")' onfocusout='window.editingKeymap=false'>";
+    html +=
+      "<button class='keyEditButton' onclick='editKeymap(" +
+      mapID +
+      ", " +
+      i +
+      ');this.classList.add("editing")\' onfocusout=\'window.editingKeymap=false;this.classList.remove("editing")\'>';
     html += getKeyLabel(keymaps[mapID][i]);
     html += "</button>";
   }

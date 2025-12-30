@@ -30,6 +30,6 @@
   width: 60px;
 }
 
-.keyEditButton:focus {
-  background: rgba(153, 204, 255, 0.5);
+.keyEditButton.editing {
+  opacity: 0.6;
 }
