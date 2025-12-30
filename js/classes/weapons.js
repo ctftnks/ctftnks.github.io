@@ -4,6 +4,7 @@ import { playSound, hexToRgbA } from "../effects.js";
 import { Smoke, Cloud } from "./smoke.js";
 import { GameFrequency } from "../constants.js";
 import { Settings } from "../state.js";
+import { IMAGES, SOUNDS } from "../assets.js";
 
 // parent class for all weapons
 /**
@@ -41,7 +42,7 @@ export class Weapon {
    */
   shoot() {
     if (!this.active) return;
-    playSound("res/sound/gun.wav");
+    playSound(SOUNDS.gun);
     this.newBullet();
     this.deactivate();
   }
@@ -120,10 +121,10 @@ export class Gun extends Weapon {
     super(tank);
     this.name = "Gun";
     this.image = new Image();
-    this.image.src = "res/img/gun.png";
+    this.image.src = IMAGES.gun;
     // Extra rule for face
     if (this.tank.player.name === "Marc" || this.tank.player.name === "marc") {
-      this.image.src = "res/img/Marc.png";
+      this.image.src = IMAGES.marc;
     }
     this.bot.fleeing_duration = 0;
   }
@@ -157,7 +158,7 @@ export class MG extends Weapon {
     super(tank);
     this.name = "MG";
     this.image = new Image();
-    this.image.src = "res/img/mg.png";
+    this.image.src = IMAGES.mg;
     this.nshots = 20;
     this.every = 0;
     this.bot.shooting_range = 2;
@@ -192,7 +193,7 @@ export class MG extends Weapon {
     this.every -= GameFrequency;
     if (this.nshots > 0 && this.every < 0 && this.active) {
       this.every = 50;
-      playSound("res/sound/mg.wav");
+      playSound(SOUNDS.mg);
       this.newBullet();
       this.nshots--;
       if (this.nshots <= 0) {
@@ -215,7 +216,7 @@ export class Laser extends Weapon {
   constructor(tank) {
     super(tank);
     this.image = new Image();
-    this.image.src = "res/img/laser.png";
+    this.image.src = IMAGES.laser;
     this.name = "Laser";
     this.active = true;
     this.fired = false;
@@ -232,7 +233,7 @@ export class Laser extends Weapon {
 
   shoot() {
     if (!this.active) return;
-    playSound("res/sound/laser.wav");
+    playSound(SOUNDS.laser);
     this.trajectory.length = 1300;
     this.trajectory.delta = 2;
     this.trajectory.step();
@@ -279,7 +280,7 @@ export class Grenade extends Weapon {
     super(tank);
     this.name = "Grenade";
     this.image = new Image();
-    this.image.src = "res/img/grenade.png";
+    this.image.src = IMAGES.grenade;
     this.bullet = undefined;
     this.nshrapnels = 30;
     this.bot.fleeing_duration = 4000;
@@ -290,7 +291,7 @@ export class Grenade extends Weapon {
     if (this.is_deleted) return;
     const e = super.newBullet();
     e.image = new Image();
-    e.image.src = "res/img/grenade.png";
+    e.image.src = IMAGES.grenade;
     e.radius = 6;
     e.color = "#000";
     e.timeout = 10000;
@@ -299,7 +300,7 @@ export class Grenade extends Weapon {
     e.explode = function () {
       if (!e.exploded) {
         e.exploded = true;
-        playSound("res/sound/grenade.wav");
+        playSound(SOUNDS.grenade);
         for (let i = 0; i < self.nshrapnels; i++) {
           const shrapnel = new Bullet(self);
           shrapnel.x = e.x;
@@ -348,7 +349,7 @@ export class Mine extends Weapon {
     super(tank);
     this.name = "Mine";
     this.image = new Image();
-    this.image.src = "res/img/mine.png";
+    this.image.src = IMAGES.mine;
     this.bullet = undefined;
     this.nshrapnels = 24;
   }
@@ -356,7 +357,7 @@ export class Mine extends Weapon {
   newBullet() {
     const e = super.newBullet();
     e.image = new Image();
-    e.image.src = "res/img/mine.png";
+    e.image.src = IMAGES.mine;
     e.radius = 6;
     e.exploded = false;
     e.color = "#000";
@@ -365,7 +366,7 @@ export class Mine extends Weapon {
     e.explode = function () {
       if (!e.exploded) {
         e.exploded = true;
-        playSound("res/sound/grenade.wav");
+        playSound(SOUNDS.grenade);
         for (let i = 0; i < self.nshrapnels; i++) {
           const shrapnel = new Bullet(self);
           shrapnel.x = e.x;
@@ -404,7 +405,7 @@ export class Guided extends Weapon {
     super(tank);
     this.name = "Guided";
     this.image = new Image();
-    this.image.src = "res/img/guided.png";
+    this.image.src = IMAGES.guided;
     this.active = true;
     this.bot.shooting_range = 16;
     this.bot.fleeing_duration = 3000;
@@ -414,7 +415,7 @@ export class Guided extends Weapon {
     const e = super.newBullet();
     e.radius = 6;
     e.image = new Image();
-    e.image.src = "res/img/guided.png";
+    e.image.src = IMAGES.guided;
     e.color = "#555";
     e.smokeColor = "#555";
     e.speed = 1.1 * Settings.TankSpeed;
@@ -448,7 +449,7 @@ export class Guided extends Weapon {
       // at first, it waits a while and then repeats the task every few ms
       if (e.age > 1750) {
         e.age -= 250;
-        playSound("res/sound/guided.wav");
+        playSound(SOUNDS.guided);
         // get current tile and path
         const tile = e.map.getTileByPos(oldx, oldy);
         const path = tile.pathTo(function (destination) {
@@ -493,7 +494,7 @@ export class WreckingBall extends Weapon {
   constructor(tank) {
     super(tank);
     this.image = new Image();
-    this.image.src = "res/img/wreckingBall.png";
+    this.image.src = IMAGES.wreckingBall;
     this.name = "WreckingBall";
     this.active = true;
     this.fired = false;
@@ -529,7 +530,7 @@ export class WreckingBall extends Weapon {
           }
         } else {
           // hit a wall: remove it!
-          playSound("res/sound/grenade.wav");
+          playSound(SOUNDS.grenade);
           new Cloud(this.player.game, bullet.x, bullet.y, 3);
           bullet.delete();
           tile.addWall(wall, true);
@@ -561,7 +562,7 @@ export class WallBuilder extends Weapon {
     super(tank);
     this.name = "WallBuilder";
     this.image = new Image();
-    this.image.src = "res/img/wallBuilder.png";
+    this.image.src = IMAGES.wallBuilder;
     this.active = true;
   }
 
@@ -574,7 +575,7 @@ export class WallBuilder extends Weapon {
       if (tile.neighbors[direction] === -1) return;
       if (tile.walls[direction]) tile.addWall(direction, true);
       else tile.addWall(direction, false);
-      playSound("res/sound/gun.wav");
+      playSound(SOUNDS.gun);
       this.active = false;
       const self = this;
       this.tank.player.game.timeouts.push(
@@ -598,7 +599,7 @@ export class Slingshot extends Weapon {
   constructor(tank) {
     super(tank);
     this.image = new Image();
-    this.image.src = "res/img/slingshot.png";
+    this.image.src = IMAGES.slingshot;
     this.name = "Slingshot";
     this.active = true;
     this.fired = false;

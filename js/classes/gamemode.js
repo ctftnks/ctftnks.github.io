@@ -6,6 +6,7 @@ import { keymaps } from "../keybindings.js";
 import { playercolors } from "../constants.js";
 import { WallBuilder } from "./weapons.js";
 import { Settings } from "../state.js";
+import { SOUNDS } from "../assets.js";
 
 /**
  * Base class for game modes.
@@ -57,7 +58,7 @@ export class Deathmatch extends Gamemode {
     player.spree += 1;
     if (player.spree >= 5 && player.spree % 5 === 0) {
       player.score += Math.floor(player.spree / 5);
-      playSound("res/sound/killingspree.mp3");
+      playSound(SOUNDS.killingspree);
     }
     if (window.updateScores) window.updateScores();
     adaptBotSpeed(player.team);
@@ -96,11 +97,12 @@ export class TeamDeathmatch extends Gamemode {
    * @param {number} val - The score value.
    */
   giveScore(player, val = 1) {
-    for (let i = 0; i < this.game.players.length; i++) if (this.game.players[i].team === player.team) this.game.players[i].score += val;
+    for (let i = 0; i < this.game.players.length; i++)
+      if (this.game.players[i].team === player.team) this.game.players[i].score += val;
     player.spree += 1;
     if (player.spree >= 5 && player.spree % 5 === 0) {
       player.score += Math.floor(player.spree / 5);
-      playSound("res/sound/killingspree.mp3");
+      playSound(SOUNDS.killingspree);
     }
     if (window.updateScores) window.updateScores();
     adaptBotSpeed(player.team);
@@ -197,7 +199,8 @@ export class CaptureTheFlag extends Gamemode {
    * @param {number} val - The score value.
    */
   giveScore(player, val = 1) {
-    for (let i = 0; i < this.game.players.length; i++) if (this.game.players[i].team === player.team) this.game.players[i].score += val;
+    for (let i = 0; i < this.game.players.length; i++)
+      if (this.game.players[i].team === player.team) this.game.players[i].score += val;
     if (window.updateScores) window.updateScores();
     adaptBotSpeed(player.team);
   }
@@ -212,7 +215,7 @@ export class CaptureTheFlag extends Gamemode {
       player1.spree += 1;
       if (player1.spree >= 5 && player1.spree % 5 === 0) {
         // player1.score += Math.floor(player1.spree / 5)
-        playSound("res/sound/killingspree.mp3");
+        playSound(SOUNDS.killingspree);
       }
       if (window.updateScores) window.updateScores();
     }
@@ -372,7 +375,7 @@ export class KingOfTheHill extends Gamemode {
       player1.spree += 1;
       if (player1.spree >= 5 && player1.spree % 5 === 0) {
         // player1.score += Math.floor(player1.spree / 5)
-        playSound("res/sound/killingspree.mp3");
+        playSound(SOUNDS.killingspree);
       }
       if (window.updateScores) window.updateScores();
     }
@@ -394,7 +397,8 @@ export class KingOfTheHill extends Gamemode {
       }
       const team = this.bases[0].team;
       if (equal && team !== "#555" && this.game.t % scoreevery === 0) {
-        for (let i = 0; i < this.game.players.length; i++) if (this.game.players[i].team === team) this.giveScore(this.game.players[i], 1);
+        for (let i = 0; i < this.game.players.length; i++)
+          if (this.game.players[i].team === team) this.giveScore(this.game.players[i], 1);
         adaptBotSpeed(team, 0.02);
       }
     }

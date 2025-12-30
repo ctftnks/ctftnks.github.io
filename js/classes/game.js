@@ -6,6 +6,7 @@ import { GameFrequency } from "../constants.js";
 import { Key } from "../keybindings.js";
 import { playSound, playMusic, stopMusic, clearEffects } from "../effects.js";
 import { store, Settings } from "../state.js";
+import { SOUNDS } from "../assets.js";
 
 // A class for a single game round with a single map
 // contains a list of players, list of objects in the game
@@ -87,8 +88,10 @@ export default class Game {
     this.loop = setInterval(function () {
       self.step();
     }, GameFrequency);
-    playSound("res/sound/gamestart.wav");
-    if (Settings.bgmusic) playMusic("res/sound/bgmusic.wav");
+    playSound(SOUNDS.gamestart);
+    if (Settings.bgmusic) {
+        // playMusic(SOUNDS.bgmusic);
+    }
     if (window.updateScores) window.updateScores();
   }
 

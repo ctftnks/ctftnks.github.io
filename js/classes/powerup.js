@@ -3,6 +3,7 @@ import { Settings } from "../state.js";
 import { playSound, playMusic, stopMusic, fogOfWar } from "../effects.js";
 import { store } from "../state.js";
 import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot, WallBuilder } from "./weapons.js";
+import { IMAGES, SOUNDS } from "../assets.js";
 
 // a parent class for powerups
 
@@ -64,10 +65,10 @@ export class LaserBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
-    this.image.src = "res/img/laser.png";
+    this.image.src = IMAGES.laser;
   }
   apply(tank) {
-    playSound("res/sound/reload.wav");
+    playSound(SOUNDS.reload);
     tank.weapon = new Laser(tank);
   }
 }
@@ -80,10 +81,10 @@ export class MGBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
-    this.image.src = "res/img/mg.png";
+    this.image.src = IMAGES.mg;
   }
   apply(tank) {
-    playSound("res/sound/reload.wav");
+    playSound(SOUNDS.reload);
     tank.weapon = new MG(tank);
   }
 }
@@ -95,10 +96,10 @@ export class MGBonus extends PowerUp {
 export class GrenadeBonus extends PowerUp {
   constructor() {
     super();
-    this.image.src = "res/img/grenade.png";
+    this.image.src = IMAGES.grenade;
   }
   apply(tank) {
-    playSound("res/sound/reload.wav");
+    playSound(SOUNDS.reload);
     tank.weapon = new Grenade(tank);
   }
 }
@@ -110,10 +111,10 @@ export class GrenadeBonus extends PowerUp {
 export class MineBonus extends PowerUp {
   constructor() {
     super();
-    this.image.src = "res/img/mine.png";
+    this.image.src = IMAGES.mine;
   }
   apply(tank) {
-    playSound("res/sound/reload.wav");
+    playSound(SOUNDS.reload);
     tank.weapon = new Mine(tank);
   }
 }
@@ -126,10 +127,10 @@ export class GuidedBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
-    this.image.src = "res/img/guided.png";
+    this.image.src = IMAGES.guided;
   }
   apply(tank) {
-    playSound("res/sound/reload.wav");
+    playSound(SOUNDS.reload);
     tank.weapon = new Guided(tank);
   }
 }
@@ -141,10 +142,10 @@ export class GuidedBonus extends PowerUp {
 export class WreckingBallBonus extends PowerUp {
   constructor() {
     super();
-    this.image.src = "res/img/wreckingBall.png";
+    this.image.src = IMAGES.wreckingBall;
   }
   apply(tank) {
-    playSound("res/sound/reload.wav");
+    playSound(SOUNDS.reload);
     tank.weapon = new WreckingBall(tank);
   }
 }
@@ -157,10 +158,10 @@ export class SlingshotBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
-    this.image.src = "res/img/slingshot.png";
+    this.image.src = IMAGES.slingshot;
   }
   apply(tank) {
-    playSound("res/sound/reload.wav");
+    playSound(SOUNDS.reload);
     tank.weapon = new Slingshot(tank);
   }
 }
@@ -172,10 +173,10 @@ export class SlingshotBonus extends PowerUp {
 export class WallBuilderBonus extends PowerUp {
   constructor() {
     super();
-    this.image.src = "res/img/wallBuilder.png";
+    this.image.src = IMAGES.wallBuilder;
   }
   apply(tank) {
-    playSound("res/sound/reload.wav");
+    playSound(SOUNDS.reload);
     tank.weapon = new WallBuilder(tank);
   }
 }
@@ -188,7 +189,7 @@ export class SpeedBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
-    this.image.src = "res/img/speed.png";
+    this.image.src = IMAGES.speed;
   }
   apply(tank) {
     tank.speed *= 1.1;
@@ -209,21 +210,23 @@ export class InvincibleBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
-    this.image.src = "res/img/invincible.png";
+    this.image.src = IMAGES.invincible;
     this.applied = false;
   }
   apply(tank) {
     if (this.applied) return;
     this.applied = true;
     stopMusic();
-    if (!Settings.muted) playMusic("res/sound/invincible.mp3");
+    if (!Settings.muted) playMusic(SOUNDS.invincible);
     tank.speed *= 1.14;
     tank.timers.invincible = tank.player.game.t + 10000;
     const self = tank;
     tank.player.game.timeouts.push(
       setTimeout(function () {
         self.speed /= 1.14;
-        if (Settings.bgmusic) playMusic("res/sound/bgmusic.wav");
+        if (Settings.bgmusic) {
+            // playMusic(SOUNDS.bgmusic); // Assuming we might want to add bgmusic later.
+        }
         else if (!tank.invincible()) stopMusic();
       }, 10100),
     );
@@ -238,14 +241,14 @@ export class TerminatorBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
-    this.image.src = "res/img/terminator.png";
+    this.image.src = IMAGES.terminator;
     this.applied = false;
   }
   apply(tank) {
     if (this.applied) return;
     this.applied = true;
     tank.rapidfire = true;
-    playSound("res/sound/terminator.mp3");
+    playSound(SOUNDS.terminator);
     const self = tank;
     // self.weapon.image = this.image;
     tank.player.game.timeouts.push(
@@ -263,7 +266,7 @@ export class TerminatorBonus extends PowerUp {
 export class MultiBonus extends PowerUp {
   constructor() {
     super();
-    this.image.src = "res/img/multi.png";
+    this.image.src = IMAGES.multi;
     this.used = false;
   }
   apply(tank) {
@@ -287,7 +290,7 @@ export class MultiBonus extends PowerUp {
 export class FogBonus extends PowerUp {
   constructor() {
     super();
-    this.image.src = "res/img/fog.png";
+    this.image.src = IMAGES.fog;
     this.used = false;
   }
   apply(tank) {
@@ -392,6 +395,6 @@ export function getRandomPowerUp() {
   let randWeight = Math.random() * totalWeights;
   let h;
   for (h = 0; randWeight > 0; h++) randWeight -= PowerUps[h].weight;
-  playSound("res/sound/original/powerup.mp3");
+  playSound(SOUNDS.origPowerup);
   return PowerUps[h - 1].create();
 }

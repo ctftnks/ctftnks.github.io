@@ -3,6 +3,7 @@ import { Smoke, Cloud } from "./smoke.js";
 import { playSound } from "../effects.js";
 import { GameFrequency } from "../constants.js";
 import { store, Settings } from "../state.js";
+import { SOUNDS } from "../assets.js";
 
 // a parent class for all bullets flying through the map
 // contains position, ang,e speed, timeout and parent weapon
@@ -56,7 +57,7 @@ export default class Bullet extends GameObject {
     /** @type {boolean} Whether to leave a smoke trace. */
     this.trace = false;
     /** @type {string} Sound to play on bounce. */
-    this.bounceSound = "res/sound/bounce.wav";
+    this.bounceSound = SOUNDS.bounce;
     /** @type {boolean} Whether the bullet is lethal. */
     this.lethal = true;
     // hitbox enlargement of the bullet
@@ -166,7 +167,7 @@ export default class Bullet extends GameObject {
         bullets[i].delete();
         this.delete();
         new Cloud(this.player.game, this.x, this.y, 1);
-        playSound("res/sound/original/gun.mp3");
+        playSound(SOUNDS.origGun);
         return;
       }
     }

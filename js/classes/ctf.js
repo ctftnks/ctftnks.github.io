@@ -1,5 +1,6 @@
 import GameObject from "./object.js";
 import { playSound } from "../effects.js";
+import { SOUNDS } from "../assets.js";
 
 /**
  * Represents a Flag in Capture the Flag mode.
@@ -84,12 +85,12 @@ export class Flag extends GameObject {
           if (!this.base.hasFlag()) {
             // return flag to base
             this.reset();
-            playSound("res/sound/resetFlag.wav");
+            playSound(SOUNDS.resetFlag);
           }
         } else if (tank.carriedFlag === -1 && !this.picked && !tank.deleted) {
           // pick up flag
           this.pickup(tank);
-          playSound("res/sound/coin.wav");
+          playSound(SOUNDS.coin);
         }
       }
     }
@@ -188,7 +189,7 @@ export class Base extends GameObject {
         if (tank.carriedFlag !== -1 && this.hasFlag()) {
           // score!
           this.game.mode.giveScore(tank.player);
-          playSound("res/sound/fanfare.mp3");
+          playSound(SOUNDS.fanfare);
           tank.carriedFlag.reset();
           tank.carriedFlag = -1;
         }

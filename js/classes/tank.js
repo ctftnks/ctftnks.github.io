@@ -4,6 +4,7 @@ import { Cloud } from "./smoke.js";
 import { playSound } from "../effects.js";
 import { TankWidth, TankHeight, GameFrequency } from "../constants.js";
 import { Settings } from "../state.js";
+import { SOUNDS } from "../assets.js";
 
 // A class for tanks which act as the player character
 // Recieves a player in its constructor
@@ -290,7 +291,7 @@ export default class Tank extends GameObject {
         // let gamemode handle scoring
         this.player.game.mode.newKill(bullets[i].player, this.player);
         // kill the player, delete the tank and bullet
-        playSound("res/sound/kill.wav");
+        playSound(SOUNDS.kill);
         this.delete();
         this.player.kill();
         return;
