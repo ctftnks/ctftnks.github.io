@@ -1,7 +1,6 @@
 import Tank from "./tank.js";
 import { Key, keymaps } from "../keybindings.js";
-import { Smoke, Cloud } from "./smoke.js";
-import { playercolors } from "../constants.js";
+import { Cloud } from "./smoke.js";
 import { store, Settings } from "../state.js";
 
 // A class for a player.
@@ -22,7 +21,7 @@ export default class Player {
     /** @type {string} Player name. */
     this.name = "Player " + (this.id + 1);
     /** @type {string} Player color. */
-    this.color = playercolors[this.id % playercolors.length];
+    this.color = store.playercolors[this.id % store.playercolors.length];
     /** @type {number|string} Team identifier. */
     this.team = this.id;
     /** @type {Game} Game instance. */
@@ -107,8 +106,8 @@ export default class Player {
    */
   changeColor() {
     this.team += 1;
-    this.team = this.team % playercolors.length;
-    this.color = playercolors[this.team % playercolors.length];
+    this.team = this.team % store.playercolors.length;
+    this.color = store.playercolors[this.team % store.playercolors.length];
   }
 
   /**

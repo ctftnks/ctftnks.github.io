@@ -1,5 +1,4 @@
 import GameObject from "./object.js";
-import { GameFrequency } from "../constants.js";
 
 /**
  * Represents a trajectory for ray-casting or lasers.
@@ -102,7 +101,7 @@ export default class Trajectory extends GameObject {
       for (let i = 0; i < tile.objs.length; i++) if (tile.objs[i].type === "Tank") this.targets.push(tile.objs[i]);
     }
 
-    this.timeout -= GameFrequency;
+    this.timeout -= Settings.GameFrequency;
     if (this.timeout < 0) this.delete();
   }
 }

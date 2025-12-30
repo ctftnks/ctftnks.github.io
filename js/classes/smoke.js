@@ -1,5 +1,4 @@
 import GameObject from "./object.js";
-import { GameFrequency } from "../constants.js";
 
 // a class for fancy smoke circles on the map
 /**
@@ -52,9 +51,9 @@ export class Smoke extends GameObject {
    */
   step() {
     // is bullet timed out?
-    this.timeout -= GameFrequency;
+    this.timeout -= Settings.GameFrequency;
     if (this.timeout < 0) this.delete();
-    this.radius -= (this.rspeed * GameFrequency) / 40;
+    this.radius -= (this.rspeed * Settings.GameFrequency) / 40;
     if (this.radius < 0) this.radius = 0;
   }
 }

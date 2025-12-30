@@ -2,7 +2,6 @@ import Bullet from "./bullet.js";
 import Trajectory from "./trajectory.js";
 import { playSound, hexToRgbA } from "../effects.js";
 import { Smoke, Cloud } from "./smoke.js";
-import { GameFrequency } from "../constants.js";
 import { Settings } from "../state.js";
 import { IMAGES, SOUNDS } from "../assets.js";
 
@@ -189,8 +188,8 @@ export class MG extends Weapon {
     if (this.tank.player.isBot && this.nshots > 15)
       setTimeout(function () {
         self.shoot();
-      }, GameFrequency);
-    this.every -= GameFrequency;
+      }, Settings.GameFrequency);
+    this.every -= Settings.GameFrequency;
     if (this.nshots > 0 && this.every < 0 && this.active) {
       this.every = 50;
       playSound(SOUNDS.mg);
@@ -422,23 +421,23 @@ export class Guided extends Weapon {
     e.goto = -1;
     e.extrahitbox = 10;
     e.step = function () {
-      e.age += GameFrequency;
+      e.age += Settings.GameFrequency;
       if (e.age > e.timeout) e.delete();
       e.leaveTrace();
       const oldx = e.x;
       const oldy = e.y;
       // normal translation
       if (e.goto === -1) {
-        e.x -= (e.speed * Math.sin(-e.angle) * GameFrequency) / 1000;
-        e.y -= (e.speed * Math.cos(-e.angle) * GameFrequency) / 1000;
+        e.x -= (e.speed * Math.sin(-e.angle) * Settings.GameFrequency) / 1000;
+        e.y -= (e.speed * Math.cos(-e.angle) * Settings.GameFrequency) / 1000;
       } else {
         // guided translation:
         // if e.goto has point data stored go into it's direction
         const distx = e.goto.x + e.goto.dx / 2 - e.x;
         const disty = e.goto.y + e.goto.dy / 2 - e.y;
         const len = Math.sqrt(distx * distx + disty * disty);
-        e.x += (e.speed * (distx / len) * GameFrequency) / 1000;
-        e.y += (e.speed * (disty / len) * GameFrequency) / 1000;
+        e.x += (e.speed * (distx / len) * Settings.GameFrequency) / 1000;
+        e.y += (e.speed * (disty / len) * Settings.GameFrequency) / 1000;
         this.angle = Math.atan2(-distx, disty) + Math.PI;
       }
       // check for wall collisions

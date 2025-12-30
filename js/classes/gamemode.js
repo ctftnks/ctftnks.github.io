@@ -3,9 +3,8 @@ import { Flag, Base, Hill } from "./ctf.js";
 import { playSound } from "../effects.js";
 import { adaptBotSpeed } from "./bot.js";
 import { keymaps } from "../keybindings.js";
-import { playercolors } from "../constants.js";
 import { WallBuilder } from "./weapons.js";
-import { Settings } from "../state.js";
+import { store } from "../state.js";
 import { SOUNDS } from "../assets.js";
 
 /**
@@ -318,7 +317,7 @@ export class MapEditor extends Gamemode {
     const p = new Player();
     this.game.addPlayer(p);
     p.keys = keymaps[0];
-    p.color = playercolors[0];
+    p.color = store.playercolors[0];
   }
 
   /**

@@ -1,8 +1,7 @@
 import GameObject from "./object.js";
 import { Smoke, Cloud } from "./smoke.js";
 import { playSound } from "../effects.js";
-import { GameFrequency } from "../constants.js";
-import { store, Settings } from "../state.js";
+import { Settings } from "../state.js";
 import { SOUNDS } from "../assets.js";
 
 // a parent class for all bullets flying through the map
@@ -91,7 +90,7 @@ export default class Bullet extends GameObject {
    */
   step() {
     // is bullet timed out?
-    this.age += GameFrequency;
+    this.age += Settings.GameFrequency;
     if (this.age > this.timeout) {
       this.explode();
       this.delete();
@@ -101,8 +100,8 @@ export default class Bullet extends GameObject {
     // translate
     const oldx = this.x;
     const oldy = this.y;
-    this.x -= (this.speed * Math.sin(-this.angle) * GameFrequency) / 1000;
-    this.y -= (this.speed * Math.cos(-this.angle) * GameFrequency) / 1000;
+    this.x -= (this.speed * Math.sin(-this.angle) * Settings.GameFrequency) / 1000;
+    this.y -= (this.speed * Math.cos(-this.angle) * Settings.GameFrequency) / 1000;
     // check for wall collisions
     this.checkCollision(oldx, oldy);
     if (Settings.BulletsCanCollide) this.checkBulletCollision();

@@ -1,8 +1,7 @@
 import Map from "./map.js";
 import MapGenerator from "./mapGenerator.js";
-import { Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill, MapEditor } from "./gamemode.js";
+import { Deathmatch } from "./gamemode.js";
 import { getRandomPowerUp } from "./powerup.js";
-import { GameFrequency } from "../constants.js";
 import { Key } from "../keybindings.js";
 import { playSound, playMusic, stopMusic, clearEffects } from "../effects.js";
 import { store, Settings } from "../state.js";
@@ -87,7 +86,7 @@ export default class Game {
     for (let i = 0; i < this.players.length; i++) this.players[i].spawn();
     this.loop = setInterval(function () {
       self.step();
-    }, GameFrequency);
+    }, Settings.GameFrequency);
     playSound(SOUNDS.gamestart);
     if (Settings.bgmusic) {
       // playMusic(SOUNDS.bgmusic);
@@ -100,7 +99,7 @@ export default class Game {
    */
   step() {
     if (!this.paused) {
-      this.t += GameFrequency;
+      this.t += Settings.GameFrequency;
       // remove deleted objects and
       // initiate spatial sorting of objects within the map class
       this.map.clearObjectLists();
@@ -131,8 +130,8 @@ export default class Game {
         if (window.openPage) window.openPage("menu");
         this.pause();
       }
-      if (this.t % 1000 === GameFrequency) {
-        let dt = Settings.RoundTime * 60 - (this.t - GameFrequency) / 1000;
+      if (this.t % 1000 === Settings.GameFrequency) {
+        let dt = Settings.RoundTime * 60 - (this.t - Settings.GameFrequency) / 1000;
         dt = dt < 0 ? 0 : dt;
         let dtm = Math.floor(dt / 60);
         let dts = Math.floor(dt - dtm * 60);

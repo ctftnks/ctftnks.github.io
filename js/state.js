@@ -21,6 +21,9 @@ const DEFAULT_SETTINGS = {
   ShowTankLabels: true,
   MapNxMin: 9,
   MapNxMax: 15,
+  GameFrequency: 10,
+  TankWidth: 34,
+  TankHeight: 50,
 };
 
 class GameStore {
@@ -35,6 +38,19 @@ class GameStore {
 
     // User Settings
     this.settings = { ...DEFAULT_SETTINGS };
+
+    // Colors of the teams
+    this.playercolors = [
+      "#DA1918", // red
+      "#31B32B", // green
+      "#1F87FF", // blue
+      "#21B19B", // teal
+      "#A020F0", // purple
+      "#F4641D", // orange
+      "#713B17", // brown
+      "#E7E52C", // yellow
+    ];
+
     this.loadSettings();
   }
 

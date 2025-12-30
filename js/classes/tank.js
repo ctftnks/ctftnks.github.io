@@ -2,7 +2,6 @@ import GameObject from "./object.js";
 import { Gun } from "./weapons.js";
 import { Cloud } from "./smoke.js";
 import { playSound } from "../effects.js";
-import { TankWidth, TankHeight, GameFrequency } from "../constants.js";
 import { Settings } from "../state.js";
 import { SOUNDS } from "../assets.js";
 
@@ -37,9 +36,9 @@ export default class Tank extends GameObject {
     /** @type {number} Rotation angle. */
     this.angle = 2 * Math.PI * Math.random();
     /** @type {number} Tank width. */
-    this.width = TankWidth;
+    this.width = Settings.TankWidth;
     /** @type {number} Tank height. */
-    this.height = TankHeight;
+    this.height = Settings.TankHeight;
     /** @type {Weapon} Current weapon. */
     this.weapon = new Gun(this);
     /** @type {number} Movement speed. */
@@ -130,8 +129,8 @@ export default class Tank extends GameObject {
     const oldx = this.x;
     const oldy = this.y;
     const speed = this.spawnshield() ? 0 : this.speed;
-    this.x -= (direction * speed * Math.sin(-this.angle) * GameFrequency) / 1000;
-    this.y -= (direction * speed * Math.cos(-this.angle) * GameFrequency) / 1000;
+    this.x -= (direction * speed * Math.sin(-this.angle) * Settings.GameFrequency) / 1000;
+    this.y -= (direction * speed * Math.cos(-this.angle) * Settings.GameFrequency) / 1000;
     const colliding_corner = this.checkWallCollision();
     if (colliding_corner !== -1) {
       this.x = oldx;
@@ -148,7 +147,7 @@ export default class Tank extends GameObject {
    */
   turn(direction) {
     const oldangle = this.angle;
-    this.angle += (((direction * Settings.TankTurnSpeed * GameFrequency) / 1000) * Settings.TankSpeed) / 180;
+    this.angle += (((direction * Settings.TankTurnSpeed * Settings.GameFrequency) / 1000) * Settings.TankSpeed) / 180;
     const colliding_corner = this.checkWallCollision();
     if (colliding_corner !== -1) {
       this.angle = oldangle;

@@ -1,5 +1,4 @@
 import Player from "./player.js";
-import { GameFrequency } from "../constants.js";
 import { store, Settings } from "../state.js";
 
 let NBots = 0;
@@ -45,7 +44,7 @@ export default class Bot extends Player {
    */
   autopilot() {
     // prevent executing this method too often
-    this.lastChecked += GameFrequency;
+    this.lastChecked += Settings.GameFrequency;
     if (this.lastChecked < 72000 / this.tank.speed)
       // if (this.lastChecked < 360 / this.tank.speed)
       return;
