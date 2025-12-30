@@ -1,5 +1,4 @@
 // True Constants (Immutable)
-export const FrameFrequency = 30;
 export const GameFrequency = 10;
 
 // Graphics

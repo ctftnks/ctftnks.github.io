@@ -1,4 +1,3 @@
-import { FrameFrequency } from "../constants.js";
 import { store } from "../state.js";
 
 // A class for the canvas in which the game is drawn
