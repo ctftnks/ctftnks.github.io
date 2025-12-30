@@ -2,7 +2,7 @@ image: node:lts
 
 stages:
   - build
-  # - test
+  - test
   - deploy
 
 # Build the project using Vite
