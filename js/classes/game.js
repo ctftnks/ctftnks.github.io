@@ -2,10 +2,10 @@ import Map from "./map.js";
 import MapGenerator from "./mapGenerator.js";
 import { Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill, MapEditor } from "./gamemode.js";
 import { getRandomPowerUp } from "./powerup.js";
-import { GameFrequency, Settings } from "../constants.js";
+import { GameFrequency } from "../constants.js";
 import { Key } from "../keybindings.js";
 import { playSound, playMusic, stopMusic, clearEffects } from "../effects.js";
-import { store } from "../state.js";
+import { store, Settings } from "../state.js";
 
 // A class for a single game round with a single map
 // contains a list of players, list of objects in the game

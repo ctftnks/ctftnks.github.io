@@ -1,10 +1,17 @@
+import template from "./main.html?raw";
+import "./style.css";
+
+export function init(container) {
+  container.innerHTML = template;
+}
+
 function clearPlayers() {
-  players = [];
+  window.players = [];
 }
 
 function quickPvP(nteams, teamsize) {
-  players = [];
-  nplayers = 0;
+  window.players = [];
+  window.nplayers = 0;
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
       players.push(new Player());
@@ -19,8 +26,8 @@ function quickPvP(nteams, teamsize) {
 }
 
 function quickPvB(nteams, teamsize) {
-  players = [];
-  nplayers = 0;
+  window.players = [];
+  window.nplayers = 0;
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
       if (i < nteams / 2) players.push(new Player());
@@ -36,8 +43,8 @@ function quickPvB(nteams, teamsize) {
 }
 
 function quickMixed(nteams, teamsize) {
-  players = [];
-  nplayers = 0;
+  window.players = [];
+  window.nplayers = 0;
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
       if (j < teamsize / 2) players.push(new Player());
@@ -53,8 +60,8 @@ function quickMixed(nteams, teamsize) {
 }
 
 function quickUnevenMixed(nteams, teamsize) {
-  players = [];
-  nplayers = 0;
+  window.players = [];
+  window.nplayers = 0;
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
       if (j < teamsize / 2 && i === 0) players.push(new Player());
@@ -68,3 +75,9 @@ function quickUnevenMixed(nteams, teamsize) {
   }
   updatePlayersMenu();
 }
+
+window.clearPlayers = clearPlayers;
+window.quickPvP = quickPvP;
+window.quickPvB = quickPvB;
+window.quickMixed = quickMixed;
+window.quickUnevenMixed = quickUnevenMixed;

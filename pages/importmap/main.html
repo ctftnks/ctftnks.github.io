@@ -6,12 +6,3 @@
 
   <!-- TODO: import map by raw data -->
 </div>
-
-<script>
-  for (var i = 0; i < maplist.length; i++) {
-    var name = maplist[i];
-    var entry = "";
-    entry += "<button class='option vspace' onclick=\"MapGenerator.importMap('" + name + "');closePage(this);\">" + name + "</button>";
-    document.getElementById("importMapList").innerHTML += entry;
-  }
-</script>

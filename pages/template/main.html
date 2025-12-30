@@ -5,7 +5,7 @@
   <div class="options">
     <div class="option">
       <span class="label">Mode</span>
-      <select onchange="GameMode = this.value">
+      <select onchange="Settings.GameMode = this.value">
         <option value="DM">DM</option>
         <option value="TDM">TDM</option>
         <option value="CTF">CTF</option>
@@ -13,7 +13,7 @@
     </div>
     <div class="option">
       <span class="label">Sound</span>
-      <select onchange="muted = this.value != 'on'">
+      <select onchange="Settings.muted = this.value !== 'on'">
         <option value="on">on</option>
         <option value="off">off</option>
       </select>

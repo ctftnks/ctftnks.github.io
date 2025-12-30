@@ -1,3 +1,15 @@
+import template from "./main.html?raw";
+import "./style.css";
+import Bot from "../../js/classes/bot.js";
+import Player from "../../js/classes/player.js";
+import { updateScores } from "../../js/main.js";
+
+export function init(container) {
+  container.innerHTML = template;
+  updatePlayersMenu();
+  if (typeof game !== "undefined") game.paused = true;
+}
+
 function addPlayer(bot = false) {
   if (players.length >= keymaps.length) keymaps.push(keymaps[0].slice());
   if (bot) players.push(new Bot());
@@ -68,7 +80,7 @@ function editableKeymap(mapID) {
   }
   let html = "";
   for (const i in keymaps[mapID]) {
-    html += "<button class='keyEditButton' onclick='editKeymap(" + mapID + ", " + i + ")' onfocusout='editingKeymap=false'>";
+    html += "<button class='keyEditButton' onclick='editKeymap(" + mapID + ", " + i + ")' onfocusout='window.editingKeymap=false'>";
     html += keyLabels[keymaps[mapID][i]];
     html += "</button>";
   }

@@ -1,4 +1,12 @@
-function updatePowerupsMenu() {
+import template from "./main.html?raw";
+import "./style.css";
+
+export function init(container) {
+  container.innerHTML = template;
+  updatePowerupsMenu();
+}
+
+export function updatePowerupsMenu() {
   const sel = 'selected="selected"';
   let content = "";
   for (let i = 0; i < PowerUps.length; i++) {
@@ -14,5 +22,8 @@ function updatePowerupsMenu() {
     content += '<option value="10" ' + (weight === 10 ? sel : "") + ">1000%</option>";
     content += "</select></div>&nbsp;";
   }
-  document.getElementById("powerupsOptions").innerHTML = content;
+  const optionsElem = document.getElementById("powerupsOptions");
+  if (optionsElem) optionsElem.innerHTML = content;
 }
+
+window.updatePowerupsMenu = updatePowerupsMenu;

@@ -1,13 +1,4 @@
-<div
-  class="popupshade"
-  id="leaderboardshade"
-  onclick="
-    closePage(this);
-    newGame();
-    clearInterval(leaderIntvl);
-    clearTimeout(leaderTimeout);
-  "
-></div>
+<div class="popupshade" id="leaderboardshade"></div>
 <div class="popup">
   <h2 id="leaderboardh2">Leaderboard</h2>
 
@@ -15,19 +6,3 @@
 
   <div id="leaderboard"></div>
 </div>
-
-<script>
-  updateLeaderboard();
-  var leaderTime = Settings.EndScreenTime;
-  document.getElementById("leaderboardh2").innerHTML = "Leaderboard:&nbsp;&nbsp;Game #" + GameID;
-  document.getElementById("leaderboardCounter").innerHTML = leaderTime + "s";
-  leaderIntvl = setInterval(function () {
-    leaderTime -= 1;
-    document.getElementById("leaderboardCounter").innerHTML = leaderTime + "s";
-  }, 1000);
-  leaderTimeout = setTimeout(function () {
-    clearInterval(leaderIntvl);
-    closePage(document.getElementById("leaderboardshade").parentNode);
-    newGame();
-  }, Settings.EndScreenTime * 1000);
-</script>
