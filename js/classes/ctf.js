@@ -36,7 +36,7 @@ export class Flag extends GameObject {
     /** @type {boolean} Whether the flag is in its base. */
     this.inBase = true;
     /** @type {number} Timer for resetting the flag. */
-    this.resetTimer;
+    this.resetTimer = 0;
   }
 
   /**
@@ -76,17 +76,17 @@ export class Flag extends GameObject {
    * Updates the flag state.
    */
   step() {
-    var tile = this.game.map.getTileByPos(this.x, this.y);
-    for (var i = 0; i < tile.objs.length; i++) {
-      var tank = tile.objs[i];
+    const tile = this.game.map.getTileByPos(this.x, this.y);
+    for (let i = 0; i < tile.objs.length; i++) {
+      const tank = tile.objs[i];
       if (tank.isTank && Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)) {
-        if (tank.player.team == this.team) {
+        if (tank.player.team === this.team) {
           if (!this.base.hasFlag()) {
             // return flag to base
             this.reset();
             playSound("res/sound/resetFlag.wav");
           }
-        } else if (tank.carriedFlag == -1 && !this.picked && !tank.deleted) {
+        } else if (tank.carriedFlag === -1 && !this.picked && !tank.deleted) {
           // pick up flag
           this.pickup(tank);
           playSound("res/sound/coin.wav");
@@ -178,14 +178,14 @@ export class Base extends GameObject {
    * Updates the base state, checking for flag captures.
    */
   step() {
-    for (var i = 0; i < this.tile.objs.length; i++) {
-      var tank = this.tile.objs[i];
+    for (let i = 0; i < this.tile.objs.length; i++) {
+      const tank = this.tile.objs[i];
       if (
         tank.isTank &&
-        tank.player.team == this.team &&
+        tank.player.team === this.team &&
         Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)
       ) {
-        if (tank.carriedFlag != -1 && this.hasFlag()) {
+        if (tank.carriedFlag !== -1 && this.hasFlag()) {
           // score!
           this.game.mode.giveScore(tank.player);
           playSound("res/sound/fanfare.mp3");
@@ -227,11 +227,11 @@ export class Hill extends Base {
    * Updates the hill state, checking for capture.
    */
   step() {
-    for (var i = 0; i < this.tile.objs.length; i++) {
-      var tank = this.tile.objs[i];
+    for (let i = 0; i < this.tile.objs.length; i++) {
+      const tank = this.tile.objs[i];
       if (
         tank.isTank &&
-        tank.player.team != this.team &&
+        tank.player.team !== this.team &&
         Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)
       ) {
         this.team = tank.player.team;

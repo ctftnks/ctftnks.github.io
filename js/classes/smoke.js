@@ -70,12 +70,11 @@ export class Smoke extends GameObject {
  * @param {string|number} color - Color override.
  */
 export const Cloud = function (game, x, y, n = 4, radius = 20, rspeed = 0.3, color = -1) {
-  for (var i = 0; i < n; i++) {
-    var rx = x + radius * 2 * (Math.random() - 0.5);
-    var ry = y + radius * 2 * (Math.random() - 0.5);
-    var rr = radius + radius * (Math.random() - 0.5);
-    var smoke = new Smoke(rx, ry, 2000, radius, rspeed);
-    if (color != -1) smoke.color = color;
+  for (let i = 0; i < n; i++) {
+    const rx = x + radius * 2 * (Math.random() - 0.5);
+    const ry = y + radius * 2 * (Math.random() - 0.5);
+    const smoke = new Smoke(rx, ry, 2000, radius, rspeed);
+    if (color !== -1) smoke.color = color;
     game.addObject(smoke);
   }
 };

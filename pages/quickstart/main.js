@@ -5,10 +5,10 @@ function clearPlayers() {
 function quickPvP(nteams, teamsize) {
   players = [];
   nplayers = 0;
-  for (var i = 0; i < nteams; i++) {
-    for (var j = 0; j < teamsize; j++) {
+  for (let i = 0; i < nteams; i++) {
+    for (let j = 0; j < teamsize; j++) {
       players.push(new Player());
-      var p = players[players.length - 1];
+      const p = players[players.length - 1];
       if (j > 0) {
         p.team = players[players.length - 2].team;
         p.color = players[players.length - 2].color;
@@ -21,11 +21,11 @@ function quickPvP(nteams, teamsize) {
 function quickPvB(nteams, teamsize) {
   players = [];
   nplayers = 0;
-  for (var i = 0; i < nteams; i++) {
-    for (var j = 0; j < teamsize; j++) {
+  for (let i = 0; i < nteams; i++) {
+    for (let j = 0; j < teamsize; j++) {
       if (i < nteams / 2) players.push(new Player());
       else players.push(new Bot());
-      var p = players[players.length - 1];
+      const p = players[players.length - 1];
       if (j > 0) {
         p.team = players[players.length - 2].team;
         p.color = players[players.length - 2].color;
@@ -38,11 +38,11 @@ function quickPvB(nteams, teamsize) {
 function quickMixed(nteams, teamsize) {
   players = [];
   nplayers = 0;
-  for (var i = 0; i < nteams; i++) {
-    for (var j = 0; j < teamsize; j++) {
+  for (let i = 0; i < nteams; i++) {
+    for (let j = 0; j < teamsize; j++) {
       if (j < teamsize / 2) players.push(new Player());
       else players.push(new Bot());
-      var p = players[players.length - 1];
+      const p = players[players.length - 1];
       if (j > 0) {
         p.team = players[players.length - 2].team;
         p.color = players[players.length - 2].color;
@@ -55,11 +55,11 @@ function quickMixed(nteams, teamsize) {
 function quickUnevenMixed(nteams, teamsize) {
   players = [];
   nplayers = 0;
-  for (var i = 0; i < nteams; i++) {
-    for (var j = 0; j < teamsize; j++) {
-      if (j < teamsize / 2 && i == 0) players.push(new Player());
+  for (let i = 0; i < nteams; i++) {
+    for (let j = 0; j < teamsize; j++) {
+      if (j < teamsize / 2 && i === 0) players.push(new Player());
       else players.push(new Bot());
-      var p = players[players.length - 1];
+      const p = players[players.length - 1];
       if (j > 0) {
         p.team = players[players.length - 2].team;
         p.color = players[players.length - 2].color;

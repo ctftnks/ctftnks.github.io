@@ -70,7 +70,7 @@ export default class Bullet extends GameObject {
    * @param {CanvasRenderingContext2D} context - The 2D context.
    */
   draw(canvas, context) {
-    if (this.image == "") {
+    if (this.image === "") {
       context.beginPath();
       context.fillStyle = this.color;
       context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
@@ -98,8 +98,8 @@ export default class Bullet extends GameObject {
     // leave a trace of smoke
     if (this.trace) this.leaveTrace();
     // translate
-    var oldx = this.x;
-    var oldy = this.y;
+    const oldx = this.x;
+    const oldy = this.y;
     this.x -= (this.speed * Math.sin(-this.angle) * GameFrequency) / 1000;
     this.y -= (this.speed * Math.cos(-this.angle) * GameFrequency) / 1000;
     // check for wall collisions
@@ -115,16 +115,16 @@ export default class Bullet extends GameObject {
    * @param {number} oldy - Previous Y position.
    */
   checkCollision(oldx, oldy) {
-    var tile = this.map.getTileByPos(oldx, oldy);
-    if (tile == -1) return;
-    var walls = tile.getWalls(this.x, this.y);
+    const tile = this.map.getTileByPos(oldx, oldy);
+    if (tile === -1) return;
+    const walls = tile.getWalls(this.x, this.y);
     // check if there is any wall, otherwise return
-    var nwalls = walls.filter((w) => w).length;
-    if (nwalls == 0) return;
+    const nwalls = walls.filter((w) => w).length;
+    if (nwalls === 0) return;
     // there seems to be a wall: handle accordingly
     playSound(this.bounceSound);
     // check if there is two walls at once
-    if (nwalls == 2) {
+    if (nwalls === 2) {
       // invert direction
       this.angle += Math.PI;
       this.x = oldx;
@@ -148,16 +148,16 @@ export default class Bullet extends GameObject {
   checkBulletCollision() {
     // create a list of bullets that may hit this one by looking
     // at the object lists of the tiles of the tanks corners
-    var bullets = [];
-    var tile = this.map.getTileByPos(this.x, this.y);
-    if (tile != -1) {
-      for (var j = 0; j < tile.objs.length; j++) {
-        if (tile.objs[j].isBullet && tile.objs[j].age > 0 && tile.objs[j] != this) bullets.push(tile.objs[j]);
+    const bullets = [];
+    const tile = this.map.getTileByPos(this.x, this.y);
+    if (tile !== -1) {
+      for (let j = 0; j < tile.objs.length; j++) {
+        if (tile.objs[j].isBullet && tile.objs[j].age > 0 && tile.objs[j] !== this) bullets.push(tile.objs[j]);
       }
     }
     // for each bullet in the list, check if it intersects this one
-    for (var i = 0; i < bullets.length; i++) {
-      var rad = 0.65 * this.radius + 0.65 * bullets[i].radius + this.extrahitbox;
+    for (let i = 0; i < bullets.length; i++) {
+      const rad = 0.65 * this.radius + 0.65 * bullets[i].radius + this.extrahitbox;
       if (Math.sqrt(Math.pow(bullets[i].x - this.x, 2) + Math.pow(bullets[i].y - this.y, 2)) <= rad) {
         if (!bullets[i].lethal) return;
         // Hit!

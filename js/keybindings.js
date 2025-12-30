@@ -2,7 +2,7 @@ import { store } from "./state.js";
 
 // static Key class
 // keeps track of pressed keys
-export var Key = {
+export const Key = {
   _pressed: {},
 
   A: 65,
@@ -78,10 +78,10 @@ export var Key = {
     this._pressed[event.keyCode] = true;
     if (store.editingKeymap) {
       // Ctrl is forbidden
-      if (event.keyCode == 17) return;
+      if (event.keyCode === 17) return;
       if (window.doEditKeymap) window.doEditKeymap(event.keyCode);
     }
-    if (event.keyCode == Key.W) {
+    if (event.keyCode === Key.W) {
       event.preventDefault();
       event.stopPropagation();
     }
@@ -94,7 +94,7 @@ export var Key = {
 
 // available keymaps
 // order: up, left, down, right, fire
-export var keymaps = [
+export const keymaps = [
   [Key.UP, Key.LEFT, Key.DOWN, Key.RIGHT, Key.SPACE],
   [Key.W, Key.A, Key.S, Key.D, Key.Q],
   [Key.N8, Key.N4, Key.N5, Key.N6, Key.N7],
@@ -125,7 +125,7 @@ export function getKeyLabel(key) {
   return String.fromCharCode(96 <= key && key <= 105 ? key - 48 : key);
 }
 
-export var keyLabels = [
+export const keyLabels = [
   "", // [0]
   "", // [1]
   "", // [2]

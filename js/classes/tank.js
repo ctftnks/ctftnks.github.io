@@ -70,7 +70,7 @@ export default class Tank extends GameObject {
     context.rect(-this.width / 2, -this.height / 2, this.width, this.height);
     context.fillStyle = this.player.color;
     if (this.timers.invincible > this.player.game.t) {
-      var dt = this.timers.invincible - this.player.game.t / 600;
+      const dt = (this.timers.invincible - this.player.game.t) / 600;
       context.fillStyle = "hsl(" + parseInt(360 * dt) + ",100%,40%)";
     }
     if (this.spawnshield()) {
@@ -84,7 +84,7 @@ export default class Tank extends GameObject {
     context.rect(-this.width / 2, -this.height / 2, this.width / 5, this.height);
     context.rect(this.width / 2 - this.width / 5, -this.height / 2, this.width / 5, this.height);
     context.fill();
-    if (this.carriedFlag != -1) {
+    if (this.carriedFlag !== -1) {
       context.beginPath();
       context.fillStyle = this.carriedFlag.color;
       context.rect(-this.carriedFlag.size / 2, -this.carriedFlag.size / 2, this.carriedFlag.size / 1.1, this.carriedFlag.size / 2);
@@ -93,9 +93,9 @@ export default class Tank extends GameObject {
       context.fillStyle = "#000";
       context.rect(-this.carriedFlag.size / 2, -this.carriedFlag.size / 2, this.carriedFlag.size / 6, this.carriedFlag.size * 1.1);
       context.fill();
-    } else if (this.weapon.image.src.split("/").slice(-1)[0] == "Marc.png") {
+    } else if (this.weapon.image.src.split("/").slice(-1)[0] === "Marc.png") {
       context.drawImage(this.weapon.image, -this.width / 2, (-1.8 * this.height) / 2, this.width, this.height * 1.4);
-    } else if (this.weapon.image != "") {
+    } else if (this.weapon.image !== "") {
       context.drawImage(this.weapon.image, -this.width / 2, -this.width / 2, this.width, this.width);
     }
     // draw label
@@ -126,18 +126,18 @@ export default class Tank extends GameObject {
    */
   move(direction) {
     this.player.stats.miles += 1;
-    var oldx = this.x;
-    var oldy = this.y;
-    var speed = this.spawnshield() ? 0 : this.speed;
+    const oldx = this.x;
+    const oldy = this.y;
+    const speed = this.spawnshield() ? 0 : this.speed;
     this.x -= (direction * speed * Math.sin(-this.angle) * GameFrequency) / 1000;
     this.y -= (direction * speed * Math.cos(-this.angle) * GameFrequency) / 1000;
-    var colliding_corner = this.checkWallCollision();
-    if (colliding_corner != -1) {
+    const colliding_corner = this.checkWallCollision();
+    if (colliding_corner !== -1) {
       this.x = oldx;
       this.y = oldy;
-      var oldangle = this.angle;
+      const oldangle = this.angle;
       this.angle -= 0.1 * ((colliding_corner % 2) - 0.5) * direction;
-      if (this.checkWallCollision() != -1) this.angle = oldangle;
+      if (this.checkWallCollision() !== -1) this.angle = oldangle;
     }
   }
 
@@ -146,20 +146,20 @@ export default class Tank extends GameObject {
    * @param {number} direction - 1 for right, -1 for left.
    */
   turn(direction) {
-    var oldangle = this.angle;
+    const oldangle = this.angle;
     this.angle += (((direction * Settings.TankTurnSpeed * GameFrequency) / 1000) * Settings.TankSpeed) / 180;
-    var colliding_corner = this.checkWallCollision();
-    if (colliding_corner != -1) {
+    const colliding_corner = this.checkWallCollision();
+    if (colliding_corner !== -1) {
       this.angle = oldangle;
-      var oldx = this.x;
-      var oldy = this.y;
-      var sign = (colliding_corner - 2) * direction * 0.1;
+      const oldx = this.x;
+      const oldy = this.y;
+      const sign = (colliding_corner - 2) * direction * 0.1;
       this.x += sign * Math.cos(-this.angle);
       this.y += -sign * Math.sin(-this.angle);
-      if (this.checkWallCollision() != -1) {
+      if (this.checkWallCollision() !== -1) {
         this.x -= 2 * sign * Math.cos(-this.angle);
         this.y -= -2 * sign * Math.sin(-this.angle);
-        if (this.checkWallCollision() != -1) {
+        if (this.checkWallCollision() !== -1) {
           this.x = oldx;
           this.y = oldy;
         }
@@ -173,7 +173,7 @@ export default class Tank extends GameObject {
   shoot() {
     if (this.spawnshield()) return;
     this.weapon.shoot();
-    if (this.weapon.active && this.weapon.name != "MG") this.player.stats.shots += 1;
+    if (this.weapon.active && this.weapon.name !== "MG") this.player.stats.shots += 1;
   }
 
   /**
@@ -218,14 +218,14 @@ export default class Tank extends GameObject {
   intersects(x, y) {
     // checks if (0 < AM*AB < AB*AB) ^ (0 < AM*AD < AD*AD)
     // see: https://math.stackexchange.com/questions/190111/how-to-check-if-a-point-is-inside-a-rectangle
-    var corners = this.corners();
-    var A = corners[0];
-    var B = corners[1];
-    var D = corners[2];
-    var AMAB = (A.x - x) * (A.x - B.x) + (A.y - y) * (A.y - B.y);
-    var AMAD = (A.x - x) * (A.x - D.x) + (A.y - y) * (A.y - D.y);
-    var ABAB = (A.x - B.x) * (A.x - B.x) + (A.y - B.y) * (A.y - B.y);
-    var ADAD = (A.x - D.x) * (A.x - D.x) + (A.y - D.y) * (A.y - D.y);
+    const corners = this.corners();
+    const A = corners[0];
+    const B = corners[1];
+    const D = corners[2];
+    const AMAB = (A.x - x) * (A.x - B.x) + (A.y - y) * (A.y - B.y);
+    const AMAD = (A.x - x) * (A.x - D.x) + (A.y - y) * (A.y - D.y);
+    const ABAB = (A.x - B.x) * (A.x - B.x) + (A.y - B.y) * (A.y - B.y);
+    const ADAD = (A.x - D.x) * (A.x - D.x) + (A.y - D.y) * (A.y - D.y);
     return 0 < AMAB && AMAB < ABAB && 0 < AMAD && AMAD < ADAD;
   }
 
@@ -236,18 +236,18 @@ export default class Tank extends GameObject {
    */
   checkWallCollision() {
     if (this.player.isBot) return -1;
-    var tile = this.map.getTileByPos(this.x, this.y);
-    var corners = this.corners();
-    var tiles = [];
-    for (var i = 0; i < 4; i++) {
-      if (tile.getWalls(corners[i].x, corners[i].y).filter((w) => w).length != 0) return i;
-      var tile2 = this.map.getTileByPos(corners[i].x, corners[i].y);
-      if (tile2 != tile) tiles.push(tile2);
+    const tile = this.map.getTileByPos(this.x, this.y);
+    const corners = this.corners();
+    const tiles = [];
+    for (let i = 0; i < 4; i++) {
+      if (tile.getWalls(corners[i].x, corners[i].y).filter((w) => w).length !== 0) return i;
+      const tile2 = this.map.getTileByPos(corners[i].x, corners[i].y);
+      if (tile2 !== tile) tiles.push(tile2);
     }
     // check if any wall corner end intersects with the tank
-    for (var t = 0; t < tiles.length; t++) {
-      var corners = tiles[t].corners();
-      for (var i = 0; i < 4; i++) if (corners[i].w && this.intersects(corners[i].x, corners[i].y)) return i;
+    for (let t = 0; t < tiles.length; t++) {
+      const corners = tiles[t].corners();
+      for (let i = 0; i < 4; i++) if (corners[i].w && this.intersects(corners[i].x, corners[i].y)) return i;
     }
     return -1;
   }
@@ -261,30 +261,30 @@ export default class Tank extends GameObject {
     if (this.spawnshield()) return;
     // create a list of bullets that may hit the tank by looking
     // at the object lists of the tiles of the tanks corners
-    var bullets = [];
-    var powerups = [];
-    var corners = this.corners();
-    for (var m = 0; m < 4; m++) {
-      var tile = this.map.getTileByPos(corners[m].x, corners[m].y);
-      if (tile != -1) {
-        for (var j = 0; j < tile.objs.length; j++) {
+    const bullets = [];
+    const powerups = [];
+    const corners = this.corners();
+    for (let m = 0; m < 4; m++) {
+      const tile = this.map.getTileByPos(corners[m].x, corners[m].y);
+      if (tile !== -1) {
+        for (let j = 0; j < tile.objs.length; j++) {
           if (tile.objs[j].isBullet && tile.objs[j].age > 0) bullets.push(tile.objs[j]);
           if (tile.objs[j].isPowerUp) powerups.push(tile.objs[j]);
         }
       }
     }
     // for each bullet in the list, check if it intersects the tank
-    for (var i = 0; i < bullets.length; i++) {
+    for (let i = 0; i < bullets.length; i++) {
       if (this.intersects(bullets[i].x, bullets[i].y)) {
         // Friendly fire?
-        if (!Settings.FriendlyFire && this.player.team == bullets[i].player.team && this.player.id != bullets[i].player.id) return;
+        if (!Settings.FriendlyFire && this.player.team === bullets[i].player.team && this.player.id !== bullets[i].player.id) return;
         if (!bullets[i].lethal) return;
         // Hit!
         if (this.invincible()) return;
         bullets[i].explode();
         bullets[i].delete();
         // count stats
-        if (bullets[i].player.team != this.player.team) bullets[i].player.stats.kills += 1;
+        if (bullets[i].player.team !== this.player.team) bullets[i].player.stats.kills += 1;
         // fancy explosion cloud
         new Cloud(this.player.game, this.x, this.y, 6);
         // let gamemode handle scoring
@@ -296,7 +296,7 @@ export default class Tank extends GameObject {
         return;
       }
     }
-    for (var i = 0; i < powerups.length; i++) {
+    for (let i = 0; i < powerups.length; i++) {
       if (this.intersects(powerups[i].x, powerups[i].y)) {
         powerups[i].apply(this);
         powerups[i].delete();
@@ -309,7 +309,7 @@ export default class Tank extends GameObject {
    * @returns {boolean} True if spawnshield active.
    */
   spawnshield() {
-    var t = this.player.game.t;
+    const t = this.player.game.t;
     return this.timers.spawnshield > t;
   }
   /**
@@ -317,7 +317,7 @@ export default class Tank extends GameObject {
    * @returns {boolean} True if invincible.
    */
   invincible() {
-    var t = this.player.game.t;
+    const t = this.player.game.t;
     return this.timers.spawnshield > t || this.timers.invincible > t;
   }
   /**
@@ -333,7 +333,7 @@ export default class Tank extends GameObject {
    */
   delete() {
     // CTF: if tank has flag, drop it
-    if (this.carriedFlag != -1) this.carriedFlag.drop(this.x, this.y);
+    if (this.carriedFlag !== -1) this.carriedFlag.drop(this.x, this.y);
     // delete the weapon
     this.weapon.delete();
     // mark the tank as deleted

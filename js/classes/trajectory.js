@@ -1,10 +1,10 @@
+import GameObject from "./object.js";
+import { GameFrequency } from "../constants.js";
+
 /**
  * Represents a trajectory for ray-casting or lasers.
  * @extends GameObject
  */
-import GameObject from "./object.js";
-import { GameFrequency } from "../constants.js";
-
 export default class Trajectory extends GameObject {
   /**
    * Creates a new Trajectory.
@@ -48,8 +48,8 @@ export default class Trajectory extends GameObject {
    */
   draw(canvas, context) {
     if (this.hidden) return;
-    for (var i = 0; i < this.points.length; i += this.drawevery) {
-      var p = this.points[i];
+    for (let i = 0; i < this.points.length; i += this.drawevery) {
+      const p = this.points[i];
       // TODO less save & restore
       context.save();
       context.beginPath();
@@ -68,22 +68,22 @@ export default class Trajectory extends GameObject {
   step() {
     // update points list
     this.targets = [];
-    var point = { x: this.x, y: this.y, angle: this.angle };
-    var length = 0;
+    let point = { x: this.x, y: this.y, angle: this.angle };
+    let length = 0;
     this.points = [point];
     while (length < this.length) {
       point = this.points[this.points.length - 1];
-      var nextpoint = {
+      const nextpoint = {
         x: point.x - this.delta * Math.sin(-point.angle),
         y: point.y - this.delta * Math.cos(-point.angle),
         angle: point.angle,
       };
-      var tile = this.map.getTileByPos(point.x, point.y);
-      if (tile == -1) return;
-      var walls = tile.getWalls(nextpoint.x, nextpoint.y);
-      var nwalls = walls.filter((w) => w).length;
+      const tile = this.map.getTileByPos(point.x, point.y);
+      if (tile === -1) return;
+      const walls = tile.getWalls(nextpoint.x, nextpoint.y);
+      const nwalls = walls.filter((w) => w).length;
       // if there seems to be a wall: handle accordingly
-      if (nwalls == 2) {
+      if (nwalls === 2) {
         nextpoint.angle += Math.PI;
         nextpoint.x = point.x;
         nextpoint.y = point.y;
@@ -99,7 +99,7 @@ export default class Trajectory extends GameObject {
       length += this.delta;
       this.points.push(nextpoint);
       // see if any tanks targeted
-      for (var i = 0; i < tile.objs.length; i++) if (tile.objs[i].type == "Tank") this.targets.push(tile.objs[i]);
+      for (let i = 0; i < tile.objs.length; i++) if (tile.objs[i].type === "Tank") this.targets.push(tile.objs[i]);
     }
 
     this.timeout -= GameFrequency;

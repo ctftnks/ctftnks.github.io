@@ -1,9 +1,9 @@
 function updateLeaderboard() {
   players.sort(function (a, b) {
-    return a.score < b.score;
+    return b.score - a.score;
   });
-  var lb = document.getElementById("leaderboard");
-  var content = "";
+  const lb = document.getElementById("leaderboard");
+  let content = "";
   content += "<table>";
   content += "<tr>";
   content += "<th>Name</th>";
@@ -13,8 +13,8 @@ function updateLeaderboard() {
   content += "<th>Shots</th>";
   content += "<th>Miles</th>";
   content += "</tr>";
-  for (var i in players) {
-    var p = players[i];
+  for (const i in players) {
+    const p = players[i];
     content += "<tr>";
     content += "<td>" + p.name + "</td>";
     content += "<td>" + p.score + "</td>";

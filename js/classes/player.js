@@ -61,10 +61,10 @@ export default class Player {
     this.tank = new Tank(this);
     this.tank.deleted = false;
     this.tank.map = this.game.map;
-    var spos = this.game.map.spawnPoint();
-    if (typeof this.base !== "undefined" && this.base.tile != -1) {
-      var spos2 = this.base.tile;
-      while (spos2.id == this.base.tile.id)
+    let spos = this.game.map.spawnPoint();
+    if (typeof this.base !== "undefined" && this.base.tile !== -1) {
+      let spos2 = this.base.tile;
+      while (spos2.id === this.base.tile.id)
         spos2 = spos2.randomWalk(Math.pow(this.game.mode.BaseSpawnDistance, 2) + Math.round(Math.random()));
       spos = { x: spos2.x + spos2.dx / 2, y: spos2.y + spos2.dy / 2 };
     }
@@ -73,7 +73,7 @@ export default class Player {
     this.game.addObject(this.tank);
     this.game.n_playersAlive += 1;
     // this.game.addObject(new Smoke(this.x, this.y));
-    var self = this;
+    const self = this;
     this.game.timeouts.push(
       setTimeout(function () {
         new Cloud(self.game, self.tank.x, self.tank.y, 4, 20, 2);
@@ -94,7 +94,7 @@ export default class Player {
     this.game.canvas.shake();
     this.spree = 0;
     this.stats.deaths += 1;
-    var self = this;
+    const self = this;
     this.game.timeouts.push(
       setTimeout(function () {
         self.spawn();

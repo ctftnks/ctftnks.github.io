@@ -2,10 +2,10 @@ import Map from "./map.js";
 import MapGenerator from "./mapGenerator.js";
 import { Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill, MapEditor } from "./gamemode.js";
 import { getRandomPowerUp } from "./powerup.js";
-import { GameFrequency } from "../constants.js";
+import { GameFrequency, Settings } from "../constants.js";
 import { Key } from "../keybindings.js";
 import { playSound, playMusic, stopMusic, clearEffects } from "../effects.js";
-import { store, Settings } from "../state.js";
+import { store } from "../state.js";
 
 // A class for a single game round with a single map
 // contains a list of players, list of objects in the game
@@ -27,7 +27,7 @@ export default class Game {
     this.canvas.game = this;
     // create new random map
     /** @type {Map} The game map. */
-    if (map == -1) {
+    if (map === -1) {
       this.map = new Map(this.canvas);
       // MapGenerator.algorithms[Math.floor(Math.random()*MapGenerator.algorithms.length)](this.map);
       // MapGenerator.primsMaze(this.map);
@@ -81,9 +81,9 @@ export default class Game {
    * Starts the game loop.
    */
   start() {
-    var self = this;
+    const self = this;
     this.mode.init();
-    for (var i = 0; i < this.players.length; i++) this.players[i].spawn();
+    for (let i = 0; i < this.players.length; i++) this.players[i].spawn();
     this.loop = setInterval(function () {
       self.step();
     }, GameFrequency);
@@ -101,17 +101,17 @@ export default class Game {
       // remove deleted objects and
       // initiate spatial sorting of objects within the map class
       this.map.clearObjectLists();
-      for (var i = this.objs.length - 1; i >= 0; i--)
+      for (let i = this.objs.length - 1; i >= 0; i--)
         if (!this.objs[i].deleted) this.map.addObject(this.objs[i]);
         else this.objs.splice(i, 1);
       // call step() function for every object in order for it to move/etc.
-      for (var i = 0; i < this.objs.length; i++) this.objs[i].step();
+      for (let i = 0; i < this.objs.length; i++) this.objs[i].step();
       // do gamemode calculations
       this.mode.step();
       // add random PowerUp
-      if (this.t % (1000 * Settings.PowerUpRate) == 0 && Settings.GameMode != "MapEditor") {
-        var p = getRandomPowerUp();
-        var pos = this.map.spawnPoint();
+      if (this.t % (1000 * Settings.PowerUpRate) === 0 && Settings.GameMode !== "MapEditor") {
+        const p = getRandomPowerUp();
+        const pos = this.map.spawnPoint();
         p.x = pos.x;
         p.y = pos.y;
         this.addObject(p);
@@ -128,16 +128,17 @@ export default class Game {
         if (window.openPage) window.openPage("menu");
         this.pause();
       }
-      if (this.t % 1000 == GameFrequency) {
-        var dt = Settings.RoundTime * 60 - (this.t - GameFrequency) / 1000;
+      if (this.t % 1000 === GameFrequency) {
+        let dt = Settings.RoundTime * 60 - (this.t - GameFrequency) / 1000;
         dt = dt < 0 ? 0 : dt;
-        var dtm = Math.floor(dt / 60);
-        var dts = Math.floor(dt - dtm * 60);
+        let dtm = Math.floor(dt / 60);
+        let dts = Math.floor(dt - dtm * 60);
         dtm = "" + dtm;
         while (dtm.length < 2) dtm = "0" + dtm;
         dts = "" + dts;
         while (dts.length < 2) dts = "0" + dts;
-        document.getElementById("GameTimer").innerHTML = dtm + ":" + dts;
+        const timerElem = document.getElementById("GameTimer");
+        if (timerElem) timerElem.innerHTML = dtm + ":" + dts;
       }
       if (this.t > Settings.RoundTime * 60000) this.end();
     }
@@ -157,11 +158,11 @@ export default class Game {
   stop() {
     this.paused = true;
     clearInterval(this.loop);
-    for (var i = 0; i < this.intvls.length; i++) clearInterval(this.intvls[i]);
-    for (var i = 0; i < this.timeouts.length; i++) clearTimeout(this.timeouts[i]);
+    for (let i = 0; i < this.intvls.length; i++) clearInterval(this.intvls[i]);
+    for (let i = 0; i < this.timeouts.length; i++) clearTimeout(this.timeouts[i]);
     clearEffects();
     stopMusic();
-    for (var i = 0; i < this.players.length; i++) this.players[i].base = undefined;
+    for (let i = 0; i < this.players.length; i++) this.players[i].base = undefined;
   }
 
   /**
@@ -170,7 +171,7 @@ export default class Game {
   end() {
     this.paused = true;
     if (window.openPage) {
-      var pageid = window.openPage("leaderboard");
+      window.openPage("leaderboard");
     }
     this.stop();
   }
@@ -180,7 +181,7 @@ export default class Game {
    */
   resetTime() {
     this.t = 0;
-    for (var i = 0; i < this.players.length; i++) {
+    for (let i = 0; i < this.players.length; i++) {
       this.players[i].tank.timers.invincible = -1;
       this.players[i].tank.timers.spawnshield = -1;
     }

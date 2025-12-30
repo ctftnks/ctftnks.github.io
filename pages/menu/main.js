@@ -6,16 +6,17 @@ function addPlayer(bot = false) {
 }
 
 function removePlayer(id) {
-  var newPlayers = [];
-  for (var i = 0; i < players.length; i++) if (players[i].id != id) newPlayers.push(players[i]);
-  players = newPlayers;
+  const newPlayers = [];
+  for (let i = 0; i < players.length; i++) if (players[i].id !== id) newPlayers.push(players[i]);
+  window.players = newPlayers;
   updatePlayersMenu();
 }
 
 function updatePlayersMenu() {
-  var pmen = document.getElementById("playersMenu");
+  const pmen = document.getElementById("playersMenu");
+  if (!pmen) return;
   pmen.innerHTML = "";
-  var entry = "";
+  let entry = "";
   entry += "<div class='entry'>";
   entry += "<span style='width:50px;display:inline-block;'></span>";
   entry += "<button class='name notclickable'>Name</button>";
@@ -23,9 +24,9 @@ function updatePlayersMenu() {
   entry += "<span style='width:50px;display:inline-block;'></span>";
   entry += "</div>";
   pmen.innerHTML += entry;
-  for (var i = 0; i < players.length; i++) {
-    var entry = "";
-    var id = players[i].id;
+  for (let i = 0; i < players.length; i++) {
+    let entry = "";
+    const id = players[i].id;
     entry += "<div class='entry'>";
     entry +=
       "<button class='team' onclick='players[" +
@@ -47,8 +48,8 @@ function updatePlayersMenu() {
 
 // edit the keymap from the menu
 function editableKeymap(mapID) {
-  if (mapID == -1) {
-    var html = "";
+  if (mapID === -1) {
+    let html = "";
     html += "<button class='keyEditButton notclickable'>&uarr;</button>";
     html += "<button class='keyEditButton notclickable'>&larr;</button>";
     html += "<button class='keyEditButton notclickable'>&darr;</button>";
@@ -56,8 +57,8 @@ function editableKeymap(mapID) {
     html += "<button class='keyEditButton notclickable'>Fire</button>";
     return html;
   }
-  if (mapID == -2) {
-    var html = "";
+  if (mapID === -2) {
+    let html = "";
     html += "<button class='keyEditButton notclickable'>-</button>";
     html += "<button class='keyEditButton notclickable'>-</button>";
     html += "<button class='keyEditButton notclickable'>-</button>";
@@ -65,8 +66,8 @@ function editableKeymap(mapID) {
     html += "<button class='keyEditButton notclickable'>-</button>";
     return html;
   }
-  var html = "";
-  for (var i in keymaps[mapID]) {
+  let html = "";
+  for (const i in keymaps[mapID]) {
     html += "<button class='keyEditButton' onclick='editKeymap(" + mapID + ", " + i + ")' onfocusout='editingKeymap=false'>";
     html += keyLabels[keymaps[mapID][i]];
     html += "</button>";
@@ -74,22 +75,29 @@ function editableKeymap(mapID) {
   return html;
 }
 
-editingKeymap = false;
-editingMapID = -1;
-editingKeyID = -1;
+window.editingKeymap = false;
+window.editingMapID = -1;
+window.editingKeyID = -1;
 function editKeymap(mapID, keyID) {
-  editingKeymap = true;
-  editingMapID = mapID;
-  editingKeyID = keyID;
+  window.editingKeymap = true;
+  window.editingMapID = mapID;
+  window.editingKeyID = keyID;
 }
 function doEditKeymap(newKeyCode) {
   keymaps[editingMapID][editingKeyID] = newKeyCode;
-  editingKeymap = false;
+  window.editingKeymap = false;
   updatePlayersMenu();
 }
 
 function editPlayerName(index) {
-  var name = prompt("Namen eingeben:");
+  const name = prompt("Namen eingeben:");
   if (name != null) players[index].name = name;
   updatePlayersMenu();
 }
+
+window.addPlayer = addPlayer;
+window.removePlayer = removePlayer;
+window.updatePlayersMenu = updatePlayersMenu;
+window.editKeymap = editKeymap;
+window.doEditKeymap = doEditKeymap;
+window.editPlayerName = editPlayerName;

@@ -1,8 +1,8 @@
 import { store, Settings } from "./state.js";
 
 export function playSound(file) {
-  if (file != "" && !Settings.muted) {
-    var audio = new Audio(file);
+  if (file !== "" && !Settings.muted) {
+    const audio = new Audio(file);
     audio.play();
   }
 }
@@ -10,8 +10,8 @@ export function playSound(file) {
 export let playingMusic = -1;
 export let musicAudio = -1;
 export function playMusic(file) {
-  if (file == playingMusic) return;
-  var audio = new Audio(file);
+  if (file === playingMusic) return;
+  const audio = new Audio(file);
   audio.addEventListener(
     "ended",
     function () {
@@ -25,16 +25,16 @@ export function playMusic(file) {
   musicAudio = audio;
 }
 export function stopMusic() {
-  if (musicAudio != -1) musicAudio.pause();
+  if (musicAudio !== -1) musicAudio.pause();
   musicAudio = -1;
   playingMusic = -1;
 }
 
 export let effectCanvasID = 0;
 export function newEffectCanvas() {
-  var canv = document.createElement("canvas");
+  const canv = document.createElement("canvas");
   effectCanvasID++;
-  var id = "effectCanvas" + effectCanvasID;
+  const id = "effectCanvas" + effectCanvasID;
   canv.id = id;
   canv.setAttribute("class", "effectCanvas");
   document.body.appendChild(canv);
@@ -42,26 +42,26 @@ export function newEffectCanvas() {
 }
 
 export function fogOfWar(game) {
-  var canv = document.getElementById("effectFrame");
+  const canv = document.getElementById("effectFrame");
   canv.height = game.canvas.canvas.clientHeight;
   canv.width = game.canvas.canvas.clientWidth;
 
-  var duration = 10000;
-  var frequency = 30;
-  var time = 0;
-  var ctx = canv.getContext("2d");
+  const duration = 10000;
+  const frequency = 30;
+  let time = 0;
+  const ctx = canv.getContext("2d");
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.scale(game.canvas.scale, game.canvas.scale);
-  var ambientLight = 1;
-  var intvl = setInterval(function () {
+  let ambientLight = 1;
+  const intvl = setInterval(function () {
     ctx.clearRect(0, 0, 2 * canv.width, 2 * canv.height);
     if (time < 300) ambientLight -= frequency / 300;
     if (duration - time < 300) ambientLight += frequency / 300;
     ctx.fillStyle = "rgba(0,0,0," + (1 - ambientLight) + ")";
     ctx.fillRect(0, 0, game.map.Nx * game.map.dx, game.map.Ny * game.map.dy);
-    for (var i = 0; i < game.players.length; i++) {
-      var x = game.players[i].tank.x;
-      var y = game.players[i].tank.y;
+    for (let i = 0; i < game.players.length; i++) {
+      const x = game.players[i].tank.x;
+      const y = game.players[i].tank.y;
       ctx.save();
       ctx.beginPath();
       ctx.arc(x, y, 100, 0, Math.PI * 2, true);
@@ -82,20 +82,20 @@ export function fogOfWar(game) {
 }
 
 export function clearEffects() {
-  var canv = document.getElementById("effectFrame");
+  const canv = document.getElementById("effectFrame");
   if (store.game && store.game.canvas && store.game.canvas.canvas) {
     canv.height = store.game.canvas.canvas.clientHeight;
     canv.width = store.game.canvas.canvas.clientWidth;
   }
-  var ctx = canv.getContext("2d");
+  const ctx = canv.getContext("2d");
   ctx.clearRect(0, 0, 2 * canv.width, 2 * canv.height);
 }
 
 export function hexToRgbA(hex, a) {
-  var c;
+  let c;
   if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
     c = hex.substring(1).split("");
-    if (c.length == 3) {
+    if (c.length === 3) {
       c = [c[0], c[0], c[1], c[1], c[2], c[2]];
     }
     c = "0x" + c.join("");

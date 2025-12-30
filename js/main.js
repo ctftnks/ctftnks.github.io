@@ -47,43 +47,43 @@ window.onload = function () {
   store.players[3].color = store.players[2].color;
   store.players[3].team = store.players[2].team;
 
-  var g = newGame();
+  const g = newGame();
   g.paused = true;
   openPage("menu");
 };
 
 // prevent accidental leaving
 window.onbeforeunload = function () {
-  var debug = true;
+  const debug = true;
   if (typeof store.game !== "undefined" && !store.game.paused && !debug) return "";
 };
 
 // start a new round
 export function newGame(map = -1) {
-  if (Settings.GameMode == "MapEditor" && map == -1) {
-    var Nx = prompt("Nx?");
-    var Ny = prompt("Ny?");
+  if (Settings.GameMode === "MapEditor" && map === -1) {
+    const Nx = prompt("Nx?");
+    const Ny = prompt("Ny?");
     map = new Map(store.canvas, Nx, Ny);
   }
 
   if (typeof store.game !== "undefined") store.game.stop();
   store.game = new Game(store.canvas, map);
 
-  if (Settings.GameMode == "DM") store.game.mode = new Deathmatch(store.game);
-  if (Settings.GameMode == "TDM") store.game.mode = new TeamDeathmatch(store.game);
-  if (Settings.GameMode == "CTF") store.game.mode = new CaptureTheFlag(store.game);
-  if (Settings.GameMode == "KOTH") store.game.mode = new KingOfTheHill(store.game);
-  if (Settings.GameMode == "MapEditor") store.game.mode = new MapEditor(store.game, map == -1);
+  if (Settings.GameMode === "DM") store.game.mode = new Deathmatch(store.game);
+  if (Settings.GameMode === "TDM") store.game.mode = new TeamDeathmatch(store.game);
+  if (Settings.GameMode === "CTF") store.game.mode = new CaptureTheFlag(store.game);
+  if (Settings.GameMode === "KOTH") store.game.mode = new KingOfTheHill(store.game);
+  if (Settings.GameMode === "MapEditor") store.game.mode = new MapEditor(store.game, map === -1);
 
-  for (var i = 0; i < store.players.length; i++) store.game.addPlayer(store.players[i]);
+  for (let i = 0; i < store.players.length; i++) store.game.addPlayer(store.players[i]);
   store.game.start();
   store.canvas.sync();
-  if (Settings.ResetStatsEachGame) for (var i = 0; i < store.game.players.length; i++) store.game.players[i].resetStats();
+  if (Settings.ResetStatsEachGame) for (let i = 0; i < store.game.players.length; i++) store.game.players[i].resetStats();
   return store.game;
 }
 
 export function updateScores() {
-  var scoreBoard = document.getElementById("scoreBoard");
+  const scoreBoard = document.getElementById("scoreBoard");
   if (!scoreBoard) return;
   scoreBoard.innerHTML = "";
 
@@ -91,8 +91,8 @@ export function updateScores() {
     return b.score - a.score;
   });
 
-  for (var i = 0; i < store.players.length; i++) {
-    var entry = "";
+  for (let i = 0; i < store.players.length; i++) {
+    let entry = "";
     entry += "<div class='entry'>";
     entry += "<span class='name' style='color:" + store.players[i].color + ";''>";
     entry += store.players[i].name;

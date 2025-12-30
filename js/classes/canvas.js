@@ -39,15 +39,15 @@ export default class Canvas {
   draw() {
     this.context.clearRect(0, 0, this.canvas.width / this.scale, this.canvas.height / this.scale);
     this.game.map.draw(this.canvas, this.context);
-    for (var i = 0; i < this.game.objs.length; i++) this.game.objs[i].draw(this.canvas, this.context);
+    for (let i = 0; i < this.game.objs.length; i++) this.game.objs[i].draw(this.canvas, this.context);
   }
 
   /**
    * Keep canvas in sync with game: redraw every few milliseconds.
    */
   sync() {
-    if (typeof this.loop == "undefined") {
-      var self = this;
+    if (typeof this.loop === "undefined") {
+      const self = this;
       this.loop = setInterval(function () {
         self.draw();
       }, FrameFrequency);
@@ -58,7 +58,7 @@ export default class Canvas {
    * Stop syncing of canvas.
    */
   stopSync() {
-    if (typeof this.loop != "undefined") clearInterval(this.loop);
+    if (typeof this.loop !== "undefined") clearInterval(this.loop);
   }
 
   /**
@@ -87,14 +87,14 @@ export default class Canvas {
    * Shakes the canvas visually.
    */
   shake() {
-    var amp = 14;
-    var speed = 25;
-    var duration = 660;
-    var self = this;
-    var i = 0;
-    var intvl = setInterval(function () {
-      var randx = amp * (Math.random() - 0.5) * Math.exp((i * 250) / duration);
-      var randy = amp * (Math.random() - 0.5) * Math.exp((i * 250) / duration);
+    const amp = 14;
+    const speed = 25;
+    const duration = 660;
+    const self = this;
+    let i = 0;
+    const intvl = setInterval(function () {
+      const randx = amp * (Math.random() - 0.5) * Math.exp((i * 250) / duration);
+      const randy = amp * (Math.random() - 0.5) * Math.exp((i * 250) / duration);
       i -= 1;
       // self.context.translate(randx, randy);
       self.canvas.style.marginLeft = randx + "px";

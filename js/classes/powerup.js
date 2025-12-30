@@ -192,7 +192,7 @@ export class SpeedBonus extends PowerUp {
   }
   apply(tank) {
     tank.speed *= 1.1;
-    var self = tank;
+    const self = tank;
     tank.player.game.timeouts.push(
       setTimeout(function () {
         self.speed /= 1.1;
@@ -219,7 +219,7 @@ export class InvincibleBonus extends PowerUp {
     if (!Settings.muted) playMusic("res/sound/invincible.mp3");
     tank.speed *= 1.14;
     tank.timers.invincible = tank.player.game.t + 10000;
-    var self = tank;
+    const self = tank;
     tank.player.game.timeouts.push(
       setTimeout(function () {
         self.speed /= 1.14;
@@ -246,7 +246,7 @@ export class TerminatorBonus extends PowerUp {
     this.applied = true;
     tank.rapidfire = true;
     playSound("res/sound/terminator.mp3");
-    var self = tank;
+    const self = tank;
     // self.weapon.image = this.image;
     tank.player.game.timeouts.push(
       setTimeout(function () {
@@ -387,10 +387,10 @@ export const PowerUps = [
  * @returns {PowerUp} A new PowerUp instance.
  */
 export function getRandomPowerUp() {
-  var totalWeights = 0;
-  for (var i = 0; i < PowerUps.length; i++) totalWeights += PowerUps[i].weight;
-  var randWeight = Math.random() * totalWeights;
-  var h;
+  let totalWeights = 0;
+  for (let i = 0; i < PowerUps.length; i++) totalWeights += PowerUps[i].weight;
+  let randWeight = Math.random() * totalWeights;
+  let h;
   for (h = 0; randWeight > 0; h++) randWeight -= PowerUps[h].weight;
   playSound("res/sound/original/powerup.mp3");
   return PowerUps[h - 1].create();

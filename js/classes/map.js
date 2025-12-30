@@ -16,14 +16,14 @@ export default class Map {
    * @param {number} Ny - Number of tiles in Y direction.
    */
   constructor(canvas = -1, Nx = -1, Ny = -1) {
-    if (canvas == -1) canvas = { width: 1, height: 1 };
+    if (canvas === -1) canvas = { width: 1, height: 1 };
     /** @type {Object} The canvas. */
     this.canvas = canvas;
     /** @type {number} Number of tiles in X. */
-    if (Nx == -1) this.Nx = parseInt(store.settings.MapNxMin + (store.settings.MapNxMax - store.settings.MapNxMin) * Math.random());
+    if (Nx === -1) this.Nx = parseInt(store.settings.MapNxMin + (store.settings.MapNxMax - store.settings.MapNxMin) * Math.random());
     else this.Nx = Nx;
     /** @type {number} Number of tiles in Y. */
-    if (Ny == -1) this.Ny = parseInt(((0.25 * Math.random() + 0.75) * this.Nx * canvas.height) / canvas.width);
+    if (Ny === -1) this.Ny = parseInt(((0.25 * Math.random() + 0.75) * this.Nx * canvas.height) / canvas.width);
     else this.Ny = Ny;
     /** @type {number} Tile width. */
     this.dx = 130;
@@ -35,8 +35,8 @@ export default class Map {
 
     // Tile initialization
     // create discrete tiles
-    for (var i = 0; i < this.Nx; i++) {
-      for (var j = 0; j < this.Ny; j++) {
+    for (let i = 0; i < this.Nx; i++) {
+      for (let j = 0; j < this.Ny; j++) {
         this.tiles.push(new Tile(i, j, this));
       }
     }
@@ -59,8 +59,8 @@ export default class Map {
    * Links neighboring tiles.
    */
   linkNeighbors() {
-    for (var i = 0; i < this.Nx; i++) {
-      for (var j = 0; j < this.Ny; j++) {
+    for (let i = 0; i < this.Nx; i++) {
+      for (let j = 0; j < this.Ny; j++) {
         this.tiles[i * this.Ny + j].neighbors = [
           this.getTileByIndex(i, j - 1),
           this.getTileByIndex(i - 1, j),
@@ -78,8 +78,8 @@ export default class Map {
    * @returns {Tile|number} The tile or -1.
    */
   getTileByPos(x, y) {
-    var i = parseInt(x / this.dx);
-    var j = parseInt(y / this.dy);
+    const i = parseInt(x / this.dx);
+    const j = parseInt(y / this.dy);
     return this.getTileByIndex(i, j);
   }
 
@@ -87,7 +87,7 @@ export default class Map {
    * Spatial sorting: clear tile object lists.
    */
   clearObjectLists() {
-    for (var i = 0; i < this.tiles.length; i++) this.tiles[i].objs = [];
+    for (let i = 0; i < this.tiles.length; i++) this.tiles[i].objs = [];
   }
 
   /**
@@ -95,8 +95,8 @@ export default class Map {
    * @param {GameObject} obj - The object to add.
    */
   addObject(obj) {
-    var tile = this.getTileByPos(obj.x, obj.y);
-    if (tile == -1) obj.delete();
+    const tile = this.getTileByPos(obj.x, obj.y);
+    if (tile === -1) obj.delete();
     else tile.objs.push(obj);
   }
 
@@ -106,8 +106,8 @@ export default class Map {
    * @returns {Object} {x, y} coordinates.
    */
   spawnPoint(tries = 0) {
-    var rInt = parseInt(Math.random() * (this.Nx * this.Ny - 1));
-    var tile = this.tiles[rInt];
+    const rInt = parseInt(Math.random() * (this.Nx * this.Ny - 1));
+    const tile = this.tiles[rInt];
     // if there is something else already, find another point
     if (tile.objs.length > 0 && tries++ < this.Nx * this.Ny) return this.spawnPoint(tries);
     return { x: tile.x + this.dx / 2, y: tile.y + this.dy / 2 };
@@ -121,7 +121,7 @@ export default class Map {
   draw(canvas, context) {
     context.fillStyle = "#edede8";
     context.fillRect(0, 0, this.Nx * this.dx, this.Ny * this.dy);
-    for (var i = 0; i < this.tiles.length; i++) this.tiles[i].draw(canvas, context);
+    for (let i = 0; i < this.tiles.length; i++) this.tiles[i].draw(canvas, context);
   }
 
   /**
@@ -215,7 +215,7 @@ export class Tile {
   addWall(direction, remove = false, neighbor = true) {
     direction = direction % 4;
     this.walls[direction] = !remove;
-    if (neighbor && typeof this.neighbors[direction] !== "undefined" && this.neighbors[direction] != -1)
+    if (neighbor && typeof this.neighbors[direction] !== "undefined" && this.neighbors[direction] !== -1)
       this.neighbors[direction].addWall(direction + 2, remove, false);
   }
 
@@ -226,9 +226,9 @@ export class Tile {
    * @returns {Array<boolean>} List of walls encountered.
    */
   getWalls(x, y) {
-    var distx = this.x - x;
-    var disty = this.y - y;
-    var walls = [false, false, false, false];
+    const distx = this.x - x;
+    const disty = this.y - y;
+    const walls = [false, false, false, false];
     // walls to walls
     if (disty > 0 && this.walls[0]) walls[0] = true;
     if (distx > 0 && this.walls[1]) walls[1] = true;
@@ -249,27 +249,27 @@ export class Tile {
     // add current tile to path
     path.push(this);
     // if the current path is longer than the shortest known path: abort!
-    if (minPathLength != -1 && path.length >= minPathLength) return -1;
-    if (maxPathLength != -1 && path.length > maxPathLength) return -1;
+    if (minPathLength !== -1 && path.length >= minPathLength) return -1;
+    if (maxPathLength !== -1 && path.length > maxPathLength) return -1;
     // is this tile what we've been searching for? Then we're done!
     if (condition(this)) return path;
     // else keep searching:
     // for every neighbor that is not separated by a wall and is not yet in path
     // calculate the path recursively. If a path is found, add it to a list
-    var options = [];
-    for (var d = 0; d < 4; d++)
-      if (!this.walls[d] && this.neighbors[d] != -1 && path.indexOf(this.neighbors[d]) == -1) {
-        var option = this.neighbors[d].pathTo(condition, path.slice(), minPathLength, maxPathLength);
-        if (option != -1) {
+    const options = [];
+    for (let d = 0; d < 4; d++)
+      if (!this.walls[d] && this.neighbors[d] !== -1 && path.indexOf(this.neighbors[d]) === -1) {
+        const option = this.neighbors[d].pathTo(condition, path.slice(), minPathLength, maxPathLength);
+        if (option !== -1) {
           minPathLength = option.length;
           options.push(option);
         }
       }
     // found no options? negative result
-    if (options.length == 0) return -1;
+    if (options.length === 0) return -1;
     // find option with minimal length and return
-    var min = -1;
-    for (var i = 0; i < options.length; i++) if (min == -1 || options[i].length < options[min].length) min = i;
+    let min = -1;
+    for (let i = 0; i < options.length; i++) if (min === -1 || options[i].length < options[min].length) min = i;
     return options[min];
   }
 
@@ -279,10 +279,10 @@ export class Tile {
    * @returns {Tile} The final tile.
    */
   randomWalk(distance) {
-    if (distance == 0) return this;
-    var r = Math.floor(Math.random() * 4);
-    for (var d = r; d < 4 + r; d++)
-      if (!this.walls[d % 4] && typeof this.neighbors[d % 4] !== "undefined" && this.neighbors[d % 4] != -1)
+    if (distance === 0) return this;
+    const r = Math.floor(Math.random() * 4);
+    for (let d = r; d < 4 + r; d++)
+      if (!this.walls[d % 4] && typeof this.neighbors[d % 4] !== "undefined" && this.neighbors[d % 4] !== -1)
         return this.neighbors[d % 4].randomWalk(distance - 1);
     return this;
   }
@@ -293,7 +293,7 @@ export class Tile {
    * @returns {number} Index of object in list or -1.
    */
   find(type) {
-    for (var i = 0; i < this.objs.length; i++) if (this.objs[i].type == type) return i;
+    for (let i = 0; i < this.objs.length; i++) if (this.objs[i].type === type) return i;
     return -1;
   }
 
@@ -304,29 +304,29 @@ export class Tile {
    * @returns {Array|number} Path to object or -1.
    */
   xypathToObj(condition, maxPathLength = -1) {
-    var tilepath = this.pathTo(
+    const tilepath = this.pathTo(
       function (dest) {
-        for (var i = 0; i < dest.objs.length; i++) if (condition(dest.objs[i])) return true;
+        for (let i = 0; i < dest.objs.length; i++) if (condition(dest.objs[i])) return true;
       },
       [],
       -1,
       maxPathLength,
     );
-    if (tilepath == -1) return -1;
-    var xypath = [];
-    for (var i = 0; i < tilepath.length; i++) {
-      var tile = tilepath[i];
+    if (tilepath === -1) return -1;
+    const xypath = [];
+    for (let i = 0; i < tilepath.length; i++) {
+      const tile = tilepath[i];
       xypath.push({ x: tile.x + tile.dx / 2, y: tile.y + tile.dy / 2 });
     }
-    var obj = -1;
-    var lasttile = tilepath[tilepath.length - 1];
-    for (var i = 0; i < lasttile.objs.length; i++) {
+    let obj = -1;
+    const lasttile = tilepath[tilepath.length - 1];
+    for (let i = 0; i < lasttile.objs.length; i++) {
       if (condition(lasttile.objs[i])) {
         obj = lasttile.objs[i];
         break;
       }
     }
-    if (obj == -1) return -1;
+    if (obj === -1) return -1;
     xypath.push(obj);
     return xypath;
   }

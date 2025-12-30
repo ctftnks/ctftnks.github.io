@@ -2,7 +2,7 @@ import Player from "./player.js";
 import { GameFrequency } from "../constants.js";
 import { store, Settings } from "../state.js";
 
-var NBots = 0;
+let NBots = 0;
 
 /**
  * A bot player that controls a tank automatically.
@@ -52,26 +52,24 @@ export default class Bot extends Player {
     this.lastChecked = 0;
 
     // some abbreviations
-    var self = this;
-    var game = this.game;
-    var mode = game.mode;
-    var tank = this.tank;
-    var weapon = tank.weapon;
-    var invincible = tank.invincible();
-    var tile = game.map.getTileByPos(tank.x, tank.y);
-    var fleeing = false;
+    const self = this;
+    const game = this.game;
+    const tank = this.tank;
+    const weapon = tank.weapon;
+    const invincible = tank.invincible();
+    const tile = game.map.getTileByPos(tank.x, tank.y);
 
     // a list of possible actions: will be populated first and the bot then decides which action to take
-    var opts = [];
+    const opts = [];
 
     // get info on the current situation of the tank
 
     // check if any interesting powerups are close
-    var powerupPath = tile.xypathToObj(function (obj) {
+    const powerupPath = tile.xypathToObj(function (obj) {
       return obj.isPowerUp && obj.attractsBots;
     }, 2);
     // if powerup found, add option to go to it
-    if (powerupPath != -1)
+    if (powerupPath !== -1)
       opts.push({
         f: function () {
           self.follow(powerupPath);
@@ -80,12 +78,12 @@ export default class Bot extends Player {
       });
 
     // check for nearest enemy tank
-    var enemyPath = tile.xypathToObj(function (obj) {
-      return obj.type == "Tank" && obj.player.team != self.team;
+    const enemyPath = tile.xypathToObj(function (obj) {
+      return obj.type === "Tank" && obj.player.team !== self.team;
     });
     // if enemy found...
-    if (enemyPath != -1) {
-      var enemy = enemyPath[enemyPath.length - 1];
+    if (enemyPath !== -1) {
+      const enemy = enemyPath[enemyPath.length - 1];
       // ...add option to move in its direction
       opts.push({
         f: function () {
@@ -95,8 +93,8 @@ export default class Bot extends Player {
       });
       // ...consider shooting if enemy is within range of the weapon
       if (weapon.active) {
-        var aimbot = this.aimbot(enemy, enemyPath);
-        if (enemy.carriedFlag != -1) aimbot.weight *= 2;
+        const aimbot = this.aimbot(enemy, enemyPath);
+        if (enemy.carriedFlag !== -1) aimbot.weight *= 2;
         if (aimbot.should_shoot)
           opts.push({
             f: function () {
@@ -108,24 +106,24 @@ export default class Bot extends Player {
     }
 
     // GAME MODE RELATED ACTIONS
-    if (game.mode.name == "CaptureTheFlag") {
+    if (game.mode.name === "CaptureTheFlag") {
       // game mode: Capture The Flag
-      var carriesFlag = tank.carriedFlag != -1;
-      var flagInBase = self.base.hasFlag();
-      var ctfPath = tile.xypathToObj(function (obj) {
+      const carriesFlag = tank.carriedFlag !== -1;
+      const flagInBase = self.base.hasFlag();
+      const ctfPath = tile.xypathToObj(function (obj) {
         // if I have no flag: search for enemy flag
-        if (!carriesFlag && obj.type == "Flag" && obj.team != self.team) return true;
+        if (!carriesFlag && obj.type === "Flag" && obj.team !== self.team) return true;
         // if I have a flag and own flag is at own base: return to base
-        if (carriesFlag && obj.type == "Base" && obj.hasFlag() && obj.team == self.team) return true;
+        if (carriesFlag && obj.type === "Base" && obj.hasFlag() && obj.team === self.team) return true;
         // if own flag is not in own base: search it
         if (!flagInBase) {
-          if (obj.type == "Flag" && obj.team == self.team) return true;
-          if (obj.type == "Tank" && obj.carriedFlag != -1 && obj.carriedFlag.team == self.team) return true;
+          if (obj.type === "Flag" && obj.team === self.team) return true;
+          if (obj.type === "Tank" && obj.carriedFlag !== -1 && obj.carriedFlag.team === self.team) return true;
         }
       });
       // add option and put weight depending on situation
-      if (ctfPath != -1) {
-        var weight = invincible && carriesFlag && flagInBase ? 600 : carriesFlag || !flagInBase ? 300 : 50;
+      if (ctfPath !== -1) {
+        const weight = invincible && carriesFlag && flagInBase ? 600 : carriesFlag || !flagInBase ? 300 : 50;
         opts.push({
           f: function () {
             self.follow(ctfPath);
@@ -133,14 +131,14 @@ export default class Bot extends Player {
           weight: weight,
         });
       }
-    } else if (game.mode.name == "KingOfTheHill") {
+    } else if (game.mode.name === "KingOfTheHill") {
       // game mode: King Of The Hill
       // search for free bases
-      var basePath = tile.xypathToObj(function (obj) {
-        if (obj.type == "Hill" && obj.team != self.team) return true;
+      const basePath = tile.xypathToObj(function (obj) {
+        if (obj.type === "Hill" && obj.team !== self.team) return true;
       });
-      if (basePath != -1) {
-        var weight = basePath.length < 6 ? 300 : 50;
+      if (basePath !== -1) {
+        const weight = basePath.length < 6 ? 300 : 50;
         opts.push({
           f: function () {
             self.follow(basePath);
@@ -151,9 +149,9 @@ export default class Bot extends Player {
     }
 
     // flee from explosive situations
-    var fleePath = this.getFleePath();
-    if (fleePath != -1) {
-      var weight = invincible ? 1 : 400;
+    const fleePath = this.getFleePath();
+    if (fleePath !== -1) {
+      const weight = invincible ? 1 : 400;
       opts.push({
         f: function () {
           self.follow(fleePath);
@@ -189,12 +187,12 @@ export default class Bot extends Player {
    * Performs movements towards the goto target.
    */
   perform_movements() {
-    if (this.goto == -1) return;
-    var tank = this.tank;
-    var distx = this.goto.x - tank.x;
-    var disty = this.goto.y - tank.y;
+    if (this.goto === -1) return;
+    const tank = this.tank;
+    const distx = this.goto.x - tank.x;
+    const disty = this.goto.y - tank.y;
     // norm angles to interval [0, 2pi]
-    var newangle = Math.atan2(-distx, disty) + Math.PI;
+    let newangle = Math.atan2(-distx, disty) + Math.PI;
     while (newangle < 0) newangle += 2 * Math.PI;
     newangle = newangle % (2 * Math.PI);
     while (tank.angle < 0) tank.angle += 2 * Math.PI;
@@ -220,14 +218,13 @@ export default class Bot extends Player {
    */
   shoot(target) {
     this.goto = -1; // don't move anywhere TODO: remove this?
-    var tank = this.tank;
-    var distx = target.x - tank.x;
-    var disty = target.y - tank.y;
-    var weapon = tank.weapon.name;
+    const tank = this.tank;
+    const distx = target.x - tank.x;
+    const disty = target.y - tank.y;
     tank.angle = Math.atan2(-distx, disty) + Math.PI;
     // Shoot target...
     // .. unless it is also a bot...
-    if (typeof target != "undefined" && typeof target["player"] != "undefined" && target.player.isBot) {
+    if (typeof target !== "undefined" && typeof target["player"] !== "undefined" && target.player.isBot) {
       // then randomise shooting time, to make bot-fights a bit more fair and random
       setTimeout(function () {
         tank.shoot();
@@ -252,18 +249,18 @@ export default class Bot extends Player {
    * @returns {Object} Result with should_shoot, target, and weight.
    */
   aimbot(enemy, path = -1) {
-    var result = { should_shoot: false, target: enemy, weight: 500 };
-    var weapon = this.tank.weapon;
-    if (path == -1) path = this.tank.map.xypathToObj(enemy);
-    if (path == -1) return result;
-    var r = Math.random() > 0.6 ? 2 : 1;
+    const result = { should_shoot: false, target: enemy, weight: 500 };
+    const weapon = this.tank.weapon;
+    if (path === -1) path = this.tank.map.xypathToObj(enemy);
+    if (path === -1) return result;
+    const r = Math.random() > 0.6 ? 2 : 1;
     // TODO: more intricate checking for specific weapon types
     // TODO: check if there is something in the way etc...
     if (path.length <= this.tank.weapon.bot.shooting_range + r && !enemy.invincible()) result.should_shoot = true;
     // rules for specific weapons
-    if (weapon.name == "Laser") {
-      for (var i = 0; i < weapon.trajectory.targets.length; i++) {
-        if (weapon.trajectory.targets[i].player.team != this.team && !enemy.invincible()) {
+    if (weapon.name === "Laser") {
+      for (let i = 0; i < weapon.trajectory.targets.length; i++) {
+        if (weapon.trajectory.targets[i].player.team !== this.team && !enemy.invincible()) {
           // shoot only if enemy would be hit
           result.should_shoot = true;
         } else {
@@ -271,20 +268,20 @@ export default class Bot extends Player {
           result.should_shoot = false;
         }
       }
-    } else if (weapon.name == "Guided" || weapon.name == "WreckingBall") {
+    } else if (weapon.name === "Guided" || weapon.name === "WreckingBall") {
       result.should_shoot = false;
       result.weight = 200;
-      var tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
-      for (var i = 0; i < 4; i++) {
-        if (tile.walls[i] ^ (weapon.name == "Guided")) {
+      const tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
+      for (let i = 0; i < 4; i++) {
+        if (tile.walls[i] ^ (weapon.name === "Guided")) {
           result.should_shoot = true;
-          var angle = (-Math.PI / 2) * i;
+          const angle = (-Math.PI / 2) * i;
           result.target = { x: this.tank.x + Math.sin(angle), y: this.tank.y - Math.cos(angle) };
         }
       }
-    } else if (weapon.name == "Slingshot") {
+    } else if (weapon.name === "Slingshot") {
       result.weight = 1100;
-      var dist = Math.hypot(this.tank.x - enemy.x, this.tank.y - enemy.y);
+      const dist = Math.hypot(this.tank.x - enemy.x, this.tank.y - enemy.y);
       result.should_shoot = dist < 400 && !enemy.invincible();
     }
     return result;
@@ -296,17 +293,17 @@ export default class Bot extends Player {
    * @returns {Array|number} The flee path or -1 if no path found.
    */
   getFleePath(duration = 2) {
-    if (this.fleeing.from == -1 || this.fleeing.condition == -1 || !this.fleeing.condition()) return -1;
+    if (this.fleeing.from === -1 || this.fleeing.condition === -1 || !this.fleeing.condition()) return -1;
     if (!this.tank.weapon.bot.flee_if_active && this.tank.weapon.active) return -1;
     // push any neighboring tile that is not in the fleeing path
-    var tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
+    const tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
     if (!this.fleeing.from.includes(tile)) this.fleeing.from.push(tile);
-    var nextTile = tile;
-    for (var i = 0; i < 4; i++) if (!tile.walls[i] && !this.fleeing.from.includes(tile.neighbors[i])) nextTile = tile.neighbors[i];
-    var fleePath = [tile, nextTile];
+    let nextTile = tile;
+    for (let i = 0; i < 4; i++) if (!tile.walls[i] && !this.fleeing.from.includes(tile.neighbors[i])) nextTile = tile.neighbors[i];
+    const fleePath = [tile, nextTile];
     // convert tile path to coordinates path and return
-    for (var i = 0; i < fleePath.length; i++) {
-      var tile = fleePath[i];
+    for (let i = 0; i < fleePath.length; i++) {
+      const tile = fleePath[i];
       fleePath[i] = { x: tile.x + tile.dx / 2, y: tile.y + tile.dy / 2 };
     }
     return fleePath;
@@ -318,16 +315,16 @@ export default class Bot extends Player {
   flee() {
     if (this.tank.weapon.bot.fleeing_duration <= 0) return;
     // generate initial path where tank comes from / where to flee from
-    var tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
-    var nextTile = store.game.map.getTileByPos(
+    const tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
+    const nextTile = store.game.map.getTileByPos(
       this.tank.x + tile.dx * Math.sin(this.tank.angle),
       this.tank.y - tile.dy * Math.cos(this.tank.angle),
     );
     this.fleeing.from = [nextTile, tile];
     // stop fleeing after some duration or if the weapon is activated again
-    var self = this;
-    var weapon = this.tank.weapon;
-    var flee_until = this.game.t + weapon.bot.fleeing_duration;
+    const self = this;
+    const weapon = this.tank.weapon;
+    const flee_until = this.game.t + weapon.bot.fleeing_duration;
     this.fleeing.condition = function () {
       return self.game.t < flee_until && (!weapon.bot.flee_if_active || weapon.active);
     };
@@ -343,23 +340,23 @@ export default class Bot extends Player {
 export function adaptBotSpeed(team, val = 0.1) {
   if (!Settings.AdaptiveBotSpeed) return;
 
-  var teams = [];
-  var botcounts = [];
+  const teams = [];
+  const botcounts = [];
 
-  for (var i = 0; i < store.game.players.length; i++) {
-    var id = teams.indexOf(store.game.players[i].team);
-    if (id == -1) {
+  for (let i = 0; i < store.game.players.length; i++) {
+    let id = teams.indexOf(store.game.players[i].team);
+    if (id === -1) {
       id = teams.length;
       teams.push(store.game.players[i].team);
       botcounts.push(0);
     }
     botcounts[id] += store.game.players[i].isBot ? 1 : 0;
   }
-  var avgbots = 0;
-  for (var i = 0; i < teams.length; i++) avgbots += botcounts[i] / parseFloat(teams.length);
-  var id = teams.indexOf(team);
+  let avgbots = 0;
+  for (let i = 0; i < teams.length; i++) avgbots += botcounts[i] / parseFloat(teams.length);
+  const id = teams.indexOf(team);
   Settings.BotSpeed += (avgbots - botcounts[id]) * val;
-  var bs = document.getElementById("BotSpeedometer");
+  const bs = document.getElementById("BotSpeedometer");
   if (bs) {
     bs.style.display = "block";
     bs.innerHTML = "BotSpeed:&nbsp;&nbsp;" + Math.round(Settings.BotSpeed * 100) + " %";
