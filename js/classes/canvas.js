@@ -47,10 +47,12 @@ export default class Canvas {
    */
   sync() {
     if (typeof this.loop === "undefined") {
-      const self = this;
-      this.loop = setInterval(function () {
-        self.draw();
-      }, FrameFrequency);
+      // Use requestAnimationFrame for drawing at the browser's repaint frequency.
+      const drawLoop = () => {
+        this.draw();
+        this.loop = requestAnimationFrame(drawLoop);
+      };
+      this.loop = requestAnimationFrame(drawLoop);
     }
   }
 
@@ -58,7 +60,7 @@ export default class Canvas {
    * Stop syncing of canvas.
    */
   stopSync() {
-    if (typeof this.loop !== "undefined") clearInterval(this.loop);
+    if (typeof this.loop !== "undefined") cancelAnimationFrame(this.loop);
   }
 
   /**
