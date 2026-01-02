@@ -78,17 +78,16 @@ export class Weapon {
   deactivate(): void {
     if (this.active === false) return;
     this.active = false;
-    const self = this;
     if (this.tank.rapidfire) {
       this.tank.player.game.timeouts.push(
-        setTimeout(function () {
-          self.activate();
+        setTimeout(() => {
+          this.activate();
         }, 500),
       );
     } else {
       this.tank.player.game.timeouts.push(
-        setTimeout(function () {
-          self.delete();
+        setTimeout(() => {
+          this.delete();
         }, 1800),
       );
     }
@@ -135,9 +134,8 @@ export class Gun extends Weapon {
   newBullet(): Bullet {
     const bullet = super.newBullet();
     // bullet explosion leads to weapon reactivation
-    const self = this;
-    bullet.explode = function () {
-      if (!self.tank.rapidfire) self.activate();
+    bullet.explode = () => {
+      if (!this.tank.rapidfire) this.activate();
     };
     return bullet;
   }
@@ -185,19 +183,18 @@ export class MG extends Weapon {
 
   shoot(): void {
     if (!this.active) return;
-    const self = this;
 
     if (this.nshots === 20) {
       this.tank.player.game.timeouts.push(
-        setTimeout(function () {
-          self.deactivate();
+        setTimeout(() => {
+          this.deactivate();
         }, 3000),
       );
     }
 
     if (this.tank.isBot() && this.nshots > 15) {
-      setTimeout(function () {
-        self.shoot();
+      setTimeout(() => {
+        this.shoot();
       }, Settings.GameFrequency);
     }
 
@@ -317,13 +314,12 @@ export class Grenade extends Weapon {
     e.timeout = 10000;
     e.exploded = false;
 
-    const self = this;
-    e.explode = function () {
+    e.explode = () => {
       if (!e.exploded) {
         e.exploded = true;
         playSound(SOUNDS.grenade);
-        for (let i = 0; i < self.nshrapnels; i++) {
-          const shrapnel = new Bullet(self);
+        for (let i = 0; i < this.nshrapnels; i++) {
+          const shrapnel = new Bullet(this);
           shrapnel.x = e.x;
           shrapnel.y = e.y;
           shrapnel.radius = 2;
@@ -333,10 +329,10 @@ export class Grenade extends Weapon {
           shrapnel.timeout = (360 * 280) / Settings.BulletSpeed;
           shrapnel.extrahitbox = -3;
           shrapnel.checkCollision = function (x: number, y: number) {};
-          self.tank.player.game.addObject(shrapnel);
+          this.tank.player.game.addObject(shrapnel);
         }
-        self.bullet = undefined;
-        self.deactivate();
+        this.bullet = undefined;
+        this.deactivate();
       }
     };
 
@@ -387,13 +383,12 @@ export class Mine extends Weapon {
     e.color = "#000";
     e.timeout = 120000 + 20 * Math.random();
 
-    const self = this;
-    e.explode = function () {
+    e.explode = () => {
       if (!e.exploded) {
         e.exploded = true;
         playSound(SOUNDS.grenade);
-        for (let i = 0; i < self.nshrapnels; i++) {
-          const shrapnel = new Bullet(self);
+        for (let i = 0; i < this.nshrapnels; i++) {
+          const shrapnel = new Bullet(this);
           shrapnel.x = e.x;
           shrapnel.y = e.y;
           shrapnel.radius = 2;
@@ -403,9 +398,9 @@ export class Mine extends Weapon {
           shrapnel.timeout = 600;
           shrapnel.extrahitbox = -3;
           // shrapnel.checkCollision = function(x, y){}
-          self.tank.player.game.addObject(shrapnel);
+          this.tank.player.game.addObject(shrapnel);
         }
-        self.bullet = undefined;
+        this.bullet = undefined;
       }
     };
 
@@ -617,10 +612,9 @@ export class WallBuilder extends Weapon {
       playSound(SOUNDS.gun);
       this.active = false;
 
-      const self = this;
       this.tank.player.game.timeouts.push(
-        setTimeout(function () {
-          if (self.tank.weapon === self) self.tank.defaultWeapon();
+        setTimeout(() => {
+          if (this.tank.weapon === this) this.tank.defaultWeapon();
         }, 400),
       );
     }

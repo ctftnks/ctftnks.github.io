@@ -98,12 +98,11 @@ export default class Game {
    * Starts the game loop.
    */
   start() {
-    const self = this;
     this.mode.init();
     for (let i = 0; i < this.players.length; i++) this.players[i].spawn();
 
-    this.loop = setInterval(function () {
-      self.step();
+    this.loop = setInterval(() => {
+      this.step();
     }, Settings.GameFrequency);
     playSound(SOUNDS.gamestart);
     if (Settings.bgmusic) {

@@ -45,7 +45,6 @@ export default class Bot extends Player {
     if (this.lastChecked < 72000 / this.tank.speed) return;
     this.lastChecked = 0;
 
-    const self = this;
     const game = this.game!;
     const tank = this.tank;
 
@@ -66,20 +65,20 @@ export default class Bot extends Player {
     if (powerupPath !== -1)
       opts.push({
         f: () => {
-          self.follow(powerupPath);
+          this.follow(powerupPath);
         },
         weight: 100,
       });
 
     const enemyPath = tile.xypathToObj((obj: any) => {
-      return obj.type === "Tank" && obj.player.team !== self.team;
+      return obj.type === "Tank" && obj.player.team !== this.team;
     });
 
     if (enemyPath !== -1) {
       const enemy = enemyPath[enemyPath.length - 1];
       opts.push({
         f: () => {
-          self.follow(enemyPath);
+          this.follow(enemyPath);
         },
         weight: 5,
       });
@@ -90,7 +89,7 @@ export default class Bot extends Player {
         if (aimbot.should_shoot)
           opts.push({
             f: () => {
-              self.shoot(aimbot.target);
+              this.shoot(aimbot.target);
             },
             weight: aimbot.weight,
           });
@@ -99,13 +98,13 @@ export default class Bot extends Player {
 
     if (game.mode.name === "CaptureTheFlag") {
       const carriesFlag = tank.carriedFlag !== -1;
-      const flagInBase = self.base!.hasFlag();
+      const flagInBase = this.base!.hasFlag();
       const ctfPath = tile.xypathToObj((obj: any) => {
-        if (!carriesFlag && obj.type === "Flag" && obj.team !== self.team) return true;
-        if (carriesFlag && obj.type === "Base" && obj.hasFlag() && obj.team === self.team) return true;
+        if (!carriesFlag && obj.type === "Flag" && obj.team !== this.team) return true;
+        if (carriesFlag && obj.type === "Base" && obj.hasFlag() && obj.team === this.team) return true;
         if (!flagInBase) {
-          if (obj.type === "Flag" && obj.team === self.team) return true;
-          if (obj.type === "Tank" && obj.carriedFlag !== -1 && obj.carriedFlag.team === self.team) return true;
+          if (obj.type === "Flag" && obj.team === this.team) return true;
+          if (obj.type === "Tank" && obj.carriedFlag !== -1 && obj.carriedFlag.team === this.team) return true;
         }
         return false;
       });
@@ -114,21 +113,21 @@ export default class Bot extends Player {
         const weight = invincible && carriesFlag && flagInBase ? 600 : carriesFlag || !flagInBase ? 300 : 50;
         opts.push({
           f: () => {
-            self.follow(ctfPath);
+            this.follow(ctfPath);
           },
           weight: weight,
         });
       }
     } else if (game.mode.name === "KingOfTheHill") {
       const basePath = tile.xypathToObj((obj: any) => {
-        if (obj.type === "Hill" && obj.team !== self.team) return true;
+        if (obj.type === "Hill" && obj.team !== this.team) return true;
         return false;
       });
       if (basePath !== -1) {
         const weight = basePath.length < 6 ? 300 : 50;
         opts.push({
           f: () => {
-            self.follow(basePath);
+            this.follow(basePath);
           },
           weight: weight,
         });
@@ -311,11 +310,10 @@ export default class Bot extends Player {
     );
     this.fleeing.from = [nextTile, tile];
 
-    const self = this;
     const weapon = this.tank.weapon;
     const flee_until = this.game!.t + weapon.bot.fleeing_duration;
     this.fleeing.condition = () => {
-      return self.game!.t < flee_until && (!weapon.bot.flee_if_active || weapon.active);
+      return this.game!.t < flee_until && (!weapon.bot.flee_if_active || weapon.active);
     };
   }
 }

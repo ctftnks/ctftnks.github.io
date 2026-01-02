@@ -72,10 +72,9 @@ export default class Player {
     this.game!.addObject(this.tank);
     this.game!.n_playersAlive += 1;
 
-    const self = this;
     this.game!.timeouts.push(
-      setTimeout(function () {
-        generateCloud(self.game!, self.tank.x, self.tank.y, 4, 20, 2);
+      setTimeout(() => {
+        generateCloud(this.game!, this.tank.x, this.tank.y, 4, 20, 2);
       }, 10),
     );
     // spawn shield
@@ -93,10 +92,9 @@ export default class Player {
     this.game!.canvas.shake();
     this.spree = 0;
     this.stats.deaths += 1;
-    const self = this;
     this.game!.timeouts.push(
-      setTimeout(function () {
-        self.spawn();
+      setTimeout(() => {
+        this.spawn();
       }, Settings.RespawnTime * 1000),
     );
   }

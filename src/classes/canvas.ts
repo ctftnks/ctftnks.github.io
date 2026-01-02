@@ -85,18 +85,17 @@ export default class Canvas {
     const amp = 14;
     const speed = 25;
     const duration = 660;
-    const self = this;
     let i = 0;
 
     const intvl = setInterval(() => {
       const randx = amp * (Math.random() - 0.5) * Math.exp((i * 250) / duration);
       const randy = amp * (Math.random() - 0.5) * Math.exp((i * 250) / duration);
       i -= 1;
-      self.canvas.style.marginLeft = randx + "px";
-      self.canvas.style.marginTop = randy + "px";
+      this.canvas.style.marginLeft = randx + "px";
+      this.canvas.style.marginTop = randy + "px";
       setTimeout(() => {
-        self.canvas.style.marginLeft = 0 + "px";
-        self.canvas.style.marginTop = 0 + "px";
+        this.canvas.style.marginLeft = 0 + "px";
+        this.canvas.style.marginTop = 0 + "px";
       }, speed);
     }, 2 * speed);
 
