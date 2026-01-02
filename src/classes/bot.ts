@@ -30,7 +30,7 @@ export default class Bot extends Player {
    */
   step(): void {
     this.autopilot();
-    this.perform_movements();
+    this.performMovements();
   }
 
   /**
@@ -79,10 +79,10 @@ export default class Bot extends Player {
         weight: 5,
       });
 
-      if (weapon.active) {
+      if (weapon.isActive) {
         const aimbot = this.aimbot(enemy, enemyPath);
         if (enemy.carriedFlag !== -1) aimbot.weight *= 2;
-        if (aimbot.should_shoot)
+        if (aimbot.shouldShoot)
           opts.push({
             f: () => {
               this.shoot(aimbot.target);
@@ -163,7 +163,7 @@ export default class Bot extends Player {
   /**
    * Performs movements towards the goto target.
    */
-  perform_movements(): void {
+  performMovements(): void {
     if (this.goto === -1) return;
     const tank = this.tank;
     const distx = this.goto.x - tank.x;
@@ -214,10 +214,10 @@ export default class Bot extends Player {
    * Evaluates whether it is a good idea to shoot.
    * @param {Tank} enemy - The enemy tank.
    * @param {Array|number} path - Path to the enemy.
-   * @returns {Object} Result with should_shoot, target, and weight.
+   * @returns {Object} Result with shouldShoot, target, and weight.
    */
   aimbot(enemy: any, path: any = -1): any {
-    const result = { should_shoot: false, target: enemy, weight: 500 };
+    const result = { shouldShoot: false, target: enemy, weight: 500 };
     const weapon = this.tank.weapon;
 
     if (path === -1) {
@@ -231,24 +231,24 @@ export default class Bot extends Player {
     if (path === -1) return result;
 
     const r = Math.random() > 0.6 ? 2 : 1;
-    if (path.length <= this.tank.weapon.bot.shooting_range + r && !enemy.invincible()) result.should_shoot = true;
+    if (path.length <= this.tank.weapon.bot.shootingRange + r && !enemy.invincible()) result.shouldShoot = true;
 
     if (weapon.name === "Laser") {
       for (let i = 0; i < weapon.trajectory.targets.length; i++) {
         if (weapon.trajectory.targets[i].player.team !== this.team && !enemy.invincible()) {
-          result.should_shoot = true;
+          result.shouldShoot = true;
         } else {
-          result.should_shoot = false;
+          result.shouldShoot = false;
         }
       }
     } else if (weapon.name === "Guided" || weapon.name === "WreckingBall") {
-      result.should_shoot = false;
+      result.shouldShoot = false;
       result.weight = 200;
       const tile = store.game!.map.getTileByPos(this.tank.x, this.tank.y);
       if (tile !== -1) {
         for (let i = 0; i < 4; i++) {
           if (tile.walls[i] ^ (weapon.name === "Guided")) {
-            result.should_shoot = true;
+            result.shouldShoot = true;
             const angle = (-Math.PI / 2) * i;
             result.target = { x: this.tank.x + Math.sin(angle), y: this.tank.y - Math.cos(angle) };
           }
@@ -257,7 +257,7 @@ export default class Bot extends Player {
     } else if (weapon.name === "Slingshot") {
       result.weight = 1100;
       const dist = Math.hypot(this.tank.x - enemy.x, this.tank.y - enemy.y);
-      result.should_shoot = dist < 400 && !enemy.invincible();
+      result.shouldShoot = dist < 400 && !enemy.invincible();
     }
     return result;
   }
@@ -269,7 +269,7 @@ export default class Bot extends Player {
    */
   getFleePath(duration: number = 2): any {
     if (this.fleeing.from === -1 || this.fleeing.condition === -1 || !this.fleeing.condition()) return -1;
-    if (!this.tank.weapon.bot.flee_if_active && this.tank.weapon.active) return -1;
+    if (!this.tank.weapon.bot.fleeIfActive && this.tank.weapon.isActive) return -1;
 
     const tile = store.game!.map.getTileByPos(this.tank.x, this.tank.y);
     if (tile === -1) return -1;
@@ -294,7 +294,7 @@ export default class Bot extends Player {
    * Initiates fleeing behavior.
    */
   flee(): void {
-    if (this.tank.weapon.bot.fleeing_duration <= 0) return;
+    if (this.tank.weapon.bot.fleeingDuration <= 0) return;
 
     if (!store.game || !store.game.map) return;
     const tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
@@ -307,9 +307,9 @@ export default class Bot extends Player {
     this.fleeing.from = [nextTile, tile];
 
     const weapon = this.tank.weapon;
-    const flee_until = this.game!.t + weapon.bot.fleeing_duration;
+    const fleeUntil = this.game!.t + weapon.bot.fleeingDuration;
     this.fleeing.condition = () => {
-      return this.game!.t < flee_until && (!weapon.bot.flee_if_active || weapon.active);
+      return this.game!.t < fleeUntil && (!weapon.bot.fleeIfActive || weapon.isActive);
     };
   }
 }

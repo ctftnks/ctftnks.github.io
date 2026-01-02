@@ -65,7 +65,7 @@ export default class Player {
     this.tank.x = spos.x;
     this.tank.y = spos.y;
     this.game!.addObject(this.tank);
-    this.game!.n_playersAlive += 1;
+    this.game!.nPlayersAlive += 1;
 
     this.game!.timeouts.push(
       setTimeout(() => {
@@ -81,8 +81,8 @@ export default class Player {
    * Check if game should end.
    */
   kill(): void {
-    this.game!.n_playersAlive -= 1;
-    this.tank.weapon.active = false;
+    this.game!.nPlayersAlive -= 1;
+    this.tank.weapon.isActive = false;
     this.game!.nkills++;
     this.game!.canvas.shake();
     this.spree = 0;

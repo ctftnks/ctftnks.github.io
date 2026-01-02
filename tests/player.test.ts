@@ -10,7 +10,7 @@ describe("Player Class", () => {
         spawnPoint: () => ({ x: 100, y: 100 }),
       },
       addObject: vi.fn(),
-      n_playersAlive: 0,
+      nPlayersAlive: 0,
       timeouts: [],
       t: 0,
     };

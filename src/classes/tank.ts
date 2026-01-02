@@ -141,12 +141,12 @@ export default class Tank extends GameObject {
     this.x -= (direction * speed * Math.sin(-this.angle) * Settings.GameFrequency) / 1000;
     this.y -= (direction * speed * Math.cos(-this.angle) * Settings.GameFrequency) / 1000;
 
-    const colliding_corner = this.checkWallCollision();
-    if (colliding_corner !== -1) {
+    const collidingCorner = this.checkWallCollision();
+    if (collidingCorner !== -1) {
       this.x = oldx;
       this.y = oldy;
       const oldangle = this.angle;
-      this.angle -= 0.1 * ((colliding_corner % 2) - 0.5) * direction;
+      this.angle -= 0.1 * ((collidingCorner % 2) - 0.5) * direction;
       if (this.checkWallCollision() !== -1) this.angle = oldangle;
     }
   }
@@ -159,12 +159,12 @@ export default class Tank extends GameObject {
     const oldangle = this.angle;
     this.angle += (((direction * Settings.TankTurnSpeed * Settings.GameFrequency) / 1000) * Settings.TankSpeed) / 180;
 
-    const colliding_corner = this.checkWallCollision();
-    if (colliding_corner !== -1) {
+    const collidingCorner = this.checkWallCollision();
+    if (collidingCorner !== -1) {
       this.angle = oldangle;
       const oldx = this.x;
       const oldy = this.y;
-      const sign = (colliding_corner - 2) * direction * 0.1;
+      const sign = (collidingCorner - 2) * direction * 0.1;
       this.x += sign * Math.cos(-this.angle);
       this.y += -sign * Math.sin(-this.angle);
       if (this.checkWallCollision() !== -1) {
@@ -184,7 +184,7 @@ export default class Tank extends GameObject {
   shoot() {
     if (this.spawnshield()) return;
     this.weapon.shoot();
-    if (this.weapon.active && this.weapon.name !== "MG") this.player.stats.shots += 1;
+    if (this.weapon.isActive && this.weapon.name !== "MG") this.player.stats.shots += 1;
   }
 
   /**

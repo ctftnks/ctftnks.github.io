@@ -32,7 +32,7 @@ export default class Game {
   /** Interval ID for the game loop. */
   loop: any;
   /** Number of players alive. */
-  n_playersAlive: number = 0;
+  nPlayersAlive: number = 0;
   /** Game time counter. */
   t: number = 0;
   /** List of interval IDs to clear on stop. */
@@ -68,7 +68,7 @@ export default class Game {
     this.objs = [];
     this.paused = false;
     this.loop = undefined;
-    this.n_playersAlive = 0;
+    this.nPlayersAlive = 0;
     this.t = 0;
     this.intvls = [];
     this.timeouts = [];
