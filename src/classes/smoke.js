@@ -1,4 +1,5 @@
 import GameObject from "./object.js";
+import { Settings } from "../state.js";
 
 // a class for fancy smoke circles on the map
 /**

@@ -1,4 +1,5 @@
 import GameObject from "./object.js";
+import { Settings } from "../state.js";
 
 /**
  * Represents a trajectory for ray-casting or lasers.
