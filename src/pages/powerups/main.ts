@@ -1,3 +1,4 @@
+import { PowerUps } from "../../classes/powerup";
 import template from "./main.html?raw";
 import "./style.css";
 
@@ -7,7 +8,6 @@ export function init(container: HTMLElement): void {
 }
 
 export function updatePowerupsMenu(): void {
-  const PowerUps: any[] = (window as any).PowerUps;
   const sel = 'selected="selected"';
   let content = "";
 
@@ -29,4 +29,4 @@ export function updatePowerupsMenu(): void {
   if (optionsElem) optionsElem.innerHTML = content;
 }
 
-(window as any).updatePowerupsMenu = updatePowerupsMenu;
+(window as any).PowerUps = PowerUps;

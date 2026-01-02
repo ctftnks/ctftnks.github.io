@@ -1,4 +1,4 @@
-import { store } from "../state";
+import { store } from "../store";
 import GameObject from "./gameobject";
 import Canvas from "./canvas";
 

@@ -1,9 +1,9 @@
 import Tank from "./tank";
-import { Key, keymaps } from "../keybindings";
+import { Key } from "../key";
 import { generateCloud } from "./smoke";
-import { store, Settings } from "../state";
-import Game from "./game";
-import { Base } from "./ctf";
+import { store, Settings } from "../store";
+import type Game from "./game";
+import type { Base } from "./ctf";
 
 /**
  * Represents a Player in the game.
@@ -32,7 +32,7 @@ export default class Player {
     this.name = "Player " + (this.id + 1);
     this.color = store.playercolors[this.id % store.playercolors.length];
     this.team = this.id;
-    this.keys = keymaps[this.id] || keymaps[0].slice();
+    this.keys = store.keymaps[this.id] || store.keymaps[0].slice();
     this.tank = new Tank(this);
   }
 
@@ -111,5 +111,12 @@ export default class Player {
     this.stats.kills = 0;
     this.stats.miles = 0;
     this.stats.shots = 0;
+  }
+
+  /**
+   * Is the player a bot or a user?
+   */
+  isBot(): boolean {
+    return false;
   }
 }

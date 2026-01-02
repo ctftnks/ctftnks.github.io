@@ -1,7 +1,7 @@
 import GameObject from "./gameobject";
-import { Settings, store } from "../state";
+import { Settings, store } from "../store";
 import { playSound, playMusic, stopMusic, fogOfWar } from "../effects";
-import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot, WallBuilder } from "./weapons";
+import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot } from "./weapons";
 import { IMAGES, SOUNDS } from "../assets";
 import Tank from "./tank";
 
@@ -156,21 +156,6 @@ export class SlingshotBonus extends PowerUp {
 }
 
 /**
- * Wall Builder weapon powerup.
- * @extends PowerUp
- */
-export class WallBuilderBonus extends PowerUp {
-  constructor() {
-    super();
-    this.image.src = IMAGES.wallBuilder;
-  }
-  apply(tank: Tank) {
-    playSound(SOUNDS.reload);
-    tank.weapon = new WallBuilder(tank);
-  }
-}
-
-/**
  * Speed Boost powerup.
  * @extends PowerUp
  */
@@ -180,12 +165,12 @@ export class SpeedBonus extends PowerUp {
     this.attractsBots = true;
     this.image.src = IMAGES.speed;
   }
+
   apply(tank: Tank) {
     tank.speed *= 1.1;
-    const self = tank;
     tank.player.game.timeouts.push(
-      setTimeout(function () {
-        self.speed /= 1.1;
+      setTimeout(() => {
+        this.speed /= 1.1;
       }, 8000),
     );
   }
@@ -211,10 +196,9 @@ export class InvincibleBonus extends PowerUp {
     if (!Settings.muted) playMusic(SOUNDS.invincible);
     tank.speed *= 1.14;
     tank.timers.invincible = tank.player.game.t + 10000;
-    const self = tank;
     tank.player.game.timeouts.push(
-      setTimeout(function () {
-        self.speed /= 1.14;
+      setTimeout(() => {
+        tank.speed /= 1.14;
         if (Settings.bgmusic) {
           // playMusic(SOUNDS.bgmusic); // Assuming we might want to add bgmusic later.
         } else if (!tank.invincible()) stopMusic();
@@ -240,11 +224,9 @@ export class TerminatorBonus extends PowerUp {
     this.applied = true;
     tank.rapidfire = true;
     playSound(SOUNDS.terminator);
-    const self = tank;
-    // self.weapon.image = this.image;
     tank.player.game.timeouts.push(
-      setTimeout(function () {
-        self.rapidfire = false;
+      setTimeout(() => {
+        tank.rapidfire = false;
       }, 120000),
     );
   }

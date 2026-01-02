@@ -1,3 +1,7 @@
+import { newGame } from "../../classes/game";
+import type Player from "../../classes/player";
+import { Settings, store } from "../../store";
+import { closePage } from "../pages";
 import template from "./main.html?raw";
 import "./style.css";
 
@@ -5,16 +9,12 @@ export function init(container: HTMLElement): void {
   container.innerHTML = template;
   updateLeaderboard();
 
-  const settings: any = (window as any).Settings;
-  const players: any = (window as any).players;
-  const gameID: number = (window as any).GameID;
-
-  let leaderTime = settings.EndScreenTime;
+  let leaderTime = Settings.EndScreenTime;
   const h2Elem = document.getElementById("leaderboardh2");
   const counterElem = document.getElementById("leaderboardCounter");
   const shadeElem = document.getElementById("leaderboardshade") as HTMLElement;
 
-  if (h2Elem) h2Elem.innerHTML = "Leaderboard:&nbsp;&nbsp;Game #" + gameID;
+  if (h2Elem) h2Elem.innerHTML = "Leaderboard:&nbsp;&nbsp;Game #" + store.GameID;
   if (counterElem) counterElem.innerHTML = leaderTime + "s";
 
   const leaderIntvl = setInterval(function () {
@@ -24,14 +24,14 @@ export function init(container: HTMLElement): void {
 
   const leaderTimeout = setTimeout(function () {
     clearInterval(leaderIntvl);
-    (window as any).closePage(shadeElem.parentNode);
-    (window as any).newGame();
-  }, settings.EndScreenTime * 1000);
+    closePage(shadeElem.parentNode);
+    newGame();
+  }, Settings.EndScreenTime * 1000);
 
   if (shadeElem) {
     shadeElem.onclick = function () {
-      (window as any).closePage(this);
-      (window as any).newGame();
+      closePage(this);
+      newGame();
       clearInterval(leaderIntvl);
       clearTimeout(leaderTimeout);
     };
@@ -39,9 +39,7 @@ export function init(container: HTMLElement): void {
 }
 
 export function updateLeaderboard(): void {
-  const players: any = (window as any).players;
-
-  players.sort(function (a: any, b: any) {
+  store.players.sort(function (a: Player, b: Player) {
     return b.score - a.score;
   });
 
@@ -74,5 +72,3 @@ export function updateLeaderboard(): void {
   content += "</table>";
   lb.innerHTML = content;
 }
-
-(window as any).updateLeaderboard = updateLeaderboard;

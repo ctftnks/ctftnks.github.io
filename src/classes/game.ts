@@ -1,15 +1,17 @@
 import GameMap from "./gamemap";
 import MapGenerator from "./mapGenerator";
-import { Deathmatch, Gamemode } from "./gamemode";
 import { getRandomPowerUp } from "./powerup";
-import { Key } from "../keybindings";
-import { playSound, playMusic, stopMusic, clearEffects } from "../effects";
-import { store, Settings } from "../state";
+import { Key } from "../key";
+import { playSound, stopMusic, clearEffects } from "../effects";
+import { store, Settings } from "../store";
 import { SOUNDS } from "../assets";
 import Canvas from "./canvas";
 import Player from "./player";
 import GameObject from "./gameobject";
 import { PowerUp } from "./powerup";
+import { Gamemode, Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill } from "./gamemode";
+import { openPage } from "../pages/pages";
+import { updateScores } from "../ui";
 
 /**
  * Manages the game state, loop, and objects.
@@ -108,7 +110,7 @@ export default class Game {
     if (Settings.bgmusic) {
       // playMusic(SOUNDS.bgmusic);
     }
-    if (window.updateScores) window.updateScores();
+    updateScores();
   }
 
   /**
@@ -130,7 +132,7 @@ export default class Game {
       // do gamemode calculations
       this.mode.step();
       // add random PowerUp
-      if (this.t % (1000 * Settings.PowerUpRate) === 0 && Settings.GameMode !== "MapEditor") {
+      if (this.t % (1000 * Settings.PowerUpRate) === 0) {
         const p: PowerUp = getRandomPowerUp();
         const pos = this.map.spawnPoint();
         p.x = pos.x;
@@ -146,7 +148,7 @@ export default class Game {
         );
       }
       if (Key.isDown("Escape")) {
-        if (window.openPage) window.openPage("menu");
+        openPage("menu");
         this.pause();
       }
       if (this.t % 1000 === Settings.GameFrequency) {
@@ -187,9 +189,7 @@ export default class Game {
    */
   end() {
     this.paused = true;
-    if (window.openPage) {
-      window.openPage("leaderboard");
-    }
+    openPage("leaderboard");
     this.stop();
   }
 
@@ -203,4 +203,36 @@ export default class Game {
       this.players[i].tank.timers.spawnshield = -1;
     }
   }
+}
+
+// start a new round
+export function newGame(map: GameMap | null = null) {
+  if (store.game) {
+    store.game.stop();
+  }
+  store.game = new Game(store.canvas, map);
+
+  if (Settings.GameMode === "DM") {
+    store.game.mode = new Deathmatch(store.game);
+  }
+  if (Settings.GameMode === "TDM") {
+    store.game.mode = new TeamDeathmatch(store.game);
+  }
+  if (Settings.GameMode === "CTF") {
+    store.game.mode = new CaptureTheFlag(store.game);
+  }
+  if (Settings.GameMode === "KOTH") {
+    store.game.mode = new KingOfTheHill(store.game);
+  }
+  for (let i = 0; i < store.players.length; i++) {
+    store.game.addPlayer(store.players[i]);
+  }
+  store.game.start();
+  store.canvas.sync();
+  if (Settings.ResetStatsEachGame) {
+    for (let i = 0; i < store.game.players.length; i++) {
+      store.game.players[i].resetStats();
+    }
+  }
+  return store.game;
 }

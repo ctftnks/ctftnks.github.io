@@ -1,7 +1,7 @@
 import GameObject from "./gameobject";
 import { Smoke, generateCloud } from "./smoke";
 import { playSound } from "../effects";
-import { Settings } from "../state";
+import { Settings } from "../store";
 import { SOUNDS } from "../assets";
 
 /**

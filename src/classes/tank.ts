@@ -2,13 +2,13 @@ import GameObject from "./gameobject";
 import { Gun, Weapon } from "./weapons";
 import { generateCloud } from "./smoke";
 import { playSound } from "../effects";
-import { Settings } from "../state";
+import { Settings } from "../store";
 import { SOUNDS } from "../assets";
-import Player from "./player";
-import GameMap, { Tile } from "./gamemap";
+import type Player from "./player";
+import type GameMap from "./gamemap";
+import type { Tile } from "./gamemap";
 import { PowerUp } from "./powerup";
 import Bullet from "./bullet";
-import type Bot from "./bot";
 import type { Flag } from "./ctf";
 
 /**
@@ -246,7 +246,7 @@ export default class Tank extends GameObject {
    * @returns {number} Index of colliding corner or -1.
    */
   checkWallCollision(): number {
-    if (this.player instanceof Bot) return -1;
+    if (this.player.isBot()) return -1;
     if (!this.map) return -1;
     const tile = this.map.getTileByPos(this.x, this.y);
     if (tile === -1) return -1;
@@ -339,14 +339,6 @@ export default class Tank extends GameObject {
   invincible(): boolean {
     const t = this.player.game.t;
     return this.timers.spawnshield > t || this.timers.invincible > t;
-  }
-
-  /**
-   * Is the player of the tank a bot?
-   * @returns {boolean} True if bot.
-   */
-  isBot(): boolean {
-    return this.player instanceof Bot;
   }
 
   /**

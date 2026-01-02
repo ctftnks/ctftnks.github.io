@@ -1,4 +1,4 @@
-import { store, Settings } from "./state";
+import { store, Settings } from "./store";
 
 // databinding for menus and options
 export function databinding(): void {
@@ -78,5 +78,3 @@ function dataminmax(val: number, elem: HTMLElement, bind: string): number {
   (Settings as any)[bind] = val;
   return val;
 }
-
-(window as any).databinding = databinding;

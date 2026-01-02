@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import GameMap, { Tile } from "../src/classes/gamemap";
-import { store } from "../src/state";
+import { store } from "../src/store";
 
 describe("Map Class", () => {
   let mockCanvas: any;

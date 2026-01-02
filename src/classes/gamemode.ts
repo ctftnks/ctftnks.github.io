@@ -2,12 +2,10 @@ import Player from "./player";
 import { Flag, Base, Hill } from "./ctf";
 import { playSound } from "../effects";
 import { adaptBotSpeed } from "./bot";
-import { keymaps } from "../keybindings";
-import { WallBuilder } from "./weapons";
-import { store } from "../state";
 import { SOUNDS } from "../assets";
 import Game from "./game";
 import { Tile } from "./gamemap";
+import { updateScores } from "../ui";
 
 /**
  * Base class for game modes.
@@ -73,7 +71,7 @@ export class Deathmatch extends Gamemode {
       player.score += Math.floor(player.spree / 5);
       playSound(SOUNDS.killingspree);
     }
-    if ((window as any).updateScores) (window as any).updateScores();
+    updateScores();
     adaptBotSpeed(player.team);
   }
 
@@ -116,7 +114,7 @@ export class TeamDeathmatch extends Gamemode {
       player.score += Math.floor(player.spree / 5);
       playSound(SOUNDS.killingspree);
     }
-    if ((window as any).updateScores) (window as any).updateScores();
+    updateScores();
     adaptBotSpeed(player.team);
   }
 
@@ -216,7 +214,7 @@ export class CaptureTheFlag extends Gamemode {
    */
   giveScore(player: Player, val: number = 1) {
     for (let i = 0; i < this.game.players.length; i++) if (this.game.players[i].team === player.team) this.game.players[i].score += val;
-    if ((window as any).updateScores) (window as any).updateScores();
+    updateScores();
     adaptBotSpeed(player.team);
   }
 
@@ -232,7 +230,7 @@ export class CaptureTheFlag extends Gamemode {
         // player1.score += Math.floor(player1.spree / 5)
         playSound(SOUNDS.killingspree);
       }
-      if ((window as any).updateScores) (window as any).updateScores();
+      updateScores();
     }
   }
 
@@ -301,67 +299,6 @@ export class CaptureTheFlag extends Gamemode {
 }
 
 /**
- * Map Editor game mode.
- * @extends Gamemode
- */
-export class MapEditor extends Gamemode {
-  clearmap: boolean;
-
-  /**
-   * Creates a new MapEditor mode.
-   * @param {Game} game - The game instance.
-   * @param {boolean} clearmap - Whether to clear the map on init.
-   */
-  constructor(game: Game, clearmap: boolean = true) {
-    super(game);
-    this.clearmap = clearmap;
-  }
-
-  /**
-   * Initializes the map editor.
-   */
-  init() {
-    const map = this.game.map;
-    if (!map) return;
-    if (this.clearmap) {
-      // Start with a grid with no walls
-      for (let i = 0; i < map.Nx * map.Ny; i++) map.tiles[i].walls = [false, false, false, false];
-      // border walls
-      for (let i = 0; i < map.Nx; i++) {
-        (map.getTileByIndex(i, 0) as Tile).walls[0] = true;
-        (map.getTileByIndex(i, map.Ny - 1) as Tile).walls[2] = true;
-      }
-      for (let i = 0; i < map.Ny; i++) {
-        (map.getTileByIndex(0, i) as Tile).walls[1] = true;
-        (map.getTileByIndex(map.Nx - 1, i) as Tile).walls[3] = true;
-      }
-    }
-    // add single player
-    this.game.players = [];
-    const p = new Player();
-    this.game.addPlayer(p);
-    p.keys = keymaps[0];
-    p.color = store.playercolors[0];
-  }
-
-  /**
-   * Logic step for map editor.
-   */
-  step() {
-    const t = this.game.players[0].tank;
-    if (t.weapon.name !== "WallBuilder") {
-      t.weapon = new WallBuilder(t);
-      t.defaultWeapon = function () {
-        t.weapon = new WallBuilder(t);
-      };
-      t.checkWallCollision = function () {
-        return -1;
-      };
-    }
-  }
-}
-
-/**
  * King of the Hill game mode.
  * @extends Gamemode
  */
@@ -384,7 +321,7 @@ export class KingOfTheHill extends Gamemode {
    */
   giveScore(player: Player, val: number = 1) {
     player.score += val;
-    if ((window as any).updateScores) (window as any).updateScores();
+    updateScores();
   }
 
   /**
@@ -399,7 +336,7 @@ export class KingOfTheHill extends Gamemode {
         // player1.score += Math.floor(player1.spree / 5)
         playSound(SOUNDS.killingspree);
       }
-      if ((window as any).updateScores) (window as any).updateScores();
+      updateScores();
     }
   }
 

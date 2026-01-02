@@ -18,8 +18,6 @@ This document lists issues, risks, and concrete improvement options found in the
 
 - **Inconsistent time units / naming**: `GameFrequency` and `FrameFrequency` are numeric constants but the units are unclear (ms vs frames). Prefer explicit names (`GAME_TICK_MS`, `RENDER_INTERVAL_MS`) and use seconds for `dt` inside update methods.
 
-- **Window-based callbacks / event bridging**: global functions like `window.openPage`, `window.updateScores`, and other `window.*` exports are used as callbacks across modules (e.g. [src/classes/game.js](src/classes/game.js#L95), [src/classes/gamemode.js](src/classes/gamemode.js#L63)). Replace with an event emitter or explicit API surface so modules can subscribe without depending on globals.
-
 - **Frequent innerHTML/string concatenation**: functions like `updateScores()` in [src/main.js](src/main.js#L36) rebuild HTML via string concatenation in a loop. This is inefficient and can cause layout thrashing. Use `DocumentFragment`, template cloning, or minimal DOM updates.
 
 - **Direct prompts and synchronous user input**: `newGame()` uses `prompt()` to get map dimensions. Synchronous prompts block rendering; prefer a modal UI or form.
@@ -39,10 +37,6 @@ This document lists issues, risks, and concrete improvement options found in the
 - **No clear units for timers**: `this.t` is incremented by `GameFrequency` and compared against `Settings.RoundTime * 60000`. Using mixed units makes reasoning error-prone; normalize on seconds (floating) for calculations and UI formatting.
 
 **Testing / Tooling / DX**
-
-- **Add linting & static checks**: add ESLint with a consistent config (Airbnb or recommended) to catch common mistakes and enforce style.
-
-- **Type safety**: consider migrating critical modules to TypeScript or add JSDoc types to improve IDE assistance and catch type bugs early.
 
 - **Broader unit tests**: current tests exist in `tests/` but expand coverage to include deterministic game-tick logic (physics, collisions, scoring). Decouple logic from DOM to make tests pure and fast.
 
@@ -70,19 +64,6 @@ This document lists issues, risks, and concrete improvement options found in the
    - Evaluate `map` spatial indexing to avoid per-tick full reclassification.
 6. Tooling & tests
    - Add ESLint, stricter Prettier rules, and expand unit tests for game logic.
-
-**Files / lines with concrete examples**
-
-- `setInterval` usages:
-  - [src/classes/game.js](src/classes/game.js#L88)
-  - [src/classes/canvas.js](src/classes/canvas.js#L51)
-  - [src/classes/canvas.js](src/classes/canvas.js#L95)
-  - [src/effects.js](src/effects.js#L56)
-  - [pages/leaderboard/main.js](pages/leaderboard/main.js#L16)
-
-- Global exposure / window bridge: [src/main.js](src/main.js#L14)
-
-- Direct DOM access examples: many `document.getElementById` calls across `pages/*` and `src/*` (e.g. [src/classes/game.js](src/classes/game.js#L143), [src/main.js](src/main.js#L36)).
 
 **Quick wins I can implement for you**
 

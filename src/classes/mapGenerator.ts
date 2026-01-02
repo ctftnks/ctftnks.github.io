@@ -1,5 +1,6 @@
 import GameMap, { Tile } from "./gamemap";
-import { store, Settings } from "../state";
+import { store } from "../store";
+import { newGame } from "./game";
 
 // Static class for some map generation methods
 
@@ -243,7 +244,7 @@ export default class MapGenerator {
         // map.dy = newmap.dy;
         // map.resize();
         // prefetchedMap = map;
-        if (window.newGame) window.newGame(map);
+        newGame(map);
       }
     };
   }

@@ -1,4 +1,4 @@
-import { store } from "../state";
+import { store } from "../store";
 
 /**
  * Manages the game canvas and rendering loop.
@@ -8,7 +8,6 @@ export default class Canvas {
   context: CanvasRenderingContext2D;
   height: number;
   width: number;
-  game: any;
   loop: number | undefined;
   scale: number = 1;
 
@@ -23,7 +22,6 @@ export default class Canvas {
     this.height = this.canvas.clientHeight;
     this.canvas.width = this.canvas.clientWidth;
     this.width = this.canvas.clientWidth;
-    this.game = undefined;
     this.loop = undefined;
     this.scale = 1;
   }
@@ -33,8 +31,8 @@ export default class Canvas {
    */
   draw(): void {
     this.context.clearRect(0, 0, this.canvas.width / this.scale, this.canvas.height / this.scale);
-    this.game.map.draw(this.context);
-    for (let i = 0; i < this.game.objs.length; i++) this.game.objs[i].draw(this.context);
+    store.game.map.draw(this.context);
+    for (let i = 0; i < store.game.objs.length; i++) store.game.objs[i].draw(this.context);
   }
 
   /**
@@ -75,7 +73,7 @@ export default class Canvas {
     this.height = this.canvas.clientHeight;
     this.canvas.width = this.canvas.clientWidth;
     this.width = this.canvas.clientWidth;
-    if (typeof store.game !== "undefined") store.game.map.resize();
+    if (store.game?.map) store.game.map.resize();
   }
 
   /**
@@ -99,7 +97,7 @@ export default class Canvas {
       }, speed);
     }, 2 * speed);
 
-    this.game.timeouts.push(
+    store.game.timeouts.push(
       setTimeout(() => {
         clearInterval(intvl);
       }, duration),

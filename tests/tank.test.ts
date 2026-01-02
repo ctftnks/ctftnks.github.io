@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import Tank from "../src/classes/tank";
-import { Settings } from "../src/state";
+import { Settings } from "../src/store";
 
 describe("Tank Class", () => {
   let mockPlayer: any;
@@ -27,6 +27,7 @@ describe("Tank Class", () => {
       },
       stats: { miles: 0, shots: 0 },
       step: vi.fn(),
+      isBot: () => false,
     };
     Settings.TankSpeed = 200;
   });

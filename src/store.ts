@@ -1,3 +1,7 @@
+import type Canvas from "./classes/canvas";
+import type Game from "./classes/game";
+import type Player from "./classes/player";
+
 const DEFAULT_SETTINGS = {
   muted: true,
   bgmusic: false,
@@ -28,15 +32,33 @@ const DEFAULT_SETTINGS = {
 
 type Settings = typeof DEFAULT_SETTINGS;
 
+/**
+ * Data Structure for the global state of the website
+ */
 class GameStore {
-  game: any = undefined;
-  canvas: any = undefined;
-  players: any[] = [];
+  game: Game | undefined = undefined;
+  canvas: Canvas | undefined = undefined;
+  players: Player[] = [];
   nplayers: number = 0;
   editingKeymap: boolean = false;
   GameID: number = 0;
 
   settings: Settings;
+
+  /**
+   * Default keymaps using modern KeyboardEvent.code strings.
+   * order: up, left, down, right, fire
+   */
+  keymaps: string[][] = [
+    ["ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight", "Space"],
+    ["KeyW", "KeyA", "KeyS", "KeyD", "KeyQ"],
+    ["Numpad8", "Numpad4", "Numpad5", "Numpad6", "Numpad7"],
+    ["KeyF", "KeyC", "KeyV", "KeyB", "KeyX"],
+    ["KeyZ", "KeyG", "KeyH", "KeyJ", "KeyT"],
+    ["KeyK", "KeyM", "Comma", "Period", "KeyN"],
+    ["Digit4", "KeyE", "KeyR", "Digit5", "Digit3"],
+    ["Digit8", "KeyU", "KeyI", "Digit9", "Digit7"],
+  ];
 
   playercolors = [
     "#DA1918", // red

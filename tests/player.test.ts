@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import Player from "../src/classes/player";
-import { store } from "../src/state";
+import { store } from "../src/store";
 
 describe("Player Class", () => {
   beforeEach(() => {

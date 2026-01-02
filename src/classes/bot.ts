@@ -1,5 +1,5 @@
 import Player from "./player";
-import { store, Settings } from "../state";
+import { store, Settings } from "../store";
 import { Tile } from "./gamemap";
 import { PowerUp } from "./powerup";
 
@@ -23,6 +23,13 @@ export default class Bot extends Player {
     this.name = "Bot " + (NBots + 1);
     this.keys = []; // Empty keys for bot
     NBots++;
+  }
+
+  /**
+   * Is the player a bot or a user?
+   */
+  isBot(): boolean {
+    return true;
   }
 
   /**
@@ -135,7 +142,7 @@ export default class Bot extends Player {
       const weight = invincible ? 1 : 400;
       opts.push({
         f: () => {
-          self.follow(fleePath);
+          this.follow(fleePath);
         },
         weight: weight,
       });
@@ -200,7 +207,7 @@ export default class Bot extends Player {
     const disty = target.y - tank.y;
     tank.angle = Math.atan2(-distx, disty) + Math.PI;
 
-    if (typeof target !== "undefined" && typeof target["player"] !== "undefined" && target.player instanceof Bot) {
+    if (typeof target !== "undefined" && typeof target["player"] !== "undefined" && target.player.isBot()) {
       setTimeout(() => {
         tank.shoot();
       }, 180 * Math.random());
@@ -264,10 +271,9 @@ export default class Bot extends Player {
 
   /**
    * Calculates a path to flee from danger.
-   * @param {number} duration - Duration of fleeing (not directly used in this logic but signature kept).
    * @returns {Array|number} The flee path or -1 if no path found.
    */
-  getFleePath(duration: number = 2): any {
+  getFleePath(): any {
     if (this.fleeing.from === -1 || this.fleeing.condition === -1 || !this.fleeing.condition()) return -1;
     if (!this.tank.weapon.bot.fleeIfActive && this.tank.weapon.isActive) return -1;
 
@@ -333,7 +339,7 @@ export function adaptBotSpeed(team: any, val: number = 0.1): number | undefined 
       teams.push(store.game!.players[i].team);
       botcounts.push(0);
     }
-    botcounts[id] += store.game!.players[i] instanceof Bot ? 1 : 0;
+    botcounts[id] += store.game!.players[i].isBot() ? 1 : 0;
   }
 
   let avgbots = 0;

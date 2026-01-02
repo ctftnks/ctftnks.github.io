@@ -3,7 +3,7 @@ import Tank from "./tank";
 import Trajectory from "./trajectory";
 import { playSound, hexToRgbA } from "../effects";
 import { Smoke, generateCloud } from "./smoke";
-import { Settings } from "../state";
+import { Settings } from "../store";
 import { IMAGES, SOUNDS } from "../assets";
 
 /**
@@ -185,7 +185,7 @@ export class MG extends Weapon {
       );
     }
 
-    if (this.tank.isBot() && this.nshots > 15) {
+    if (this.tank.player.isBot() && this.nshots > 15) {
       setTimeout(() => {
         this.shoot();
       }, Settings.GameFrequency);
@@ -383,7 +383,6 @@ export class Mine extends Weapon {
           shrapnel.angle = 2 * Math.PI * Math.random();
           shrapnel.timeout = 600;
           shrapnel.extrahitbox = -3;
-          // shrapnel.checkCollision = function(x, y){}
           this.tank.player.game.addObject(shrapnel);
         }
         this.bullet = undefined;
@@ -565,42 +564,6 @@ export class WreckingBall extends Weapon {
  * Creates walls.
  * @extends Weapon
  */
-export class WallBuilder extends Weapon {
-  name: string = "WallBuilder";
-
-  /**
-   * Creates a new WallBuilder weapon.
-   * @param {Tank} tank - The tank.
-   */
-  constructor(tank: Tank) {
-    super(tank);
-    this.image.src = IMAGES.wallBuilder;
-  }
-
-  shoot(): void {
-    if (this.isActive) {
-      const tile = this.tank.map.getTileByPos(this.tank.x, this.tank.y);
-      let direction = this.tank.angle;
-
-      while (direction < 0) direction += 2 * Math.PI;
-      direction = Math.round(-direction / (Math.PI / 2) + 16) % 4;
-
-      if (tile.neighbors[direction] === -1) return;
-
-      if (tile.walls[direction]) tile.addWall(direction, true);
-      else tile.addWall(direction, false);
-
-      playSound(SOUNDS.gun);
-      this.isActive = false;
-
-      this.tank.player.game.timeouts.push(
-        setTimeout(() => {
-          if (this.tank.weapon === this) this.tank.defaultWeapon();
-        }, 400),
-      );
-    }
-  }
-}
 
 /**
  * Throws over walls.

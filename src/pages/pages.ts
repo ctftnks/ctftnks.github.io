@@ -1,5 +1,5 @@
 // create page div in container, load content into page
-import { databinding } from "../src/databinding";
+import { databinding } from "../databinding";
 
 let pageID = 0;
 
@@ -55,5 +55,6 @@ export function closePage(id: number | HTMLElement): void {
   }
 }
 
+// Put some objects into the global scope such that they can be called by inline JS (onclick=...)
 (window as any).openPage = openPage;
 (window as any).closePage = closePage;
