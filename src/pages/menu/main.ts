@@ -8,19 +8,30 @@ import { updatePlayersMenu } from "../../ui";
 export function init(container: HTMLElement): void {
   container.innerHTML = template;
   updatePlayersMenu();
-  if (typeof store.game !== "undefined") store.game.paused = true;
+  if (typeof store.game !== "undefined") {
+    store.game.paused = true;
+  }
 }
 
 function addPlayer(bot: boolean = false): void {
-  if (store.players.length >= store.keymaps.length) store.keymaps.push(store.keymaps[0].slice());
-  if (bot) store.players.push(new Bot());
-  else store.players.push(new Player());
+  if (store.players.length >= store.keymaps.length) {
+    store.keymaps.push(store.keymaps[0].slice());
+  }
+  if (bot) {
+    store.players.push(new Bot());
+  } else {
+    store.players.push(new Player());
+  }
   updatePlayersMenu();
 }
 
 function removePlayer(id: number): void {
   const newPlayers = [];
-  for (let i = 0; i < store.players.length; i++) if (store.players[i].id !== id) newPlayers.push(store.players[i]);
+  for (let i = 0; i < store.players.length; i++) {
+    if (store.players[i].id !== id) {
+      newPlayers.push(store.players[i]);
+    }
+  }
   store.players = newPlayers;
   updatePlayersMenu();
 }

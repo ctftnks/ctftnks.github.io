@@ -50,9 +50,13 @@ export class Smoke extends GameObject {
   step(): void {
     // is bullet timed out?
     this.timeout -= Settings.GameFrequency;
-    if (this.timeout < 0) this.delete();
+    if (this.timeout < 0) {
+      this.delete();
+    }
     this.radius -= (this.rspeed * Settings.GameFrequency) / 40;
-    if (this.radius < 0) this.radius = 0;
+    if (this.radius < 0) {
+      this.radius = 0;
+    }
   }
 }
 
@@ -79,7 +83,9 @@ export const generateCloud = function (
     const rx = x + radius * 2 * (Math.random() - 0.5);
     const ry = y + radius * 2 * (Math.random() - 0.5);
     const smoke = new Smoke(rx, ry, 2000, radius, rspeed);
-    if (color !== "") smoke.color = color;
+    if (color !== "") {
+      smoke.color = color;
+    }
     game.addObject(smoke);
   }
 };

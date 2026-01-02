@@ -2,7 +2,9 @@ import { store } from "./store";
 
 export function updateScores() {
   const scoreBoard = document.getElementById("scoreBoard");
-  if (!scoreBoard) return;
+  if (!scoreBoard) {
+    return;
+  }
   scoreBoard.innerHTML = "";
 
   store.players.sort((a, b) => {
@@ -15,7 +17,9 @@ export function updateScores() {
     entry += "<span class='name' style='color:" + store.players[i].color + ";''>";
     entry += store.players[i].name;
     entry += "</span><span class='score'>";
-    if (store.players[i].spree > 1) entry += " <span class='spree'>+" + store.players[i].spree + "</span>";
+    if (store.players[i].spree > 1) {
+      entry += " <span class='spree'>+" + store.players[i].spree + "</span>";
+    }
     entry += store.players[i].score;
     entry += "</span></div>";
     scoreBoard.innerHTML += entry;
@@ -24,7 +28,9 @@ export function updateScores() {
 
 export function updatePlayersMenu(): void {
   const pmen = document.getElementById("playersMenu");
-  if (!pmen) return;
+  if (!pmen) {
+    return;
+  }
   pmen.innerHTML = "";
   let entry = "";
   entry += "<div class='entry'>";
@@ -48,8 +54,11 @@ export function updatePlayersMenu(): void {
     entryRow += "<button class='name' onclick='editPlayerName(" + i + ")' style='color:" + store.players[i].color + ";'>";
     entryRow += store.players[i].name;
     entryRow += "</button>";
-    if (store.players[i].isBot()) entryRow += editableKeymap(-2);
-    else entryRow += editableKeymap(store.players[i].id);
+    if (store.players[i].isBot()) {
+      entryRow += editableKeymap(-2);
+    } else {
+      entryRow += editableKeymap(store.players[i].id);
+    }
     entryRow += "<button class='remove' onclick='removePlayer(" + id + ")'>&times;</button>";
     entryRow += "</div>";
     pmen.innerHTML += entryRow;
@@ -59,7 +68,9 @@ export function updatePlayersMenu(): void {
 
 export function editPlayerName(index: number): void {
   const name = prompt("Namen eingeben:");
-  if (name != null) store.players[index].name = name;
+  if (name != null) {
+    store.players[index].name = name;
+  }
   updatePlayersMenu();
 }
 
@@ -80,7 +91,9 @@ window.addEventListener(
       // Prevent default behavior while remapping keys
       event.preventDefault();
       // 'ControlLeft' or 'ControlRight' are usually forbidden in this game's logic
-      if (event.code.startsWith("Control")) return;
+      if (event.code.startsWith("Control")) {
+        return;
+      }
       doEditKeymap(event.code);
     }
   },
@@ -133,7 +146,9 @@ function editableKeymap(mapID: number): string {
  * @returns {string}
  */
 export function getKeyLabel(code: string): string {
-  if (!code) return "";
+  if (!code) {
+    return "";
+  }
 
   // Clean up common codes
   // KeyW -> W, ArrowUp -> Up, Digit1 -> 1, Numpad1 -> Num1
@@ -143,7 +158,9 @@ export function getKeyLabel(code: string): string {
     .replace(/^Digit/, "")
     .replace(/^Numpad/, "Num");
 
-  if (label === "Space") return "Space";
+  if (label === "Space") {
+    return "Space";
+  }
   return label.toUpperCase();
 }
 

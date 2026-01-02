@@ -23,6 +23,7 @@ export async function openPage(name: string): Promise<number> {
       if (module.init) {
         module.init(container);
       }
+
       databinding();
     } catch (e) {
       console.error(`Failed to load page module: ${name}`, e);

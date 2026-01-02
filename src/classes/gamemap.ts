@@ -30,7 +30,9 @@ export default class GameMap {
    * @param {number} Ny - Number of tiles in Y direction.
    */
   constructor(canvas: Canvas | any = -1, Nx: number = -1, Ny: number = -1) {
-    if (canvas === -1) canvas = { width: 1, height: 1 };
+    if (canvas === -1) {
+      canvas = { width: 1, height: 1 };
+    }
     this.canvas = canvas;
 
     if (Nx === -1) {
@@ -44,6 +46,7 @@ export default class GameMap {
     } else {
       this.Ny = Ny;
     }
+
     // this.dy = canvas.height / this.Ny;
     this.dy = this.dx;
 
@@ -65,7 +68,9 @@ export default class GameMap {
    * @returns {Tile|number} The tile or -1 if out of bounds.
    */
   getTileByIndex(i: number, j: number): Tile | -1 {
-    if (i < this.Nx && j < this.Ny && i >= 0 && j >= 0) return this.tiles[i * this.Ny + j];
+    if (i < this.Nx && j < this.Ny && i >= 0 && j >= 0) {
+      return this.tiles[i * this.Ny + j];
+    }
     return -1;
   }
 
@@ -101,7 +106,9 @@ export default class GameMap {
    * Spatial sorting: clear tile object lists.
    */
   clearObjectLists(): void {
-    for (let i = 0; i < this.tiles.length; i++) this.tiles[i].objs = [];
+    for (let i = 0; i < this.tiles.length; i++) {
+      this.tiles[i].objs = [];
+    }
   }
 
   /**
@@ -110,8 +117,11 @@ export default class GameMap {
    */
   addObject(obj: GameObject): void {
     const tile = this.getTileByPos(obj.x, obj.y);
-    if (tile === -1) obj.delete();
-    else tile.objs.push(obj);
+    if (tile === -1) {
+      obj.delete();
+    } else {
+      tile.objs.push(obj);
+    }
   }
 
   /**
@@ -123,7 +133,9 @@ export default class GameMap {
     const rInt = parseInt((Math.random() * (this.Nx * this.Ny - 1)).toString());
     const tile = this.tiles[rInt];
     // if there is something else already, find another point
-    if (tile.objs.length > 0 && tries++ < this.Nx * this.Ny) return this.spawnPoint(tries);
+    if (tile.objs.length > 0 && tries++ < this.Nx * this.Ny) {
+      return this.spawnPoint(tries);
+    }
     return { x: tile.x + this.dx / 2, y: tile.y + this.dy / 2 };
   }
 
@@ -134,7 +146,9 @@ export default class GameMap {
   draw(context: CanvasRenderingContext2D): void {
     context.fillStyle = "#edede8";
     context.fillRect(0, 0, this.Nx * this.dx, this.Ny * this.dy);
-    for (let i = 0; i < this.tiles.length; i++) this.tiles[i].draw(context);
+    for (let i = 0; i < this.tiles.length; i++) {
+      this.tiles[i].draw(context);
+    }
   }
 
   /**
@@ -211,10 +225,18 @@ export class Tile {
    */
   draw(context: CanvasRenderingContext2D): void {
     context.fillStyle = "#555";
-    if (this.walls[0]) context.fillRect(this.x - 2, this.y - 2, this.dx + 4, 4);
-    if (this.walls[1]) context.fillRect(this.x - 2, this.y - 2, 4, this.dy + 4);
-    if (this.walls[2]) context.fillRect(this.x - 2, this.y - 2 + this.dy, this.dx + 4, 4);
-    if (this.walls[3]) context.fillRect(this.x - 2 + this.dx, this.y - 2, 4, this.dy + 4);
+    if (this.walls[0]) {
+      context.fillRect(this.x - 2, this.y - 2, this.dx + 4, 4);
+    }
+    if (this.walls[1]) {
+      context.fillRect(this.x - 2, this.y - 2, 4, this.dy + 4);
+    }
+    if (this.walls[2]) {
+      context.fillRect(this.x - 2, this.y - 2 + this.dy, this.dx + 4, 4);
+    }
+    if (this.walls[3]) {
+      context.fillRect(this.x - 2 + this.dx, this.y - 2, 4, this.dy + 4);
+    }
   }
 
   /**
@@ -242,10 +264,18 @@ export class Tile {
     const disty = this.y - y;
     const walls = [false, false, false, false];
     // walls to walls
-    if (disty > 0 && this.walls[0]) walls[0] = true;
-    if (distx > 0 && this.walls[1]) walls[1] = true;
-    if (disty < -this.dy && this.walls[2]) walls[2] = true;
-    if (distx < -this.dx && this.walls[3]) walls[3] = true;
+    if (disty > 0 && this.walls[0]) {
+      walls[0] = true;
+    }
+    if (distx > 0 && this.walls[1]) {
+      walls[1] = true;
+    }
+    if (disty < -this.dy && this.walls[2]) {
+      walls[2] = true;
+    }
+    if (distx < -this.dx && this.walls[3]) {
+      walls[3] = true;
+    }
     return walls;
   }
 
@@ -261,15 +291,21 @@ export class Tile {
     // add current tile to path
     path.push(this);
     // if the current path is longer than the shortest known path: abort!
-    if (minPathLength !== -1 && path.length >= minPathLength) return -1;
-    if (maxPathLength !== -1 && path.length > maxPathLength) return -1;
+    if (minPathLength !== -1 && path.length >= minPathLength) {
+      return -1;
+    }
+    if (maxPathLength !== -1 && path.length > maxPathLength) {
+      return -1;
+    }
     // is this tile what we've been searching for? Then we're done!
-    if (condition(this)) return path;
+    if (condition(this)) {
+      return path;
+    }
     // else keep searching:
     // for every neighbor that is not separated by a wall and is not yet in path
     // calculate the path recursively. If a path is found, add it to a list
     const options: Tile[][] = [];
-    for (let d = 0; d < 4; d++)
+    for (let d = 0; d < 4; d++) {
       if (!this.walls[d] && this.neighbors[d] && path.indexOf(this.neighbors[d] as Tile) === -1) {
         const option = (this.neighbors[d] as Tile).pathTo(condition, path.slice(), minPathLength, maxPathLength);
         if (option !== -1) {
@@ -277,13 +313,19 @@ export class Tile {
           options.push(option);
         }
       }
+    }
     // found no options? negative result
-    if (options.length === 0) return -1;
+    if (options.length === 0) {
+      return -1;
+    }
     // find option with minimal length and return
     let min = -1;
     for (let i = 0; i < options.length; i++) {
-      if (min === -1 || options[i].length < options[min].length) min = i;
+      if (min === -1 || options[i].length < options[min].length) {
+        min = i;
+      }
     }
+
     return options[min];
   }
 
@@ -293,7 +335,9 @@ export class Tile {
    * @returns {Tile} The final tile.
    */
   randomWalk(distance: number): Tile {
-    if (distance === 0) return this;
+    if (distance === 0) {
+      return this;
+    }
     const r = Math.floor(Math.random() * 4);
     for (let d = r; d < 4 + r; d++) {
       if (
@@ -305,6 +349,7 @@ export class Tile {
         return (this.neighbors[d % 4] as Tile).randomWalk(distance - 1);
       }
     }
+
     return this;
   }
 
@@ -314,7 +359,11 @@ export class Tile {
    * @returns {number} Index of object in list or -1.
    */
   find(type: string): number {
-    for (let i = 0; i < this.objs.length; i++) if (this.objs[i].type === type) return i;
+    for (let i = 0; i < this.objs.length; i++) {
+      if (this.objs[i].type === type) {
+        return i;
+      }
+    }
     return -1;
   }
 
@@ -327,14 +376,20 @@ export class Tile {
   xypathToObj(condition: (obj: GameObject) => boolean, maxPathLength: number = -1): Array<{ x: number; y: number } | GameObject> | -1 {
     const tilepath = this.pathTo(
       (dest) => {
-        for (let i = 0; i < dest.objs.length; i++) if (condition(dest.objs[i])) return true;
+        for (let i = 0; i < dest.objs.length; i++) {
+          if (condition(dest.objs[i])) {
+            return true;
+          }
+        }
         return false;
       },
       [],
       -1,
       maxPathLength,
     );
-    if (tilepath === -1) return -1;
+    if (tilepath === -1) {
+      return -1;
+    }
     const xypath: Array<{ x: number; y: number } | GameObject> = [];
     for (let i = 0; i < tilepath.length; i++) {
       const tile = tilepath[i];
@@ -348,7 +403,10 @@ export class Tile {
         break;
       }
     }
-    if (obj === -1) return -1;
+
+    if (obj === -1) {
+      return -1;
+    }
     xypath.push(obj);
     return xypath;
   }

@@ -69,7 +69,9 @@ export default class Bullet extends GameObject {
       this.delete();
     }
 
-    if (this.trace) this.leaveTrace();
+    if (this.trace) {
+      this.leaveTrace();
+    }
 
     const oldx = this.x;
     const oldy = this.y;
@@ -77,7 +79,9 @@ export default class Bullet extends GameObject {
     this.y! -= (this.speed * Math.cos(-this.angle!) * Settings.GameFrequency) / 1000;
 
     this.checkCollision(oldx, oldy);
-    if (Settings.BulletsCanCollide) this.checkBulletCollision();
+    if (Settings.BulletsCanCollide) {
+      this.checkBulletCollision();
+    }
   }
 
   /**
@@ -87,12 +91,16 @@ export default class Bullet extends GameObject {
    */
   checkCollision(oldx: number, oldy: number): void {
     const tile = this.map.getTileByPos(oldx, oldy);
-    if (tile === -1) return;
+    if (tile === -1) {
+      return;
+    }
 
     const walls = tile.getWalls(this.x, this.y);
     const nwalls = walls.filter((w: boolean) => w).length;
 
-    if (nwalls === 0) return;
+    if (nwalls === 0) {
+      return;
+    }
 
     playSound(this.bounceSound);
 
@@ -117,14 +125,18 @@ export default class Bullet extends GameObject {
     const tile = this.map.getTileByPos(this.x, this.y);
     if (tile !== -1) {
       for (let j = 0; j < tile.objs.length; j++) {
-        if (tile.objs[j] instanceof Bullet && tile.objs[j].age > 0 && tile.objs[j] !== this) bullets.push(tile.objs[j]);
+        if (tile.objs[j] instanceof Bullet && tile.objs[j].age > 0 && tile.objs[j] !== this) {
+          bullets.push(tile.objs[j]);
+        }
       }
     }
 
     for (let i = 0; i < bullets.length; i++) {
       const rad = 0.65 * this.radius + 0.65 * bullets[i].radius + this.extrahitbox;
       if (Math.sqrt(Math.pow(bullets[i].x! - this.x!, 2) + Math.pow(bullets[i].y! - this.y!, 2)) <= rad) {
-        if (!bullets[i].lethal) return;
+        if (!bullets[i].lethal) {
+          return;
+        }
         bullets[i].explode();
         this.explode();
         bullets[i].delete();

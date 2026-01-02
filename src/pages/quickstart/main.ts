@@ -36,8 +36,11 @@ export function quickPvB(nteams: number, teamsize: number): void {
 
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
-      if (i < nteams / 2) store.players.push(new Player());
-      else store.players.push(new Bot());
+      if (i < nteams / 2) {
+        store.players.push(new Player());
+      } else {
+        store.players.push(new Bot());
+      }
       const p = store.players[store.players.length - 1];
       if (j > 0) {
         p.team = store.players[store.players.length - 2].team;
@@ -54,8 +57,11 @@ export function quickMixed(nteams: number, teamsize: number): void {
 
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
-      if (j < teamsize / 2) store.players.push(new Player());
-      else store.players.push(new Bot());
+      if (j < teamsize / 2) {
+        store.players.push(new Player());
+      } else {
+        store.players.push(new Bot());
+      }
       const p = store.players[store.players.length - 1];
       if (j > 0) {
         p.team = store.players[store.players.length - 2].team;
@@ -72,8 +78,11 @@ export function quickUnevenMixed(nteams: number, teamsize: number): void {
 
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
-      if (j < teamsize / 2 && i === 0) store.players.push(new Player());
-      else store.players.push(new Bot());
+      if (j < teamsize / 2 && i === 0) {
+        store.players.push(new Player());
+      } else {
+        store.players.push(new Bot());
+      }
       const p = store.players[store.players.length - 1];
       if (j > 0) {
         p.team = store.players[store.players.length - 2].team;

@@ -190,10 +190,14 @@ export class InvincibleBonus extends PowerUp {
   }
 
   apply(tank: Tank) {
-    if (this.applied) return;
+    if (this.applied) {
+      return;
+    }
     this.applied = true;
     stopMusic();
-    if (!Settings.muted) playMusic(SOUNDS.invincible);
+    if (!Settings.muted) {
+      playMusic(SOUNDS.invincible);
+    }
     tank.speed *= 1.14;
     tank.timers.invincible = tank.player.game.t + 10000;
     tank.player.game.timeouts.push(
@@ -201,7 +205,9 @@ export class InvincibleBonus extends PowerUp {
         tank.speed /= 1.14;
         if (Settings.bgmusic) {
           // playMusic(SOUNDS.bgmusic); // Assuming we might want to add bgmusic later.
-        } else if (!tank.invincible()) stopMusic();
+        } else if (!tank.invincible()) {
+          stopMusic();
+        }
       }, 10100),
     );
   }
@@ -220,7 +226,9 @@ export class TerminatorBonus extends PowerUp {
     this.image.src = IMAGES.terminator;
   }
   apply(tank: Tank) {
-    if (this.applied) return;
+    if (this.applied) {
+      return;
+    }
     this.applied = true;
     tank.rapidfire = true;
     playSound(SOUNDS.terminator);
@@ -269,7 +277,9 @@ export class FogBonus extends PowerUp {
     this.image.src = IMAGES.fog;
   }
   apply(tank: Tank) {
-    if (!this.used) tank.player.game.intvls.push(fogOfWar(store.game));
+    if (!this.used) {
+      tank.player.game.intvls.push(fogOfWar(store.game));
+    }
   }
 }
 
@@ -366,11 +376,15 @@ export const PowerUps = [
  */
 export function getRandomPowerUp(): PowerUp {
   let totalWeights = 0;
-  for (let i = 0; i < PowerUps.length; i++) totalWeights += PowerUps[i].weight;
+  for (let i = 0; i < PowerUps.length; i++) {
+    totalWeights += PowerUps[i].weight;
+  }
 
   let randWeight = Math.random() * totalWeights;
   let h: number;
-  for (h = 0; randWeight > 0; h++) randWeight -= PowerUps[h].weight;
+  for (h = 0; randWeight > 0; h++) {
+    randWeight -= PowerUps[h].weight;
+  }
 
   playSound(SOUNDS.origPowerup);
   return PowerUps[h - 1].create();

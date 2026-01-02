@@ -80,9 +80,13 @@ export class Flag extends GameObject {
    * Updates the flag state.
    */
   step() {
-    if (!this.game.map) return;
+    if (!this.game.map) {
+      return;
+    }
     const tile = this.game.map.getTileByPos(this.x, this.y);
-    if (tile === -1) return;
+    if (tile === -1) {
+      return;
+    }
     for (let i = 0; i < tile.objs.length; i++) {
       const tank: GameObject = tile.objs[i];
       if (tank instanceof Tank && Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)) {
@@ -99,7 +103,9 @@ export class Flag extends GameObject {
         }
       }
     }
-    if (!this.inBase && !this.picked && this.resetTimer < this.game.t) this.reset();
+    if (!this.inBase && !this.picked && this.resetTimer < this.game.t) {
+      this.reset();
+    }
     if (this.inBase) {
       this.x = this.base.x;
       this.y = this.base.y;
@@ -182,7 +188,9 @@ export class Base extends GameObject {
    * Updates the base state, checking for flag captures.
    */
   step() {
-    if (!this.tile || this.tile === -1) return;
+    if (!this.tile || this.tile === -1) {
+      return;
+    }
     for (let i = 0; i < this.tile.objs.length; i++) {
       const tank: Tank = this.tile.objs[i];
       if (
@@ -206,7 +214,9 @@ export class Base extends GameObject {
    * @returns {boolean} True if the flag is in the base.
    */
   hasFlag(): boolean {
-    if (typeof this.flag === "undefined") return false;
+    if (typeof this.flag === "undefined") {
+      return false;
+    }
     return this.flag.inBase;
   }
 }
@@ -232,7 +242,9 @@ export class Hill extends Base {
    * Updates the hill state, checking for capture.
    */
   step() {
-    if (!this.tile || (this.tile as any) === -1) return;
+    if (!this.tile || (this.tile as any) === -1) {
+      return;
+    }
     for (let i = 0; i < this.tile.objs.length; i++) {
       const tank: Tank = this.tile.objs[i];
       if (

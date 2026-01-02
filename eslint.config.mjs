@@ -5,6 +5,9 @@ import eslintConfigPrettier from "eslint-config-prettier";
 import jsdoc from "eslint-plugin-jsdoc";
 
 export default [
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  eslintConfigPrettier,
   {
     ignores: ["dist/**", "node_modules/**", "coverage/**", "public/**"],
   },
@@ -20,6 +23,8 @@ export default [
     },
 
     rules: {
+      // Enforce braces for all control statements
+      curly: ["error", "all"],
       // Enforce JSDoc comments for functions and methods
       "jsdoc/require-jsdoc": [
         "warn",
@@ -37,7 +42,4 @@ export default [
       ],
     },
   },
-  js.configs.recommended,
-  ...tseslint.configs.recommended,
-  eslintConfigPrettier,
 ];

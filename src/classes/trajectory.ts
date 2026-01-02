@@ -34,7 +34,9 @@ export default class Trajectory extends GameObject {
    * @param {CanvasRenderingContext2D} context - The context.
    */
   draw(context: CanvasRenderingContext2D): void {
-    if (this.hidden) return;
+    if (this.hidden) {
+      return;
+    }
     for (let i = 0; i < this.points.length; i += this.drawevery) {
       const p = this.points[i];
       // TODO less save & restore
@@ -68,7 +70,9 @@ export default class Trajectory extends GameObject {
       };
 
       const tile = this.map.getTileByPos(point.x, point.y);
-      if (tile === -1) return;
+      if (tile === -1) {
+        return;
+      }
 
       const walls = tile.getWalls(nextpoint.x, nextpoint.y);
       const nwalls = walls.filter((w: boolean) => w).length;
@@ -90,11 +94,15 @@ export default class Trajectory extends GameObject {
       this.points.push(nextpoint);
       // see if any tanks targeted
       for (let i = 0; i < tile.objs.length; i++) {
-        if (tile.objs[i].type === "Tank") this.targets.push(tile.objs[i]);
+        if (tile.objs[i].type === "Tank") {
+          this.targets.push(tile.objs[i]);
+        }
       }
     }
 
     this.timeout -= Settings.GameFrequency;
-    if (this.timeout < 0) this.delete();
+    if (this.timeout < 0) {
+      this.delete();
+    }
   }
 }

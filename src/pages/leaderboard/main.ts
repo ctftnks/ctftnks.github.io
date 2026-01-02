@@ -14,12 +14,18 @@ export function init(container: HTMLElement): void {
   const counterElem = document.getElementById("leaderboardCounter");
   const shadeElem = document.getElementById("leaderboardshade") as HTMLElement;
 
-  if (h2Elem) h2Elem.innerHTML = "Leaderboard:&nbsp;&nbsp;Game #" + store.GameID;
-  if (counterElem) counterElem.innerHTML = leaderTime + "s";
+  if (h2Elem) {
+    h2Elem.innerHTML = "Leaderboard:&nbsp;&nbsp;Game #" + store.GameID;
+  }
+  if (counterElem) {
+    counterElem.innerHTML = leaderTime + "s";
+  }
 
   const leaderIntvl = setInterval(() => {
     leaderTime -= 1;
-    if (counterElem) counterElem.innerHTML = leaderTime + "s";
+    if (counterElem) {
+      counterElem.innerHTML = leaderTime + "s";
+    }
   }, 1000);
 
   const leaderTimeout = setTimeout(() => {
@@ -44,7 +50,9 @@ export function updateLeaderboard(): void {
   });
 
   const lb = document.getElementById("leaderboard");
-  if (!lb) return;
+  if (!lb) {
+    return;
+  }
 
   let content = "";
   content += "<table>";

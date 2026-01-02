@@ -23,6 +23,7 @@ export function databinding(): void {
       if (suffix && val.endsWith(suffix)) {
         val = val.substring(0, val.length - suffix.length);
       }
+
       // remove prefix if present
       if (prefix && val.startsWith(prefix)) {
         val = val.substring(prefix.length);
@@ -35,6 +36,7 @@ export function databinding(): void {
       } else {
         (Settings as any)[bind] = Number(numericVal);
       }
+
       store.saveSettings();
     };
   });
@@ -53,27 +55,36 @@ export function databinding(): void {
       const val = elem.value;
       if (elem.hasAttribute("data-type") && elem.getAttribute("data-type") === "string") {
         (Settings as any)[bind] = val;
+      } else if (val === "true") // handle boolean selects if any
+      {
+        (Settings as any)[bind] = true;
+      } else if (val === "false") {
+        (Settings as any)[bind] = false;
       } else {
-        // handle boolean selects if any
-        if (val === "true") (Settings as any)[bind] = true;
-        else if (val === "false") (Settings as any)[bind] = false;
-        else (Settings as any)[bind] = Number(val);
+        (Settings as any)[bind] = Number(val);
       }
+
       store.saveSettings();
     };
   });
 }
 
 function dataminmax(val: number, elem: HTMLElement, bind: string): number {
-  if (typeof val !== "number" || isNaN(val)) return val;
+  if (typeof val !== "number" || isNaN(val)) {
+    return val;
+  }
 
   if (elem.hasAttribute("data-min")) {
     const min = Number(elem.getAttribute("data-min"));
-    if (val < min) val = min;
+    if (val < min) {
+      val = min;
+    }
   }
   if (elem.hasAttribute("data-max")) {
     const max = Number(elem.getAttribute("data-max"));
-    if (val > max) val = max;
+    if (val > max) {
+      val = max;
+    }
   }
   (Settings as any)[bind] = val;
   return val;

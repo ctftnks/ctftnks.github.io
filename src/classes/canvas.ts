@@ -32,7 +32,9 @@ export default class Canvas {
   draw(): void {
     this.context.clearRect(0, 0, this.canvas.width / this.scale, this.canvas.height / this.scale);
     store.game.map.draw(this.context);
-    for (let i = 0; i < store.game.objs.length; i++) store.game.objs[i].draw(this.context);
+    for (let i = 0; i < store.game.objs.length; i++) {
+      store.game.objs[i].draw(this.context);
+    }
   }
 
   /**
@@ -52,7 +54,9 @@ export default class Canvas {
    * Stop syncing of canvas.
    */
   stopSync(): void {
-    if (typeof this.loop !== "undefined") cancelAnimationFrame(this.loop);
+    if (typeof this.loop !== "undefined") {
+      cancelAnimationFrame(this.loop);
+    }
   }
 
   /**
@@ -73,7 +77,9 @@ export default class Canvas {
     this.height = this.canvas.clientHeight;
     this.canvas.width = this.canvas.clientWidth;
     this.width = this.canvas.clientWidth;
-    if (store.game?.map) store.game.map.resize();
+    if (store.game?.map) {
+      store.game.map.resize();
+    }
   }
 
   /**

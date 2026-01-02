@@ -42,9 +42,13 @@ export class Weapon {
    * Fires the weapon.
    */
   shoot(): void {
-    if (!this.isActive) return;
+    if (!this.isActive) {
+      return;
+    }
     playSound(SOUNDS.gun);
-    if (!this.isDeleted) this.newBullet();
+    if (!this.isDeleted) {
+      this.newBullet();
+    }
     this.deactivate();
   }
 
@@ -72,7 +76,9 @@ export class Weapon {
    * Deactivates the weapon (cannot shoot temporarily or until deleted).
    */
   deactivate(): void {
-    if (this.isActive === false) return;
+    if (this.isActive === false) {
+      return;
+    }
     this.isActive = false;
     if (this.tank.rapidfire) {
       this.tank.player.game.timeouts.push(
@@ -131,7 +137,9 @@ export class Gun extends Weapon {
     const bullet = super.newBullet();
     // bullet explosion leads to weapon reactivation
     bullet.explode = () => {
-      if (!this.tank.rapidfire) this.activate();
+      if (!this.tank.rapidfire) {
+        this.activate();
+      }
     };
     return bullet;
   }
@@ -175,7 +183,9 @@ export class MG extends Weapon {
   }
 
   shoot(): void {
-    if (!this.isActive) return;
+    if (!this.isActive) {
+      return;
+    }
 
     if (this.nshots === 20) {
       this.tank.player.game.timeouts.push(
@@ -233,7 +243,9 @@ export class Laser extends Weapon {
   }
 
   shoot(): void {
-    if (!this.isActive) return;
+    if (!this.isActive) {
+      return;
+    }
     playSound(SOUNDS.laser);
     this.trajectory.length = 1300;
     this.trajectory.delta = 2;
@@ -327,10 +339,15 @@ export class Grenade extends Weapon {
   }
 
   shoot(): void {
-    if (!this.isActive) return;
+    if (!this.isActive) {
+      return;
+    }
     if (typeof this.bullet === "undefined") {
-      if (!this.isDeleted) this.bullet = this.newBullet();
-      else this.bullet = undefined;
+      if (!this.isDeleted) {
+        this.bullet = this.newBullet();
+      } else {
+        this.bullet = undefined;
+      }
     } else if (this.bullet.age > 300) {
       const bullet = this.bullet;
       bullet.explode();
@@ -430,7 +447,9 @@ export class Guided extends Weapon {
 
     e.step = function () {
       e.age += Settings.GameFrequency;
-      if (e.age > e.timeout) e.delete();
+      if (e.age > e.timeout) {
+        e.delete();
+      }
       e.leaveTrace();
 
       const oldx = e.x;
@@ -461,21 +480,25 @@ export class Guided extends Weapon {
         // get current tile and path
         const tile = e.map.getTileByPos(oldx, oldy);
         const path = tile.pathTo((destination: any) => {
-          for (let i = 0; i < destination.objs.length; i++)
-            if (destination.objs[i] instanceof Tank && destination.objs[i].player.team !== e.player.team) return true;
+          for (let i = 0; i < destination.objs.length; i++) {
+            if (destination.objs[i] instanceof Tank && destination.objs[i].player.team !== e.player.team) {
+              return true;
+            }
+          }
           return false;
         });
         // set next path tile as goto point
         if (path.length > 1) {
           e.goto = path[1];
-        } else {
-          // if there is no next tile, hit the tank in the tile
+        } else // if there is no next tile, hit the tank in the tile
+        {
           for (let i = 0; i < tile.objs.length; i++) {
             if (tile.objs[i] instanceof Tank) {
               e.goto = { x: tile.objs[i].x, y: tile.objs[i].y, dx: 0, dy: 0 };
             }
           }
         }
+
         if (path.length > 0) {
           e.smokeColor = path[path.length - 1].objs[0].color;
         }
@@ -519,12 +542,14 @@ export class WreckingBall extends Weapon {
     bullet.timeout = 1000;
     bullet.checkCollision = function (x: number, y: number) {
       const tile = bullet.map.getTileByPos(x, y);
-      if (tile === -1) return;
+      if (tile === -1) {
+        return;
+      }
       const walls = tile.getWalls(this.x, this.y);
       const wall = walls.indexOf(true);
       if (wall !== -1) {
-        // is the wall an outer wall?
         if (typeof tile.neighbors[wall] === "undefined" || tile.neighbors[wall] === -1) {
+          // is the wall an outer wall?
           playSound(this.bounceSound);
           // outer wall: bounce
           if (wall === 1 || wall === 3) {

@@ -26,7 +26,9 @@ export function updatePowerupsMenu(): void {
   }
 
   const optionsElem = document.getElementById("powerupsOptions");
-  if (optionsElem) optionsElem.innerHTML = content;
+  if (optionsElem) {
+    optionsElem.innerHTML = content;
+  }
 }
 
 (window as any).PowerUps = PowerUps;

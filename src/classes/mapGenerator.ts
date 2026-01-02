@@ -25,7 +25,9 @@ export default class MapGenerator {
    */
   static primsMaze(map: GameMap) {
     // Start with a grid full of walls.
-    for (let i = 0; i < map.Nx * map.Ny; i++) map.tiles[i].walls = [true, true, true, true];
+    for (let i = 0; i < map.Nx * map.Ny; i++) {
+      map.tiles[i].walls = [true, true, true, true];
+    }
 
     const walls: number[] = [];
     const inMaze: number[] = [];
@@ -33,7 +35,9 @@ export default class MapGenerator {
     // Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
     const randomCell = map.tiles[parseInt("" + Math.random() * (map.Nx * map.Ny - 1))];
     inMaze.push(randomCell.id);
-    for (let i = 0; i < 4; i++) walls.push(randomCell.id + 0.1 * i);
+    for (let i = 0; i < 4; i++) {
+      walls.push(randomCell.id + 0.1 * i);
+    }
 
     // While there are walls in the list:
     while (walls.length > 0) {
@@ -50,10 +54,14 @@ export default class MapGenerator {
         tile.addWall(wallDir, true);
         inMaze.push(opposite.id);
         // Add the neighboring walls of the cell to the wall list.
-        for (let i = 0; i < 4; i++) if (opposite.walls[i]) walls.push(opposite.id + 0.1 * i);
+        for (let i = 0; i < 4; i++) {
+          if (opposite.walls[i]) {
+            walls.push(opposite.id + 0.1 * i);
+          }
+        }
         walls.splice(randomWallNo, 1);
-      } else {
-        // If the cell on the opposite side already was in the maze, remove the wall from the list.
+      } else // If the cell on the opposite side already was in the maze, remove the wall from the list.
+      {
         walls.splice(randomWallNo, 1);
       }
     }
@@ -76,7 +84,9 @@ export default class MapGenerator {
       x2 = map.Nx;
       y2 = map.Ny;
       // Start with a grid with no walls
-      for (let i = 0; i < map.Nx * map.Ny; i++) map.tiles[i].walls = [false, false, false, false];
+      for (let i = 0; i < map.Nx * map.Ny; i++) {
+        map.tiles[i].walls = [false, false, false, false];
+      }
       // border walls
       for (let i = 0; i < map.Nx; i++) {
         (map.getTileByIndex(i, 0) as Tile).walls[0] = true;
@@ -88,11 +98,15 @@ export default class MapGenerator {
       }
     }
     // recursion end
-    if (x2 - x1 < 2 || y2 - y1 < 2) return;
+    if (x2 - x1 < 2 || y2 - y1 < 2) {
+      return;
+    }
     if (x2 - x1 > y2 - y1) {
       // vertical cell-dividing wall
       const posX = x1 + Math.floor(Math.random() * (x2 - x1 - 1));
-      for (let i = y1; i < y2; i++) (map.getTileByIndex(posX, i) as Tile).addWall(3);
+      for (let i = y1; i < y2; i++) {
+        (map.getTileByIndex(posX, i) as Tile).addWall(3);
+      }
       // random hole in vertical wall
       const posY = y1 + Math.floor(Math.random() * (y2 - y1));
       (map.getTileByIndex(posX, posY) as Tile).addWall(3, true);
@@ -101,7 +115,9 @@ export default class MapGenerator {
     } else {
       // horizontal cell-dividing wall
       const posY = y1 + Math.floor(Math.random() * (y2 - y1 - 1));
-      for (let i = x1; i < x2; i++) (map.getTileByIndex(i, posY) as Tile).addWall(2);
+      for (let i = x1; i < x2; i++) {
+        (map.getTileByIndex(i, posY) as Tile).addWall(2);
+      }
       // random hole in horizontal wall
       const posX = x1 + Math.floor(Math.random() * (x2 - x1));
       (map.getTileByIndex(posX, posY) as Tile).addWall(2, true);
@@ -127,7 +143,9 @@ export default class MapGenerator {
       x2 = map.Nx;
       y2 = map.Ny;
       // Start with a grid with no walls
-      for (let i = 0; i < map.Nx * map.Ny; i++) map.tiles[i].walls = [false, false, false, false];
+      for (let i = 0; i < map.Nx * map.Ny; i++) {
+        map.tiles[i].walls = [false, false, false, false];
+      }
       // border walls
       for (let i = 0; i < map.Nx; i++) {
         (map.getTileByIndex(i, 0) as Tile).walls[0] = true;
@@ -139,11 +157,15 @@ export default class MapGenerator {
       }
     }
     // recursion end
-    if (x2 - x1 < 2 || y2 - y1 < 2) return;
+    if (x2 - x1 < 2 || y2 - y1 < 2) {
+      return;
+    }
     if (x2 - x1 > y2 - y1) {
       // vertical cell-dividing wall
       const posX = x1 + Math.floor(Math.random() * (x2 - x1 - 1));
-      for (let i = y1; i < y2; i++) (map.getTileByIndex(posX, i) as Tile).addWall(3);
+      for (let i = y1; i < y2; i++) {
+        (map.getTileByIndex(posX, i) as Tile).addWall(3);
+      }
       const doubleHole = y2 - y1 > 2 ? 3 : 1;
       for (let k = 0; k < doubleHole; k++) {
         // random hole in vertical wall
@@ -155,7 +177,9 @@ export default class MapGenerator {
     } else {
       // horizontal cell-dividing wall
       const posY = y1 + Math.floor(Math.random() * (y2 - y1 - 1));
-      for (let i = x1; i < x2; i++) (map.getTileByIndex(i, posY) as Tile).addWall(2);
+      for (let i = x1; i < x2; i++) {
+        (map.getTileByIndex(i, posY) as Tile).addWall(2);
+      }
       const doubleHole = x2 - x1 > 2 ? 3 : 1;
       for (let k = 0; k < doubleHole; k++) {
         // random hole in horizontal wall
@@ -180,11 +204,17 @@ export default class MapGenerator {
       for (let i = 0; i < Nx; i++) {
         let number = 0;
         const t = map.getTileByIndex(i, j) as Tile;
-        for (let d = 0; d < 4; d++) number += (t.walls[d] ? 1 : 0) * Math.pow(2, d);
+        for (let d = 0; d < 4; d++) {
+          number += (t.walls[d] ? 1 : 0) * Math.pow(2, d);
+        }
         data += "" + number;
-        if (i < Nx - 1) data += " ";
+        if (i < Nx - 1) {
+          data += " ";
+        }
       }
-      if (j < Ny - 1) data += "\n";
+      if (j < Ny - 1) {
+        data += "\n";
+      }
     }
     return data;
   }
@@ -194,7 +224,9 @@ export default class MapGenerator {
    * @param {GameMap} map - The map to update.
    */
   static importedMap(map: GameMap) {
-    if (!prefetchedMap) return;
+    if (!prefetchedMap) {
+      return;
+    }
     // copy tiles and size to old map
     map.Nx = prefetchedMap.Nx;
     map.Ny = prefetchedMap.Ny;
@@ -213,7 +245,9 @@ export default class MapGenerator {
     const xhttp = new XMLHttpRequest();
     // TODO: pick random name
     const maxMapId = 0;
-    if (mapname === -1) mapname = Math.floor(Math.random() * maxMapId);
+    if (mapname === -1) {
+      mapname = Math.floor(Math.random() * maxMapId);
+    }
     xhttp.open("GET", "maps/" + mapname + ".csv", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
@@ -221,7 +255,9 @@ export default class MapGenerator {
         // got data from file, now process it
         const data = this.responseText;
         const lines = data.match(/[^\r\n]+/g);
-        if (!lines) return;
+        if (!lines) {
+          return;
+        }
         const Ny = lines.length;
         const Nx = lines[0].split(" ").length;
 
@@ -233,7 +269,9 @@ export default class MapGenerator {
           for (let i = 0; i < Nx; i++) {
             const number = parseInt(line[i]);
             const t = map.getTileByIndex(i, j) as Tile;
-            for (let d = 0; d < 4; d++) t.walls[d] = (number >>> d) % 2 === 1;
+            for (let d = 0; d < 4; d++) {
+              t.walls[d] = (number >>> d) % 2 === 1;
+            }
           }
         }
         // copy tiles and size to old map

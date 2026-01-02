@@ -11,7 +11,9 @@ export let playingMusic: string | number = -1;
 export let musicAudio: HTMLAudioElement | number = -1;
 
 export function playMusic(file: string): void {
-  if (file === playingMusic) return;
+  if (file === playingMusic) {
+    return;
+  }
   const audio = new Audio(file);
   audio.addEventListener(
     "ended",
@@ -30,6 +32,7 @@ export function stopMusic(): void {
   if (musicAudio !== -1 && typeof musicAudio !== "number") {
     musicAudio.pause();
   }
+
   musicAudio = -1;
   playingMusic = -1;
 }
@@ -61,8 +64,12 @@ export function fogOfWar(game: any): number {
 
   const intvl = setInterval(() => {
     ctx.clearRect(0, 0, 2 * canv.width, 2 * canv.height);
-    if (time < 300) ambientLight -= frequency / 300;
-    if (duration - time < 300) ambientLight += frequency / 300;
+    if (time < 300) {
+      ambientLight -= frequency / 300;
+    }
+    if (duration - time < 300) {
+      ambientLight += frequency / 300;
+    }
     ctx.fillStyle = "rgba(0,0,0," + (1 - ambientLight) + ")";
     ctx.fillRect(0, 0, game.map.Nx * game.map.dx, game.map.Ny * game.map.dy);
     for (let i = 0; i < game.players.length; i++) {
@@ -104,6 +111,7 @@ export function hexToRgbA(hex: string, a: number): string {
     if (c.length === 3) {
       c = [c[0], c[0], c[1], c[1], c[2], c[2]];
     }
+
     const r = parseInt(c.slice(0, 2).join(""), 16);
     const g = parseInt(c.slice(2, 4).join(""), 16);
     const b = parseInt(c.slice(4, 6).join(""), 16);

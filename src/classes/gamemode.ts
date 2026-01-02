@@ -81,8 +81,11 @@ export class Deathmatch extends Gamemode {
    * @param {Player} player2 - The victim.
    */
   newKill(player1: Player, player2: Player) {
-    if (player1.team === player2.team) this.giveScore(player1, -1);
-    else this.giveScore(player1, 1);
+    if (player1.team === player2.team) {
+      this.giveScore(player1, -1);
+    } else {
+      this.giveScore(player1, 1);
+    }
   }
 }
 
@@ -108,7 +111,11 @@ export class TeamDeathmatch extends Gamemode {
    * @param {number} val - The score value.
    */
   giveScore(player: Player, val: number = 1) {
-    for (let i = 0; i < this.game.players.length; i++) if (this.game.players[i].team === player.team) this.game.players[i].score += val;
+    for (let i = 0; i < this.game.players.length; i++) {
+      if (this.game.players[i].team === player.team) {
+        this.game.players[i].score += val;
+      }
+    }
     player.spree += 1;
     if (player.spree >= 5 && player.spree % 5 === 0) {
       player.score += Math.floor(player.spree / 5);
@@ -124,8 +131,11 @@ export class TeamDeathmatch extends Gamemode {
    * @param {Player} player2 - The victim.
    */
   newKill(player1: Player, player2: Player) {
-    if (player1.team === player2.team) this.giveScore(player1, -1);
-    else this.giveScore(player1, 1);
+    if (player1.team === player2.team) {
+      this.giveScore(player1, -1);
+    } else {
+      this.giveScore(player1, 1);
+    }
   }
 
   /**
@@ -134,19 +144,22 @@ export class TeamDeathmatch extends Gamemode {
   init() {
     const bases: Base[] = [];
     const game = this.game;
-    if (!game.map) return;
+    if (!game.map) {
+      return;
+    }
 
     // create single base for each team
     for (let i = 0; i < game.players.length; i++) {
       let baseExists = false;
       const player = game.players[i];
-      for (let j = 0; j < bases.length; j++)
+      for (let j = 0; j < bases.length; j++) {
         if (player.team === bases[j].team) {
           baseExists = true;
           player.tank.x = bases[j].x;
           player.tank.y = bases[j].y;
           player.base = bases[j];
         }
+      }
       if (!baseExists) {
         // find spawnPoint that is far away from existing bases
         let maxLength = -1;
@@ -154,7 +167,9 @@ export class TeamDeathmatch extends Gamemode {
         for (let k = 0; k < 100; k++) {
           const pos = game.map.spawnPoint();
           const tile = game.map.getTileByPos(pos.x, pos.y);
-          if (tile === -1) continue;
+          if (tile === -1) {
+            continue;
+          }
           let length = 0;
           let initfirst = false;
           if (bases.length === 0) {
@@ -163,14 +178,24 @@ export class TeamDeathmatch extends Gamemode {
           }
           for (let j = 0; j < bases.length; j++) {
             const stile = this.game.map!.getTileByPos(bases[j].x, bases[j].y);
-            if (stile === -1) continue;
+            if (stile === -1) {
+              continue;
+            }
             const path = (tile as Tile).pathTo((destination) => {
               return destination.id === stile.id;
             });
-            if (path !== -1) length += path.length * path.length;
+            if (path !== -1) {
+              length += path.length * path.length;
+            }
           }
-          if (initfirst) bases.pop();
-          for (let j = 0; j < bases.length; j++) if (bases[j].x === pos.x && bases[j].y === pos.y) length = -1;
+          if (initfirst) {
+            bases.pop();
+          }
+          for (let j = 0; j < bases.length; j++) {
+            if (bases[j].x === pos.x && bases[j].y === pos.y) {
+              length = -1;
+            }
+          }
           if (length > maxLength) {
             maxLength = length;
             maxPos = pos;
@@ -180,8 +205,9 @@ export class TeamDeathmatch extends Gamemode {
         bases.push(b);
         game.addObject(b);
         let spawnPoint: Tile = b.tile;
-        while (spawnPoint.id === b.tile.id)
+        while (spawnPoint.id === b.tile.id) {
           spawnPoint = spawnPoint.randomWalk(this.game.mode.BaseSpawnDistance + Math.round(Math.random()));
+        }
         player.tank.x = spawnPoint.x + spawnPoint.dx / 2;
         player.tank.y = spawnPoint.y + spawnPoint.dy / 2;
         player.base = b;
@@ -213,7 +239,11 @@ export class CaptureTheFlag extends Gamemode {
    * @param {number} val - The score value.
    */
   giveScore(player: Player, val: number = 1) {
-    for (let i = 0; i < this.game.players.length; i++) if (this.game.players[i].team === player.team) this.game.players[i].score += val;
+    for (let i = 0; i < this.game.players.length; i++) {
+      if (this.game.players[i].team === player.team) {
+        this.game.players[i].score += val;
+      }
+    }
     updateScores();
     adaptBotSpeed(player.team);
   }
@@ -226,10 +256,11 @@ export class CaptureTheFlag extends Gamemode {
   newKill(player1: Player, player2: Player) {
     if (player1.team != player2.team) {
       player1.spree += 1;
-      if (player1.spree >= 5 && player1.spree % 5 === 0) {
-        // player1.score += Math.floor(player1.spree / 5)
+      if (player1.spree >= 5 && player1.spree % 5 === 0) // player1.score += Math.floor(player1.spree / 5)
+      {
         playSound(SOUNDS.killingspree);
       }
+
       updateScores();
     }
   }
@@ -240,19 +271,22 @@ export class CaptureTheFlag extends Gamemode {
   init() {
     const bases: Base[] = [];
     const game = this.game;
-    if (!game.map) return;
+    if (!game.map) {
+      return;
+    }
 
     // create single base for each team
     for (let i = 0; i < game.players.length; i++) {
       let baseExists = false;
       const player = game.players[i];
-      for (let j = 0; j < bases.length; j++)
+      for (let j = 0; j < bases.length; j++) {
         if (player.team === bases[j].team) {
           baseExists = true;
           player.tank.x = bases[j].x;
           player.tank.y = bases[j].y;
           player.base = bases[j];
         }
+      }
       if (!baseExists) {
         // find spawnPoint that is far away from existing bases
         let maxLength = -1;
@@ -260,7 +294,9 @@ export class CaptureTheFlag extends Gamemode {
         for (let k = 0; k < 100; k++) {
           const pos = game.map.spawnPoint();
           const tile = game.map.getTileByPos(pos.x, pos.y);
-          if (tile === -1) continue;
+          if (tile === -1) {
+            continue;
+          }
           let length = 0;
           let initfirst = false;
           if (bases.length === 0) {
@@ -269,14 +305,24 @@ export class CaptureTheFlag extends Gamemode {
           }
           for (let j = 0; j < bases.length; j++) {
             const stile = this.game.map!.getTileByPos(bases[j].x, bases[j].y);
-            if (stile === -1) continue;
+            if (stile === -1) {
+              continue;
+            }
             const path = (tile as Tile).pathTo((destination) => {
               return destination.id === stile.id;
             });
-            if (path !== -1) length += path.length * path.length;
+            if (path !== -1) {
+              length += path.length * path.length;
+            }
           }
-          if (initfirst) bases.pop();
-          for (let j = 0; j < bases.length; j++) if (bases[j].x === pos.x && bases[j].y === pos.y) length = -1;
+          if (initfirst) {
+            bases.pop();
+          }
+          for (let j = 0; j < bases.length; j++) {
+            if (bases[j].x === pos.x && bases[j].y === pos.y) {
+              length = -1;
+            }
+          }
           if (length > maxLength) {
             maxLength = length;
             maxPos = pos;
@@ -288,8 +334,9 @@ export class CaptureTheFlag extends Gamemode {
         bases.push(b);
         game.addObject(b);
         let spawnPoint: Tile = b.tile;
-        while (spawnPoint.id === b.tile.id)
+        while (spawnPoint.id === b.tile.id) {
           spawnPoint = spawnPoint.randomWalk(this.game.mode.BaseSpawnDistance + Math.round(Math.random()));
+        }
         player.tank.x = spawnPoint.x + spawnPoint.dx / 2;
         player.tank.y = spawnPoint.y + spawnPoint.dy / 2;
         player.base = b;
@@ -332,10 +379,11 @@ export class KingOfTheHill extends Gamemode {
   newKill(player1: Player, player2: Player) {
     if (player1.team !== player2.team) {
       player1.spree += 1;
-      if (player1.spree >= 5 && player1.spree % 5 === 0) {
-        // player1.score += Math.floor(player1.spree / 5)
+      if (player1.spree >= 5 && player1.spree % 5 === 0) // player1.score += Math.floor(player1.spree / 5)
+      {
         playSound(SOUNDS.killingspree);
       }
+
       updateScores();
     }
   }
@@ -354,9 +402,14 @@ export class KingOfTheHill extends Gamemode {
           break;
         }
       }
+
       const team = this.bases[0].team;
       if (equal && team !== "#555" && this.game.t % scoreevery === 0) {
-        for (let i = 0; i < this.game.players.length; i++) if (this.game.players[i].team === team) this.giveScore(this.game.players[i], 1);
+        for (let i = 0; i < this.game.players.length; i++) {
+          if (this.game.players[i].team === team) {
+            this.giveScore(this.game.players[i], 1);
+          }
+        }
         adaptBotSpeed(team, 0.02);
       }
     }
@@ -368,7 +421,9 @@ export class KingOfTheHill extends Gamemode {
   init() {
     const bases: Hill[] = [];
     const game = this.game;
-    if (!game.map) return;
+    if (!game.map) {
+      return;
+    }
 
     // create players.length-1 bases
     for (let ni = 0; ni < game.players.length - 1; ni++) {
@@ -378,7 +433,9 @@ export class KingOfTheHill extends Gamemode {
       for (let k = 0; k < 100; k++) {
         const pos = game.map.spawnPoint();
         const tile = game.map.getTileByPos(pos.x, pos.y);
-        if (tile === -1) continue;
+        if (tile === -1) {
+          continue;
+        }
         let length = 0;
         let initfirst = false;
         if (bases.length === 0) {
@@ -387,14 +444,24 @@ export class KingOfTheHill extends Gamemode {
         }
         for (let j = 0; j < bases.length; j++) {
           const stile = this.game.map!.getTileByPos(bases[j].x, bases[j].y);
-          if (stile === -1) continue;
+          if (stile === -1) {
+            continue;
+          }
           const path = (tile as Tile).pathTo((destination) => {
             return destination.id === stile.id;
           });
-          if (path !== -1) length += path.length * path.length;
+          if (path !== -1) {
+            length += path.length * path.length;
+          }
         }
-        if (initfirst) bases.pop();
-        for (let j = 0; j < bases.length; j++) if (bases[j].x === pos.x && bases[j].y === pos.y) length = -1;
+        if (initfirst) {
+          bases.pop();
+        }
+        for (let j = 0; j < bases.length; j++) {
+          if (bases[j].x === pos.x && bases[j].y === pos.y) {
+            length = -1;
+          }
+        }
         if (length > maxLength) {
           maxLength = length;
           maxPos = pos;

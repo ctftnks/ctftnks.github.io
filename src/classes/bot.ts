@@ -45,19 +45,27 @@ export default class Bot extends Player {
    */
   autopilot(): void {
     this.lastChecked += Settings.GameFrequency;
-    if (this.lastChecked < 72000 / this.tank.speed) return;
+    if (this.lastChecked < 72000 / this.tank.speed) {
+      return;
+    }
     this.lastChecked = 0;
 
     const game = this.game!;
     const tank = this.tank;
 
-    if (!game.map) return;
-    if (!tank.map) return;
+    if (!game.map) {
+      return;
+    }
+    if (!tank.map) {
+      return;
+    }
 
     const weapon = tank.weapon;
     const invincible = tank.invincible();
     const tile = game.map.getTileByPos(tank.x, tank.y);
-    if (tile === -1) return;
+    if (tile === -1) {
+      return;
+    }
 
     const opts: any[] = [];
 
@@ -65,13 +73,14 @@ export default class Bot extends Player {
       return obj instanceof PowerUp && obj.attractsBots;
     }, 2);
 
-    if (powerupPath !== -1)
+    if (powerupPath !== -1) {
       opts.push({
         f: () => {
           this.follow(powerupPath);
         },
         weight: 100,
       });
+    }
 
     const enemyPath = tile.xypathToObj((obj: any) => {
       return obj.type === "Tank" && obj.player.team !== this.team;
@@ -88,14 +97,17 @@ export default class Bot extends Player {
 
       if (weapon.isActive) {
         const aimbot = this.aimbot(enemy, enemyPath);
-        if (enemy.carriedFlag !== -1) aimbot.weight *= 2;
-        if (aimbot.shouldShoot)
+        if (enemy.carriedFlag !== -1) {
+          aimbot.weight *= 2;
+        }
+        if (aimbot.shouldShoot) {
           opts.push({
             f: () => {
               this.shoot(aimbot.target);
             },
             weight: aimbot.weight,
           });
+        }
       }
     }
 
@@ -103,11 +115,19 @@ export default class Bot extends Player {
       const carriesFlag = tank.carriedFlag !== -1;
       const flagInBase = this.base!.hasFlag();
       const ctfPath = tile.xypathToObj((obj: any) => {
-        if (!carriesFlag && obj.type === "Flag" && obj.team !== this.team) return true;
-        if (carriesFlag && obj.type === "Base" && obj.hasFlag() && obj.team === this.team) return true;
+        if (!carriesFlag && obj.type === "Flag" && obj.team !== this.team) {
+          return true;
+        }
+        if (carriesFlag && obj.type === "Base" && obj.hasFlag() && obj.team === this.team) {
+          return true;
+        }
         if (!flagInBase) {
-          if (obj.type === "Flag" && obj.team === this.team) return true;
-          if (obj.type === "Tank" && obj.carriedFlag !== -1 && obj.carriedFlag.team === this.team) return true;
+          if (obj.type === "Flag" && obj.team === this.team) {
+            return true;
+          }
+          if (obj.type === "Tank" && obj.carriedFlag !== -1 && obj.carriedFlag.team === this.team) {
+            return true;
+          }
         }
         return false;
       });
@@ -123,7 +143,9 @@ export default class Bot extends Player {
       }
     } else if (game.mode.name === "KingOfTheHill") {
       const basePath = tile.xypathToObj((obj: any) => {
-        if (obj.type === "Hill" && obj.team !== this.team) return true;
+        if (obj.type === "Hill" && obj.team !== this.team) {
+          return true;
+        }
         return false;
       });
       if (basePath !== -1) {
@@ -163,36 +185,50 @@ export default class Bot extends Player {
    * @param {Array} path - The path to follow.
    */
   follow(path: any[]): void {
-    if (path.length < 2) this.goto = path[0];
-    else this.goto = path[1];
+    if (path.length < 2) {
+      this.goto = path[0];
+    } else {
+      this.goto = path[1];
+    }
   }
 
   /**
    * Performs movements towards the goto target.
    */
   performMovements(): void {
-    if (this.goto === -1) return;
+    if (this.goto === -1) {
+      return;
+    }
     const tank = this.tank;
     const distx = this.goto.x - tank.x;
     const disty = this.goto.y - tank.y;
 
     let newangle = Math.atan2(-distx, disty) + Math.PI;
-    while (newangle < 0) newangle += 2 * Math.PI;
+    while (newangle < 0) {
+      newangle += 2 * Math.PI;
+    }
     newangle = newangle % (2 * Math.PI);
-    while (tank.angle < 0) tank.angle += 2 * Math.PI;
+    while (tank.angle < 0) {
+      tank.angle += 2 * Math.PI;
+    }
     tank.angle = tank.angle % (2 * Math.PI);
 
     if (Math.abs(tank.angle - newangle) < 0.6 || Math.abs(Math.abs(tank.angle - newangle) - Math.PI * 2) < 0.6) {
       tank.move(1 * Settings.BotSpeed);
     }
+
     if (Math.abs(tank.angle - newangle) < 0.1) {
       tank.angle = newangle;
     } else if (tank.angle < newangle) {
-      if (Math.abs(tank.angle - newangle) < Math.PI) tank.turn(2 * Settings.BotSpeed);
-      else tank.turn(-2 * Settings.BotSpeed);
+      if (Math.abs(tank.angle - newangle) < Math.PI) {
+        tank.turn(2 * Settings.BotSpeed);
+      } else {
+        tank.turn(-2 * Settings.BotSpeed);
+      }
+    } else if (Math.abs(tank.angle - newangle) < Math.PI) {
+      tank.turn(-2 * Settings.BotSpeed);
     } else {
-      if (Math.abs(tank.angle - newangle) < Math.PI) tank.turn(-2 * Settings.BotSpeed);
-      else tank.turn(2 * Settings.BotSpeed);
+      tank.turn(2 * Settings.BotSpeed);
     }
   }
 
@@ -214,6 +250,7 @@ export default class Bot extends Player {
     } else {
       tank.shoot();
     }
+
     this.flee();
   }
 
@@ -228,17 +265,23 @@ export default class Bot extends Player {
     const weapon = this.tank.weapon;
 
     if (path === -1) {
-      if (!this.tank.map) return result;
+      if (!this.tank.map) {
+        return result;
+      }
       const tile = this.tank.map.getTileByPos(this.tank.x, this.tank.y);
       if (tile !== -1) {
         path = tile.xypathToObj(enemy);
       }
     }
 
-    if (path === -1) return result;
+    if (path === -1) {
+      return result;
+    }
 
     const r = Math.random() > 0.6 ? 2 : 1;
-    if (path.length <= this.tank.weapon.bot.shootingRange + r && !enemy.invincible()) result.shouldShoot = true;
+    if (path.length <= this.tank.weapon.bot.shootingRange + r && !enemy.invincible()) {
+      result.shouldShoot = true;
+    }
 
     if (weapon.name === "Laser") {
       for (let i = 0; i < weapon.trajectory.targets.length; i++) {
@@ -274,18 +317,28 @@ export default class Bot extends Player {
    * @returns {Array|number} The flee path or -1 if no path found.
    */
   getFleePath(): any {
-    if (this.fleeing.from === -1 || this.fleeing.condition === -1 || !this.fleeing.condition()) return -1;
-    if (!this.tank.weapon.bot.fleeIfActive && this.tank.weapon.isActive) return -1;
+    if (this.fleeing.from === -1 || this.fleeing.condition === -1 || !this.fleeing.condition()) {
+      return -1;
+    }
+    if (!this.tank.weapon.bot.fleeIfActive && this.tank.weapon.isActive) {
+      return -1;
+    }
 
     const tile = store.game!.map.getTileByPos(this.tank.x, this.tank.y);
-    if (tile === -1) return -1;
+    if (tile === -1) {
+      return -1;
+    }
 
-    if (!this.fleeing.from.includes(tile)) this.fleeing.from.push(tile);
+    if (!this.fleeing.from.includes(tile)) {
+      this.fleeing.from.push(tile);
+    }
 
     let nextTile: Tile = tile;
-    for (let i = 0; i < 4; i++)
-      if (!(tile as Tile).walls[i] && (tile as Tile).neighbors[i] && !this.fleeing.from.includes((tile as Tile).neighbors[i]))
+    for (let i = 0; i < 4; i++) {
+      if (!(tile as Tile).walls[i] && (tile as Tile).neighbors[i] && !this.fleeing.from.includes((tile as Tile).neighbors[i])) {
         nextTile = (tile as Tile).neighbors[i] as Tile;
+      }
+    }
 
     const fleePath = [tile, nextTile];
 
@@ -300,11 +353,17 @@ export default class Bot extends Player {
    * Initiates fleeing behavior.
    */
   flee(): void {
-    if (this.tank.weapon.bot.fleeingDuration <= 0) return;
+    if (this.tank.weapon.bot.fleeingDuration <= 0) {
+      return;
+    }
 
-    if (!store.game || !store.game.map) return;
+    if (!store.game || !store.game.map) {
+      return;
+    }
     const tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
-    if (tile === -1) return;
+    if (tile === -1) {
+      return;
+    }
 
     const nextTile = store.game.map.getTileByPos(
       this.tank.x + tile.dx * Math.sin(this.tank.angle),
@@ -327,7 +386,9 @@ export default class Bot extends Player {
  * @returns {number|undefined} The new bot speed.
  */
 export function adaptBotSpeed(team: any, val: number = 0.1): number | undefined {
-  if (!Settings.AdaptiveBotSpeed) return;
+  if (!Settings.AdaptiveBotSpeed) {
+    return;
+  }
 
   const teams: any[] = [];
   const botcounts: number[] = [];
@@ -343,7 +404,9 @@ export function adaptBotSpeed(team: any, val: number = 0.1): number | undefined 
   }
 
   let avgbots = 0;
-  for (let i = 0; i < teams.length; i++) avgbots += botcounts[i] / parseFloat(teams.length);
+  for (let i = 0; i < teams.length; i++) {
+    avgbots += botcounts[i] / parseFloat(teams.length);
+  }
 
   const id = teams.indexOf(team);
   Settings.BotSpeed += (avgbots - botcounts[id]) * val;

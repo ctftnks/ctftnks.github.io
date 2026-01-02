@@ -101,7 +101,9 @@ export default class Game {
    */
   start() {
     this.mode.init();
-    for (let i = 0; i < this.players.length; i++) this.players[i].spawn();
+    for (let i = 0; i < this.players.length; i++) {
+      this.players[i].spawn();
+    }
 
     this.loop = setInterval(() => {
       this.step();
@@ -119,16 +121,24 @@ export default class Game {
   step() {
     if (!this.paused) {
       this.t += Settings.GameFrequency;
-      if (!this.map) return;
+      if (!this.map) {
+        return;
+      }
       // remove deleted objects and
       // initiate spatial sorting of objects within the map class
       this.map.clearObjectLists();
       for (let i = this.objs.length - 1; i >= 0; i--) {
-        if (!this.objs[i].deleted) this.map.addObject(this.objs[i]);
-        else this.objs.splice(i, 1);
+        if (!this.objs[i].deleted) {
+          this.map.addObject(this.objs[i]);
+        } else {
+          this.objs.splice(i, 1);
+        }
       }
+
       // call step() function for every object in order for it to move/etc.
-      for (let i = 0; i < this.objs.length; i++) this.objs[i].step();
+      for (let i = 0; i < this.objs.length; i++) {
+        this.objs[i].step();
+      }
       // do gamemode calculations
       this.mode.step();
       // add random PowerUp
@@ -157,9 +167,13 @@ export default class Game {
         const dtm: number = Math.floor(dt / 60);
         const dts: number = Math.floor(dt - dtm * 60);
         const timerElem = document.getElementById("GameTimer");
-        if (timerElem) timerElem.innerHTML = `${String(dtm).padStart(2, "0")}:${String(dts).padStart(2, "0")}`;
+        if (timerElem) {
+          timerElem.innerHTML = `${String(dtm).padStart(2, "0")}:${String(dts).padStart(2, "0")}`;
+        }
       }
-      if (this.t > Settings.RoundTime * 60000) this.end();
+      if (this.t > Settings.RoundTime * 60000) {
+        this.end();
+      }
     }
   }
 
@@ -176,12 +190,20 @@ export default class Game {
    */
   stop() {
     this.paused = true;
-    if (this.loop) clearInterval(this.loop);
-    for (let i = 0; i < this.intvls.length; i++) clearInterval(this.intvls[i]);
-    for (let i = 0; i < this.timeouts.length; i++) clearTimeout(this.timeouts[i]);
+    if (this.loop) {
+      clearInterval(this.loop);
+    }
+    for (let i = 0; i < this.intvls.length; i++) {
+      clearInterval(this.intvls[i]);
+    }
+    for (let i = 0; i < this.timeouts.length; i++) {
+      clearTimeout(this.timeouts[i]);
+    }
     clearEffects();
     stopMusic();
-    for (let i = 0; i < this.players.length; i++) this.players[i].base = undefined;
+    for (let i = 0; i < this.players.length; i++) {
+      this.players[i].base = undefined;
+    }
   }
 
   /**
@@ -210,23 +232,29 @@ export function newGame(map: GameMap | null = null) {
   if (store.game) {
     store.game.stop();
   }
+
   store.game = new Game(store.canvas, map);
 
   if (Settings.GameMode === "DM") {
     store.game.mode = new Deathmatch(store.game);
   }
+
   if (Settings.GameMode === "TDM") {
     store.game.mode = new TeamDeathmatch(store.game);
   }
+
   if (Settings.GameMode === "CTF") {
     store.game.mode = new CaptureTheFlag(store.game);
   }
+
   if (Settings.GameMode === "KOTH") {
     store.game.mode = new KingOfTheHill(store.game);
   }
+
   for (let i = 0; i < store.players.length; i++) {
     store.game.addPlayer(store.players[i]);
   }
+
   store.game.start();
   store.canvas.sync();
   if (Settings.ResetStatsEachGame) {
@@ -234,5 +262,6 @@ export function newGame(map: GameMap | null = null) {
       store.game.players[i].resetStats();
     }
   }
+
   return store.game;
 }

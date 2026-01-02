@@ -40,11 +40,21 @@ export default class Player {
    * Timestep: check if keys pressed and act accordingly.
    */
   step(): void {
-    if (Key.isDown(this.keys[0])) this.tank.move(1);
-    if (Key.isDown(this.keys[1])) this.tank.turn(-1);
-    if (Key.isDown(this.keys[2])) this.tank.move(-0.7);
-    if (Key.isDown(this.keys[3])) this.tank.turn(1);
-    if (Key.isDown(this.keys[4])) this.tank.shoot();
+    if (Key.isDown(this.keys[0])) {
+      this.tank.move(1);
+    }
+    if (Key.isDown(this.keys[1])) {
+      this.tank.turn(-1);
+    }
+    if (Key.isDown(this.keys[2])) {
+      this.tank.move(-0.7);
+    }
+    if (Key.isDown(this.keys[3])) {
+      this.tank.turn(1);
+    }
+    if (Key.isDown(this.keys[4])) {
+      this.tank.shoot();
+    }
   }
 
   /**
@@ -58,8 +68,9 @@ export default class Player {
 
     if (typeof this.base !== "undefined" && this.base.tile !== -1) {
       let spos2 = this.base.tile;
-      while (spos2.id === this.base.tile.id)
+      while (spos2.id === this.base.tile.id) {
         spos2 = spos2.randomWalk(Math.pow(this.game!.mode.BaseSpawnDistance, 2) + Math.round(Math.random()));
+      }
       spos = { x: spos2.x + spos2.dx / 2, y: spos2.y + spos2.dy / 2 };
     }
     this.tank.x = spos.x;

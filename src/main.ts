@@ -23,11 +23,15 @@ window.onload = () => {
 // prevent accidental leaving
 window.onbeforeunload = () => {
   const debug = true;
-  if (typeof store.game !== "undefined" && !store.game.paused && !debug) return "";
+  if (typeof store.game !== "undefined" && !store.game.paused && !debug) {
+    return "";
+  }
 };
 
 window.onresize = () => {
-  if (typeof store.game !== "undefined") store.game.canvas.resize();
+  if (typeof store.game !== "undefined") {
+    store.game.canvas.resize();
+  }
 };
 
 // Put some objects into the global scope such that they can be called by inline JS (onclick=...)
