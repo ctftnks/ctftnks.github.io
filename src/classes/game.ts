@@ -1,6 +1,6 @@
 import GameMap from "./gamemap";
 import MapGenerator from "./mapGenerator";
-import { getRandomPowerUp } from "./powerup";
+import { getRandomPowerUp, PowerUp } from "./powerup";
 import { Key } from "../key";
 import { playSound, stopMusic, clearEffects } from "../effects";
 import { store, Settings } from "../store";
@@ -8,7 +8,6 @@ import { SOUNDS } from "../assets";
 import Canvas from "./canvas";
 import Player from "./player";
 import GameObject from "./gameobject";
-import { PowerUp } from "./powerup";
 import { Gamemode, Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import { openPage } from "../pages/pages";
 import { updateScores } from "../ui";

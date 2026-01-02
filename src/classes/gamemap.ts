@@ -127,7 +127,7 @@ export default class GameMap {
   /**
    * Returns a random free spawn point.
    * @param {number} tries - Recursion counter.
-   * @returns {Object} {x, y} coordinates.
+   * @returns {object} {x, y} coordinates.
    */
   spawnPoint(tries: number = 0): { x: number; y: number } {
     const rInt = parseInt((Math.random() * (this.Nx * this.Ny - 1)).toString());
@@ -208,7 +208,7 @@ export class Tile {
 
   /**
    * Return the coordinates of the corners of the tile and whether they're part of some wall.
-   * @returns {Array<Object>} List of corners with {x, y, w}.
+   * @returns {Array<object>} List of corners with {x, y, w}.
    */
   corners(): { x: number; y: number; w: boolean }[] {
     return [

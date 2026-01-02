@@ -41,13 +41,15 @@ export class Gamemode {
 
   /**
    * Updates player score (Default implementation)
+   * @param player
+   * @param val
    */
   giveScore(player: Player, val: number = 1) {}
 }
 
 /**
  * Deathmatch game mode.
- * @extends Gamemode
+ * @augments Gamemode
  */
 export class Deathmatch extends Gamemode {
   /**
@@ -91,7 +93,7 @@ export class Deathmatch extends Gamemode {
 
 /**
  * Team Deathmatch game mode.
- * @extends Gamemode
+ * @augments Gamemode
  */
 export class TeamDeathmatch extends Gamemode {
   initiated: boolean = false;
@@ -218,7 +220,7 @@ export class TeamDeathmatch extends Gamemode {
 
 /**
  * Capture the Flag game mode.
- * @extends Gamemode
+ * @augments Gamemode
  */
 export class CaptureTheFlag extends Gamemode {
   initiated: boolean = false;
@@ -347,7 +349,7 @@ export class CaptureTheFlag extends Gamemode {
 
 /**
  * King of the Hill game mode.
- * @extends Gamemode
+ * @augments Gamemode
  */
 export class KingOfTheHill extends Gamemode {
   bases: Hill[] = [];

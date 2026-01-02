@@ -13,7 +13,6 @@ export class Weapon {
   name: string = "Weapon";
   tank: Tank;
   image: HTMLImageElement;
-  img: HTMLImageElement | undefined;
   isActive: boolean = true;
   isDeleted: boolean = false;
   bot: { shootingRange: number; fleeingDuration: number; fleeIfActive: boolean };
@@ -118,7 +117,7 @@ export class Weapon {
 
 /**
  * The normal, default gun.
- * @extends Weapon
+ * @augments Weapon
  */
 export class Gun extends Weapon {
   name: string = "Gun";
@@ -152,7 +151,7 @@ export class Gun extends Weapon {
 
 /**
  * A rapid-firing machine gun.
- * @extends Weapon
+ * @augments Weapon
  */
 export class MG extends Weapon {
   name: string = "MG";
@@ -217,7 +216,7 @@ export class MG extends Weapon {
 
 /**
  * Laser weapon.
- * @extends Weapon
+ * @augments Weapon
  */
 export class Laser extends Weapon {
   name: string = "Laser";
@@ -285,7 +284,7 @@ export class Laser extends Weapon {
 
 /**
  * A grenade that can be remotely detonated.
- * @extends Weapon
+ * @augments Weapon
  */
 export class Grenade extends Weapon {
   name: string = "Grenade";
@@ -360,7 +359,7 @@ export class Grenade extends Weapon {
 
 /**
  * A mine.
- * @extends Weapon
+ * @augments Weapon
  */
 export class Mine extends Weapon {
   name: string = "Mine";
@@ -418,7 +417,7 @@ export class Mine extends Weapon {
 
 /**
  * A guided missile.
- * @extends Weapon
+ * @augments Weapon
  */
 export class Guided extends Weapon {
   name: string = "Guided";
@@ -517,7 +516,7 @@ export class Guided extends Weapon {
 
 /**
  * Destroys walls.
- * @extends Weapon
+ * @augments Weapon
  */
 export class WreckingBall extends Weapon {
   name: string = "WreckingBall";
@@ -587,12 +586,12 @@ export class WreckingBall extends Weapon {
 
 /**
  * Creates walls.
- * @extends Weapon
+ * @augments Weapon
  */
 
 /**
  * Throws over walls.
- * @extends Weapon
+ * @augments Weapon
  */
 export class Slingshot extends Weapon {
   name: string = "Slingshot";

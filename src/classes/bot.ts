@@ -2,12 +2,14 @@ import Player from "./player";
 import { store, Settings } from "../store";
 import { Tile } from "./gamemap";
 import { PowerUp } from "./powerup";
+import Tank from "./tank";
+import { Flag } from "./ctf";
 
 let NBots: number = 0;
 
 /**
  * A bot player that controls a tank automatically.
- * @extends Player
+ * @augments Player
  */
 export default class Bot extends Player {
   // keys are inherited from Player
@@ -83,7 +85,7 @@ export default class Bot extends Player {
     }
 
     const enemyPath = tile.xypathToObj((obj: any) => {
-      return obj.type === "Tank" && obj.player.team !== this.team;
+      return obj instanceof Tank && obj.player.team !== this.team;
     });
 
     if (enemyPath !== -1) {
@@ -122,10 +124,10 @@ export default class Bot extends Player {
           return true;
         }
         if (!flagInBase) {
-          if (obj.type === "Flag" && obj.team === this.team) {
+          if (obj instanceof Flag && obj.team === this.team) {
             return true;
           }
-          if (obj.type === "Tank" && obj.carriedFlag !== -1 && obj.carriedFlag.team === this.team) {
+          if (obj instanceof Tank && obj.carriedFlag !== -1 && obj.carriedFlag.team === this.team) {
             return true;
           }
         }
@@ -234,7 +236,7 @@ export default class Bot extends Player {
 
   /**
    * Handles shooting logic.
-   * @param {Object} target - The target to shoot at.
+   * @param {object} target - The target to shoot at.
    */
   shoot(target: any): void {
     this.goto = -1;
@@ -258,7 +260,7 @@ export default class Bot extends Player {
    * Evaluates whether it is a good idea to shoot.
    * @param {Tank} enemy - The enemy tank.
    * @param {Array|number} path - Path to the enemy.
-   * @returns {Object} Result with shouldShoot, target, and weight.
+   * @returns {object} Result with shouldShoot, target, and weight.
    */
   aimbot(enemy: any, path: any = -1): any {
     const result = { shouldShoot: false, target: enemy, weight: 500 };

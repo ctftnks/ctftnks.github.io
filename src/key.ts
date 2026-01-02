@@ -7,7 +7,7 @@ export const Key = {
   /**
    * Check if a key is currently pressed.
    * @param {string} code - The KeyboardEvent.code (e.g., 'KeyW', 'ArrowUp', 'Space')
-   * @returns {boolean}
+   * @returns {boolean} true, if the key is currently pressed, otherwise false
    */
   isDown: function (code: string): boolean {
     return this._pressed.has(code);

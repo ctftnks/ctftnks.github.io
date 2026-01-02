@@ -4,7 +4,7 @@ import GameMap from "./gamemap";
 
 /**
  * Represents a trajectory for ray-casting or lasers.
- * @extends GameObject
+ * @augments GameObject
  */
 export default class Trajectory extends GameObject {
   hidden: boolean = false;

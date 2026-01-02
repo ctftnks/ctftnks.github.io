@@ -20,7 +20,6 @@ export default class MapGenerator {
    * Make the wall a passage and mark the cell on the opposite side as part of the maze.
    * Add the neighboring walls of the cell to the wall list.
    * If the cell on the opposite side already was in the maze, remove the wall from the list.
-   *
    * @param {GameMap} map - The map to modify.
    */
   static primsMaze(map: GameMap) {

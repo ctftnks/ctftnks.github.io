@@ -7,7 +7,7 @@ import Tank from "./tank";
 
 /**
  * Base class for all PowerUps.
- * @extends GameObject
+ * @augments GameObject
  */
 export class PowerUp extends GameObject {
   /** Collision radius. */
@@ -48,7 +48,7 @@ export class PowerUp extends GameObject {
 
 /**
  * Laser weapon powerup.
- * @extends PowerUp
+ * @augments PowerUp
  */
 export class LaserBonus extends PowerUp {
   constructor() {
@@ -64,7 +64,7 @@ export class LaserBonus extends PowerUp {
 
 /**
  * Machine Gun weapon powerup.
- * @extends PowerUp
+ * @augments PowerUp
  */
 export class MGBonus extends PowerUp {
   constructor() {
@@ -80,7 +80,7 @@ export class MGBonus extends PowerUp {
 
 /**
  * Grenade weapon powerup.
- * @extends PowerUp
+ * @augments PowerUp
  */
 export class GrenadeBonus extends PowerUp {
   constructor() {
@@ -95,7 +95,7 @@ export class GrenadeBonus extends PowerUp {
 
 /**
  * Mine weapon powerup.
- * @extends PowerUp
+ * @augments PowerUp
  */
 export class MineBonus extends PowerUp {
   constructor() {
@@ -110,7 +110,7 @@ export class MineBonus extends PowerUp {
 
 /**
  * Guided Missile weapon powerup.
- * @extends PowerUp
+ * @augments PowerUp
  */
 export class GuidedBonus extends PowerUp {
   constructor() {
@@ -126,7 +126,7 @@ export class GuidedBonus extends PowerUp {
 
 /**
  * Wrecking Ball weapon powerup.
- * @extends PowerUp
+ * @augments PowerUp
  */
 export class WreckingBallBonus extends PowerUp {
   constructor() {
@@ -141,7 +141,7 @@ export class WreckingBallBonus extends PowerUp {
 
 /**
  * Slingshot weapon powerup.
- * @extends PowerUp
+ * @augments PowerUp
  */
 export class SlingshotBonus extends PowerUp {
   constructor() {
@@ -157,7 +157,7 @@ export class SlingshotBonus extends PowerUp {
 
 /**
  * Speed Boost powerup.
- * @extends PowerUp
+ * @augments PowerUp
  */
 export class SpeedBonus extends PowerUp {
   constructor() {
@@ -178,7 +178,7 @@ export class SpeedBonus extends PowerUp {
 
 /**
  * Invincibility powerup.
- * @extends PowerUp
+ * @augments PowerUp
  */
 export class InvincibleBonus extends PowerUp {
   applied: boolean = false;
@@ -215,7 +215,7 @@ export class InvincibleBonus extends PowerUp {
 
 /**
  * Terminator powerup (Rapid Fire).
- * @extends PowerUp
+ * @augments PowerUp
  */
 export class TerminatorBonus extends PowerUp {
   applied: boolean = false;
@@ -242,7 +242,7 @@ export class TerminatorBonus extends PowerUp {
 
 /**
  * Multiplier powerup (Spawn rate increase).
- * @extends PowerUp
+ * @augments PowerUp
  */
 export class MultiBonus extends PowerUp {
   used: boolean = false;
@@ -268,7 +268,7 @@ export class MultiBonus extends PowerUp {
 
 /**
  * Fog of War powerup.
- * @extends PowerUp
+ * @augments PowerUp
  */
 export class FogBonus extends PowerUp {
   used: boolean = false;

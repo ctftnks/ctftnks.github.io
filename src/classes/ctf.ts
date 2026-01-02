@@ -7,7 +7,7 @@ import Player from "./player";
 
 /**
  * Represents a Flag in Capture the Flag mode.
- * @extends GameObject
+ * @augments GameObject
  */
 export class Flag extends GameObject {
   type: string = "Flag";
@@ -133,7 +133,7 @@ export class Flag extends GameObject {
 
 /**
  * Represents a Base in the game.
- * @extends GameObject
+ * @augments GameObject
  */
 export class Base extends GameObject {
   type: string = "Base";
@@ -223,7 +223,7 @@ export class Base extends GameObject {
 
 /**
  * Represents a Hill in King of the Hill mode.
- * @extends Base
+ * @augments Base
  */
 export class Hill extends Base {
   type: string = "Hill";

@@ -4,7 +4,7 @@ import Game from "./game";
 
 /**
  * Represents a fancy smoke circle on the map.
- * @extends GameObject
+ * @augments GameObject
  */
 export class Smoke extends GameObject {
   radius: number;

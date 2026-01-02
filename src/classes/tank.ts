@@ -18,7 +18,7 @@ import type { Flag } from "./ctf";
  * contains position, angle, speed of the tank and provides methods to move it
  * contains methods for collision detection with walls and bullets
  * contains a weapon and a method to shoot it
- * @extends GameObject
+ * @augments GameObject
  */
 export default class Tank extends GameObject {
   /** The player. */
@@ -205,7 +205,7 @@ export default class Tank extends GameObject {
   /**
    * Get x,y-coordinates of the tanks corners.
    * Needed for collision detection and weapon firing.
-   * @returns {Array<Object>} List of corners {x, y}.
+   * @returns {Array<object>} List of corners {x, y}.
    */
   corners(): { x: number; y: number }[] {
     return [

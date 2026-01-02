@@ -106,7 +106,11 @@ export function doEditKeymap(newKeyCode: string): void {
   updatePlayersMenu();
 }
 
-/** edit the keymap from the menu */
+/**
+ * edit the keymap from the menu
+ * @param mapID
+ * @returns HTML string with buttons for displaying the Player's keymap on screen
+ */
 function editableKeymap(mapID: number): string {
   if (mapID === -1) {
     let html = "";
@@ -143,7 +147,7 @@ function editableKeymap(mapID: number): string {
 /**
  * Returns a user-friendly label for a given key code.
  * @param {string} code
- * @returns {string}
+ * @returns {string} label of the key
  */
 export function getKeyLabel(code: string): string {
   if (!code) {
