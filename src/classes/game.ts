@@ -65,15 +65,6 @@ export default class Game {
     }
 
     this.map.resize();
-    this.players = [];
-    this.objs = [];
-    this.paused = false;
-    this.loop = undefined;
-    this.nPlayersAlive = 0;
-    this.t = 0;
-    this.intvls = [];
-    this.timeouts = [];
-    this.nkills = 0;
     this.mode = new Deathmatch(this);
     store.GameID++;
   }
@@ -82,7 +73,7 @@ export default class Game {
    * Adds a player to the game.
    * @param {Player} player - The player to add.
    */
-  addPlayer(player: Player) {
+  addPlayer(player: Player): void {
     this.players.push(player);
     player.game = this;
   }
@@ -91,14 +82,14 @@ export default class Game {
    * Adds an object to the game.
    * @param {GameObject} object - The object to add.
    */
-  addObject(object: GameObject) {
+  addObject(object: GameObject): void {
     this.objs.push(object);
   }
 
   /**
    * Starts the game loop.
    */
-  start() {
+  start(): void {
     this.mode.init();
     for (let i = 0; i < this.players.length; i++) {
       this.players[i].spawn();
@@ -117,7 +108,7 @@ export default class Game {
   /**
    * A single step of the game loop.
    */
-  step() {
+  step(): void {
     if (!this.paused) {
       this.t += Settings.GameFrequency;
       if (!this.map) {
@@ -179,7 +170,7 @@ export default class Game {
   /**
    * Pauses or unpauses the game.
    */
-  pause() {
+  pause(): void {
     this.paused = !this.paused;
     stopMusic(); // prevent 'invincible' sound from playing all over
   }
@@ -187,7 +178,7 @@ export default class Game {
   /**
    * Stops the game loop and clears intervals/timeouts.
    */
-  stop() {
+  stop(): void {
     this.paused = true;
     if (this.loop) {
       clearInterval(this.loop);
@@ -208,7 +199,7 @@ export default class Game {
   /**
    * Ends the game and shows the leaderboard.
    */
-  end() {
+  end(): void {
     this.paused = true;
     openPage("leaderboard");
     this.stop();
@@ -217,7 +208,7 @@ export default class Game {
   /**
    * Resets the game time and player timers.
    */
-  resetTime() {
+  resetTime(): void {
     this.t = 0;
     for (let i = 0; i < this.players.length; i++) {
       this.players[i].tank.timers.invincible = -1;

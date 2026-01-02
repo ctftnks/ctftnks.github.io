@@ -38,7 +38,7 @@ export default class Tank extends GameObject {
   /** Movement speed. */
   speed: number;
   /** Timers for effects. */
-  timers: { spawnshield: number; invincible: number };
+  timers: { spawnshield: number; invincible: number } = { spawnshield: -1, invincible: -1 };
   /** The flag currently carried, or -1. */
   carriedFlag: Flag | number = -1;
   /** Inventory of weapons (unused?). */
@@ -60,14 +60,13 @@ export default class Tank extends GameObject {
     this.weapon = new Gun(this);
     this.speed = Settings.TankSpeed;
     this.type = "Tank";
-    this.timers = { spawnshield: -1, invincible: -1 };
   }
 
   /**
    * Draws the tank (rotated) on map.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(context: CanvasRenderingContext2D) {
+  draw(context: CanvasRenderingContext2D): void {
     context.save();
     context.beginPath();
     context.translate(this.x, this.y);
@@ -121,7 +120,7 @@ export default class Tank extends GameObject {
    * Let player class check for key presses and move tank.
    * Check for collisions and handle them.
    */
-  step() {
+  step(): void {
     this.player.step();
     if (this.weapon.isDeleted) {
       this.defaultWeapon();
@@ -134,7 +133,7 @@ export default class Tank extends GameObject {
    * Move the tank forward/backwards.
    * @param {number} direction - 1 for forward, -1 for backward.
    */
-  move(direction: number) {
+  move(direction: number): void {
     this.player.stats.miles += 1;
     const oldx = this.x;
     const oldy = this.y;
@@ -159,7 +158,7 @@ export default class Tank extends GameObject {
    * Rotate the tank.
    * @param {number} direction - 1 for right, -1 for left.
    */
-  turn(direction: number) {
+  turn(direction: number): void {
     const oldangle = this.angle;
     this.angle += (((direction * Settings.TankTurnSpeed * Settings.GameFrequency) / 1000) * Settings.TankSpeed) / 180;
 
@@ -185,7 +184,7 @@ export default class Tank extends GameObject {
   /**
    * Use the weapon.
    */
-  shoot() {
+  shoot(): void {
     if (this.spawnshield()) {
       return;
     }
@@ -198,7 +197,7 @@ export default class Tank extends GameObject {
   /**
    * Return to the default weapon.
    */
-  defaultWeapon() {
+  defaultWeapon(): void {
     this.weapon = new Gun(this);
   }
 
@@ -296,7 +295,7 @@ export default class Tank extends GameObject {
    * Uses spatial sorting of the map class.
    * Only checks thos bullets that lie within the tiles of the tanks corners.
    */
-  checkBulletCollision() {
+  checkBulletCollision(): void {
     if (this.spawnshield()) {
       return;
     }
@@ -384,7 +383,7 @@ export default class Tank extends GameObject {
   /**
    * Deletes the tank.
    */
-  delete() {
+  delete(): void {
     // CTF: if tank has flag, drop it
     if (this.carriedFlag !== -1) {
       this.carriedFlag.drop(this.x, this.y);

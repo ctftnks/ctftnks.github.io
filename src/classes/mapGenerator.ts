@@ -22,7 +22,7 @@ export default class MapGenerator {
    * If the cell on the opposite side already was in the maze, remove the wall from the list.
    * @param {GameMap} map - The map to modify.
    */
-  static primsMaze(map: GameMap) {
+  static primsMaze(map: GameMap): void {
     // Start with a grid full of walls.
     for (let i = 0; i < map.Nx * map.Ny; i++) {
       map.tiles[i].walls = [true, true, true, true];
@@ -74,7 +74,7 @@ export default class MapGenerator {
    * @param {number} x2 - End X.
    * @param {number} y2 - End Y.
    */
-  static recursiveDivision(map: GameMap, x1: number = -1, y1: number = -1, x2: number = -1, y2: number = -1) {
+  static recursiveDivision(map: GameMap, x1: number = -1, y1: number = -1, x2: number = -1, y2: number = -1): void {
     // recursive entry point
     if (x1 === -1) {
       // init limits
@@ -133,7 +133,7 @@ export default class MapGenerator {
    * @param {number} x2 - End X.
    * @param {number} y2 - End Y.
    */
-  static porousRecursiveDivision(map: GameMap, x1: number = -1, y1: number = -1, x2: number = -1, y2: number = -1) {
+  static porousRecursiveDivision(map: GameMap, x1: number = -1, y1: number = -1, x2: number = -1, y2: number = -1): void {
     // recursive entry point
     if (x1 === -1) {
       // init limits

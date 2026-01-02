@@ -46,7 +46,7 @@ export class Flag extends GameObject {
   /**
    * Return flag to base.
    */
-  reset() {
+  reset(): void {
     this.inBase = true;
     this.drop(this.base.x, this.base.y);
   }
@@ -55,7 +55,7 @@ export class Flag extends GameObject {
    * Let tank pick up the flag.
    * @param {Tank} tank - The tank picking up the flag.
    */
-  pickup(tank: Tank) {
+  pickup(tank: Tank): void {
     tank.carriedFlag = this;
     this.picked = true;
     this.inBase = false;
@@ -67,7 +67,7 @@ export class Flag extends GameObject {
    * @param {number} x - X coordinate.
    * @param {number} y - Y coordinate.
    */
-  drop(x: number, y: number) {
+  drop(x: number, y: number): void {
     this.deleted = false;
     this.x = x;
     this.y = y;
@@ -79,7 +79,7 @@ export class Flag extends GameObject {
   /**
    * Updates the flag state.
    */
-  step() {
+  step(): void {
     if (!this.game.map) {
       return;
     }
@@ -116,7 +116,7 @@ export class Flag extends GameObject {
    * Draws the flag.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(context: CanvasRenderingContext2D) {
+  draw(context: CanvasRenderingContext2D): void {
     context.save();
     context.translate(this.x, this.y);
     context.beginPath();
@@ -171,7 +171,7 @@ export class Base extends GameObject {
    * Draws the base.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(context: CanvasRenderingContext2D) {
+  draw(context: CanvasRenderingContext2D): void {
     context.save();
     context.beginPath();
     context.translate(this.x, this.y);
@@ -187,7 +187,7 @@ export class Base extends GameObject {
   /**
    * Updates the base state, checking for flag captures.
    */
-  step() {
+  step(): void {
     if (!this.tile || this.tile === -1) {
       return;
     }
@@ -241,7 +241,7 @@ export class Hill extends Base {
   /**
    * Updates the hill state, checking for capture.
    */
-  step() {
+  step(): void {
     if (!this.tile || (this.tile as any) === -1) {
       return;
     }

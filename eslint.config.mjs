@@ -45,6 +45,12 @@ export default [
       "jsdoc/require-returns-type": "off",
       "jsdoc/require-returns-description": "off",
       // "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/explicit-function-return-type": [
+        "error",
+        {
+          allowExpressions: true, // allows skipping return types on simple arrow functions used as arguments
+        },
+      ],
     },
   },
 ];

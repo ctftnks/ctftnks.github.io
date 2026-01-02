@@ -22,8 +22,6 @@ export default class Canvas {
     this.height = this.canvas.clientHeight;
     this.canvas.width = this.canvas.clientWidth;
     this.width = this.canvas.clientWidth;
-    this.loop = undefined;
-    this.scale = 1;
   }
 
   /**

@@ -27,18 +27,18 @@ export class PowerUp extends GameObject {
    * Applies the powerup effect to a tank.
    * @param {Tank} tank - The tank picking up the powerup.
    */
-  apply(tank: Tank) {}
+  apply(tank: Tank): void {}
 
   /**
    * Update step.
    */
-  step() {}
+  step(): void {}
 
   /**
    * Draws the powerup.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(context: CanvasRenderingContext2D) {
+  draw(context: CanvasRenderingContext2D): void {
     context.save();
     context.translate(this.x, this.y);
     context.drawImage(this.image, -this.width / 2, -this.width / 2, this.width, this.width);
@@ -56,7 +56,7 @@ export class LaserBonus extends PowerUp {
     this.attractsBots = true;
     this.image.src = IMAGES.laser;
   }
-  apply(tank: Tank) {
+  apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new Laser(tank);
   }
@@ -72,7 +72,7 @@ export class MGBonus extends PowerUp {
     this.attractsBots = true;
     this.image.src = IMAGES.mg;
   }
-  apply(tank: Tank) {
+  apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new MG(tank);
   }
@@ -87,7 +87,7 @@ export class GrenadeBonus extends PowerUp {
     super();
     this.image.src = IMAGES.grenade;
   }
-  apply(tank: Tank) {
+  apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new Grenade(tank);
   }
@@ -102,7 +102,7 @@ export class MineBonus extends PowerUp {
     super();
     this.image.src = IMAGES.mine;
   }
-  apply(tank: Tank) {
+  apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new Mine(tank);
   }
@@ -118,7 +118,7 @@ export class GuidedBonus extends PowerUp {
     this.attractsBots = true;
     this.image.src = IMAGES.guided;
   }
-  apply(tank: Tank) {
+  apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new Guided(tank);
   }
@@ -133,7 +133,7 @@ export class WreckingBallBonus extends PowerUp {
     super();
     this.image.src = IMAGES.wreckingBall;
   }
-  apply(tank: Tank) {
+  apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new WreckingBall(tank);
   }
@@ -149,7 +149,7 @@ export class SlingshotBonus extends PowerUp {
     this.attractsBots = true;
     this.image.src = IMAGES.slingshot;
   }
-  apply(tank: Tank) {
+  apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new Slingshot(tank);
   }
@@ -166,7 +166,7 @@ export class SpeedBonus extends PowerUp {
     this.image.src = IMAGES.speed;
   }
 
-  apply(tank: Tank) {
+  apply(tank: Tank): void {
     tank.speed *= 1.1;
     tank.player.game.timeouts.push(
       setTimeout(() => {
@@ -189,7 +189,7 @@ export class InvincibleBonus extends PowerUp {
     this.image.src = IMAGES.invincible;
   }
 
-  apply(tank: Tank) {
+  apply(tank: Tank): void {
     if (this.applied) {
       return;
     }
@@ -225,7 +225,7 @@ export class TerminatorBonus extends PowerUp {
     this.attractsBots = true;
     this.image.src = IMAGES.terminator;
   }
-  apply(tank: Tank) {
+  apply(tank: Tank): void {
     if (this.applied) {
       return;
     }
@@ -252,7 +252,7 @@ export class MultiBonus extends PowerUp {
     this.image.src = IMAGES.multi;
   }
 
-  apply(tank: Tank) {
+  apply(tank: Tank): void {
     if (!this.used) {
       this.used = true;
       Settings.PowerUpRate /= 2.5;
@@ -276,7 +276,7 @@ export class FogBonus extends PowerUp {
     super();
     this.image.src = IMAGES.fog;
   }
-  apply(tank: Tank) {
+  apply(tank: Tank): void {
     if (!this.used) {
       tank.player.game.intvls.push(fogOfWar(store.game));
     }
