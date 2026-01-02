@@ -15,7 +15,7 @@ export class Weapon {
   image: HTMLImageElement;
   img: HTMLImageElement | undefined;
   active: boolean;
-  is_deleted: boolean;
+  isDeleted: boolean;
   bot: { shooting_range: number; fleeing_duration: number; flee_if_active: boolean };
   trajectory: any;
   bullet: any;
@@ -34,7 +34,7 @@ export class Weapon {
     this.image.src = "";
     this.img = undefined;
     this.active = true;
-    this.is_deleted = false;
+    this.isDeleted = false;
     this.bot = {
       shooting_range: 2, // distance at which bots fire the weapon
       fleeing_duration: 800, // how long should a bot flee after firing this weapon?
@@ -106,7 +106,7 @@ export class Weapon {
    */
   delete(): void {
     this.active = false;
-    this.is_deleted = true;
+    this.isDeleted = true;
   }
 
   /**
@@ -279,7 +279,7 @@ export class Laser extends Weapon {
   }
 
   delete(): void {
-    this.is_deleted = true;
+    this.isDeleted = true;
     this.trajectory.delete();
   }
 }
@@ -308,7 +308,7 @@ export class Grenade extends Weapon {
   }
 
   newBullet(): Bullet | undefined {
-    if (this.is_deleted) return;
+    if (this.isDeleted) return;
     const e = super.newBullet();
     e.image = new Image();
     e.image.src = IMAGES.grenade;
