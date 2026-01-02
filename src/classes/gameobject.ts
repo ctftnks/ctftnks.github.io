@@ -3,27 +3,21 @@
  * Base class for Tanks, Bullets, PowerUps, etc.
  */
 export default class GameObject {
-  deleted: boolean = false;
   type: string = "Object";
   image: HTMLImageElement;
   x: number = 0;
   y: number = 0;
   width: number = 0;
   img: HTMLImageElement | undefined;
+  // every object can be deleted
+  // the loop will then delete it from the game object list
+  deleted: boolean = false;
 
   /**
    * Creates a new GameObject.
    */
   constructor() {
-    // every object can be deleted
-    // the loop will then delete it from the game object list
-    this.deleted = false;
-    this.type = "Object";
     this.image = new Image();
-    this.x = 0;
-    this.y = 0;
-    this.width = 0;
-    this.img = undefined;
   }
 
   /**
@@ -38,7 +32,7 @@ export default class GameObject {
    * @param {Object} canvas - The canvas element (or wrapper).
    * @param {CanvasRenderingContext2D} context - The 2D rendering context.
    */
-  draw(canvas: any, context: CanvasRenderingContext2D): void {
+  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D): void {
     if (this.img) {
       context.save();
       context.translate(this.x, this.y);

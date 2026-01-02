@@ -10,9 +10,9 @@ export default class Trajectory extends GameObject {
   hidden: boolean = false;
   color: string = "#000";
   thickness: number = 2;
-  length: number;
+  length: number = 2000;
   angle: number | undefined;
-  delta: number;
+  delta: number = 4;
   points: any[] = [];
   map: GameMap;
   drawevery: number = 1;
@@ -26,17 +26,7 @@ export default class Trajectory extends GameObject {
   constructor(map: GameMap) {
     super();
 
-    this.hidden = false;
-    this.color = "#000";
-    this.thickness = 2;
-    this.length = 2000;
-    this.angle = undefined;
-    this.delta = 4;
-    this.points = [];
     this.map = map;
-    this.drawevery = 1;
-    this.timeout = 100;
-    this.targets = [];
   }
 
   /**
@@ -44,7 +34,7 @@ export default class Trajectory extends GameObject {
    * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas: any, context: CanvasRenderingContext2D): void {
+  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D): void {
     if (this.hidden) return;
     for (let i = 0; i < this.points.length; i += this.drawevery) {
       const p = this.points[i];

@@ -27,7 +27,6 @@ export class Smoke extends GameObject {
     this.x = x;
     this.y = y;
     this.radius = radius;
-    this.color = "rgba(40, 40, 40, 0.3)";
     this.rspeed = rspeed;
     // lifetime of the smoke in [ms]
     this.timeout = timeout;
@@ -38,7 +37,7 @@ export class Smoke extends GameObject {
    * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas: any, context: CanvasRenderingContext2D): void {
+  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D): void {
     context.beginPath();
     context.fillStyle = this.color;
     context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);

@@ -20,12 +20,7 @@ export class PowerUp extends GameObject {
    */
   constructor() {
     super();
-    this.image = new Image();
     this.width = 30;
-    this.x = 0; // Initialized later
-    this.y = 0; // Initialized later
-    this.radius = 40;
-    this.attractsBots = false;
   }
 
   /**
@@ -44,7 +39,7 @@ export class PowerUp extends GameObject {
    * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas: any, context: CanvasRenderingContext2D) {
+  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     context.save();
     context.translate(this.x, this.y);
     context.drawImage(this.image, -this.width / 2, -this.width / 2, this.width, this.width);
@@ -208,7 +203,6 @@ export class InvincibleBonus extends PowerUp {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.invincible;
-    this.applied = false;
   }
 
   apply(tank: Tank) {
@@ -241,7 +235,6 @@ export class TerminatorBonus extends PowerUp {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.terminator;
-    this.applied = false;
   }
   apply(tank: Tank) {
     if (this.applied) return;
@@ -264,11 +257,12 @@ export class TerminatorBonus extends PowerUp {
  */
 export class MultiBonus extends PowerUp {
   used: boolean = false;
+
   constructor() {
     super();
     this.image.src = IMAGES.multi;
-    this.used = false;
   }
+
   apply(tank: Tank) {
     if (!this.used) {
       this.used = true;
@@ -292,7 +286,6 @@ export class FogBonus extends PowerUp {
   constructor() {
     super();
     this.image.src = IMAGES.fog;
-    this.used = false;
   }
   apply(tank: Tank) {
     if (!this.used) tank.player.game.intvls.push(fogOfWar(store.game));

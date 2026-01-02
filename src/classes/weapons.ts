@@ -11,11 +11,11 @@ import { IMAGES, SOUNDS } from "../assets";
  */
 export class Weapon {
   name: string = "Weapon";
-  tank: any;
+  tank: Tank;
   image: HTMLImageElement;
   img: HTMLImageElement | undefined;
-  active: boolean;
-  isDeleted: boolean;
+  active: boolean = true;
+  isDeleted: boolean = false;
   bot: { shooting_range: number; fleeing_duration: number; flee_if_active: boolean };
   trajectory: any;
   bullet: any;
@@ -27,14 +27,10 @@ export class Weapon {
    * Creates a new Weapon.
    * @param {Tank} tank - The tank owning this weapon.
    */
-  constructor(tank: any) {
-    this.name = "Weapon";
+  constructor(tank: Tank) {
     this.tank = tank;
     this.image = new Image();
     this.image.src = "";
-    this.img = undefined;
-    this.active = true;
-    this.isDeleted = false;
     this.bot = {
       shooting_range: 2, // distance at which bots fire the weapon
       fleeing_duration: 800, // how long should a bot flee after firing this weapon?
@@ -48,7 +44,7 @@ export class Weapon {
   shoot(): void {
     if (!this.active) return;
     playSound(SOUNDS.gun);
-    this.newBullet();
+    if (!this.isDeleted) this.newBullet();
     this.deactivate();
   }
 
@@ -119,14 +115,14 @@ export class Weapon {
  * @extends Weapon
  */
 export class Gun extends Weapon {
+  name: string = "Gun";
+
   /**
    * Creates a new Gun.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank: any) {
+  constructor(tank: Tank) {
     super(tank);
-    this.name = "Gun";
-    this.image = new Image();
     this.image.src = IMAGES.gun;
     this.bot.fleeing_duration = 0;
   }
@@ -151,6 +147,7 @@ export class Gun extends Weapon {
  * @extends Weapon
  */
 export class MG extends Weapon {
+  name: string = "MG";
   nshots: number = 20;
   every: number = 0;
 
@@ -158,13 +155,9 @@ export class MG extends Weapon {
    * Creates a new MG.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank: any) {
+  constructor(tank: Tank) {
     super(tank);
-    this.name = "MG";
-    this.image = new Image();
     this.image.src = IMAGES.mg;
-    this.nshots = 20;
-    this.every = 0;
     this.bot.shooting_range = 2;
     this.bot.fleeing_duration = 1500;
     this.bot.flee_if_active = true;
@@ -217,6 +210,7 @@ export class MG extends Weapon {
  * @extends Weapon
  */
 export class Laser extends Weapon {
+  name: string = "Laser";
   fired: boolean = false;
   trajectory: Trajectory;
 
@@ -224,13 +218,9 @@ export class Laser extends Weapon {
    * Creates a new Laser.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank: any) {
+  constructor(tank: Tank) {
     super(tank);
-    this.image = new Image();
     this.image.src = IMAGES.laser;
-    this.name = "Laser";
-    this.active = true;
-    this.fired = false;
     this.trajectory = new Trajectory(this.tank.player.game.map);
     this.trajectory.x = this.tank.x;
     this.trajectory.y = this.tank.y;
@@ -286,6 +276,7 @@ export class Laser extends Weapon {
  * @extends Weapon
  */
 export class Grenade extends Weapon {
+  name: string = "Grenade";
   bullet: any;
   nshrapnels: number = 30;
 
@@ -293,19 +284,15 @@ export class Grenade extends Weapon {
    * Creates a new Grenade weapon.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank: any) {
+  constructor(tank: Tank) {
     super(tank);
-    this.name = "Grenade";
-    this.image = new Image();
     this.image.src = IMAGES.grenade;
     this.bullet = undefined;
-    this.nshrapnels = 30;
     this.bot.fleeing_duration = 4000;
     this.bot.flee_if_active = false;
   }
 
-  newBullet(): Bullet | undefined {
-    if (this.isDeleted) return;
+  newBullet(): Bullet {
     const e = super.newBullet();
     e.image = new Image();
     e.image.src = IMAGES.grenade;
@@ -342,7 +329,8 @@ export class Grenade extends Weapon {
   shoot(): void {
     if (!this.active) return;
     if (typeof this.bullet === "undefined") {
-      this.bullet = this.newBullet();
+      if (!this.isDeleted) this.bullet = this.newBullet();
+      else this.bullet = undefined;
     } else if (this.bullet.age > 300) {
       const bullet = this.bullet;
       bullet.explode();
@@ -358,6 +346,7 @@ export class Grenade extends Weapon {
  * @extends Weapon
  */
 export class Mine extends Weapon {
+  name: string = "Mine";
   bullet: any;
   nshrapnels: number = 24;
 
@@ -365,13 +354,10 @@ export class Mine extends Weapon {
    * Creates a new Mine weapon.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank: any) {
+  constructor(tank: Tank) {
     super(tank);
-    this.name = "Mine";
-    this.image = new Image();
     this.image.src = IMAGES.mine;
     this.bullet = undefined;
-    this.nshrapnels = 24;
   }
 
   newBullet(): Bullet {
@@ -419,16 +405,15 @@ export class Mine extends Weapon {
  * @extends Weapon
  */
 export class Guided extends Weapon {
+  name: string = "Guided";
+
   /**
    * Creates a new Guided Missile weapon.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank: any) {
+  constructor(tank: Tank) {
     super(tank);
-    this.name = "Guided";
-    this.image = new Image();
     this.image.src = IMAGES.guided;
-    this.active = true;
     this.bot.shooting_range = 16;
     this.bot.fleeing_duration = 3000;
   }
@@ -513,19 +498,16 @@ export class Guided extends Weapon {
  * @extends Weapon
  */
 export class WreckingBall extends Weapon {
+  name: string = "WreckingBall";
   fired: boolean = false;
 
   /**
    * Creates a new WreckingBall weapon.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank: any) {
+  constructor(tank: Tank) {
     super(tank);
-    this.image = new Image();
     this.image.src = IMAGES.wreckingBall;
-    this.name = "WreckingBall";
-    this.active = true;
-    this.fired = false;
     this.bot.shooting_range = 99;
     this.bot.fleeing_duration = 0;
   }
@@ -584,16 +566,15 @@ export class WreckingBall extends Weapon {
  * @extends Weapon
  */
 export class WallBuilder extends Weapon {
+  name: string = "WallBuilder";
+
   /**
    * Creates a new WallBuilder weapon.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank: any) {
+  constructor(tank: Tank) {
     super(tank);
-    this.name = "WallBuilder";
-    this.image = new Image();
     this.image.src = IMAGES.wallBuilder;
-    this.active = true;
   }
 
   shoot(): void {
@@ -626,19 +607,16 @@ export class WallBuilder extends Weapon {
  * @extends Weapon
  */
 export class Slingshot extends Weapon {
+  name: string = "Slingshot";
   fired: boolean = false;
 
   /**
    * Creates a new Slingshot weapon.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank: any) {
+  constructor(tank: Tank) {
     super(tank);
-    this.image = new Image();
     this.image.src = IMAGES.slingshot;
-    this.name = "Slingshot";
-    this.active = true;
-    this.fired = false;
     this.bot.shooting_range = 8;
     this.bot.fleeing_duration = 0;
   }

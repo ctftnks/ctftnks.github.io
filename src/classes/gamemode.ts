@@ -13,21 +13,17 @@ import { Tile } from "./gamemap";
  * Base class for game modes.
  */
 export class Gamemode {
-  name: string;
+  name: string = "defaultmode";
   game: Game;
-  BaseSpawnDistance: number;
+  BaseSpawnDistance: number = 2;
 
   /**
    * Creates a new Gamemode.
    * @param {Game} game - The game instance.
    */
   constructor(game: Game) {
-    /** @type {string} Name of the game mode. */
-    this.name = "defaultmode";
-    /** @type {Game} Game instance. */
+    /** Corresponding Game instance. */
     this.game = game;
-    /** @type {number} Distance for base spawning. */
-    this.BaseSpawnDistance = 2;
   }
   /**
    * Called every game step.
@@ -97,7 +93,7 @@ export class Deathmatch extends Gamemode {
  * @extends Gamemode
  */
 export class TeamDeathmatch extends Gamemode {
-  initiated: boolean;
+  initiated: boolean = false;
 
   /**
    * Creates a new TeamDeathmatch mode.
@@ -106,8 +102,6 @@ export class TeamDeathmatch extends Gamemode {
   constructor(game: Game) {
     super(game);
     this.name = "TeamDeathmatch";
-    this.initiated = false;
-    this.BaseSpawnDistance = 2;
   }
 
   /**
@@ -203,7 +197,7 @@ export class TeamDeathmatch extends Gamemode {
  * @extends Gamemode
  */
 export class CaptureTheFlag extends Gamemode {
-  initiated: boolean;
+  initiated: boolean = false;
 
   /**
    * Creates a new CaptureTheFlag mode.
@@ -212,7 +206,6 @@ export class CaptureTheFlag extends Gamemode {
   constructor(game: Game) {
     super(game);
     this.name = "CaptureTheFlag";
-    this.initiated = false;
     this.BaseSpawnDistance = 7;
   }
 
@@ -373,7 +366,7 @@ export class MapEditor extends Gamemode {
  * @extends Gamemode
  */
 export class KingOfTheHill extends Gamemode {
-  bases: Hill[];
+  bases: Hill[] = [];
 
   /**
    * Creates a new KingOfTheHill mode.
@@ -382,7 +375,6 @@ export class KingOfTheHill extends Gamemode {
   constructor(game: Game) {
     super(game);
     this.name = "KingOfTheHill";
-    this.bases = [];
   }
 
   /**

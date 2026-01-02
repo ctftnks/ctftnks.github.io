@@ -13,14 +13,12 @@ export default class Bullet extends GameObject {
   player: any;
   map: any;
   weapon: any;
-  x: number | undefined;
-  y: number | undefined;
-  angle: number | undefined;
+  angle: number | undefined = undefined;
   radius: number = 4;
   speed: number;
   color: string = "#000";
   timeout: number;
-  age: number = -0;
+  age: number = 0;
   trace: boolean = false;
   bounceSound: any;
   lethal: boolean = true;
@@ -36,18 +34,9 @@ export default class Bullet extends GameObject {
     this.player = weapon.tank.player;
     this.map = this.player.game.map;
     this.weapon = weapon;
-    this.x = undefined;
-    this.y = undefined;
-    this.angle = undefined;
-    this.radius = 4;
     this.speed = Settings.BulletSpeed;
-    this.color = "#000";
     this.timeout = Settings.BulletTimeout * 1000;
-    this.age = -0;
-    this.trace = false;
     this.bounceSound = SOUNDS.bounce;
-    this.lethal = true;
-    this.extrahitbox = 0;
   }
 
   /**
@@ -55,7 +44,7 @@ export default class Bullet extends GameObject {
    * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The 2D context.
    */
-  draw(canvas: any, context: CanvasRenderingContext2D): void {
+  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D): void {
     if (this.image === "") {
       context.beginPath();
       context.fillStyle = this.color;

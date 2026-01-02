@@ -44,10 +44,8 @@ export default class GameMap {
     } else {
       this.Ny = Ny;
     }
-    this.dx = 130;
     // this.dy = canvas.height / this.Ny;
     this.dy = this.dx;
-    this.tiles = [];
 
     // Tile initialization
     // create discrete tiles
@@ -172,7 +170,7 @@ export class Tile {
   /** Height. */
   dy: number;
   /** Objects currently in this tile. */
-  objs: GameObject[];
+  objs: GameObject[] = [];
   /** List of Walls [top, left, bottom, right]. */
   walls: boolean[] = [false, false, false, false];
   /** List of neighboring tiles [top, left, bottom, right]. */
@@ -193,21 +191,6 @@ export class Tile {
     this.y = j * map.dy;
     this.dx = map.dx;
     this.dy = map.dy;
-    this.objs = [];
-    // list of walls
-    this.walls = [
-      false, // top
-      false, // left
-      false, // bottom
-      false, // right
-    ];
-    // list of neighbors
-    this.neighbors = [
-      undefined, // top
-      undefined, // left
-      undefined, // bottom
-      undefined, // right
-    ];
   }
 
   /**

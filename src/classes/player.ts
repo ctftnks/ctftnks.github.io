@@ -21,7 +21,7 @@ export default class Player {
   spree: number = 0;
   keys: string[];
   tank: Tank;
-  stats: { deaths: number; kills: number; miles: number; shots: number };
+  stats: { deaths: number; kills: number; miles: number; shots: number } = { deaths: 0, kills: 0, miles: 0, shots: 0 };
 
   /**
    * Creates a new Player.
@@ -32,13 +32,8 @@ export default class Player {
     this.name = "Player " + (this.id + 1);
     this.color = store.playercolors[this.id % store.playercolors.length];
     this.team = this.id;
-    this.game = undefined;
-    this.base = undefined;
-    this.score = 0;
-    this.spree = 0;
     this.keys = keymaps[this.id] || keymaps[0].slice();
     this.tank = new Tank(this);
-    this.stats = { deaths: 0, kills: 0, miles: 0, shots: 0 };
   }
 
   /**

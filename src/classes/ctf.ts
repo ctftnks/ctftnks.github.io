@@ -10,6 +10,7 @@ import Player from "./player";
  * @extends GameObject
  */
 export class Flag extends GameObject {
+  type: string = "Flag";
   /** Game instance. */
   game: Game;
   /** The home base. */
@@ -21,11 +22,11 @@ export class Flag extends GameObject {
   /** Flag size. */
   size: number = 24;
   /** Whether the flag is currently picked up. */
-  picked: boolean;
+  picked: boolean = false;
   /** Whether the flag is in its base. */
-  inBase: boolean;
+  inBase: boolean = true;
   /** Timer for resetting the flag. */
-  resetTimer: number;
+  resetTimer: number = 0;
 
   /**
    * Creates a new Flag.
@@ -34,17 +35,12 @@ export class Flag extends GameObject {
    */
   constructor(game: Game, base: Base) {
     super();
-    this.type = "Flag";
     this.game = game;
     this.base = base;
     this.team = base.team;
     this.color = base.color;
-    this.size = 24;
     this.x = base.x;
     this.y = base.y;
-    this.picked = false;
-    this.inBase = true;
-    this.resetTimer = 0;
   }
 
   /**
@@ -115,7 +111,7 @@ export class Flag extends GameObject {
    * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas: any, context: CanvasRenderingContext2D) {
+  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     context.save();
     context.translate(this.x, this.y);
     context.beginPath();
@@ -135,6 +131,7 @@ export class Flag extends GameObject {
  * @extends GameObject
  */
 export class Base extends GameObject {
+  type: string = "Base";
   /** Team identifier. */
   team: number;
   /** Base color. */
@@ -142,9 +139,9 @@ export class Base extends GameObject {
   /** Game instance. */
   game: Game;
   /** The flag belonging to this base. */
-  flag: Flag | undefined;
+  flag: Flag | undefined = undefined;
   /** Base size. */
-  size: number;
+  size: number = 80;
   /** The tile the base is on. */
   tile: any;
 
@@ -157,14 +154,11 @@ export class Base extends GameObject {
    */
   constructor(game: Game, player: Player | { color: string; team: number }, x: number, y: number) {
     super();
-    this.type = "Base";
     this.team = player.team;
     this.color = player.color;
     this.game = game;
     this.x = x;
     this.y = y;
-    this.flag = undefined;
-    this.size = 80;
     this.tile = this.game.map ? this.game.map.getTileByPos(this.x, this.y) : undefined;
   }
 
@@ -173,7 +167,7 @@ export class Base extends GameObject {
    * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas: any, context: CanvasRenderingContext2D) {
+  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     context.save();
     context.beginPath();
     context.translate(this.x, this.y);
@@ -224,6 +218,8 @@ export class Base extends GameObject {
  * @extends Base
  */
 export class Hill extends Base {
+  type: string = "Hill";
+
   /**
    * Creates a new Hill.
    * @param {Game} game - The game instance.
@@ -232,7 +228,6 @@ export class Hill extends Base {
    */
   constructor(game: Game, x: number, y: number) {
     super(game, { color: "#555", team: -1 }, x, y);
-    this.type = "Hill";
   }
 
   /**

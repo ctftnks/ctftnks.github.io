@@ -9,6 +9,7 @@ import GameMap, { Tile } from "./gamemap";
 import { PowerUp } from "./powerup";
 import Bullet from "./bullet";
 import type Bot from "./bot";
+import type { Flag } from "./ctf";
 
 /**
  * Represents a Tank controlled by a player.
@@ -39,9 +40,9 @@ export default class Tank extends GameObject {
   /** Timers for effects. */
   timers: { spawnshield: number; invincible: number };
   /** The flag currently carried, or -1. */
-  carriedFlag: any; // Flag type not available yet
+  carriedFlag: Flag | number = -1;
   /** Inventory of weapons (unused?). */
-  weapons: Weapon[];
+  weapons: Weapon[] = [];
   /** Whether rapid fire is active. */
   rapidfire: boolean = false;
 
@@ -53,9 +54,6 @@ export default class Tank extends GameObject {
     super();
     this.player = player;
     this.color = this.player.color;
-    this.map = undefined;
-    this.x = 0;
-    this.y = 0;
     this.angle = 2 * Math.PI * Math.random();
     this.width = Settings.TankWidth;
     this.height = Settings.TankHeight;
@@ -63,9 +61,6 @@ export default class Tank extends GameObject {
     this.speed = Settings.TankSpeed;
     this.type = "Tank";
     this.timers = { spawnshield: -1, invincible: -1 };
-    this.carriedFlag = -1;
-    this.weapons = [];
-    this.rapidfire = false;
   }
 
   /**
@@ -73,7 +68,7 @@ export default class Tank extends GameObject {
    * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas: any, context: CanvasRenderingContext2D) {
+  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     context.save();
     context.beginPath();
     context.translate(this.x, this.y);

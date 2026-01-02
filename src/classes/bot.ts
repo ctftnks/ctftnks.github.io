@@ -11,9 +11,9 @@ let NBots: number = 0;
  */
 export default class Bot extends Player {
   // keys are inherited from Player
-  goto: any;
-  fleeing: { from: any; condition: any };
-  lastChecked: number;
+  goto: any = -1;
+  fleeing: { from: any; condition: any } = { from: -1, condition: -1 };
+  lastChecked: number = 0;
 
   /**
    * Creates a new Bot.
@@ -22,9 +22,6 @@ export default class Bot extends Player {
     super();
     this.name = "Bot " + (NBots + 1);
     this.keys = []; // Empty keys for bot
-    this.goto = -1;
-    this.fleeing = { from: -1, condition: -1 };
-    this.lastChecked = 0;
     NBots++;
   }
 
