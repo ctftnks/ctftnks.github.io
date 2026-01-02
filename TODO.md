@@ -1,5 +1,18 @@
 # TODO
 
+## Refactoring
+
+- use arrow functions
+- more tests
+- add JSDoc
+- no duplicate instantiation of attribute values in constructors
+- make sure inherited attributes are not redeclared/hidden
+- remove occurrences of "any"
+- stricter TypeScript compiler rules
+- define rules on camelCase and snake_case and enforce them
+- do not use global variables/functions (window.\*)
+- move every class to its own file (and create package folders)
+
 ## Bugs
 
 ## Bots reimplementation
@@ -12,7 +25,7 @@
 
 - own flags could be required to be brought home in CTF
 
-## Enhancement:
+## Enhancement
 
 - Weapon queue
 - different tank types (visually): write a class for that?
