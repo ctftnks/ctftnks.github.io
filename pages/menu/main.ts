@@ -1,31 +1,35 @@
 import template from "./main.html?raw";
 import "./style.css";
-import Bot from "../../src/classes/bot.js";
-import Player from "../../src/classes/player.js";
-import { updateScores } from "../../src/main.js";
-import { keymaps, getKeyLabel } from "../../src/keybindings.js";
+import Bot from "../../src/classes/bot";
+import Player from "../../src/classes/player";
+import { updateScores } from "../../src/main";
+import { keymaps, getKeyLabel } from "../../src/keybindings";
 
-export function init(container) {
+export function init(container: HTMLElement): void {
   container.innerHTML = template;
   updatePlayersMenu();
-  if (typeof game !== "undefined") game.paused = true;
+  const gameObj: any = (window as any).game;
+  if (typeof gameObj !== "undefined") gameObj.paused = true;
 }
 
-function addPlayer(bot = false) {
+function addPlayer(bot: boolean = false): void {
+  const players: any[] = (window as any).players;
   if (players.length >= keymaps.length) keymaps.push(keymaps[0].slice());
   if (bot) players.push(new Bot());
   else players.push(new Player());
   updatePlayersMenu();
 }
 
-function removePlayer(id) {
+function removePlayer(id: number): void {
+  const players: any[] = (window as any).players;
   const newPlayers = [];
   for (let i = 0; i < players.length; i++) if (players[i].id !== id) newPlayers.push(players[i]);
-  window.players = newPlayers;
+  (window as any).players = newPlayers;
   updatePlayersMenu();
 }
 
-function updatePlayersMenu() {
+function updatePlayersMenu(): void {
+  const players: any[] = (window as any).players;
   const pmen = document.getElementById("playersMenu");
   if (!pmen) return;
   pmen.innerHTML = "";
@@ -37,30 +41,31 @@ function updatePlayersMenu() {
   entry += "<span style='width:50px;display:inline-block;'></span>";
   entry += "</div>";
   pmen.innerHTML += entry;
+
   for (let i = 0; i < players.length; i++) {
-    let entry = "";
+    let entryRow = "";
     const id = players[i].id;
-    entry += "<div class='entry'>";
-    entry +=
+    entryRow += "<div class='entry'>";
+    entryRow +=
       "<button class='team' onclick='players[" +
       i +
       "].changeColor();updatePlayersMenu();' style='color:" +
       players[i].color +
       ";'>&diams;</button>";
-    entry += "<button class='name' onclick='editPlayerName(" + i + ")' style='color:" + players[i].color + ";'>";
-    entry += players[i].name;
-    entry += "</button>";
-    if (players[i].isBot) entry += editableKeymap(-2);
-    else entry += editableKeymap(players[i].id);
-    entry += "<button class='remove' onclick='removePlayer(" + id + ")'>&times;</button>";
-    entry += "</div>";
-    pmen.innerHTML += entry;
+    entryRow += "<button class='name' onclick='editPlayerName(" + i + ")' style='color:" + players[i].color + ";'>";
+    entryRow += players[i].name;
+    entryRow += "</button>";
+    if (players[i].isBot) entryRow += editableKeymap(-2);
+    else entryRow += editableKeymap(players[i].id);
+    entryRow += "<button class='remove' onclick='removePlayer(" + id + ")'>&times;</button>";
+    entryRow += "</div>";
+    pmen.innerHTML += entryRow;
   }
   updateScores();
 }
 
 // edit the keymap from the menu
-function editableKeymap(mapID) {
+function editableKeymap(mapID: number): string {
   if (mapID === -1) {
     let html = "";
     html += "<button class='keyEditButton notclickable'>&uarr;</button>";
@@ -93,29 +98,36 @@ function editableKeymap(mapID) {
   return html;
 }
 
-window.editingKeymap = false;
-window.editingMapID = -1;
-window.editingKeyID = -1;
-function editKeymap(mapID, keyID) {
-  window.editingKeymap = true;
-  window.editingMapID = mapID;
-  window.editingKeyID = keyID;
+let editingKeymap: boolean = false;
+let editingMapID: number = -1;
+let editingKeyID: number = -1;
+
+function editKeymap(mapID: number, keyID: number): void {
+  editingKeymap = true;
+  editingMapID = mapID;
+  editingKeyID = keyID;
+  (window as any).editingKeymap = editingKeymap;
+  (window as any).editingMapID = editingMapID;
+  (window as any).editingKeyID = editingKeyID;
 }
-function doEditKeymap(newKeyCode) {
+
+function doEditKeymap(newKeyCode: number): void {
   keymaps[editingMapID][editingKeyID] = newKeyCode;
-  window.editingKeymap = false;
+  editingKeymap = false;
+  (window as any).editingKeymap = editingKeymap;
   updatePlayersMenu();
 }
 
-function editPlayerName(index) {
+function editPlayerName(index: number): void {
+  const players: any[] = (window as any).players;
   const name = prompt("Namen eingeben:");
   if (name != null) players[index].name = name;
   updatePlayersMenu();
 }
 
-window.addPlayer = addPlayer;
-window.removePlayer = removePlayer;
-window.updatePlayersMenu = updatePlayersMenu;
-window.editKeymap = editKeymap;
-window.doEditKeymap = doEditKeymap;
-window.editPlayerName = editPlayerName;
+(window as any).addPlayer = addPlayer;
+(window as any).removePlayer = removePlayer;
+(window as any).updatePlayersMenu = updatePlayersMenu;
+(window as any).editKeymap = editKeymap;
+(window as any).doEditKeymap = doEditKeymap;
+(window as any).editPlayerName = editPlayerName;

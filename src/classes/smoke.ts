@@ -1,12 +1,17 @@
-import GameObject from "./object.js";
-import { Settings } from "../state.js";
+import GameObject from "./object";
+import { Settings } from "../state";
+import Game from "./game";
 
-// a class for fancy smoke circles on the map
 /**
- * Represents a smoke particle.
+ * Represents a fancy smoke circle on the map.
  * @extends GameObject
  */
 export class Smoke extends GameObject {
+  radius: number;
+  color: string = "rgba(40, 40, 40, 0.3)";
+  rspeed: number;
+  timeout: number;
+
   /**
    * Creates a new Smoke particle.
    * @param {number} x - X coordinate.
@@ -15,22 +20,16 @@ export class Smoke extends GameObject {
    * @param {number} radius - Initial radius.
    * @param {number} rspeed - Radius shrinking speed.
    */
-  constructor(x, y, timeout = 300, radius = 10, rspeed = 1) {
+  constructor(x: number, y: number, timeout: number = 300, radius: number = 10, rspeed: number = 1) {
     // inherit from GameObject class
     super();
     // to be initialized
-    /** @type {number} X coordinate. */
     this.x = x;
-    /** @type {number} Y coordinate. */
     this.y = y;
-    /** @type {number} Current radius. */
     this.radius = radius;
-    /** @type {string} Color. */
     this.color = "rgba(40, 40, 40, 0.3)";
-    /** @type {number} Shrink speed. */
     this.rspeed = rspeed;
     // lifetime of the smoke in [ms]
-    /** @type {number} Remaining lifetime. */
     this.timeout = timeout;
   }
 
@@ -39,7 +38,7 @@ export class Smoke extends GameObject {
    * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas, context) {
+  draw(canvas: any, context: CanvasRenderingContext2D): void {
     context.beginPath();
     context.fillStyle = this.color;
     context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
@@ -50,7 +49,7 @@ export class Smoke extends GameObject {
   /**
    * Updates the smoke particle.
    */
-  step() {
+  step(): void {
     // is bullet timed out?
     this.timeout -= Settings.GameFrequency;
     if (this.timeout < 0) this.delete();
@@ -69,12 +68,20 @@ export class Smoke extends GameObject {
  * @param {number} rspeed - Shrink speed.
  * @param {string|number} color - Color override.
  */
-export const Cloud = function (game, x, y, n = 4, radius = 20, rspeed = 0.3, color = -1) {
+export const generateCloud = function (
+  game: Game,
+  x: number,
+  y: number,
+  n: number = 4,
+  radius: number = 20,
+  rspeed: number = 0.3,
+  color: string = "",
+): void {
   for (let i = 0; i < n; i++) {
     const rx = x + radius * 2 * (Math.random() - 0.5);
     const ry = y + radius * 2 * (Math.random() - 0.5);
     const smoke = new Smoke(rx, ry, 2000, radius, rspeed);
-    if (color !== -1) smoke.color = color;
+    if (color !== "") smoke.color = color;
     game.addObject(smoke);
   }
 };

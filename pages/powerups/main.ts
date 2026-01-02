@@ -1,14 +1,16 @@
 import template from "./main.html?raw";
 import "./style.css";
 
-export function init(container) {
+export function init(container: HTMLElement): void {
   container.innerHTML = template;
   updatePowerupsMenu();
 }
 
-export function updatePowerupsMenu() {
+export function updatePowerupsMenu(): void {
+  const PowerUps: any[] = (window as any).PowerUps;
   const sel = 'selected="selected"';
   let content = "";
+
   for (let i = 0; i < PowerUps.length; i++) {
     const name = PowerUps[i].name;
     const weight = PowerUps[i].weight;
@@ -22,8 +24,9 @@ export function updatePowerupsMenu() {
     content += '<option value="10" ' + (weight === 10 ? sel : "") + ">1000%</option>";
     content += "</select></div>&nbsp;";
   }
+
   const optionsElem = document.getElementById("powerupsOptions");
   if (optionsElem) optionsElem.innerHTML = content;
 }
 
-window.updatePowerupsMenu = updatePowerupsMenu;
+(window as any).updatePowerupsMenu = updatePowerupsMenu;

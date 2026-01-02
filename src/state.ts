@@ -26,46 +26,46 @@ const DEFAULT_SETTINGS = {
   TankHeight: 50,
 };
 
+type Settings = typeof DEFAULT_SETTINGS;
+
 class GameStore {
+  game: any = undefined;
+  canvas: any = undefined;
+  players: any[] = [];
+  nplayers: number = 0;
+  editingKeymap: boolean = false;
+  GameID: number = 0;
+
+  settings: Settings;
+
+  playercolors = [
+    "#DA1918", // red
+    "#31B32B", // green
+    "#1F87FF", // blue
+    "#21B19B", // teal
+    "#A020F0", // purple
+    "#F4641D", // orange
+    "#713B17", // brown
+    "#E7E52C", // yellow
+  ];
+
   constructor() {
-    // Runtime State
-    this.game = undefined;
-    this.canvas = undefined;
-    this.players = [];
-    this.nplayers = 0;
-    this.editingKeymap = false;
-    this.GameID = 0;
-
-    // User Settings
     this.settings = { ...DEFAULT_SETTINGS };
-
-    // Colors of the teams
-    this.playercolors = [
-      "#DA1918", // red
-      "#31B32B", // green
-      "#1F87FF", // blue
-      "#21B19B", // teal
-      "#A020F0", // purple
-      "#F4641D", // orange
-      "#713B17", // brown
-      "#E7E52C", // yellow
-    ];
-
     this.loadSettings();
   }
 
-  saveSettings() {
+  saveSettings(): void {
     localStorage.setItem("ctftanks_settings", JSON.stringify(this.settings));
   }
 
-  loadSettings() {
+  loadSettings(): void {
     const saved = localStorage.getItem("ctftanks_settings");
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         for (let key in parsed) {
           if (key in this.settings) {
-            this.settings[key] = parsed[key];
+            (this.settings as any)[key] = parsed[key];
           }
         }
       } catch (e) {

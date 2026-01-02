@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import Map, { Tile } from "../src/classes/map.js";
-import { store } from "../src/state.js";
+import GameMap, { Tile } from "../src/classes/map";
+import { store } from "../src/state";
 
 describe("Map Class", () => {
-  let mockCanvas;
+  let mockCanvas: any;
 
   beforeEach(() => {
     mockCanvas = {
@@ -17,14 +17,14 @@ describe("Map Class", () => {
   });
 
   it("should initialize with correct dimensions", () => {
-    const map = new Map(mockCanvas, 10, 8);
+    const map = new GameMap(mockCanvas, 10, 8);
     expect(map.Nx).toBe(10);
     expect(map.Ny).toBe(8);
     expect(map.tiles.length).toBe(80);
   });
 
   it("should link neighbors correctly", () => {
-    const map = new Map(mockCanvas, 3, 3);
+    const map = new GameMap(mockCanvas, 3, 3);
     const centerTile = map.getTileByIndex(1, 1);
 
     // Neighbors: [top, left, bottom, right]
@@ -35,7 +35,7 @@ describe("Map Class", () => {
   });
 
   it("should find tile by world position", () => {
-    const map = new Map(mockCanvas, 10, 10);
+    const map = new GameMap(mockCanvas, 10, 10);
     const dx = map.dx;
     const dy = map.dy;
 
@@ -45,7 +45,7 @@ describe("Map Class", () => {
   });
 
   it("should return -1 for out of bounds world position", () => {
-    const map = new Map(mockCanvas, 10, 10);
+    const map = new GameMap(mockCanvas, 10, 10);
     const dx = map.dx;
     const dy = map.dy;
 
@@ -58,7 +58,7 @@ describe("Map Class", () => {
 });
 
 describe("Tile Class", () => {
-  let mockMap;
+  let mockMap: any;
 
   beforeEach(() => {
     mockMap = {

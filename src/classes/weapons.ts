@@ -1,34 +1,39 @@
-import Bullet from "./bullet.js";
-import Trajectory from "./trajectory.js";
-import { playSound, hexToRgbA } from "../effects.js";
-import { Smoke, Cloud } from "./smoke.js";
-import { Settings } from "../state.js";
-import { IMAGES, SOUNDS } from "../assets.js";
+import Bullet from "./bullet";
+import Trajectory from "./trajectory";
+import { playSound, hexToRgbA } from "../effects";
+import { Smoke, generateCloud } from "./smoke";
+import { Settings } from "../state";
+import { IMAGES, SOUNDS } from "../assets";
 
-// parent class for all weapons
 /**
  * Base class for all weapons.
  */
 export class Weapon {
+  name: string = "Weapon";
+  tank: any;
+  image: HTMLImageElement;
+  img: HTMLImageElement | undefined;
+  active: boolean;
+  is_deleted: boolean;
+  bot: { shooting_range: number; fleeing_duration: number; flee_if_active: boolean };
+  trajectory: any;
+  bullet: any;
+  nshots: number | undefined;
+  every: number | undefined;
+  fired: boolean | undefined;
+
   /**
    * Creates a new Weapon.
    * @param {Tank} tank - The tank owning this weapon.
    */
-  constructor(tank) {
-    /** @type {string} Weapon name. */
+  constructor(tank: any) {
     this.name = "Weapon";
-    /** @type {Tank} The tank. */
     this.tank = tank;
-    /** @type {HTMLImageElement} Weapon icon/image. */
     this.image = new Image();
     this.image.src = "";
-    /** @type {HTMLImageElement} Another image ref? */
     this.img = undefined;
-    /** @type {boolean} Whether the weapon is active. */
     this.active = true;
-    /** @type {boolean} Whether the weapon is deleted. */
     this.is_deleted = false;
-    /** @type {Object} Bot behavior settings for this weapon. */
     this.bot = {
       shooting_range: 2, // distance at which bots fire the weapon
       fleeing_duration: 800, // how long should a bot flee after firing this weapon?
@@ -39,7 +44,7 @@ export class Weapon {
   /**
    * Fires the weapon.
    */
-  shoot() {
+  shoot(): void {
     if (!this.active) return;
     playSound(SOUNDS.gun);
     this.newBullet();
@@ -50,10 +55,11 @@ export class Weapon {
    * Creates a new bullet with all the typical properties.
    * @returns {Bullet} The created bullet.
    */
-  newBullet() {
+  newBullet(): Bullet {
     const bullet = new Bullet(this);
-    bullet.x = (this.tank.corners()[0].x + this.tank.corners()[1].x) / 2;
-    bullet.y = (this.tank.corners()[0].y + this.tank.corners()[1].y) / 2;
+    const corners = this.tank.corners();
+    bullet.x = (corners[0].x + corners[1].x) / 2;
+    bullet.y = (corners[0].y + corners[1].y) / 2;
     bullet.lethal = false;
     setTimeout(function () {
       bullet.lethal = true;
@@ -68,35 +74,36 @@ export class Weapon {
   /**
    * Deactivates the weapon (cannot shoot temporarily or until deleted).
    */
-  deactivate() {
+  deactivate(): void {
     if (this.active === false) return;
     this.active = false;
     const self = this;
-    if (this.tank.rapidfire)
+    if (this.tank.rapidfire) {
       this.tank.player.game.timeouts.push(
         setTimeout(function () {
           self.activate();
         }, 500),
       );
-    else
+    } else {
       this.tank.player.game.timeouts.push(
         setTimeout(function () {
           self.delete();
         }, 1800),
       );
+    }
   }
 
   /**
    * Reactivate a deactivated weapon.
    */
-  activate() {
+  activate(): void {
     this.active = true;
   }
 
   /**
    * Mark weapon as deleted.
    */
-  delete() {
+  delete(): void {
     this.active = false;
     this.is_deleted = true;
   }
@@ -104,7 +111,7 @@ export class Weapon {
   /**
    * Draw crosshair or trajectory preview.
    */
-  crosshair() {}
+  crosshair(): void {}
 }
 
 /**
@@ -116,7 +123,7 @@ export class Gun extends Weapon {
    * Creates a new Gun.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank) {
+  constructor(tank: any) {
     super(tank);
     this.name = "Gun";
     this.image = new Image();
@@ -124,7 +131,7 @@ export class Gun extends Weapon {
     this.bot.fleeing_duration = 0;
   }
 
-  newBullet() {
+  newBullet(): Bullet {
     const bullet = super.newBullet();
     // bullet explosion leads to weapon reactivation
     const self = this;
@@ -137,7 +144,7 @@ export class Gun extends Weapon {
   /**
    * Cannot be deleted.
    */
-  delete() {}
+  delete(): void {}
 }
 
 /**
@@ -145,11 +152,14 @@ export class Gun extends Weapon {
  * @extends Weapon
  */
 export class MG extends Weapon {
+  nshots: number = 20;
+  every: number = 0;
+
   /**
    * Creates a new MG.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank) {
+  constructor(tank: any) {
     super(tank);
     this.name = "MG";
     this.image = new Image();
@@ -161,7 +171,7 @@ export class MG extends Weapon {
     this.bot.flee_if_active = true;
   }
 
-  newBullet() {
+  newBullet(): Bullet {
     const bullet = super.newBullet();
     bullet.radius = 2;
     bullet.bounceSound = "";
@@ -172,19 +182,24 @@ export class MG extends Weapon {
     return bullet;
   }
 
-  shoot() {
+  shoot(): void {
     if (!this.active) return;
     const self = this;
-    if (this.nshots === 20)
+
+    if (this.nshots === 20) {
       this.tank.player.game.timeouts.push(
         setTimeout(function () {
           self.deactivate();
         }, 3000),
       );
-    if (this.tank.player.isBot && this.nshots > 15)
+    }
+
+    if (this.tank.player.isBot && this.nshots > 15) {
       setTimeout(function () {
         self.shoot();
       }, Settings.GameFrequency);
+    }
+
     this.every -= Settings.GameFrequency;
     if (this.nshots > 0 && this.every < 0 && this.active) {
       this.every = 50;
@@ -204,11 +219,14 @@ export class MG extends Weapon {
  * @extends Weapon
  */
 export class Laser extends Weapon {
+  fired: boolean = false;
+  trajectory: Trajectory;
+
   /**
    * Creates a new Laser.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank) {
+  constructor(tank: any) {
     super(tank);
     this.image = new Image();
     this.image.src = IMAGES.laser;
@@ -226,12 +244,13 @@ export class Laser extends Weapon {
     this.bot.fleeing_duration = 0;
   }
 
-  shoot() {
+  shoot(): void {
     if (!this.active) return;
     playSound(SOUNDS.laser);
     this.trajectory.length = 1300;
     this.trajectory.delta = 2;
     this.trajectory.step();
+
     for (let i = 15; i < this.trajectory.points.length; i++) {
       const p = this.trajectory.points[i];
       const bullet = new Bullet(this);
@@ -249,14 +268,16 @@ export class Laser extends Weapon {
     }
     this.deactivate();
   }
-  crosshair() {
+
+  crosshair(): void {
     this.trajectory.x = this.tank.x;
     this.trajectory.y = this.tank.y;
     this.trajectory.angle = this.tank.angle;
     this.trajectory.timeout = 100;
     this.trajectory.length = this.active ? 620 : 0;
   }
-  delete() {
+
+  delete(): void {
     this.is_deleted = true;
     this.trajectory.delete();
   }
@@ -267,11 +288,14 @@ export class Laser extends Weapon {
  * @extends Weapon
  */
 export class Grenade extends Weapon {
+  bullet: any;
+  nshrapnels: number = 30;
+
   /**
    * Creates a new Grenade weapon.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank) {
+  constructor(tank: any) {
     super(tank);
     this.name = "Grenade";
     this.image = new Image();
@@ -282,7 +306,7 @@ export class Grenade extends Weapon {
     this.bot.flee_if_active = false;
   }
 
-  newBullet() {
+  newBullet(): Bullet | undefined {
     if (this.is_deleted) return;
     const e = super.newBullet();
     e.image = new Image();
@@ -291,6 +315,7 @@ export class Grenade extends Weapon {
     e.color = "#000";
     e.timeout = 10000;
     e.exploded = false;
+
     const self = this;
     e.explode = function () {
       if (!e.exploded) {
@@ -306,7 +331,7 @@ export class Grenade extends Weapon {
           shrapnel.angle = 2 * Math.PI * Math.random();
           shrapnel.timeout = (360 * 280) / Settings.BulletSpeed;
           shrapnel.extrahitbox = -3;
-          shrapnel.checkCollision = function (x, y) {};
+          shrapnel.checkCollision = function (x: number, y: number) {};
           self.tank.player.game.addObject(shrapnel);
         }
         self.bullet = undefined;
@@ -317,7 +342,7 @@ export class Grenade extends Weapon {
     return e;
   }
 
-  shoot() {
+  shoot(): void {
     if (!this.active) return;
     if (typeof this.bullet === "undefined") {
       this.bullet = this.newBullet();
@@ -336,11 +361,14 @@ export class Grenade extends Weapon {
  * @extends Weapon
  */
 export class Mine extends Weapon {
+  bullet: any;
+  nshrapnels: number = 24;
+
   /**
    * Creates a new Mine weapon.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank) {
+  constructor(tank: any) {
     super(tank);
     this.name = "Mine";
     this.image = new Image();
@@ -349,7 +377,7 @@ export class Mine extends Weapon {
     this.nshrapnels = 24;
   }
 
-  newBullet() {
+  newBullet(): Bullet {
     const e = super.newBullet();
     e.image = new Image();
     e.image.src = IMAGES.mine;
@@ -357,6 +385,7 @@ export class Mine extends Weapon {
     e.exploded = false;
     e.color = "#000";
     e.timeout = 120000 + 20 * Math.random();
+
     const self = this;
     e.explode = function () {
       if (!e.exploded) {
@@ -378,11 +407,13 @@ export class Mine extends Weapon {
         self.bullet = undefined;
       }
     };
+
     e.player.game.timeouts.push(
       setTimeout(function () {
         e.speed = 0;
       }, 600),
     );
+
     return e;
   }
 }
@@ -396,7 +427,7 @@ export class Guided extends Weapon {
    * Creates a new Guided Missile weapon.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank) {
+  constructor(tank: any) {
     super(tank);
     this.name = "Guided";
     this.image = new Image();
@@ -406,7 +437,7 @@ export class Guided extends Weapon {
     this.bot.fleeing_duration = 3000;
   }
 
-  newBullet() {
+  newBullet(): Bullet {
     const e = super.newBullet();
     e.radius = 6;
     e.image = new Image();
@@ -416,10 +447,12 @@ export class Guided extends Weapon {
     e.speed = 1.1 * Settings.TankSpeed;
     e.goto = -1;
     e.extrahitbox = 10;
+
     e.step = function () {
       e.age += Settings.GameFrequency;
       if (e.age > e.timeout) e.delete();
       e.leaveTrace();
+
       const oldx = e.x;
       const oldy = e.y;
       // normal translation
@@ -447,7 +480,7 @@ export class Guided extends Weapon {
         playSound(SOUNDS.guided);
         // get current tile and path
         const tile = e.map.getTileByPos(oldx, oldy);
-        const path = tile.pathTo(function (destination) {
+        const path = tile.pathTo(function (destination: any) {
           for (let i = 0; i < destination.objs.length; i++)
             if (destination.objs[i].isTank && destination.objs[i].player.team !== e.player.team) return true;
           return false;
@@ -463,7 +496,9 @@ export class Guided extends Weapon {
             }
           }
         }
-        if (path.length > 0) e.smokeColor = path[path.length - 1].objs[0].color;
+        if (path.length > 0) {
+          e.smokeColor = path[path.length - 1].objs[0].color;
+        }
       }
       e.leaveTrace = function () {
         if (Math.random() > 0.8) {
@@ -482,11 +517,13 @@ export class Guided extends Weapon {
  * @extends Weapon
  */
 export class WreckingBall extends Weapon {
+  fired: boolean = false;
+
   /**
    * Creates a new WreckingBall weapon.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank) {
+  constructor(tank: any) {
     super(tank);
     this.image = new Image();
     this.image.src = IMAGES.wreckingBall;
@@ -497,13 +534,13 @@ export class WreckingBall extends Weapon {
     this.bot.fleeing_duration = 0;
   }
 
-  newBullet() {
+  newBullet(): Bullet {
     const bullet = super.newBullet();
     bullet.radius = 10;
     bullet.color = "#000";
     bullet.speed = Settings.TankSpeed * 1.1;
     bullet.timeout = 1000;
-    bullet.checkCollision = function (x, y) {
+    bullet.checkCollision = function (x: number, y: number) {
       const tile = bullet.map.getTileByPos(x, y);
       if (tile === -1) return;
       const walls = tile.getWalls(this.x, this.y);
@@ -526,12 +563,13 @@ export class WreckingBall extends Weapon {
         } else {
           // hit a wall: remove it!
           playSound(SOUNDS.grenade);
-          new Cloud(this.player.game, bullet.x, bullet.y, 3);
+          generateCloud(this.player.game, bullet.x, bullet.y, 3);
           bullet.delete();
           tile.addWall(wall, true);
         }
       }
     };
+
     bullet.trace = true;
     bullet.leaveTrace = function () {
       if (Math.random() > 0.96) {
@@ -540,6 +578,7 @@ export class WreckingBall extends Weapon {
         bullet.player.game.addObject(smoke);
       }
     };
+
     return bullet;
   }
 }
@@ -553,7 +592,7 @@ export class WallBuilder extends Weapon {
    * Creates a new WallBuilder weapon.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank) {
+  constructor(tank: any) {
     super(tank);
     this.name = "WallBuilder";
     this.image = new Image();
@@ -561,17 +600,22 @@ export class WallBuilder extends Weapon {
     this.active = true;
   }
 
-  shoot() {
+  shoot(): void {
     if (this.active) {
       const tile = this.tank.map.getTileByPos(this.tank.x, this.tank.y);
       let direction = this.tank.angle;
+
       while (direction < 0) direction += 2 * Math.PI;
       direction = Math.round(-direction / (Math.PI / 2) + 16) % 4;
+
       if (tile.neighbors[direction] === -1) return;
+
       if (tile.walls[direction]) tile.addWall(direction, true);
       else tile.addWall(direction, false);
+
       playSound(SOUNDS.gun);
       this.active = false;
+
       const self = this;
       this.tank.player.game.timeouts.push(
         setTimeout(function () {
@@ -587,11 +631,13 @@ export class WallBuilder extends Weapon {
  * @extends Weapon
  */
 export class Slingshot extends Weapon {
+  fired: boolean = false;
+
   /**
    * Creates a new Slingshot weapon.
    * @param {Tank} tank - The tank.
    */
-  constructor(tank) {
+  constructor(tank: any) {
     super(tank);
     this.image = new Image();
     this.image.src = IMAGES.slingshot;
@@ -602,13 +648,13 @@ export class Slingshot extends Weapon {
     this.bot.fleeing_duration = 0;
   }
 
-  newBullet() {
+  newBullet(): Bullet {
     const bullet = super.newBullet();
     bullet.radius = 6;
     bullet.color = "#333";
     bullet.speed = 2 * Settings.BulletSpeed;
     bullet.timeout = 2000;
-    bullet.checkCollision = function (x, y) {};
+    bullet.checkCollision = function (x: number, y: number) {};
     bullet.trace = true;
     bullet.leaveTrace = function () {
       if (Math.random() > 0.96) {
@@ -618,6 +664,7 @@ export class Slingshot extends Weapon {
         bullet.player.game.addObject(smoke);
       }
     };
+
     return bullet;
   }
 }

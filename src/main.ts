@@ -1,20 +1,50 @@
-import Canvas from "./classes/canvas.js";
-import Player from "./classes/player.js";
-import Bot from "./classes/bot.js";
-import Game from "./classes/game.js";
-import Map from "./classes/map.js";
-import MapGenerator from "./classes/mapGenerator.js";
-import { Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill, MapEditor } from "./classes/gamemode.js";
-import { openPage } from "../pages/pages.js";
-import { store, Settings } from "./state.js";
-import { Key, keymaps } from "./keybindings.js";
-import { PowerUps } from "./classes/powerup.js";
+import Canvas from "./classes/canvas";
+import Player from "./classes/player";
+import Bot from "./classes/bot";
+import Game from "./classes/game";
+import GameMap from "./classes/map";
+import MapGenerator from "./classes/mapGenerator";
+import { Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill, MapEditor } from "./classes/gamemode";
+import { openPage } from "../pages/pages";
+import { store, Settings } from "./state";
+import { Key, keymaps } from "./keybindings";
+import { PowerUps } from "./classes/powerup";
+
+declare global {
+  interface Window {
+    Player: typeof Player;
+    Bot: typeof Bot;
+    Game: typeof Game;
+    GameMap: typeof GameMap;
+    MapGenerator: typeof MapGenerator;
+    Deathmatch: typeof Deathmatch;
+    TeamDeathmatch: typeof TeamDeathmatch;
+    CaptureTheFlag: typeof CaptureTheFlag;
+    KingOfTheHill: typeof KingOfTheHill;
+    MapEditor: typeof MapEditor;
+    Settings: typeof Settings;
+    Key: typeof Key;
+    keymaps: typeof keymaps;
+    PowerUps: typeof PowerUps;
+    store: typeof store;
+    game: any;
+    canvas: any;
+    players: any[];
+    nplayers: number;
+    editingKeymap: boolean;
+    GameID: number;
+    newGame: typeof newGame;
+    updateScores: typeof updateScores;
+    openPage: typeof openPage;
+    doEditKeymap?: (code: string) => void;
+  }
+}
 
 // Expose classes and variables to window for non-module dynamic scripts in pages/
 window.Player = Player;
 window.Bot = Bot;
 window.Game = Game;
-window.Map = Map;
+window.GameMap = GameMap;
 window.MapGenerator = MapGenerator;
 window.Deathmatch = Deathmatch;
 window.TeamDeathmatch = TeamDeathmatch;
@@ -58,11 +88,11 @@ window.onbeforeunload = function () {
 };
 
 // start a new round
-export function newGame(map = -1) {
-  if (Settings.GameMode === "MapEditor" && map === -1) {
+export function newGame(map: GameMap | null = null) {
+  if (Settings.GameMode === "MapEditor" && map === null) {
     const Nx = prompt("Nx?");
     const Ny = prompt("Ny?");
-    map = new Map(store.canvas, Nx, Ny);
+    map = new GameMap(store.canvas, Nx ? parseInt(Nx) : undefined, Ny ? parseInt(Ny) : undefined);
   }
 
   if (typeof store.game !== "undefined") store.game.stop();

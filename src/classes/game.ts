@@ -1,61 +1,78 @@
-import Map from "./map.js";
-import MapGenerator from "./mapGenerator.js";
-import { Deathmatch } from "./gamemode.js";
-import { getRandomPowerUp } from "./powerup.js";
-import { Key } from "../keybindings.js";
-import { playSound, playMusic, stopMusic, clearEffects } from "../effects.js";
-import { store, Settings } from "../state.js";
-import { SOUNDS } from "../assets.js";
-
-// A class for a single game round with a single map
-// contains a list of players, list of objects in the game
-// contains a loop mechanism for time-iteration
+import GameMap from "./map";
+import MapGenerator from "./mapGenerator";
+import { Deathmatch, Gamemode } from "./gamemode";
+import { getRandomPowerUp } from "./powerup";
+import { Key } from "../keybindings";
+import { playSound, playMusic, stopMusic, clearEffects } from "../effects";
+import { store, Settings } from "../state";
+import { SOUNDS } from "../assets";
+import Canvas from "./canvas";
+import Player from "./player";
+import GameObject from "./object";
+import { PowerUp } from "./powerup";
 
 /**
  * Manages the game state, loop, and objects.
+ *
+ * A class for a single game round with a single map
+ * contains a list of players, list of objects in the game
+ * contains a loop mechanism for time-iteration
  */
 export default class Game {
+  /** The canvas manager, used for size/resolution. */
+  canvas: Canvas;
+  /** The game map. */
+  map: GameMap | undefined;
+  /** List of players. */
+  players: Player[] = [];
+  /** List of game objects. */
+  objs: GameObject[] = [];
+  /** Whether the game is paused. */
+  paused: boolean = false;
+  /** Interval ID for the game loop. */
+  loop: any;
+  /** Number of players alive. */
+  n_playersAlive: number = 0;
+  /** Game time counter. */
+  t: number = 0;
+  /** List of interval IDs to clear on stop. */
+  intvls: any[] = [];
+  /** List of timeout IDs to clear on stop. */
+  timeouts: any[] = [];
+  /** Total kills in the game. */
+  nkills: number = 0;
+  /** The current game mode. */
+  mode: Gamemode;
+
   /**
    * Creates a new Game instance.
    * @param {Canvas} canvas - The canvas manager.
-   * @param {Map|number} map - The map object or -1 to generate a new one.
+   * @param {GameMap|number} map - The map object or -1 to generate a new one.
    */
-  constructor(canvas, map = -1) {
-    // pass canvas class to game, for size / resolution
-    /** @type {Canvas} The canvas manager. */
+  constructor(canvas: Canvas, map: GameMap | null = null) {
     this.canvas = canvas;
     this.canvas.game = this;
     // create new random map
-    /** @type {Map} The game map. */
-    if (map === -1) {
-      this.map = new Map(this.canvas);
+    if (!map) {
+      this.map = new GameMap(this.canvas);
       // MapGenerator.algorithms[Math.floor(Math.random()*MapGenerator.algorithms.length)](this.map);
       // MapGenerator.primsMaze(this.map);
       // MapGenerator.recursiveDivision(this.map);
       MapGenerator.porousRecursiveDivision(this.map);
     } else {
-      this.map = map;
+      this.map = map as GameMap;
     }
+
     this.map.resize();
-    /** @type {Array<Player>} List of players. */
     this.players = [];
-    /** @type {Array<GameObject>} List of game objects. */
     this.objs = [];
-    /** @type {boolean} Whether the game is paused. */
     this.paused = false;
-    /** @type {number|undefined} Interval ID for the game loop. */
     this.loop = undefined;
-    /** @type {number} Number of players alive. */
     this.n_playersAlive = 0;
-    /** @type {number} Game time counter. */
     this.t = 0;
-    /** @type {Array<number>} List of interval IDs to clear on stop. */
     this.intvls = [];
-    /** @type {Array<number>} List of timeout IDs to clear on stop. */
     this.timeouts = [];
-    /** @type {number} Total kills in the game. */
     this.nkills = 0;
-    /** @type {Gamemode} The current game mode. */
     this.mode = new Deathmatch(this);
     store.GameID++;
   }
@@ -64,7 +81,7 @@ export default class Game {
    * Adds a player to the game.
    * @param {Player} player - The player to add.
    */
-  addPlayer(player) {
+  addPlayer(player: Player) {
     this.players.push(player);
     player.game = this;
   }
@@ -73,7 +90,7 @@ export default class Game {
    * Adds an object to the game.
    * @param {GameObject} object - The object to add.
    */
-  addObject(object) {
+  addObject(object: GameObject) {
     this.objs.push(object);
   }
 
@@ -84,6 +101,7 @@ export default class Game {
     const self = this;
     this.mode.init();
     for (let i = 0; i < this.players.length; i++) this.players[i].spawn();
+
     this.loop = setInterval(function () {
       self.step();
     }, Settings.GameFrequency);
@@ -100,19 +118,21 @@ export default class Game {
   step() {
     if (!this.paused) {
       this.t += Settings.GameFrequency;
+      if (!this.map) return;
       // remove deleted objects and
       // initiate spatial sorting of objects within the map class
       this.map.clearObjectLists();
-      for (let i = this.objs.length - 1; i >= 0; i--)
+      for (let i = this.objs.length - 1; i >= 0; i--) {
         if (!this.objs[i].deleted) this.map.addObject(this.objs[i]);
         else this.objs.splice(i, 1);
+      }
       // call step() function for every object in order for it to move/etc.
       for (let i = 0; i < this.objs.length; i++) this.objs[i].step();
       // do gamemode calculations
       this.mode.step();
       // add random PowerUp
       if (this.t % (1000 * Settings.PowerUpRate) === 0 && Settings.GameMode !== "MapEditor") {
-        const p = getRandomPowerUp();
+        const p: PowerUp = getRandomPowerUp();
         const pos = this.map.spawnPoint();
         p.x = pos.x;
         p.y = pos.y;
@@ -133,14 +153,10 @@ export default class Game {
       if (this.t % 1000 === Settings.GameFrequency) {
         let dt = Settings.RoundTime * 60 - (this.t - Settings.GameFrequency) / 1000;
         dt = dt < 0 ? 0 : dt;
-        let dtm = Math.floor(dt / 60);
-        let dts = Math.floor(dt - dtm * 60);
-        dtm = "" + dtm;
-        while (dtm.length < 2) dtm = "0" + dtm;
-        dts = "" + dts;
-        while (dts.length < 2) dts = "0" + dts;
+        let dtm: number = Math.floor(dt / 60);
+        let dts: number = Math.floor(dt - dtm * 60);
         const timerElem = document.getElementById("GameTimer");
-        if (timerElem) timerElem.innerHTML = dtm + ":" + dts;
+        if (timerElem) timerElem.innerHTML = `${String(dtm).padStart(2, "0")}:${String(dts).padStart(2, "0")}`;
       }
       if (this.t > Settings.RoundTime * 60000) this.end();
     }
@@ -159,7 +175,7 @@ export default class Game {
    */
   stop() {
     this.paused = true;
-    clearInterval(this.loop);
+    if (this.loop) clearInterval(this.loop);
     for (let i = 0; i < this.intvls.length; i++) clearInterval(this.intvls[i]);
     for (let i = 0; i < this.timeouts.length; i++) clearTimeout(this.timeouts[i]);
     clearEffects();

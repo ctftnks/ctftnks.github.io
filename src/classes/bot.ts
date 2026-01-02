@@ -1,30 +1,30 @@
-import Player from "./player.js";
-import { store, Settings } from "../state.js";
+import Player from "./player";
+import { store, Settings } from "../state";
+import { Tile } from "./map";
 
-let NBots = 0;
+let NBots: number = 0;
 
 /**
  * A bot player that controls a tank automatically.
  * @extends Player
  */
 export default class Bot extends Player {
+  // isBot and keys are inherited from Player
+  goto: any;
+  fleeing: { from: any; condition: any };
+  lastChecked: number;
+
   /**
    * Creates a new Bot.
    * @param {Player} player - The player object (this parameter seems unused in constructor but might be legacy).
    */
-  constructor(player) {
+  constructor(player?: Player) {
     super();
-    /** @type {string} The name of the bot. */
     this.name = "Bot " + (NBots + 1);
-    /** @type {boolean} Indicates if this player is a bot. */
     this.isBot = true;
-    /** @type {undefined} Keys are undefined for bots. */
-    this.keys = undefined;
-    /** @type {Object|number} The target coordinates or object to move towards. */
+    this.keys = []; // Empty keys for bot
     this.goto = -1;
-    /** @type {Object} State for fleeing behavior. */
     this.fleeing = { from: -1, condition: -1 };
-    /** @type {number} Timestamp of the last check. */
     this.lastChecked = 0;
     NBots++;
   }
@@ -32,71 +32,64 @@ export default class Bot extends Player {
   /**
    * Updates the bot's state.
    */
-  step() {
-    // check possible actions and decide for one
+  step(): void {
     this.autopilot();
-    // perform movements, if any are planned
     this.perform_movements();
   }
 
   /**
    * Decides the next action for the bot.
    */
-  autopilot() {
-    // prevent executing this method too often
+  autopilot(): void {
     this.lastChecked += Settings.GameFrequency;
-    if (this.lastChecked < 72000 / this.tank.speed)
-      // if (this.lastChecked < 360 / this.tank.speed)
-      return;
+    if (this.lastChecked < 72000 / this.tank.speed) return;
     this.lastChecked = 0;
 
-    // some abbreviations
     const self = this;
-    const game = this.game;
+    const game = this.game!;
     const tank = this.tank;
+
+    if (!game.map) return;
+    if (!tank.map) return;
+
     const weapon = tank.weapon;
     const invincible = tank.invincible();
     const tile = game.map.getTileByPos(tank.x, tank.y);
+    if (tile === -1) return;
 
-    // a list of possible actions: will be populated first and the bot then decides which action to take
-    const opts = [];
+    const opts: any[] = [];
 
-    // get info on the current situation of the tank
-
-    // check if any interesting powerups are close
-    const powerupPath = tile.xypathToObj(function (obj) {
+    const powerupPath = tile.xypathToObj((obj: any) => {
       return obj.isPowerUp && obj.attractsBots;
     }, 2);
-    // if powerup found, add option to go to it
+
     if (powerupPath !== -1)
       opts.push({
-        f: function () {
+        f: () => {
           self.follow(powerupPath);
         },
         weight: 100,
       });
 
-    // check for nearest enemy tank
-    const enemyPath = tile.xypathToObj(function (obj) {
+    const enemyPath = tile.xypathToObj((obj: any) => {
       return obj.type === "Tank" && obj.player.team !== self.team;
     });
-    // if enemy found...
+
     if (enemyPath !== -1) {
       const enemy = enemyPath[enemyPath.length - 1];
-      // ...add option to move in its direction
       opts.push({
-        f: function () {
+        f: () => {
           self.follow(enemyPath);
         },
         weight: 5,
       });
-      // ...consider shooting if enemy is within range of the weapon
+
       if (weapon.active) {
         const aimbot = this.aimbot(enemy, enemyPath);
         if (enemy.carriedFlag !== -1) aimbot.weight *= 2;
         if (aimbot.should_shoot)
           opts.push({
-            f: function () {
+            f: () => {
               self.shoot(aimbot.target);
             },
             weight: aimbot.weight,
@@ -104,42 +97,37 @@ export default class Bot extends Player {
       }
     }
 
-    // GAME MODE RELATED ACTIONS
     if (game.mode.name === "CaptureTheFlag") {
-      // game mode: Capture The Flag
       const carriesFlag = tank.carriedFlag !== -1;
-      const flagInBase = self.base.hasFlag();
-      const ctfPath = tile.xypathToObj(function (obj) {
-        // if I have no flag: search for enemy flag
+      const flagInBase = self.base!.hasFlag();
+      const ctfPath = tile.xypathToObj((obj: any) => {
         if (!carriesFlag && obj.type === "Flag" && obj.team !== self.team) return true;
-        // if I have a flag and own flag is at own base: return to base
         if (carriesFlag && obj.type === "Base" && obj.hasFlag() && obj.team === self.team) return true;
-        // if own flag is not in own base: search it
         if (!flagInBase) {
           if (obj.type === "Flag" && obj.team === self.team) return true;
           if (obj.type === "Tank" && obj.carriedFlag !== -1 && obj.carriedFlag.team === self.team) return true;
         }
+        return false;
       });
-      // add option and put weight depending on situation
+
       if (ctfPath !== -1) {
         const weight = invincible && carriesFlag && flagInBase ? 600 : carriesFlag || !flagInBase ? 300 : 50;
         opts.push({
-          f: function () {
+          f: () => {
             self.follow(ctfPath);
           },
           weight: weight,
         });
       }
     } else if (game.mode.name === "KingOfTheHill") {
-      // game mode: King Of The Hill
-      // search for free bases
-      const basePath = tile.xypathToObj(function (obj) {
+      const basePath = tile.xypathToObj((obj: any) => {
         if (obj.type === "Hill" && obj.team !== self.team) return true;
+        return false;
       });
       if (basePath !== -1) {
         const weight = basePath.length < 6 ? 300 : 50;
         opts.push({
-          f: function () {
+          f: () => {
             self.follow(basePath);
           },
           weight: weight,
@@ -147,28 +135,23 @@ export default class Bot extends Player {
       }
     }
 
-    // flee from explosive situations
     const fleePath = this.getFleePath();
     if (fleePath !== -1) {
       const weight = invincible ? 1 : 400;
       opts.push({
-        f: function () {
+        f: () => {
           self.follow(fleePath);
         },
         weight: weight,
       });
     }
 
-    // TODO: check for bullets
-
-    // sort the options by weight and act on the option with the highest weight
     if (opts.length > 0) {
-      opts.sort(function (a, b) {
+      opts.sort((a: any, b: any) => {
         return a.weight > b.weight ? -1 : 1;
       });
       opts[0].f();
     } else {
-      // else do nothing
       this.goto = -1;
     }
   }
@@ -177,7 +160,7 @@ export default class Bot extends Player {
    * Sets a goto target from a path.
    * @param {Array} path - The path to follow.
    */
-  follow(path) {
+  follow(path: any[]): void {
     if (path.length < 2) this.goto = path[0];
     else this.goto = path[1];
   }
@@ -185,18 +168,18 @@ export default class Bot extends Player {
   /**
    * Performs movements towards the goto target.
    */
-  perform_movements() {
+  perform_movements(): void {
     if (this.goto === -1) return;
     const tank = this.tank;
     const distx = this.goto.x - tank.x;
     const disty = this.goto.y - tank.y;
-    // norm angles to interval [0, 2pi]
+
     let newangle = Math.atan2(-distx, disty) + Math.PI;
     while (newangle < 0) newangle += 2 * Math.PI;
     newangle = newangle % (2 * Math.PI);
     while (tank.angle < 0) tank.angle += 2 * Math.PI;
     tank.angle = tank.angle % (2 * Math.PI);
-    // turn and move in correct direction
+
     if (Math.abs(tank.angle - newangle) < 0.6 || Math.abs(Math.abs(tank.angle - newangle) - Math.PI * 2) < 0.6) {
       tank.move(1 * Settings.BotSpeed);
     }
@@ -215,30 +198,21 @@ export default class Bot extends Player {
    * Handles shooting logic.
    * @param {Object} target - The target to shoot at.
    */
-  shoot(target) {
-    this.goto = -1; // don't move anywhere TODO: remove this?
+  shoot(target: any): void {
+    this.goto = -1;
     const tank = this.tank;
     const distx = target.x - tank.x;
     const disty = target.y - tank.y;
     tank.angle = Math.atan2(-distx, disty) + Math.PI;
-    // Shoot target...
-    // .. unless it is also a bot...
+
     if (typeof target !== "undefined" && typeof target["player"] !== "undefined" && target.player.isBot) {
-      // then randomise shooting time, to make bot-fights a bit more fair and random
-      setTimeout(function () {
+      setTimeout(() => {
         tank.shoot();
       }, 180 * Math.random());
     } else {
-      // target is not a bot: just shoot it
       tank.shoot();
     }
-    // flee the situation
     this.flee();
-    // if (weapon == "Grenade") {
-    //   this.game.timeouts.push(setTimeout(function () {
-    //     tank.shoot();
-    //   }, 4000));
-    // }
   }
 
   /**
@@ -247,35 +221,42 @@ export default class Bot extends Player {
    * @param {Array|number} path - Path to the enemy.
    * @returns {Object} Result with should_shoot, target, and weight.
    */
-  aimbot(enemy, path = -1) {
+  aimbot(enemy: any, path: any = -1): any {
     const result = { should_shoot: false, target: enemy, weight: 500 };
     const weapon = this.tank.weapon;
-    if (path === -1) path = this.tank.map.xypathToObj(enemy);
+
+    if (path === -1) {
+      if (!this.tank.map) return result;
+      const tile = this.tank.map.getTileByPos(this.tank.x, this.tank.y);
+      if (tile !== -1) {
+        path = tile.xypathToObj(enemy);
+      }
+    }
+
     if (path === -1) return result;
+
     const r = Math.random() > 0.6 ? 2 : 1;
-    // TODO: more intricate checking for specific weapon types
-    // TODO: check if there is something in the way etc...
     if (path.length <= this.tank.weapon.bot.shooting_range + r && !enemy.invincible()) result.should_shoot = true;
-    // rules for specific weapons
+
     if (weapon.name === "Laser") {
       for (let i = 0; i < weapon.trajectory.targets.length; i++) {
         if (weapon.trajectory.targets[i].player.team !== this.team && !enemy.invincible()) {
-          // shoot only if enemy would be hit
           result.should_shoot = true;
         } else {
-          // make sure to not shoot self with laser
           result.should_shoot = false;
         }
       }
     } else if (weapon.name === "Guided" || weapon.name === "WreckingBall") {
       result.should_shoot = false;
       result.weight = 200;
-      const tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
-      for (let i = 0; i < 4; i++) {
-        if (tile.walls[i] ^ (weapon.name === "Guided")) {
-          result.should_shoot = true;
-          const angle = (-Math.PI / 2) * i;
-          result.target = { x: this.tank.x + Math.sin(angle), y: this.tank.y - Math.cos(angle) };
+      const tile = store.game!.map.getTileByPos(this.tank.x, this.tank.y);
+      if (tile !== -1) {
+        for (let i = 0; i < 4; i++) {
+          if (tile.walls[i] ^ (weapon.name === "Guided")) {
+            result.should_shoot = true;
+            const angle = (-Math.PI / 2) * i;
+            result.target = { x: this.tank.x + Math.sin(angle), y: this.tank.y - Math.cos(angle) };
+          }
         }
       }
     } else if (weapon.name === "Slingshot") {
@@ -291,19 +272,25 @@ export default class Bot extends Player {
    * @param {number} duration - Duration of fleeing (not directly used in this logic but signature kept).
    * @returns {Array|number} The flee path or -1 if no path found.
    */
-  getFleePath(duration = 2) {
+  getFleePath(duration: number = 2): any {
     if (this.fleeing.from === -1 || this.fleeing.condition === -1 || !this.fleeing.condition()) return -1;
     if (!this.tank.weapon.bot.flee_if_active && this.tank.weapon.active) return -1;
-    // push any neighboring tile that is not in the fleeing path
-    const tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
+
+    const tile = store.game!.map.getTileByPos(this.tank.x, this.tank.y);
+    if (tile === -1) return -1;
+
     if (!this.fleeing.from.includes(tile)) this.fleeing.from.push(tile);
-    let nextTile = tile;
-    for (let i = 0; i < 4; i++) if (!tile.walls[i] && !this.fleeing.from.includes(tile.neighbors[i])) nextTile = tile.neighbors[i];
+
+    let nextTile: Tile = tile;
+    for (let i = 0; i < 4; i++)
+      if (!(tile as Tile).walls[i] && (tile as Tile).neighbors[i] && !this.fleeing.from.includes((tile as Tile).neighbors[i]))
+        nextTile = (tile as Tile).neighbors[i] as Tile;
+
     const fleePath = [tile, nextTile];
-    // convert tile path to coordinates path and return
+
     for (let i = 0; i < fleePath.length; i++) {
-      const tile = fleePath[i];
-      fleePath[i] = { x: tile.x + tile.dx / 2, y: tile.y + tile.dy / 2 };
+      const t = fleePath[i];
+      fleePath[i] = { x: t.x + t.dx / 2, y: t.y + t.dy / 2 };
     }
     return fleePath;
   }
@@ -311,21 +298,24 @@ export default class Bot extends Player {
   /**
    * Initiates fleeing behavior.
    */
-  flee() {
+  flee(): void {
     if (this.tank.weapon.bot.fleeing_duration <= 0) return;
-    // generate initial path where tank comes from / where to flee from
+
+    if (!store.game || !store.game.map) return;
     const tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
+    if (tile === -1) return;
+
     const nextTile = store.game.map.getTileByPos(
       this.tank.x + tile.dx * Math.sin(this.tank.angle),
       this.tank.y - tile.dy * Math.cos(this.tank.angle),
     );
     this.fleeing.from = [nextTile, tile];
-    // stop fleeing after some duration or if the weapon is activated again
+
     const self = this;
     const weapon = this.tank.weapon;
-    const flee_until = this.game.t + weapon.bot.fleeing_duration;
-    this.fleeing.condition = function () {
-      return self.game.t < flee_until && (!weapon.bot.flee_if_active || weapon.active);
+    const flee_until = this.game!.t + weapon.bot.fleeing_duration;
+    this.fleeing.condition = () => {
+      return self.game!.t < flee_until && (!weapon.bot.flee_if_active || weapon.active);
     };
   }
 }
@@ -334,27 +324,30 @@ export default class Bot extends Player {
  * Adapts bot speed based on team balance.
  * @param {number} team - The team ID.
  * @param {number} val - The adaptation value.
- * @returns {number} The new bot speed.
+ * @returns {number|undefined} The new bot speed.
  */
-export function adaptBotSpeed(team, val = 0.1) {
+export function adaptBotSpeed(team: any, val: number = 0.1): number | undefined {
   if (!Settings.AdaptiveBotSpeed) return;
 
-  const teams = [];
-  const botcounts = [];
+  const teams: any[] = [];
+  const botcounts: number[] = [];
 
-  for (let i = 0; i < store.game.players.length; i++) {
-    let id = teams.indexOf(store.game.players[i].team);
+  for (let i = 0; i < store.game!.players.length; i++) {
+    let id = teams.indexOf(store.game!.players[i].team);
     if (id === -1) {
       id = teams.length;
-      teams.push(store.game.players[i].team);
+      teams.push(store.game!.players[i].team);
       botcounts.push(0);
     }
-    botcounts[id] += store.game.players[i].isBot ? 1 : 0;
+    botcounts[id] += store.game!.players[i].isBot ? 1 : 0;
   }
+
   let avgbots = 0;
   for (let i = 0; i < teams.length; i++) avgbots += botcounts[i] / parseFloat(teams.length);
+
   const id = teams.indexOf(team);
   Settings.BotSpeed += (avgbots - botcounts[id]) * val;
+
   const bs = document.getElementById("BotSpeedometer");
   if (bs) {
     bs.style.display = "block";

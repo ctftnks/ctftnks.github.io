@@ -1,16 +1,20 @@
 import template from "./main.html?raw";
 import "./style.css";
 
-export function init(container) {
+export function init(container: HTMLElement): void {
   container.innerHTML = template;
   updateLeaderboard();
 
-  let leaderTime = Settings.EndScreenTime;
+  const settings: any = (window as any).Settings;
+  const players: any = (window as any).players;
+  const gameID: number = (window as any).GameID;
+
+  let leaderTime = settings.EndScreenTime;
   const h2Elem = document.getElementById("leaderboardh2");
   const counterElem = document.getElementById("leaderboardCounter");
-  const shadeElem = document.getElementById("leaderboardshade");
+  const shadeElem = document.getElementById("leaderboardshade") as HTMLElement;
 
-  if (h2Elem) h2Elem.innerHTML = "Leaderboard:&nbsp;&nbsp;Game #" + GameID;
+  if (h2Elem) h2Elem.innerHTML = "Leaderboard:&nbsp;&nbsp;Game #" + gameID;
   if (counterElem) counterElem.innerHTML = leaderTime + "s";
 
   const leaderIntvl = setInterval(function () {
@@ -20,27 +24,30 @@ export function init(container) {
 
   const leaderTimeout = setTimeout(function () {
     clearInterval(leaderIntvl);
-    closePage(shadeElem.parentNode);
-    newGame();
-  }, Settings.EndScreenTime * 1000);
+    (window as any).closePage(shadeElem.parentNode);
+    (window as any).newGame();
+  }, settings.EndScreenTime * 1000);
 
-  // Attach cleanup to shadeElem onclick if we want to override the HTML one
-  // but the HTML one currently uses inline scripts which should work due to (0, eval)
-  // however, it's safer to use the closure variables here.
-  shadeElem.onclick = function () {
-    closePage(this);
-    newGame();
-    clearInterval(leaderIntvl);
-    clearTimeout(leaderTimeout);
-  };
+  if (shadeElem) {
+    shadeElem.onclick = function () {
+      (window as any).closePage(this);
+      (window as any).newGame();
+      clearInterval(leaderIntvl);
+      clearTimeout(leaderTimeout);
+    };
+  }
 }
 
-export function updateLeaderboard() {
-  players.sort(function (a, b) {
+export function updateLeaderboard(): void {
+  const players: any = (window as any).players;
+
+  players.sort(function (a: any, b: any) {
     return b.score - a.score;
   });
+
   const lb = document.getElementById("leaderboard");
   if (!lb) return;
+
   let content = "";
   content += "<table>";
   content += "<tr>";
@@ -51,6 +58,7 @@ export function updateLeaderboard() {
   content += "<th>Shots</th>";
   content += "<th>Miles</th>";
   content += "</tr>";
+
   for (const i in players) {
     const p = players[i];
     content += "<tr>";
@@ -62,8 +70,9 @@ export function updateLeaderboard() {
     content += "<td>" + Math.round(p.stats.miles / 100) + "</td>";
     content += "</tr>";
   }
+
   content += "</table>";
   lb.innerHTML = content;
 }
 
-window.updateLeaderboard = updateLeaderboard;
+(window as any).updateLeaderboard = updateLeaderboard;

@@ -1,41 +1,37 @@
-import { store } from "../state.js";
-
-// A class for the canvas in which the game is drawn
-// binds HTML element and handles its size
-// provides loop to keep the frame in sync with the game
+import { store } from "../state";
 
 /**
  * Manages the game canvas and rendering loop.
  */
 export default class Canvas {
+  canvas: HTMLCanvasElement;
+  context: CanvasRenderingContext2D;
+  height: number;
+  width: number;
+  game: any;
+  loop: number | undefined;
+  scale: number = 1;
+
   /**
    * Creates a new Canvas manager.
    * @param {string} id - The ID of the canvas element.
    */
-  constructor(id) {
-    // initialize: get HTML element
-    /** @type {HTMLCanvasElement} The canvas element. */
-    this.canvas = document.getElementById(id);
-    /** @type {CanvasRenderingContext2D} The 2D rendering context. */
-    this.context = this.canvas.getContext("2d");
+  constructor(id: string) {
+    this.canvas = document.getElementById(id) as HTMLCanvasElement;
+    this.context = this.canvas.getContext("2d")!;
     this.canvas.height = this.canvas.clientHeight;
-    /** @type {number} Canvas height. */
     this.height = this.canvas.clientHeight;
     this.canvas.width = this.canvas.clientWidth;
-    /** @type {number} Canvas width. */
     this.width = this.canvas.clientWidth;
-    /** @type {Game} Reference to the game object. */
     this.game = undefined;
-    /** @type {number|undefined} The interval ID for the draw loop. */
     this.loop = undefined;
-    /** @type {number} Scale factor. */
     this.scale = 1;
   }
 
   /**
    * Clear canvas and draw all objects.
    */
-  draw() {
+  draw(): void {
     this.context.clearRect(0, 0, this.canvas.width / this.scale, this.canvas.height / this.scale);
     this.game.map.draw(this.canvas, this.context);
     for (let i = 0; i < this.game.objs.length; i++) this.game.objs[i].draw(this.canvas, this.context);
@@ -44,9 +40,8 @@ export default class Canvas {
   /**
    * Keep canvas in sync with game: redraw every few milliseconds.
    */
-  sync() {
+  sync(): void {
     if (typeof this.loop === "undefined") {
-      // Use requestAnimationFrame for drawing at the browser's repaint frequency.
       const drawLoop = () => {
         this.draw();
         this.loop = requestAnimationFrame(drawLoop);
@@ -58,7 +53,7 @@ export default class Canvas {
   /**
    * Stop syncing of canvas.
    */
-  stopSync() {
+  stopSync(): void {
     if (typeof this.loop !== "undefined") cancelAnimationFrame(this.loop);
   }
 
@@ -66,47 +61,47 @@ export default class Canvas {
    * Zoom into the canvas.
    * @param {number} factor - The scale factor.
    */
-  rescale(factor) {
+  rescale(factor: number): void {
     this.scale = factor;
-    this.context.setTransform(1, 0, 0, 1, 0, 0); // reset
-    this.context.scale(factor, factor); // scale by new factor
+    this.context.setTransform(1, 0, 0, 1, 0, 0);
+    this.context.scale(factor, factor);
   }
 
   /**
    * Update sizes of canvas and map for window.onresize.
    */
-  resize() {
+  resize(): void {
     this.canvas.height = this.canvas.clientHeight;
     this.height = this.canvas.clientHeight;
     this.canvas.width = this.canvas.clientWidth;
     this.width = this.canvas.clientWidth;
     if (typeof store.game !== "undefined") store.game.map.resize();
-    // this.rescale(Math.max(this.width / (game.map.dx * game.map.Nx));
   }
 
   /**
    * Shakes the canvas visually.
    */
-  shake() {
+  shake(): void {
     const amp = 14;
     const speed = 25;
     const duration = 660;
     const self = this;
     let i = 0;
-    const intvl = setInterval(function () {
+
+    const intvl = setInterval(() => {
       const randx = amp * (Math.random() - 0.5) * Math.exp((i * 250) / duration);
       const randy = amp * (Math.random() - 0.5) * Math.exp((i * 250) / duration);
       i -= 1;
-      // self.context.translate(randx, randy);
       self.canvas.style.marginLeft = randx + "px";
       self.canvas.style.marginTop = randy + "px";
-      setTimeout(function () {
+      setTimeout(() => {
         self.canvas.style.marginLeft = 0 + "px";
         self.canvas.style.marginTop = 0 + "px";
       }, speed);
     }, 2 * speed);
+
     this.game.timeouts.push(
-      setTimeout(function () {
+      setTimeout(() => {
         clearInterval(intvl);
       }, duration),
     );

@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import Tank from "../src/classes/tank.js";
-import { Settings } from "../src/state.js";
+import Tank from "../src/classes/tank";
+import { Settings } from "../src/state";
 
 describe("Tank Class", () => {
-  let mockPlayer;
+  let mockPlayer: any;
 
   beforeEach(() => {
     const mockTile = {

@@ -1,17 +1,20 @@
 import template from "./main.html?raw";
 import "./style.css";
 
-export function init(container) {
+export function init(container: HTMLElement): void {
   container.innerHTML = template;
 }
 
-function clearPlayers() {
-  window.players = [];
+function clearPlayers(): void {
+  (window as any).players = [];
 }
 
-function quickPvP(nteams, teamsize) {
-  window.players = [];
-  window.nplayers = 0;
+function quickPvP(nteams: number, teamsize: number): void {
+  const Player = (window as any).Player;
+  (window as any).players = [];
+  (window as any).nplayers = 0;
+  const players: any[] = (window as any).players;
+
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
       players.push(new Player());
@@ -22,12 +25,16 @@ function quickPvP(nteams, teamsize) {
       }
     }
   }
-  updatePlayersMenu();
+  (window as any).updatePlayersMenu();
 }
 
-function quickPvB(nteams, teamsize) {
-  window.players = [];
-  window.nplayers = 0;
+function quickPvB(nteams: number, teamsize: number): void {
+  const Player = (window as any).Player;
+  const Bot = (window as any).Bot;
+  (window as any).players = [];
+  (window as any).nplayers = 0;
+  const players: any[] = (window as any).players;
+
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
       if (i < nteams / 2) players.push(new Player());
@@ -39,12 +46,16 @@ function quickPvB(nteams, teamsize) {
       }
     }
   }
-  updatePlayersMenu();
+  (window as any).updatePlayersMenu();
 }
 
-function quickMixed(nteams, teamsize) {
-  window.players = [];
-  window.nplayers = 0;
+function quickMixed(nteams: number, teamsize: number): void {
+  const Player = (window as any).Player;
+  const Bot = (window as any).Bot;
+  (window as any).players = [];
+  (window as any).nplayers = 0;
+  const players: any[] = (window as any).players;
+
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
       if (j < teamsize / 2) players.push(new Player());
@@ -56,12 +67,16 @@ function quickMixed(nteams, teamsize) {
       }
     }
   }
-  updatePlayersMenu();
+  (window as any).updatePlayersMenu();
 }
 
-function quickUnevenMixed(nteams, teamsize) {
-  window.players = [];
-  window.nplayers = 0;
+function quickUnevenMixed(nteams: number, teamsize: number): void {
+  const Player = (window as any).Player;
+  const Bot = (window as any).Bot;
+  (window as any).players = [];
+  (window as any).nplayers = 0;
+  const players: any[] = (window as any).players;
+
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
       if (j < teamsize / 2 && i === 0) players.push(new Player());
@@ -73,11 +88,11 @@ function quickUnevenMixed(nteams, teamsize) {
       }
     }
   }
-  updatePlayersMenu();
+  (window as any).updatePlayersMenu();
 }
 
-window.clearPlayers = clearPlayers;
-window.quickPvP = quickPvP;
-window.quickPvB = quickPvB;
-window.quickMixed = quickMixed;
-window.quickUnevenMixed = quickUnevenMixed;
+(window as any).clearPlayers = clearPlayers;
+(window as any).quickPvP = quickPvP;
+(window as any).quickPvB = quickPvB;
+(window as any).quickMixed = quickMixed;
+(window as any).quickUnevenMixed = quickUnevenMixed;

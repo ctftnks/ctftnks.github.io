@@ -1,19 +1,19 @@
-import { store, Settings } from "./state.js";
+import { store, Settings } from "./state";
 
 // databinding for menus and options
-export function databinding() {
+export function databinding(): void {
   // input elements
-  [].forEach.call(document.querySelectorAll("input[data-bind]"), function (elem) {
+  [].forEach.call(document.querySelectorAll("input[data-bind]"), function (elem: HTMLInputElement) {
     const bind = elem.getAttribute("data-bind");
     const prefix = elem.hasAttribute("data-prefix") ? elem.getAttribute("data-prefix") : "";
     const suffix = elem.hasAttribute("data-suffix") ? elem.getAttribute("data-suffix") : "";
 
-    if (!(bind in Settings)) {
+    if (!bind || !(bind in Settings)) {
       console.error("databinding: " + bind + " not found in Settings");
       return;
     }
 
-    let val = Settings[bind];
+    let val = (Settings as any)[bind];
     val = dataminmax(val, elem, bind);
     elem.value = prefix + "" + val + "" + suffix;
 
@@ -31,40 +31,40 @@ export function databinding() {
       const numericVal = dataminmax(Number(val), elem, bind);
 
       if (elem.hasAttribute("data-type") && elem.getAttribute("data-type") === "string") {
-        Settings[bind] = String(numericVal);
+        (Settings as any)[bind] = String(numericVal);
       } else {
-        Settings[bind] = Number(numericVal);
+        (Settings as any)[bind] = Number(numericVal);
       }
       store.saveSettings();
     };
   });
 
   // select elements
-  [].forEach.call(document.querySelectorAll("select[data-bind]"), function (elem) {
+  [].forEach.call(document.querySelectorAll("select[data-bind]"), function (elem: HTMLSelectElement) {
     const bind = elem.getAttribute("data-bind");
-    if (!(bind in Settings)) {
+    if (!bind || !(bind in Settings)) {
       console.error("databinding: " + bind + " not found in Settings");
       return;
     }
 
-    const val = Settings[bind];
+    const val = (Settings as any)[bind];
     elem.value = val;
     elem.onchange = function () {
       const val = elem.value;
       if (elem.hasAttribute("data-type") && elem.getAttribute("data-type") === "string") {
-        Settings[bind] = val;
+        (Settings as any)[bind] = val;
       } else {
         // handle boolean selects if any
-        if (val === "true") Settings[bind] = true;
-        else if (val === "false") Settings[bind] = false;
-        else Settings[bind] = Number(val);
+        if (val === "true") (Settings as any)[bind] = true;
+        else if (val === "false") (Settings as any)[bind] = false;
+        else (Settings as any)[bind] = Number(val);
       }
       store.saveSettings();
     };
   });
 }
 
-function dataminmax(val, elem, bind) {
+function dataminmax(val: number, elem: HTMLElement, bind: string): number {
   if (typeof val !== "number" || isNaN(val)) return val;
 
   if (elem.hasAttribute("data-min")) {
@@ -75,8 +75,8 @@ function dataminmax(val, elem, bind) {
     const max = Number(elem.getAttribute("data-max"));
     if (val > max) val = max;
   }
-  Settings[bind] = val;
+  (Settings as any)[bind] = val;
   return val;
 }
 
-window.databinding = databinding;
+(window as any).databinding = databinding;

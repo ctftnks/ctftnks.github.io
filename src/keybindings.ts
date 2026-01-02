@@ -1,21 +1,21 @@
-import { store } from "./state.js";
+import { store } from "./state";
 
 /**
  * Modern Key class to track pressed keys using event.code
  */
 export const Key = {
-  _pressed: new Set(),
+  _pressed: new Set<string>(),
 
   /**
    * Check if a key is currently pressed.
    * @param {string} code - The KeyboardEvent.code (e.g., 'KeyW', 'ArrowUp', 'Space')
    * @returns {boolean}
    */
-  isDown: function (code) {
+  isDown: function (code: string): boolean {
     return this._pressed.has(code);
   },
 
-  onKeydown: function (event) {
+  onKeydown: function (event: KeyboardEvent) {
     this._pressed.add(event.code);
 
     if (store.editingKeymap) {
@@ -24,7 +24,8 @@ export const Key = {
       // 'ControlLeft' or 'ControlRight' are usually forbidden in this game's logic
       if (event.code.startsWith("Control")) return;
 
-      if (window.doEditKeymap) window.doEditKeymap(event.code);
+      const doEditKeymap = (window as any).doEditKeymap;
+      if (doEditKeymap) doEditKeymap(event.code);
     }
 
     // Legacy specific prevention for 'W' key if needed,
@@ -35,7 +36,7 @@ export const Key = {
     }
   },
 
-  onKeyup: function (event) {
+  onKeyup: function (event: KeyboardEvent) {
     this._pressed.delete(event.code);
   },
 };
@@ -44,7 +45,7 @@ export const Key = {
  * Default keymaps using modern KeyboardEvent.code strings.
  * order: up, left, down, right, fire
  */
-export const keymaps = [
+export const keymaps: string[][] = [
   ["ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight", "Space"],
   ["KeyW", "KeyA", "KeyS", "KeyD", "KeyQ"],
   ["Numpad8", "Numpad4", "Numpad5", "Numpad6", "Numpad7"],
@@ -56,15 +57,15 @@ export const keymaps = [
 ];
 
 // event listeners
-window.addEventListener("keyup", (e) => Key.onKeyup(e), false);
-window.addEventListener("keydown", (e) => Key.onKeydown(e), false);
+window.addEventListener("keyup", (e: KeyboardEvent) => Key.onKeyup(e), false);
+window.addEventListener("keydown", (e: KeyboardEvent) => Key.onKeydown(e), false);
 
 /**
  * Returns a user-friendly label for a given key code.
  * @param {string} code
  * @returns {string}
  */
-export function getKeyLabel(code) {
+export function getKeyLabel(code: string): string {
   if (!code) return "";
 
   // Clean up common codes

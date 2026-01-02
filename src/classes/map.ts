@@ -1,36 +1,52 @@
-import { store } from "../state.js";
-
-// A class for the Map,
-// discretized in Nx * Ny tiles, which can be separated by walls (walls)
-// also the tiles keep object lists for spatial sorting
-// the canvas is passed to the constructor to provide the size of the canvas
+import { store } from "../state";
+import GameObject from "./object";
+import Canvas from "./canvas";
 
 /**
  * Represents the game map.
+ *
+ * Discretized in Nx * Ny tiles, which can be separated by walls (walls)
+ * also the tiles keep object lists for spatial sorting
+ * the canvas is passed to the constructor to provide the size of the canvas
  */
-export default class Map {
+export default class GameMap {
+  /** The canvas. */
+  canvas: Canvas | { width: number; height: number };
+  /** Number of tiles in X. */
+  Nx: number;
+  /** Number of tiles in Y. */
+  Ny: number;
+  /** Tile width. */
+  dx: number = 130;
+  /** Tile height. */
+  dy: number;
+  /** List of tiles. */
+  tiles: Tile[] = [];
+
   /**
-   * Creates a new Map.
-   * @param {Object} canvas - The canvas object.
+   * Creates a new GameMap.
+   * @param {Canvas} canvas - The canvas object.
    * @param {number} Nx - Number of tiles in X direction.
    * @param {number} Ny - Number of tiles in Y direction.
    */
-  constructor(canvas = -1, Nx = -1, Ny = -1) {
+  constructor(canvas: Canvas | any = -1, Nx: number = -1, Ny: number = -1) {
     if (canvas === -1) canvas = { width: 1, height: 1 };
-    /** @type {Object} The canvas. */
     this.canvas = canvas;
-    /** @type {number} Number of tiles in X. */
-    if (Nx === -1) this.Nx = parseInt(store.settings.MapNxMin + (store.settings.MapNxMax - store.settings.MapNxMin) * Math.random());
-    else this.Nx = Nx;
-    /** @type {number} Number of tiles in Y. */
-    if (Ny === -1) this.Ny = parseInt(((0.25 * Math.random() + 0.75) * this.Nx * canvas.height) / canvas.width);
-    else this.Ny = Ny;
-    /** @type {number} Tile width. */
+
+    if (Nx === -1) {
+      this.Nx = parseInt((store.settings.MapNxMin + (store.settings.MapNxMax - store.settings.MapNxMin) * Math.random()).toString());
+    } else {
+      this.Nx = Nx;
+    }
+
+    if (Ny === -1) {
+      this.Ny = parseInt((((0.25 * Math.random() + 0.75) * this.Nx * canvas.height) / canvas.width).toString());
+    } else {
+      this.Ny = Ny;
+    }
     this.dx = 130;
     // this.dy = canvas.height / this.Ny;
-    /** @type {number} Tile height. */
     this.dy = this.dx;
-    /** @type {Array<Tile>} List of tiles. */
     this.tiles = [];
 
     // Tile initialization
@@ -50,7 +66,7 @@ export default class Map {
    * @param {number} j - Y index.
    * @returns {Tile|number} The tile or -1 if out of bounds.
    */
-  getTileByIndex(i, j) {
+  getTileByIndex(i: number, j: number): Tile | -1 {
     if (i < this.Nx && j < this.Ny && i >= 0 && j >= 0) return this.tiles[i * this.Ny + j];
     return -1;
   }
@@ -58,14 +74,14 @@ export default class Map {
   /**
    * Links neighboring tiles.
    */
-  linkNeighbors() {
+  linkNeighbors(): void {
     for (let i = 0; i < this.Nx; i++) {
       for (let j = 0; j < this.Ny; j++) {
         this.tiles[i * this.Ny + j].neighbors = [
-          this.getTileByIndex(i, j - 1),
-          this.getTileByIndex(i - 1, j),
-          this.getTileByIndex(i, j + 1),
-          this.getTileByIndex(i + 1, j),
+          this.getTileByIndex(i, j - 1) as Tile | undefined,
+          this.getTileByIndex(i - 1, j) as Tile | undefined,
+          this.getTileByIndex(i, j + 1) as Tile | undefined,
+          this.getTileByIndex(i + 1, j) as Tile | undefined,
         ];
       }
     }
@@ -77,16 +93,16 @@ export default class Map {
    * @param {number} y - Y coordinate.
    * @returns {Tile|number} The tile or -1.
    */
-  getTileByPos(x, y) {
-    const i = parseInt(x / this.dx);
-    const j = parseInt(y / this.dy);
+  getTileByPos(x: number, y: number): Tile | -1 {
+    const i = parseInt((x / this.dx).toString());
+    const j = parseInt((y / this.dy).toString());
     return this.getTileByIndex(i, j);
   }
 
   /**
    * Spatial sorting: clear tile object lists.
    */
-  clearObjectLists() {
+  clearObjectLists(): void {
     for (let i = 0; i < this.tiles.length; i++) this.tiles[i].objs = [];
   }
 
@@ -94,7 +110,7 @@ export default class Map {
    * Spatial sorting: add object to corresponding tile list.
    * @param {GameObject} obj - The object to add.
    */
-  addObject(obj) {
+  addObject(obj: GameObject): void {
     const tile = this.getTileByPos(obj.x, obj.y);
     if (tile === -1) obj.delete();
     else tile.objs.push(obj);
@@ -105,8 +121,8 @@ export default class Map {
    * @param {number} tries - Recursion counter.
    * @returns {Object} {x, y} coordinates.
    */
-  spawnPoint(tries = 0) {
-    const rInt = parseInt(Math.random() * (this.Nx * this.Ny - 1));
+  spawnPoint(tries: number = 0): { x: number; y: number } {
+    const rInt = parseInt((Math.random() * (this.Nx * this.Ny - 1)).toString());
     const tile = this.tiles[rInt];
     // if there is something else already, find another point
     if (tile.objs.length > 0 && tries++ < this.Nx * this.Ny) return this.spawnPoint(tries);
@@ -118,7 +134,7 @@ export default class Map {
    * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas, context) {
+  draw(canvas: Canvas, context: CanvasRenderingContext2D): void {
     context.fillStyle = "#edede8";
     context.fillRect(0, 0, this.Nx * this.dx, this.Ny * this.dy);
     for (let i = 0; i < this.tiles.length; i++) this.tiles[i].draw(canvas, context);
@@ -127,8 +143,10 @@ export default class Map {
   /**
    * Update sizes of map and tiles, for window.onresize.
    */
-  resize() {
-    this.canvas.rescale(Math.min(this.canvas.width / (this.dx * this.Nx), this.canvas.height / (this.dy * this.Ny)));
+  resize(): void {
+    if (this.canvas instanceof Canvas) {
+      this.canvas.rescale(Math.min(this.canvas.width / (this.dx * this.Nx), this.canvas.height / (this.dy * this.Ny)));
+    }
   }
 }
 
@@ -137,33 +155,46 @@ export default class Map {
  * Contains position, wall list, neighbor list, object list.
  */
 export class Tile {
+  /** X index. */
+  i: number;
+  /** Y index. */
+  j: number;
+  /** The map. */
+  map: GameMap;
+  /** Unique tile ID. */
+  id: number;
+  /** X coordinate in pixels. */
+  x: number;
+  /** Y coordinate in pixels. */
+  y: number;
+  /** Width. */
+  dx: number;
+  /** Height. */
+  dy: number;
+  /** Objects currently in this tile. */
+  objs: GameObject[];
+  /** List of Walls [top, left, bottom, right]. */
+  walls: boolean[] = [false, false, false, false];
+  /** List of neighboring tiles [top, left, bottom, right]. */
+  neighbors: (Tile | undefined)[] = [undefined, undefined, undefined, undefined];
+
   /**
    * Creates a new Tile.
    * @param {number} i - X index.
    * @param {number} j - Y index.
-   * @param {Map} map - The map instance.
+   * @param {GameMap} map - The map instance.
    */
-  constructor(i, j, map) {
-    /** @type {number} X index. */
+  constructor(i: number, j: number, map: GameMap) {
     this.i = i;
-    /** @type {number} Y index. */
     this.j = j;
-    /** @type {Map} The map. */
     this.map = map;
-    /** @type {number} Unique tile ID. */
     this.id = i * map.Ny + j;
-    /** @type {number} X coordinate in pixels. */
     this.x = i * map.dx;
-    /** @type {number} Y coordinate in pixels. */
     this.y = j * map.dy;
-    /** @type {number} Width. */
     this.dx = map.dx;
-    /** @type {number} Height. */
     this.dy = map.dy;
-    /** @type {Array<GameObject>} Objects currently in this tile. */
     this.objs = [];
     // list of walls
-    /** @type {Array<boolean>} Walls [top, left, bottom, right]. */
     this.walls = [
       false, // top
       false, // left
@@ -171,7 +202,6 @@ export class Tile {
       false, // right
     ];
     // list of neighbors
-    /** @type {Array<Tile|undefined>} Neighbors [top, left, bottom, right]. */
     this.neighbors = [
       undefined, // top
       undefined, // left
@@ -184,7 +214,7 @@ export class Tile {
    * Return the coordinates of the corners of the tile and whether they're part of some wall.
    * @returns {Array<Object>} List of corners with {x, y, w}.
    */
-  corners() {
+  corners(): { x: number; y: number; w: boolean }[] {
     return [
       { x: this.x, y: this.y, w: this.walls[0] || this.walls[1] }, // top left
       { x: this.x, y: this.y + this.dy, w: this.walls[1] || this.walls[2] }, // bottom left
@@ -198,7 +228,7 @@ export class Tile {
    * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas, context) {
+  draw(canvas: Canvas, context: CanvasRenderingContext2D): void {
     context.fillStyle = "#555";
     if (this.walls[0]) context.fillRect(this.x - 2, this.y - 2, this.dx + 4, 4);
     if (this.walls[1]) context.fillRect(this.x - 2, this.y - 2, 4, this.dy + 4);
@@ -212,11 +242,12 @@ export class Tile {
    * @param {boolean} remove - Whether to remove the wall.
    * @param {boolean} neighbor - Whether to update the neighbor as well.
    */
-  addWall(direction, remove = false, neighbor = true) {
+  addWall(direction: number, remove: boolean = false, neighbor: boolean = true): void {
     direction = direction % 4;
     this.walls[direction] = !remove;
-    if (neighbor && typeof this.neighbors[direction] !== "undefined" && this.neighbors[direction] !== -1)
-      this.neighbors[direction].addWall(direction + 2, remove, false);
+    if (neighbor && typeof this.neighbors[direction] !== "undefined" && this.neighbors[direction] !== -1) {
+      (this.neighbors[direction] as Tile).addWall(direction + 2, remove, false);
+    }
   }
 
   /**
@@ -225,7 +256,7 @@ export class Tile {
    * @param {number} y - Y coordinate.
    * @returns {Array<boolean>} List of walls encountered.
    */
-  getWalls(x, y) {
+  getWalls(x: number, y: number): boolean[] {
     const distx = this.x - x;
     const disty = this.y - y;
     const walls = [false, false, false, false];
@@ -245,7 +276,7 @@ export class Tile {
    * @param {number} maxPathLength - Max allowed path length.
    * @returns {Array<Tile>|number} The path or -1 if not found.
    */
-  pathTo(condition, path = [], minPathLength = -1, maxPathLength = -1) {
+  pathTo(condition: (tile: Tile) => boolean, path: Tile[] = [], minPathLength: number = -1, maxPathLength: number = -1): Tile[] | -1 {
     // add current tile to path
     path.push(this);
     // if the current path is longer than the shortest known path: abort!
@@ -256,10 +287,10 @@ export class Tile {
     // else keep searching:
     // for every neighbor that is not separated by a wall and is not yet in path
     // calculate the path recursively. If a path is found, add it to a list
-    const options = [];
+    const options: Tile[][] = [];
     for (let d = 0; d < 4; d++)
-      if (!this.walls[d] && this.neighbors[d] !== -1 && path.indexOf(this.neighbors[d]) === -1) {
-        const option = this.neighbors[d].pathTo(condition, path.slice(), minPathLength, maxPathLength);
+      if (!this.walls[d] && this.neighbors[d] && path.indexOf(this.neighbors[d] as Tile) === -1) {
+        const option = (this.neighbors[d] as Tile).pathTo(condition, path.slice(), minPathLength, maxPathLength);
         if (option !== -1) {
           minPathLength = option.length;
           options.push(option);
@@ -269,7 +300,9 @@ export class Tile {
     if (options.length === 0) return -1;
     // find option with minimal length and return
     let min = -1;
-    for (let i = 0; i < options.length; i++) if (min === -1 || options[i].length < options[min].length) min = i;
+    for (let i = 0; i < options.length; i++) {
+      if (min === -1 || options[i].length < options[min].length) min = i;
+    }
     return options[min];
   }
 
@@ -278,12 +311,19 @@ export class Tile {
    * @param {number} distance - Steps to walk.
    * @returns {Tile} The final tile.
    */
-  randomWalk(distance) {
+  randomWalk(distance: number): Tile {
     if (distance === 0) return this;
     const r = Math.floor(Math.random() * 4);
-    for (let d = r; d < 4 + r; d++)
-      if (!this.walls[d % 4] && typeof this.neighbors[d % 4] !== "undefined" && this.neighbors[d % 4] !== -1)
-        return this.neighbors[d % 4].randomWalk(distance - 1);
+    for (let d = r; d < 4 + r; d++) {
+      if (
+        !this.walls[d % 4] &&
+        typeof this.neighbors[d % 4] !== "undefined" &&
+        this.neighbors[d % 4] !== undefined &&
+        this.neighbors[d % 4] !== -1
+      ) {
+        return (this.neighbors[d % 4] as Tile).randomWalk(distance - 1);
+      }
+    }
     return this;
   }
 
@@ -292,7 +332,7 @@ export class Tile {
    * @param {string} type - Object type to search for.
    * @returns {number} Index of object in list or -1.
    */
-  find(type) {
+  find(type: string): number {
     for (let i = 0; i < this.objs.length; i++) if (this.objs[i].type === type) return i;
     return -1;
   }
@@ -303,22 +343,23 @@ export class Tile {
    * @param {number} maxPathLength - Max path length.
    * @returns {Array|number} Path to object or -1.
    */
-  xypathToObj(condition, maxPathLength = -1) {
+  xypathToObj(condition: (obj: GameObject) => boolean, maxPathLength: number = -1): Array<{ x: number; y: number } | GameObject> | -1 {
     const tilepath = this.pathTo(
       function (dest) {
         for (let i = 0; i < dest.objs.length; i++) if (condition(dest.objs[i])) return true;
+        return false;
       },
       [],
       -1,
       maxPathLength,
     );
     if (tilepath === -1) return -1;
-    const xypath = [];
+    const xypath: Array<{ x: number; y: number } | GameObject> = [];
     for (let i = 0; i < tilepath.length; i++) {
       const tile = tilepath[i];
       xypath.push({ x: tile.x + tile.dx / 2, y: tile.y + tile.dy / 2 });
     }
-    let obj = -1;
+    let obj: GameObject | -1 = -1;
     const lasttile = tilepath[tilepath.length - 1];
     for (let i = 0; i < lasttile.objs.length; i++) {
       if (condition(lasttile.objs[i])) {

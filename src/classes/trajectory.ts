@@ -1,43 +1,41 @@
-import GameObject from "./object.js";
-import { Settings } from "../state.js";
+import GameObject from "./object";
+import { Settings } from "../state";
+import GameMap from "./map";
 
 /**
  * Represents a trajectory for ray-casting or lasers.
  * @extends GameObject
  */
 export default class Trajectory extends GameObject {
+  hidden: boolean = false;
+  color: string = "#000";
+  thickness: number = 2;
+  length: number;
+  angle: number | undefined;
+  delta: number;
+  points: any[] = [];
+  map: GameMap;
+  drawevery: number = 1;
+  timeout: number = 100;
+  targets: any[] = [];
+
   /**
    * Creates a new Trajectory.
-   * @param {Map} map - The map to trace on.
+   * @param {GameMap} map - The map to trace on.
    */
-  constructor(map) {
+  constructor(map: GameMap) {
     super();
 
-    /** @type {boolean} Whether to hide the trajectory. */
     this.hidden = false;
-    /** @type {string} Color. */
     this.color = "#000";
-    /** @type {number} Thickness of line. */
     this.thickness = 2;
-    /** @type {number} Maximum length. */
     this.length = 2000;
-    /** @type {number} Start X. */
-    this.x = undefined;
-    /** @type {number} Start Y. */
-    this.y = undefined;
-    /** @type {number} Angle. */
     this.angle = undefined;
-    /** @type {number} Step size. */
     this.delta = 4;
-    /** @type {Array<Object>} List of points on trajectory. */
     this.points = [];
-    /** @type {Map} The map. */
     this.map = map;
-    /** @type {number} Draw every Nth point. */
     this.drawevery = 1;
-    /** @type {number} Timeout. */
     this.timeout = 100;
-    /** @type {Array<GameObject>} Targets hit. */
     this.targets = [];
   }
 
@@ -46,7 +44,7 @@ export default class Trajectory extends GameObject {
    * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas, context) {
+  draw(canvas: any, context: CanvasRenderingContext2D): void {
     if (this.hidden) return;
     for (let i = 0; i < this.points.length; i += this.drawevery) {
       const p = this.points[i];
@@ -65,12 +63,13 @@ export default class Trajectory extends GameObject {
   /**
    * Calculates the trajectory.
    */
-  step() {
+  step(): void {
     // update points list
     this.targets = [];
-    let point = { x: this.x, y: this.y, angle: this.angle };
+    let point = { x: this.x!, y: this.y!, angle: this.angle! };
     let length = 0;
     this.points = [point];
+
     while (length < this.length) {
       point = this.points[this.points.length - 1];
       const nextpoint = {
@@ -78,10 +77,12 @@ export default class Trajectory extends GameObject {
         y: point.y - this.delta * Math.cos(-point.angle),
         angle: point.angle,
       };
+
       const tile = this.map.getTileByPos(point.x, point.y);
       if (tile === -1) return;
+
       const walls = tile.getWalls(nextpoint.x, nextpoint.y);
-      const nwalls = walls.filter((w) => w).length;
+      const nwalls = walls.filter((w: boolean) => w).length;
       // if there seems to be a wall: handle accordingly
       if (nwalls === 2) {
         nextpoint.angle += Math.PI;
@@ -99,7 +100,9 @@ export default class Trajectory extends GameObject {
       length += this.delta;
       this.points.push(nextpoint);
       // see if any tanks targeted
-      for (let i = 0; i < tile.objs.length; i++) if (tile.objs[i].type === "Tank") this.targets.push(tile.objs[i]);
+      for (let i = 0; i < tile.objs.length; i++) {
+        if (tile.objs[i].type === "Tank") this.targets.push(tile.objs[i]);
+      }
     }
 
     this.timeout -= Settings.GameFrequency;

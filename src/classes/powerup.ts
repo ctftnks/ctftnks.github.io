@@ -1,35 +1,33 @@
-import GameObject from "./object.js";
-import { Settings } from "../state.js";
-import { playSound, playMusic, stopMusic, fogOfWar } from "../effects.js";
-import { store } from "../state.js";
-import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot, WallBuilder } from "./weapons.js";
-import { IMAGES, SOUNDS } from "../assets.js";
-
-// a parent class for powerups
+import GameObject from "./object";
+import { Settings, store } from "../state";
+import { playSound, playMusic, stopMusic, fogOfWar } from "../effects";
+import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot, WallBuilder } from "./weapons";
+import { IMAGES, SOUNDS } from "../assets";
+import Tank from "./tank";
 
 /**
  * Base class for all PowerUps.
  * @extends GameObject
  */
 export class PowerUp extends GameObject {
+  /** Indicates this is a powerup. */
+  isPowerUp: boolean = true;
+  /** Collision radius. */
+  radius: number = 40;
+  /** Whether bots are attracted to it. */
+  attractsBots: boolean = false;
+
   /**
    * Creates a new PowerUp.
    */
   constructor() {
     super();
-    /** @type {boolean} Indicates this is a powerup. */
     this.isPowerUp = true;
-    /** @type {HTMLImageElement} PowerUp icon. */
     this.image = new Image();
-    /** @type {number} Width of the icon. */
     this.width = 30;
-    /** @type {number} X coordinate. */
-    this.x = undefined;
-    /** @type {number} Y coordinate. */
-    this.y = undefined;
-    /** @type {number} Collision radius. */
+    this.x = 0; // Initialized later
+    this.y = 0; // Initialized later
     this.radius = 40;
-    /** @type {boolean} Whether bots are attracted to it. */
     this.attractsBots = false;
   }
 
@@ -37,7 +35,7 @@ export class PowerUp extends GameObject {
    * Applies the powerup effect to a tank.
    * @param {Tank} tank - The tank picking up the powerup.
    */
-  apply(tank) {}
+  apply(tank: Tank) {}
 
   /**
    * Update step.
@@ -49,7 +47,7 @@ export class PowerUp extends GameObject {
    * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas, context) {
+  draw(canvas: any, context: CanvasRenderingContext2D) {
     context.save();
     context.translate(this.x, this.y);
     context.drawImage(this.image, -this.width / 2, -this.width / 2, this.width, this.width);
@@ -67,7 +65,7 @@ export class LaserBonus extends PowerUp {
     this.attractsBots = true;
     this.image.src = IMAGES.laser;
   }
-  apply(tank) {
+  apply(tank: Tank) {
     playSound(SOUNDS.reload);
     tank.weapon = new Laser(tank);
   }
@@ -83,7 +81,7 @@ export class MGBonus extends PowerUp {
     this.attractsBots = true;
     this.image.src = IMAGES.mg;
   }
-  apply(tank) {
+  apply(tank: Tank) {
     playSound(SOUNDS.reload);
     tank.weapon = new MG(tank);
   }
@@ -98,7 +96,7 @@ export class GrenadeBonus extends PowerUp {
     super();
     this.image.src = IMAGES.grenade;
   }
-  apply(tank) {
+  apply(tank: Tank) {
     playSound(SOUNDS.reload);
     tank.weapon = new Grenade(tank);
   }
@@ -113,7 +111,7 @@ export class MineBonus extends PowerUp {
     super();
     this.image.src = IMAGES.mine;
   }
-  apply(tank) {
+  apply(tank: Tank) {
     playSound(SOUNDS.reload);
     tank.weapon = new Mine(tank);
   }
@@ -129,7 +127,7 @@ export class GuidedBonus extends PowerUp {
     this.attractsBots = true;
     this.image.src = IMAGES.guided;
   }
-  apply(tank) {
+  apply(tank: Tank) {
     playSound(SOUNDS.reload);
     tank.weapon = new Guided(tank);
   }
@@ -144,7 +142,7 @@ export class WreckingBallBonus extends PowerUp {
     super();
     this.image.src = IMAGES.wreckingBall;
   }
-  apply(tank) {
+  apply(tank: Tank) {
     playSound(SOUNDS.reload);
     tank.weapon = new WreckingBall(tank);
   }
@@ -160,7 +158,7 @@ export class SlingshotBonus extends PowerUp {
     this.attractsBots = true;
     this.image.src = IMAGES.slingshot;
   }
-  apply(tank) {
+  apply(tank: Tank) {
     playSound(SOUNDS.reload);
     tank.weapon = new Slingshot(tank);
   }
@@ -175,7 +173,7 @@ export class WallBuilderBonus extends PowerUp {
     super();
     this.image.src = IMAGES.wallBuilder;
   }
-  apply(tank) {
+  apply(tank: Tank) {
     playSound(SOUNDS.reload);
     tank.weapon = new WallBuilder(tank);
   }
@@ -191,7 +189,7 @@ export class SpeedBonus extends PowerUp {
     this.attractsBots = true;
     this.image.src = IMAGES.speed;
   }
-  apply(tank) {
+  apply(tank: Tank) {
     tank.speed *= 1.1;
     const self = tank;
     tank.player.game.timeouts.push(
@@ -207,13 +205,16 @@ export class SpeedBonus extends PowerUp {
  * @extends PowerUp
  */
 export class InvincibleBonus extends PowerUp {
+  applied: boolean = false;
+
   constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.invincible;
     this.applied = false;
   }
-  apply(tank) {
+
+  apply(tank: Tank) {
     if (this.applied) return;
     this.applied = true;
     stopMusic();
@@ -237,13 +238,15 @@ export class InvincibleBonus extends PowerUp {
  * @extends PowerUp
  */
 export class TerminatorBonus extends PowerUp {
+  applied: boolean = false;
+
   constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.terminator;
     this.applied = false;
   }
-  apply(tank) {
+  apply(tank: Tank) {
     if (this.applied) return;
     this.applied = true;
     tank.rapidfire = true;
@@ -263,12 +266,13 @@ export class TerminatorBonus extends PowerUp {
  * @extends PowerUp
  */
 export class MultiBonus extends PowerUp {
+  used: boolean = false;
   constructor() {
     super();
     this.image.src = IMAGES.multi;
     this.used = false;
   }
-  apply(tank) {
+  apply(tank: Tank) {
     if (!this.used) {
       this.used = true;
       Settings.PowerUpRate /= 2.5;
@@ -287,12 +291,13 @@ export class MultiBonus extends PowerUp {
  * @extends PowerUp
  */
 export class FogBonus extends PowerUp {
+  used: boolean = false;
   constructor() {
     super();
     this.image.src = IMAGES.fog;
     this.used = false;
   }
-  apply(tank) {
+  apply(tank: Tank) {
     if (!this.used) tank.player.game.intvls.push(fogOfWar(store.game));
   }
 }
@@ -388,12 +393,14 @@ export const PowerUps = [
  * Returns a random powerup based on weights.
  * @returns {PowerUp} A new PowerUp instance.
  */
-export function getRandomPowerUp() {
+export function getRandomPowerUp(): PowerUp {
   let totalWeights = 0;
   for (let i = 0; i < PowerUps.length; i++) totalWeights += PowerUps[i].weight;
+
   let randWeight = Math.random() * totalWeights;
-  let h;
+  let h: number;
   for (h = 0; randWeight > 0; h++) randWeight -= PowerUps[h].weight;
+
   playSound(SOUNDS.origPowerup);
   return PowerUps[h - 1].create();
 }
