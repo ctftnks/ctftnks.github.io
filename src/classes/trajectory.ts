@@ -1,6 +1,7 @@
 import GameObject from "./gameobject";
 import { Settings } from "../store";
 import GameMap from "./gamemap";
+import Tank from "./tank";
 
 /**
  * Represents a trajectory for ray-casting or lasers.
@@ -70,7 +71,7 @@ export default class Trajectory extends GameObject {
       };
 
       const tile = this.map.getTileByPos(point.x, point.y);
-      if (tile === -1) {
+      if (tile === null) {
         return;
       }
 
@@ -94,7 +95,7 @@ export default class Trajectory extends GameObject {
       this.points.push(nextpoint);
       // see if any tanks targeted
       for (let i = 0; i < tile.objs.length; i++) {
-        if (tile.objs[i].type === "Tank") {
+        if (tile && tile.objs[i] instanceof Tank) {
           this.targets.push(tile.objs[i]);
         }
       }

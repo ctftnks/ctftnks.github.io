@@ -3,16 +3,19 @@ import { Smoke, generateCloud } from "./smoke";
 import { playSound } from "../effects";
 import { Settings } from "../store";
 import { SOUNDS } from "../assets";
+import Player from "./player";
+import GameMap from "./gamemap";
+import { Weapon } from "./weapons";
 
 /**
  * Represents a bullet fired by a tank.
  * @augments GameObject
  */
 export default class Bullet extends GameObject {
-  player: any;
-  map: any;
-  weapon: any;
-  angle: number | undefined = undefined;
+  player: Player;
+  map: GameMap;
+  weapon: Weapon;
+  angle: number = 0;
   radius: number = 4;
   speed: number;
   color: string = "#000";
@@ -27,10 +30,10 @@ export default class Bullet extends GameObject {
    * Creates a new Bullet.
    * @param {Weapon} weapon - The weapon that fired the bullet.
    */
-  constructor(weapon: any) {
+  constructor(weapon: Weapon) {
     super();
     this.player = weapon.tank.player;
-    this.map = this.player.game.map;
+    this.map = this.player.game!.map!;
     this.weapon = weapon;
     this.speed = Settings.BulletSpeed;
     this.timeout = Settings.BulletTimeout * 1000;
@@ -89,7 +92,7 @@ export default class Bullet extends GameObject {
    */
   checkCollision(oldx: number, oldy: number): void {
     const tile = this.map.getTileByPos(oldx, oldy);
-    if (tile === -1) {
+    if (tile === null) {
       return;
     }
 
@@ -121,7 +124,7 @@ export default class Bullet extends GameObject {
   checkBulletCollision(): void {
     const bullets: Bullet[] = [];
     const tile = this.map.getTileByPos(this.x, this.y);
-    if (tile !== -1) {
+    if (tile !== null) {
       for (let j = 0; j < tile.objs.length; j++) {
         if (tile.objs[j] instanceof Bullet && tile.objs[j].age > 0 && tile.objs[j] !== this) {
           bullets.push(tile.objs[j]);

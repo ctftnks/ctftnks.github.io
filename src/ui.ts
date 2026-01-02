@@ -36,7 +36,7 @@ export function updatePlayersMenu(): void {
   entry += "<div class='entry'>";
   entry += "<span style='width:50px;display:inline-block;'></span>";
   entry += "<button class='name notclickable'>Name</button>";
-  entry += editableKeymap(-1);
+  entry += editableKeymap(null);
   entry += "<span style='width:50px;display:inline-block;'></span>";
   entry += "</div>";
   pmen.innerHTML += entry;
@@ -74,8 +74,8 @@ export function editPlayerName(index: number): void {
   updatePlayersMenu();
 }
 
-let editingMapID: number = -1;
-let editingKeyID: number = -1;
+let editingMapID: number | null = null;
+let editingKeyID: number | null = null;
 let editingKeymap: boolean = false;
 
 export function editKeymap(mapID: number, keyID: number): void {
@@ -111,8 +111,8 @@ export function doEditKeymap(newKeyCode: string): void {
  * @param mapID
  * @returns HTML string with buttons for displaying the Player's keymap on screen
  */
-function editableKeymap(mapID: number): string {
-  if (mapID === -1) {
+function editableKeymap(mapID: number | null): string {
+  if (mapID === null) {
     let html = "";
     html += "<button class='keyEditButton notclickable'>&uarr;</button>";
     html += "<button class='keyEditButton notclickable'>&larr;</button>";

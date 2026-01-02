@@ -29,19 +29,16 @@ export default class GameMap {
    * @param {number} Nx - Number of tiles in X direction.
    * @param {number} Ny - Number of tiles in Y direction.
    */
-  constructor(canvas: Canvas | any = -1, Nx: number = -1, Ny: number = -1) {
-    if (canvas === -1) {
-      canvas = { width: 1, height: 1 };
-    }
+  constructor(canvas: Canvas, Nx: number | null = null, Ny: number | null = null) {
     this.canvas = canvas;
 
-    if (Nx === -1) {
+    if (Nx === null) {
       this.Nx = parseInt((store.settings.MapNxMin + (store.settings.MapNxMax - store.settings.MapNxMin) * Math.random()).toString());
     } else {
       this.Nx = Nx;
     }
 
-    if (Ny === -1) {
+    if (Ny === null) {
       this.Ny = parseInt((((0.25 * Math.random() + 0.75) * this.Nx * canvas.height) / canvas.width).toString());
     } else {
       this.Ny = Ny;
@@ -65,13 +62,13 @@ export default class GameMap {
    * Gets a tile by its grid index.
    * @param {number} i - X index.
    * @param {number} j - Y index.
-   * @returns {Tile|number} The tile or -1 if out of bounds.
+   * @returns {Tile|null} The tile or null if out of bounds.
    */
-  getTileByIndex(i: number, j: number): Tile | -1 {
+  getTileByIndex(i: number, j: number): Tile | null {
     if (i < this.Nx && j < this.Ny && i >= 0 && j >= 0) {
       return this.tiles[i * this.Ny + j];
     }
-    return -1;
+    return null;
   }
 
   /**
@@ -81,10 +78,10 @@ export default class GameMap {
     for (let i = 0; i < this.Nx; i++) {
       for (let j = 0; j < this.Ny; j++) {
         this.tiles[i * this.Ny + j].neighbors = [
-          this.getTileByIndex(i, j - 1) as Tile | undefined,
-          this.getTileByIndex(i - 1, j) as Tile | undefined,
-          this.getTileByIndex(i, j + 1) as Tile | undefined,
-          this.getTileByIndex(i + 1, j) as Tile | undefined,
+          this.getTileByIndex(i, j - 1),
+          this.getTileByIndex(i - 1, j),
+          this.getTileByIndex(i, j + 1),
+          this.getTileByIndex(i + 1, j),
         ];
       }
     }
@@ -94,9 +91,9 @@ export default class GameMap {
    * Gets a tile by its world position.
    * @param {number} x - X coordinate.
    * @param {number} y - Y coordinate.
-   * @returns {Tile|number} The tile or -1.
+   * @returns {Tile|null} The tile or null.
    */
-  getTileByPos(x: number, y: number): Tile | -1 {
+  getTileByPos(x: number, y: number): Tile | null {
     const i = parseInt((x / this.dx).toString());
     const j = parseInt((y / this.dy).toString());
     return this.getTileByIndex(i, j);
@@ -117,7 +114,7 @@ export default class GameMap {
    */
   addObject(obj: GameObject): void {
     const tile = this.getTileByPos(obj.x, obj.y);
-    if (tile === -1) {
+    if (tile === null) {
       obj.delete();
     } else {
       tile.objs.push(obj);
@@ -187,7 +184,7 @@ export class Tile {
   /** List of Walls [top, left, bottom, right]. */
   walls: boolean[] = [false, false, false, false];
   /** List of neighboring tiles [top, left, bottom, right]. */
-  neighbors: (Tile | undefined)[] = [undefined, undefined, undefined, undefined];
+  neighbors: (Tile | null)[] = [null, null, null, null];
 
   /**
    * Creates a new Tile.
@@ -248,7 +245,7 @@ export class Tile {
   addWall(direction: number, remove: boolean = false, neighbor: boolean = true): void {
     direction = direction % 4;
     this.walls[direction] = !remove;
-    if (neighbor && typeof this.neighbors[direction] !== "undefined" && this.neighbors[direction] !== -1) {
+    if (neighbor && typeof this.neighbors[direction] !== "undefined" && this.neighbors[direction] !== null) {
       (this.neighbors[direction] as Tile).addWall(direction + 2, remove, false);
     }
   }
@@ -283,19 +280,24 @@ export class Tile {
    * Recursively find the shortest path to any tile in map where condition is met.
    * @param {Function} condition - Function returning boolean.
    * @param {Array} path - Current path.
-   * @param {number} minPathLength - Optimization: abort if path is longer than this.
-   * @param {number} maxPathLength - Max allowed path length.
-   * @returns {Array<Tile>|number} The path or -1 if not found.
+   * @param {number|null} minPathLength - Optimization: abort if path is longer than this.
+   * @param {number|null} maxPathLength - Max allowed path length.
+   * @returns {Array<Tile>|null} The path or null if not found.
    */
-  pathTo(condition: (tile: Tile) => boolean, path: Tile[] = [], minPathLength: number = -1, maxPathLength: number = -1): Tile[] | -1 {
+  pathTo(
+    condition: (tile: Tile) => boolean,
+    path: Tile[] = [],
+    minPathLength: number | null = null,
+    maxPathLength: number | null = null,
+  ): Tile[] | null {
     // add current tile to path
     path.push(this);
     // if the current path is longer than the shortest known path: abort!
-    if (minPathLength !== -1 && path.length >= minPathLength) {
-      return -1;
+    if (minPathLength !== null && path.length >= minPathLength) {
+      return null;
     }
-    if (maxPathLength !== -1 && path.length > maxPathLength) {
-      return -1;
+    if (maxPathLength !== null && path.length > maxPathLength) {
+      return null;
     }
     // is this tile what we've been searching for? Then we're done!
     if (condition(this)) {
@@ -308,7 +310,7 @@ export class Tile {
     for (let d = 0; d < 4; d++) {
       if (!this.walls[d] && this.neighbors[d] && path.indexOf(this.neighbors[d] as Tile) === -1) {
         const option = (this.neighbors[d] as Tile).pathTo(condition, path.slice(), minPathLength, maxPathLength);
-        if (option !== -1) {
+        if (option !== null) {
           minPathLength = option.length;
           options.push(option);
         }
@@ -316,12 +318,12 @@ export class Tile {
     }
     // found no options? negative result
     if (options.length === 0) {
-      return -1;
+      return null;
     }
     // find option with minimal length and return
-    let min = -1;
+    let min = 0;
     for (let i = 0; i < options.length; i++) {
-      if (min === -1 || options[i].length < options[min].length) {
+      if (options[i].length < options[min].length) {
         min = i;
       }
     }
@@ -340,12 +342,7 @@ export class Tile {
     }
     const r = Math.floor(Math.random() * 4);
     for (let d = r; d < 4 + r; d++) {
-      if (
-        !this.walls[d % 4] &&
-        typeof this.neighbors[d % 4] !== "undefined" &&
-        this.neighbors[d % 4] !== undefined &&
-        this.neighbors[d % 4] !== -1
-      ) {
+      if (!this.walls[d % 4] && this.neighbors[d % 4] !== null) {
         return (this.neighbors[d % 4] as Tile).randomWalk(distance - 1);
       }
     }
@@ -354,26 +351,15 @@ export class Tile {
   }
 
   /**
-   * Is object of type 'type' in tile?
-   * @param {string} type - Object type to search for.
-   * @returns {number} Index of object in list or -1.
-   */
-  find(type: string): number {
-    for (let i = 0; i < this.objs.length; i++) {
-      if (this.objs[i].type === type) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  /**
    * Find any object that matches the condition and return a path of coordinates to it.
    * @param {Function} condition - Match condition.
-   * @param {number} maxPathLength - Max path length.
-   * @returns {Array|number} Path to object or -1.
+   * @param {number|null} maxPathLength - Max path length.
+   * @returns {Array|null} Path to object or null.
    */
-  xypathToObj(condition: (obj: GameObject) => boolean, maxPathLength: number = -1): Array<{ x: number; y: number } | GameObject> | -1 {
+  xypathToObj(
+    condition: (obj: GameObject) => boolean,
+    maxPathLength: number | null = null,
+  ): Array<{ x: number; y: number } | GameObject> | null {
     const tilepath = this.pathTo(
       (dest) => {
         for (let i = 0; i < dest.objs.length; i++) {
@@ -384,18 +370,18 @@ export class Tile {
         return false;
       },
       [],
-      -1,
+      null,
       maxPathLength,
     );
-    if (tilepath === -1) {
-      return -1;
+    if (tilepath === null) {
+      return null;
     }
     const xypath: Array<{ x: number; y: number } | GameObject> = [];
     for (let i = 0; i < tilepath.length; i++) {
       const tile = tilepath[i];
       xypath.push({ x: tile.x + tile.dx / 2, y: tile.y + tile.dy / 2 });
     }
-    let obj: GameObject | -1 = -1;
+    let obj: GameObject | null = null;
     const lasttile = tilepath[tilepath.length - 1];
     for (let i = 0; i < lasttile.objs.length; i++) {
       if (condition(lasttile.objs[i])) {
@@ -404,8 +390,8 @@ export class Tile {
       }
     }
 
-    if (obj === -1) {
-      return -1;
+    if (obj === null) {
+      return null;
     }
     xypath.push(obj);
     return xypath;

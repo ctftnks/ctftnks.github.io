@@ -48,11 +48,10 @@ export default class Game {
   /**
    * Creates a new Game instance.
    * @param {Canvas} canvas - The canvas manager.
-   * @param {GameMap|number} map - The map object or -1 to generate a new one.
+   * @param {GameMap|null} map - The map object or null to generate a new one.
    */
   constructor(canvas: Canvas, map: GameMap | null = null) {
     this.canvas = canvas;
-    this.canvas.game = this;
     // create new random map
     if (!map) {
       this.map = new GameMap(this.canvas);
@@ -211,8 +210,8 @@ export default class Game {
   resetTime(): void {
     this.t = 0;
     for (let i = 0; i < this.players.length; i++) {
-      this.players[i].tank.timers.invincible = -1;
-      this.players[i].tank.timers.spawnshield = -1;
+      this.players[i].tank.timers.invincible = 0;
+      this.players[i].tank.timers.spawnshield = 0;
     }
   }
 }

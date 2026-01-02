@@ -164,12 +164,12 @@ export class TeamDeathmatch extends Gamemode {
       }
       if (!baseExists) {
         // find spawnPoint that is far away from existing bases
-        let maxLength = -1;
+        let maxLength = 0;
         let maxPos = game.map.spawnPoint();
         for (let k = 0; k < 100; k++) {
           const pos = game.map.spawnPoint();
           const tile = game.map.getTileByPos(pos.x, pos.y);
-          if (tile === -1) {
+          if (tile === null) {
             continue;
           }
           let length = 0;
@@ -180,13 +180,13 @@ export class TeamDeathmatch extends Gamemode {
           }
           for (let j = 0; j < bases.length; j++) {
             const stile = this.game.map!.getTileByPos(bases[j].x, bases[j].y);
-            if (stile === -1) {
+            if (stile === null) {
               continue;
             }
             const path = (tile as Tile).pathTo((destination) => {
               return destination.id === stile.id;
             });
-            if (path !== -1) {
+            if (path !== null) {
               length += path.length * path.length;
             }
           }
@@ -258,8 +258,8 @@ export class CaptureTheFlag extends Gamemode {
   newKill(player1: Player, player2: Player): void {
     if (player1.team != player2.team) {
       player1.spree += 1;
-      if (player1.spree >= 5 && player1.spree % 5 === 0) // player1.score += Math.floor(player1.spree / 5)
-      {
+      if (player1.spree >= 5 && player1.spree % 5 === 0) {
+        // player1.score += Math.floor(player1.spree / 5)
         playSound(SOUNDS.killingspree);
       }
 
@@ -296,7 +296,7 @@ export class CaptureTheFlag extends Gamemode {
         for (let k = 0; k < 100; k++) {
           const pos = game.map.spawnPoint();
           const tile = game.map.getTileByPos(pos.x, pos.y);
-          if (tile === -1) {
+          if (tile === null) {
             continue;
           }
           let length = 0;
@@ -307,13 +307,13 @@ export class CaptureTheFlag extends Gamemode {
           }
           for (let j = 0; j < bases.length; j++) {
             const stile = this.game.map!.getTileByPos(bases[j].x, bases[j].y);
-            if (stile === -1) {
+            if (stile === null) {
               continue;
             }
             const path = (tile as Tile).pathTo((destination) => {
               return destination.id === stile.id;
             });
-            if (path !== -1) {
+            if (path !== null) {
               length += path.length * path.length;
             }
           }
@@ -381,8 +381,8 @@ export class KingOfTheHill extends Gamemode {
   newKill(player1: Player, player2: Player): void {
     if (player1.team !== player2.team) {
       player1.spree += 1;
-      if (player1.spree >= 5 && player1.spree % 5 === 0) // player1.score += Math.floor(player1.spree / 5)
-      {
+      if (player1.spree >= 5 && player1.spree % 5 === 0) {
+        // player1.score += Math.floor(player1.spree / 5)
         playSound(SOUNDS.killingspree);
       }
 
@@ -430,12 +430,12 @@ export class KingOfTheHill extends Gamemode {
     // create players.length-1 bases
     for (let ni = 0; ni < game.players.length - 1; ni++) {
       // find spawnPoint that is far away from existing bases
-      let maxLength = -1;
+      let maxLength = 0;
       let maxPos = game.map.spawnPoint();
       for (let k = 0; k < 100; k++) {
         const pos = game.map.spawnPoint();
         const tile = game.map.getTileByPos(pos.x, pos.y);
-        if (tile === -1) {
+        if (tile === null) {
           continue;
         }
         let length = 0;
@@ -446,13 +446,13 @@ export class KingOfTheHill extends Gamemode {
         }
         for (let j = 0; j < bases.length; j++) {
           const stile = this.game.map!.getTileByPos(bases[j].x, bases[j].y);
-          if (stile === -1) {
+          if (stile === null) {
             continue;
           }
           const path = (tile as Tile).pathTo((destination) => {
             return destination.id === stile.id;
           });
-          if (path !== -1) {
+          if (path !== null) {
             length += path.length * path.length;
           }
         }

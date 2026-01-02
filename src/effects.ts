@@ -7,8 +7,8 @@ export function playSound(file: string): void {
   }
 }
 
-export let playingMusic: string | number = -1;
-export let musicAudio: HTMLAudioElement | number = -1;
+export let playingMusic: string | null = null;
+export let musicAudio: HTMLAudioElement | null = null;
 
 export function playMusic(file: string): void {
   if (file === playingMusic) {
@@ -29,12 +29,12 @@ export function playMusic(file: string): void {
 }
 
 export function stopMusic(): void {
-  if (musicAudio !== -1 && typeof musicAudio !== "number") {
+  if (musicAudio !== null) {
     musicAudio.pause();
   }
 
-  musicAudio = -1;
-  playingMusic = -1;
+  musicAudio = null;
+  playingMusic = null;
 }
 
 export let effectCanvasID: number = 0;

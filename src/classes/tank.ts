@@ -38,9 +38,9 @@ export default class Tank extends GameObject {
   /** Movement speed. */
   speed: number;
   /** Timers for effects. */
-  timers: { spawnshield: number; invincible: number } = { spawnshield: -1, invincible: -1 };
-  /** The flag currently carried, or -1. */
-  carriedFlag: Flag | number = -1;
+  timers: { spawnshield: number; invincible: number } = { spawnshield: 0, invincible: 0 };
+  /** The flag currently carried, or null if none. */
+  carriedFlag: Flag | null = null;
   /** Inventory of weapons (unused?). */
   weapons: Weapon[] = [];
   /** Whether rapid fire is active. */
@@ -91,7 +91,7 @@ export default class Tank extends GameObject {
     context.rect(this.width / 2 - this.width / 5, -this.height / 2, this.width / 5, this.height);
     context.fill();
 
-    if (this.carriedFlag !== -1) {
+    if (this.carriedFlag !== null) {
       context.beginPath();
       context.fillStyle = this.carriedFlag.color;
       context.rect(-this.carriedFlag.size / 2, -this.carriedFlag.size / 2, this.carriedFlag.size / 1.1, this.carriedFlag.size / 2);
@@ -260,7 +260,7 @@ export default class Tank extends GameObject {
       return -1;
     }
     const tile = this.map.getTileByPos(this.x, this.y);
-    if (tile === -1) {
+    if (tile === null) {
       return -1;
     }
     const corners = this.corners();
@@ -277,7 +277,7 @@ export default class Tank extends GameObject {
     // check if any wall corner end intersects with the tank
     for (let t = 0; t < tiles.length; t++) {
       const currentTile = tiles[t];
-      if (currentTile === -1) {
+      if (currentTile === null) {
         continue;
       }
       const corners = (currentTile as Tile).corners();
@@ -309,7 +309,7 @@ export default class Tank extends GameObject {
     const corners = this.corners();
     for (let m = 0; m < 4; m++) {
       const tile = this.map.getTileByPos(corners[m].x, corners[m].y);
-      if (tile !== -1) {
+      if (tile !== null) {
         for (let j = 0; j < tile.objs.length; j++) {
           const obj: GameObject = tile.objs[j];
           if (obj instanceof Bullet && (obj as Bullet).age > 0) {
@@ -385,7 +385,7 @@ export default class Tank extends GameObject {
    */
   delete(): void {
     // CTF: if tank has flag, drop it
-    if (this.carriedFlag !== -1) {
+    if (this.carriedFlag !== null) {
       this.carriedFlag.drop(this.x, this.y);
     }
     // delete the weapon

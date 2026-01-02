@@ -4,6 +4,7 @@ import { SOUNDS } from "../assets";
 import Game from "./game";
 import Tank from "./tank";
 import Player from "./player";
+import { type Tile } from "./gamemap";
 
 /**
  * Represents a Flag in Capture the Flag mode.
@@ -84,19 +85,19 @@ export class Flag extends GameObject {
       return;
     }
     const tile = this.game.map.getTileByPos(this.x, this.y);
-    if (tile === -1) {
+    if (tile === null) {
       return;
     }
     for (let i = 0; i < tile.objs.length; i++) {
       const tank: GameObject = tile.objs[i];
       if (tank instanceof Tank && Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)) {
-        if ((tank as Tank).player.team === this.team) {
+        if (tank.player.team === this.team) {
           if (!this.base.hasFlag()) {
             // return flag to base
             this.reset();
             playSound(SOUNDS.resetFlag);
           }
-        } else if ((tank as Tank).carriedFlag === -1 && !this.picked && !tank.deleted) {
+        } else if (tank.carriedFlag === null && !this.picked && !tank.deleted) {
           // pick up flag
           this.pickup(tank as Tank);
           playSound(SOUNDS.coin);
@@ -138,7 +139,7 @@ export class Flag extends GameObject {
 export class Base extends GameObject {
   type: string = "Base";
   /** Team identifier. */
-  team: number;
+  team: number | null;
   /** Base color. */
   color: string;
   /** Game instance. */
@@ -148,7 +149,7 @@ export class Base extends GameObject {
   /** Base size. */
   size: number = 80;
   /** The tile the base is on. */
-  tile: any;
+  tile: Tile | null;
 
   /**
    * Creates a new Base.
@@ -164,7 +165,7 @@ export class Base extends GameObject {
     this.game = game;
     this.x = x;
     this.y = y;
-    this.tile = this.game.map ? this.game.map.getTileByPos(this.x, this.y) : undefined;
+    this.tile = this.game.map?.getTileByPos(this.x, this.y) ?? null;
   }
 
   /**
@@ -188,22 +189,22 @@ export class Base extends GameObject {
    * Updates the base state, checking for flag captures.
    */
   step(): void {
-    if (!this.tile || this.tile === -1) {
+    if (this.tile === null) {
       return;
     }
     for (let i = 0; i < this.tile.objs.length; i++) {
-      const tank: Tank = this.tile.objs[i];
+      const tank: GameObject = this.tile.objs[i];
       if (
         tank instanceof Tank &&
         tank.player.team === this.team &&
         Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)
       ) {
-        if (tank.carriedFlag !== -1 && this.hasFlag()) {
+        if (tank.carriedFlag !== null && this.hasFlag()) {
           // score!
           this.game.mode.giveScore(tank.player);
           playSound(SOUNDS.fanfare);
           tank.carriedFlag.reset();
-          tank.carriedFlag = -1;
+          tank.carriedFlag = null;
         }
       }
     }
@@ -235,14 +236,14 @@ export class Hill extends Base {
    * @param {number} y - Y coordinate.
    */
   constructor(game: Game, x: number, y: number) {
-    super(game, { color: "#555", team: -1 }, x, y);
+    super(game, { color: "#555", team: null }, x, y);
   }
 
   /**
    * Updates the hill state, checking for capture.
    */
   step(): void {
-    if (!this.tile || (this.tile as any) === -1) {
+    if (this.tile === null) {
       return;
     }
     for (let i = 0; i < this.tile.objs.length; i++) {

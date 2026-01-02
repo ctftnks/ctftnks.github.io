@@ -44,16 +44,16 @@ describe("Map Class", () => {
     expect(tile.j).toBe(3);
   });
 
-  it("should return -1 for out of bounds world position", () => {
+  it("should return null for out of bounds world position", () => {
     const map = new GameMap(mockCanvas, 10, 10);
     const dx = map.dx;
     const dy = map.dy;
 
     // Test significantly out of bounds to avoid parseInt(small_negative) === 0
-    expect(map.getTileByPos(-dx * 2, 50)).toBe(-1);
-    expect(map.getTileByPos(dx * 15, 50)).toBe(-1);
-    expect(map.getTileByPos(50, -dy * 2)).toBe(-1);
-    expect(map.getTileByPos(50, dy * 15)).toBe(-1);
+    expect(map.getTileByPos(-dx * 2, 50)).toBe(null);
+    expect(map.getTileByPos(dx * 15, 50)).toBe(null);
+    expect(map.getTileByPos(50, -dy * 2)).toBe(null);
+    expect(map.getTileByPos(50, dy * 15)).toBe(null);
   });
 });
 

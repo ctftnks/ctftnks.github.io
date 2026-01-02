@@ -55,8 +55,8 @@ export function databinding(): void {
       const val = elem.value;
       if (elem.hasAttribute("data-type") && elem.getAttribute("data-type") === "string") {
         (Settings as any)[bind] = val;
-      } else if (val === "true") // handle boolean selects if any
-      {
+      } else if (val === "true") {
+        // handle boolean selects if any
         (Settings as any)[bind] = true;
       } else if (val === "false") {
         (Settings as any)[bind] = false;

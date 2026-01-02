@@ -3,9 +3,15 @@ import { store, Settings } from "../store";
 import { Tile } from "./gamemap";
 import { PowerUp } from "./powerup";
 import Tank from "./tank";
-import { Flag } from "./ctf";
+import { Base, Flag, Hill } from "./ctf";
 
 let NBots: number = 0;
+
+/** Interface for anything that has (x, y) coordinates */
+declare interface Coord {
+  x: number;
+  y: number;
+}
 
 /**
  * A bot player that controls a tank automatically.
@@ -13,8 +19,8 @@ let NBots: number = 0;
  */
 export default class Bot extends Player {
   // keys are inherited from Player
-  goto: any = -1;
-  fleeing: { from: any; condition: any } = { from: -1, condition: -1 };
+  goto: Coord | null = null;
+  fleeing: { from: any; condition: any } = { from: null, condition: null };
   lastChecked: number = 0;
 
   /**
@@ -65,7 +71,7 @@ export default class Bot extends Player {
     const weapon = tank.weapon;
     const invincible = tank.invincible();
     const tile = game.map.getTileByPos(tank.x, tank.y);
-    if (tile === -1) {
+    if (tile === null) {
       return;
     }
 
@@ -75,7 +81,7 @@ export default class Bot extends Player {
       return obj instanceof PowerUp && obj.attractsBots;
     }, 2);
 
-    if (powerupPath !== -1) {
+    if (powerupPath !== null) {
       opts.push({
         f: () => {
           this.follow(powerupPath);
@@ -88,7 +94,7 @@ export default class Bot extends Player {
       return obj instanceof Tank && obj.player.team !== this.team;
     });
 
-    if (enemyPath !== -1) {
+    if (enemyPath !== null) {
       const enemy = enemyPath[enemyPath.length - 1];
       opts.push({
         f: () => {
@@ -99,7 +105,7 @@ export default class Bot extends Player {
 
       if (weapon.isActive) {
         const aimbot = this.aimbot(enemy, enemyPath);
-        if (enemy.carriedFlag !== -1) {
+        if (enemy.carriedFlag !== null) {
           aimbot.weight *= 2;
         }
         if (aimbot.shouldShoot) {
@@ -114,27 +120,27 @@ export default class Bot extends Player {
     }
 
     if (game.mode.name === "CaptureTheFlag") {
-      const carriesFlag = tank.carriedFlag !== -1;
+      const carriesFlag = tank.carriedFlag !== null;
       const flagInBase = this.base!.hasFlag();
       const ctfPath = tile.xypathToObj((obj: any) => {
-        if (!carriesFlag && obj.type === "Flag" && obj.team !== this.team) {
+        if (!carriesFlag && obj instanceof Flag && obj.team !== this.team) {
           return true;
         }
-        if (carriesFlag && obj.type === "Base" && obj.hasFlag() && obj.team === this.team) {
+        if (carriesFlag && obj instanceof Base && obj.hasFlag() && obj.team === this.team) {
           return true;
         }
         if (!flagInBase) {
           if (obj instanceof Flag && obj.team === this.team) {
             return true;
           }
-          if (obj instanceof Tank && obj.carriedFlag !== -1 && obj.carriedFlag.team === this.team) {
+          if (obj instanceof Tank && obj.carriedFlag !== null && obj.carriedFlag.team === this.team) {
             return true;
           }
         }
         return false;
       });
 
-      if (ctfPath !== -1) {
+      if (ctfPath !== null) {
         const weight = invincible && carriesFlag && flagInBase ? 600 : carriesFlag || !flagInBase ? 300 : 50;
         opts.push({
           f: () => {
@@ -145,12 +151,12 @@ export default class Bot extends Player {
       }
     } else if (game.mode.name === "KingOfTheHill") {
       const basePath = tile.xypathToObj((obj: any) => {
-        if (obj.type === "Hill" && obj.team !== this.team) {
+        if (obj instanceof Hill && obj.team !== this.team) {
           return true;
         }
         return false;
       });
-      if (basePath !== -1) {
+      if (basePath !== null) {
         const weight = basePath.length < 6 ? 300 : 50;
         opts.push({
           f: () => {
@@ -162,7 +168,7 @@ export default class Bot extends Player {
     }
 
     const fleePath = this.getFleePath();
-    if (fleePath !== -1) {
+    if (fleePath !== null) {
       const weight = invincible ? 1 : 400;
       opts.push({
         f: () => {
@@ -178,15 +184,15 @@ export default class Bot extends Player {
       });
       opts[0].f();
     } else {
-      this.goto = -1;
+      this.goto = null;
     }
   }
 
   /**
    * Sets a goto target from a path.
-   * @param {Array} path - The path to follow.
+   * @param {Coord[]} path - The path to follow.
    */
-  follow(path: any[]): void {
+  follow(path: Coord[]): void {
     if (path.length < 2) {
       this.goto = path[0];
     } else {
@@ -198,7 +204,7 @@ export default class Bot extends Player {
    * Performs movements towards the goto target.
    */
   performMovements(): void {
-    if (this.goto === -1) {
+    if (this.goto === null) {
       return;
     }
     const tank = this.tank;
@@ -236,16 +242,16 @@ export default class Bot extends Player {
 
   /**
    * Handles shooting logic.
-   * @param {object} target - The target to shoot at.
+   * @param {Tank} target - The target to shoot at.
    */
-  shoot(target: any): void {
-    this.goto = -1;
+  shoot(target: Tank): void {
+    this.goto = null;
     const tank = this.tank;
     const distx = target.x - tank.x;
     const disty = target.y - tank.y;
     tank.angle = Math.atan2(-distx, disty) + Math.PI;
 
-    if (typeof target !== "undefined" && typeof target["player"] !== "undefined" && target.player.isBot()) {
+    if (target?.player?.isBot()) {
       setTimeout(() => {
         tank.shoot();
       }, 180 * Math.random());
@@ -262,21 +268,21 @@ export default class Bot extends Player {
    * @param {Array|number} path - Path to the enemy.
    * @returns {object} Result with shouldShoot, target, and weight.
    */
-  aimbot(enemy: any, path: any = -1): any {
+  aimbot(enemy: any, path: Coord[] | null = null): any {
     const result = { shouldShoot: false, target: enemy, weight: 500 };
     const weapon = this.tank.weapon;
 
-    if (path === -1) {
+    if (path === null) {
       if (!this.tank.map) {
         return result;
       }
       const tile = this.tank.map.getTileByPos(this.tank.x, this.tank.y);
-      if (tile !== -1) {
+      if (tile !== null) {
         path = tile.xypathToObj(enemy);
       }
     }
 
-    if (path === -1) {
+    if (path === null) {
       return result;
     }
 
@@ -297,7 +303,7 @@ export default class Bot extends Player {
       result.shouldShoot = false;
       result.weight = 200;
       const tile = store.game!.map.getTileByPos(this.tank.x, this.tank.y);
-      if (tile !== -1) {
+      if (tile !== null) {
         for (let i = 0; i < 4; i++) {
           if (tile.walls[i] ^ (weapon.name === "Guided")) {
             result.shouldShoot = true;
@@ -316,37 +322,37 @@ export default class Bot extends Player {
 
   /**
    * Calculates a path to flee from danger.
-   * @returns {Array|number} The flee path or -1 if no path found.
+   * @returns {Array|null} The flee path or null if no path found.
    */
-  getFleePath(): any {
-    if (this.fleeing.from === -1 || this.fleeing.condition === -1 || !this.fleeing.condition()) {
-      return -1;
+  getFleePath(): Coord[] | null {
+    if (this.fleeing.from === null || this.fleeing.condition === null || !this.fleeing.condition()) {
+      return null;
     }
     if (!this.tank.weapon.bot.fleeIfActive && this.tank.weapon.isActive) {
-      return -1;
+      return null;
     }
 
-    const tile = store.game!.map.getTileByPos(this.tank.x, this.tank.y);
-    if (tile === -1) {
-      return -1;
+    const tile = store.game!.map?.getTileByPos(this.tank.x, this.tank.y);
+    if (!tile) {
+      return null;
     }
 
     if (!this.fleeing.from.includes(tile)) {
       this.fleeing.from.push(tile);
     }
 
-    let nextTile: Tile = tile;
+    let nextTile: Coord = tile;
     for (let i = 0; i < 4; i++) {
-      if (!(tile as Tile).walls[i] && (tile as Tile).neighbors[i] && !this.fleeing.from.includes((tile as Tile).neighbors[i])) {
-        nextTile = (tile as Tile).neighbors[i] as Tile;
+      if (!tile.walls[i] && tile.neighbors[i] && !this.fleeing.from.includes(tile.neighbors[i])) {
+        nextTile = tile.neighbors[i] as Coord;
       }
     }
 
-    const fleePath = [tile, nextTile];
+    const fleePath: Coord[] = [tile, nextTile];
 
     for (let i = 0; i < fleePath.length; i++) {
       const t = fleePath[i];
-      fleePath[i] = { x: t.x + t.dx / 2, y: t.y + t.dy / 2 };
+      fleePath[i] = { x: t.x + (t as Tile).dx / 2, y: t.y + (t as Tile).dy / 2 };
     }
     return fleePath;
   }
@@ -363,7 +369,7 @@ export default class Bot extends Player {
       return;
     }
     const tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
-    if (tile === -1) {
+    if (tile === null) {
       return;
     }
 
@@ -407,7 +413,7 @@ export function adaptBotSpeed(team: any, val: number = 0.1): number | undefined 
 
   let avgbots = 0;
   for (let i = 0; i < teams.length; i++) {
-    avgbots += botcounts[i] / parseFloat(teams.length);
+    avgbots += botcounts[i] / parseFloat(teams.length.toString());
   }
 
   const id = teams.indexOf(team);

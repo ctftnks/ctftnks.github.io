@@ -66,7 +66,7 @@ export default class Player {
     this.tank.map = this.game!.map;
     let spos = this.game!.map.spawnPoint();
 
-    if (typeof this.base !== "undefined" && this.base.tile !== -1) {
+    if (typeof this.base !== "undefined" && this.base.tile !== null) {
       let spos2 = this.base.tile;
       while (spos2.id === this.base.tile.id) {
         spos2 = spos2.randomWalk(Math.pow(this.game!.mode.BaseSpawnDistance, 2) + Math.round(Math.random()));

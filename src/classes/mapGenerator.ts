@@ -59,8 +59,8 @@ export default class MapGenerator {
           }
         }
         walls.splice(randomWallNo, 1);
-      } else // If the cell on the opposite side already was in the maze, remove the wall from the list.
-      {
+      } // If the cell on the opposite side already was in the maze, remove the wall from the list.
+      else {
         walls.splice(randomWallNo, 1);
       }
     }
@@ -239,13 +239,13 @@ export default class MapGenerator {
    * Import map from file.
    * @param {string|number} mapname - Map identifier.
    */
-  static importMap(mapname: string | number = -1) {
+  static importMap(mapname: string | null = null): void {
     // request file
     const xhttp = new XMLHttpRequest();
     // TODO: pick random name
     const maxMapId = 0;
-    if (mapname === -1) {
-      mapname = Math.floor(Math.random() * maxMapId);
+    if (mapname === null) {
+      mapname = Math.floor(Math.random() * maxMapId).toString();
     }
     xhttp.open("GET", "maps/" + mapname + ".csv", true);
     xhttp.send();
@@ -261,8 +261,7 @@ export default class MapGenerator {
         const Nx = lines[0].split(" ").length;
 
         // Safety check for game
-        const canvas = store.game && store.game.map ? store.game.map.canvas : -1;
-        const map = new GameMap(canvas, Nx, Ny);
+        const map = new GameMap(store.canvas!, Nx, Ny);
         for (let j = 0; j < Ny; j++) {
           const line = lines[j].split(" ");
           for (let i = 0; i < Nx; i++) {

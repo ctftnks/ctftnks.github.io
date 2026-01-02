@@ -37,7 +37,7 @@ type Settings = typeof DEFAULT_SETTINGS;
  */
 class GameStore {
   game: Game | undefined = undefined;
-  canvas: Canvas | undefined = undefined;
+  canvas: Canvas | undefined;
   players: Player[] = [];
   nplayers: number = 0;
   editingKeymap: boolean = false;

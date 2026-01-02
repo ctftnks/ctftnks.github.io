@@ -5,6 +5,7 @@ import { playSound, hexToRgbA } from "../effects";
 import { Smoke, generateCloud } from "./smoke";
 import { Settings } from "../store";
 import { IMAGES, SOUNDS } from "../assets";
+import { Tile } from "./gamemap";
 
 /**
  * Base class for all weapons.
@@ -441,7 +442,7 @@ export class Guided extends Weapon {
     e.color = "#555";
     e.smokeColor = "#555";
     e.speed = 1.1 * Settings.TankSpeed;
-    e.goto = -1;
+    e.goto = null;
     e.extrahitbox = 10;
 
     e.step = function () {
@@ -454,7 +455,7 @@ export class Guided extends Weapon {
       const oldx = e.x;
       const oldy = e.y;
       // normal translation
-      if (e.goto === -1) {
+      if (e.goto === null) {
         e.x -= (e.speed * Math.sin(-e.angle) * Settings.GameFrequency) / 1000;
         e.y -= (e.speed * Math.cos(-e.angle) * Settings.GameFrequency) / 1000;
       } else {
@@ -489,8 +490,8 @@ export class Guided extends Weapon {
         // set next path tile as goto point
         if (path.length > 1) {
           e.goto = path[1];
-        } else // if there is no next tile, hit the tank in the tile
-        {
+        } // if there is no next tile, hit the tank in the tile
+        else {
           for (let i = 0; i < tile.objs.length; i++) {
             if (tile.objs[i] instanceof Tank) {
               e.goto = { x: tile.objs[i].x, y: tile.objs[i].y, dx: 0, dy: 0 };
@@ -540,14 +541,14 @@ export class WreckingBall extends Weapon {
     bullet.speed = Settings.TankSpeed * 1.1;
     bullet.timeout = 1000;
     bullet.checkCollision = function (x: number, y: number) {
-      const tile = bullet.map.getTileByPos(x, y);
-      if (tile === -1) {
+      const tile: Tile = bullet.map.getTileByPos(x, y);
+      if (tile === null) {
         return;
       }
       const walls = tile.getWalls(this.x, this.y);
       const wall = walls.indexOf(true);
       if (wall !== -1) {
-        if (typeof tile.neighbors[wall] === "undefined" || tile.neighbors[wall] === -1) {
+        if (typeof tile.neighbors[wall] === "undefined" || tile.neighbors[wall] === null) {
           // is the wall an outer wall?
           playSound(this.bounceSound);
           // outer wall: bounce
