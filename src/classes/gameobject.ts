@@ -29,10 +29,9 @@ export default class GameObject {
 
   /**
    * Default draw function.
-   * @param {Object} canvas - The canvas element (or wrapper).
    * @param {CanvasRenderingContext2D} context - The 2D rendering context.
    */
-  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D): void {
+  draw(context: CanvasRenderingContext2D): void {
     if (this.img) {
       context.save();
       context.translate(this.x, this.y);

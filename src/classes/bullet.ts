@@ -41,10 +41,9 @@ export default class Bullet extends GameObject {
 
   /**
    * Draws the bullet on the canvas.
-   * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The 2D context.
    */
-  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D): void {
+  draw(context: CanvasRenderingContext2D): void {
     if (this.image === "") {
       context.beginPath();
       context.fillStyle = this.color;

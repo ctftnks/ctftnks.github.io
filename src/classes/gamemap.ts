@@ -129,13 +129,12 @@ export default class GameMap {
 
   /**
    * Draws the map.
-   * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas: Canvas, context: CanvasRenderingContext2D): void {
+  draw(context: CanvasRenderingContext2D): void {
     context.fillStyle = "#edede8";
     context.fillRect(0, 0, this.Nx * this.dx, this.Ny * this.dy);
-    for (let i = 0; i < this.tiles.length; i++) this.tiles[i].draw(canvas, context);
+    for (let i = 0; i < this.tiles.length; i++) this.tiles[i].draw(context);
   }
 
   /**
@@ -208,10 +207,9 @@ export class Tile {
 
   /**
    * Draw the tile walls.
-   * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas: Canvas, context: CanvasRenderingContext2D): void {
+  draw(context: CanvasRenderingContext2D): void {
     context.fillStyle = "#555";
     if (this.walls[0]) context.fillRect(this.x - 2, this.y - 2, this.dx + 4, 4);
     if (this.walls[1]) context.fillRect(this.x - 2, this.y - 2, 4, this.dy + 4);

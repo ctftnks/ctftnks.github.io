@@ -31,10 +31,9 @@ export default class Trajectory extends GameObject {
 
   /**
    * Draws the trajectory.
-   * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D): void {
+  draw(context: CanvasRenderingContext2D): void {
     if (this.hidden) return;
     for (let i = 0; i < this.points.length; i += this.drawevery) {
       const p = this.points[i];

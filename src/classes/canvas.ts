@@ -33,8 +33,8 @@ export default class Canvas {
    */
   draw(): void {
     this.context.clearRect(0, 0, this.canvas.width / this.scale, this.canvas.height / this.scale);
-    this.game.map.draw(this.canvas, this.context);
-    for (let i = 0; i < this.game.objs.length; i++) this.game.objs[i].draw(this.canvas, this.context);
+    this.game.map.draw(this.context);
+    for (let i = 0; i < this.game.objs.length; i++) this.game.objs[i].draw(this.context);
   }
 
   /**

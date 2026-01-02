@@ -34,10 +34,9 @@ export class Smoke extends GameObject {
 
   /**
    * Draws the smoke particle.
-   * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D): void {
+  draw(context: CanvasRenderingContext2D): void {
     context.beginPath();
     context.fillStyle = this.color;
     context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);

@@ -108,10 +108,9 @@ export class Flag extends GameObject {
 
   /**
    * Draws the flag.
-   * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+  draw(context: CanvasRenderingContext2D) {
     context.save();
     context.translate(this.x, this.y);
     context.beginPath();
@@ -164,10 +163,9 @@ export class Base extends GameObject {
 
   /**
    * Draws the base.
-   * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+  draw(context: CanvasRenderingContext2D) {
     context.save();
     context.beginPath();
     context.translate(this.x, this.y);

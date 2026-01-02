@@ -65,10 +65,9 @@ export default class Tank extends GameObject {
 
   /**
    * Draws the tank (rotated) on map.
-   * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+  draw(context: CanvasRenderingContext2D) {
     context.save();
     context.beginPath();
     context.translate(this.x, this.y);

@@ -36,10 +36,9 @@ export class PowerUp extends GameObject {
 
   /**
    * Draws the powerup.
-   * @param {Object} canvas - The canvas.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+  draw(context: CanvasRenderingContext2D) {
     context.save();
     context.translate(this.x, this.y);
     context.drawImage(this.image, -this.width / 2, -this.width / 2, this.width, this.width);
