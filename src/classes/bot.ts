@@ -17,9 +17,8 @@ export default class Bot extends Player {
 
   /**
    * Creates a new Bot.
-   * @param {Player} player - The player object (this parameter seems unused in constructor but might be legacy).
    */
-  constructor(player?: Player) {
+  constructor() {
     super();
     this.name = "Bot " + (NBots + 1);
     this.keys = []; // Empty keys for bot

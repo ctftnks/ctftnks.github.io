@@ -8,7 +8,7 @@ import Player from "./player";
 import GameMap, { Tile } from "./gamemap";
 import { PowerUp } from "./powerup";
 import Bullet from "./bullet";
-import Bot from "./bot";
+import type Bot from "./bot";
 
 /**
  * Represents a Tank controlled by a player.
@@ -129,7 +129,7 @@ export default class Tank extends GameObject {
    */
   step() {
     this.player.step();
-    if (this.weapon.is_deleted) this.defaultWeapon();
+    if (this.weapon.isDeleted) this.defaultWeapon();
     this.weapon.crosshair();
     this.checkBulletCollision();
   }
