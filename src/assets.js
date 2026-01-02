@@ -33,47 +33,26 @@ export const IMAGES = {
   invincible: imgInvincible,
 };
 
-// Sounds
-import sndReload from "../res/sound/reload.wav";
-import sndGun from "../res/sound/gun.wav";
-import sndGamestart from "../res/sound/gamestart.wav";
-import sndFlag from "../res/sound/flag.wav";
-import sndKillingspree from "../res/sound/killingspree.mp3";
-import sndGrenade from "../res/sound/grenade.wav";
-import sndInvincible from "../res/sound/invincible.mp3";
-import sndPowerup from "../res/sound/powerup.wav";
-import sndBounce from "../res/sound/bounce.wav";
-import sndLaser from "../res/sound/laser.wav";
-import sndResetFlag from "../res/sound/resetFlag.wav";
-import sndMg from "../res/sound/mg.wav";
-import sndFanfare from "../res/sound/fanfare.mp3";
-import sndKill from "../res/sound/kill.wav";
-import sndGuided from "../res/sound/guided.wav";
-import sndCoin from "../res/sound/coin.wav";
-import sndOrigPowerup from "../res/sound/original/powerup.mp3";
-import sndOrigLaser from "../res/sound/original/laser.mp3";
-import sndOrigGun from "../res/sound/original/gun.mp3";
-import sndTerminator from "../res/sound/terminator.mp3";
-
+// Sounds (served statically from public/sound/)
 export const SOUNDS = {
-  reload: sndReload,
-  gun: sndGun,
-  gamestart: sndGamestart,
-  flag: sndFlag,
-  killingspree: sndKillingspree,
-  grenade: sndGrenade,
-  invincible: sndInvincible,
-  powerup: sndPowerup,
-  bounce: sndBounce,
-  laser: sndLaser,
-  resetFlag: sndResetFlag,
-  mg: sndMg,
-  fanfare: sndFanfare,
-  kill: sndKill,
-  guided: sndGuided,
-  coin: sndCoin,
-  origPowerup: sndOrigPowerup,
-  origLaser: sndOrigLaser,
-  origGun: sndOrigGun,
-  terminator: sndTerminator,
+  reload: "/sound/reload.wav",
+  gun: "/sound/gun.wav",
+  gamestart: "/sound/gamestart.wav",
+  flag: "/sound/flag.wav",
+  killingspree: "/sound/killingspree.mp3",
+  grenade: "/sound/grenade.wav",
+  invincible: "/sound/invincible.mp3",
+  powerup: "/sound/powerup.wav",
+  bounce: "/sound/bounce.wav",
+  laser: "/sound/laser.wav",
+  resetFlag: "/sound/resetFlag.wav",
+  mg: "/sound/mg.wav",
+  fanfare: "/sound/fanfare.mp3",
+  kill: "/sound/kill.wav",
+  guided: "/sound/guided.wav",
+  coin: "/sound/coin.wav",
+  origPowerup: "/sound/original/powerup.mp3",
+  origLaser: "/sound/original/laser.mp3",
+  origGun: "/sound/original/gun.mp3",
+  terminator: "/sound/terminator.mp3",
 };
