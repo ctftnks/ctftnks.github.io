@@ -58,7 +58,7 @@ export class Weapon {
     bullet.x = (corners[0].x + corners[1].x) / 2;
     bullet.y = (corners[0].y + corners[1].y) / 2;
     bullet.lethal = false;
-    setTimeout(function () {
+    setTimeout(() => {
       bullet.lethal = true;
     }, 100);
     bullet.angle = this.tank.angle;
@@ -390,7 +390,7 @@ export class Mine extends Weapon {
     };
 
     e.player.game.timeouts.push(
-      setTimeout(function () {
+      setTimeout(() => {
         e.speed = 0;
       }, 600),
     );
@@ -460,7 +460,7 @@ export class Guided extends Weapon {
         playSound(SOUNDS.guided);
         // get current tile and path
         const tile = e.map.getTileByPos(oldx, oldy);
-        const path = tile.pathTo(function (destination: any) {
+        const path = tile.pathTo((destination: any) => {
           for (let i = 0; i < destination.objs.length; i++)
             if (destination.objs[i] instanceof Tank && destination.objs[i].player.team !== e.player.team) return true;
           return false;

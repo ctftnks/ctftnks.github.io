@@ -1,7 +1,7 @@
 import globals from "globals";
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";
-import eslintConfigPrettier, { rules } from "eslint-config-prettier";
+import eslintConfigPrettier from "eslint-config-prettier";
 import jsdoc from "eslint-plugin-jsdoc";
 
 export default [

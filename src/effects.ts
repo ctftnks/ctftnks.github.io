@@ -59,7 +59,7 @@ export function fogOfWar(game: any): number {
   ctx.scale(game.canvas.scale, game.canvas.scale);
   let ambientLight = 1;
 
-  const intvl = setInterval(function () {
+  const intvl = setInterval(() => {
     ctx.clearRect(0, 0, 2 * canv.width, 2 * canv.height);
     if (time < 300) ambientLight -= frequency / 300;
     if (duration - time < 300) ambientLight += frequency / 300;
@@ -80,7 +80,7 @@ export function fogOfWar(game: any): number {
   }, frequency);
 
   game.intvls.push(intvl);
-  setTimeout(function () {
+  setTimeout(() => {
     clearInterval(intvl);
     ctx.clearRect(0, 0, 2 * canv.width, 2 * canv.height);
   }, duration);

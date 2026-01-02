@@ -5,7 +5,7 @@ export function updateScores() {
   if (!scoreBoard) return;
   scoreBoard.innerHTML = "";
 
-  store.players.sort(function (a, b) {
+  store.players.sort((a, b) => {
     return b.score - a.score;
   });
 

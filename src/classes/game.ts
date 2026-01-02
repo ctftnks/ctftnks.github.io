@@ -140,7 +140,7 @@ export default class Game {
         this.addObject(p);
         this.timeouts.push(
           setTimeout(
-            function () {
+            () => {
               p.delete();
             },
             1000 * Settings.PowerUpRate * Settings.MaxPowerUps,

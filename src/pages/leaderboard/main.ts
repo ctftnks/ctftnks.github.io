@@ -17,12 +17,12 @@ export function init(container: HTMLElement): void {
   if (h2Elem) h2Elem.innerHTML = "Leaderboard:&nbsp;&nbsp;Game #" + store.GameID;
   if (counterElem) counterElem.innerHTML = leaderTime + "s";
 
-  const leaderIntvl = setInterval(function () {
+  const leaderIntvl = setInterval(() => {
     leaderTime -= 1;
     if (counterElem) counterElem.innerHTML = leaderTime + "s";
   }, 1000);
 
-  const leaderTimeout = setTimeout(function () {
+  const leaderTimeout = setTimeout(() => {
     clearInterval(leaderIntvl);
     closePage(shadeElem.parentNode);
     newGame();
@@ -39,7 +39,7 @@ export function init(container: HTMLElement): void {
 }
 
 export function updateLeaderboard(): void {
-  store.players.sort(function (a: Player, b: Player) {
+  store.players.sort((a: Player, b: Player) => {
     return b.score - a.score;
   });
 

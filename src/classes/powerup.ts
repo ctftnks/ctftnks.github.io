@@ -250,7 +250,7 @@ export class MultiBonus extends PowerUp {
       Settings.PowerUpRate /= 2.5;
       Settings.PowerUpRate = Math.round(1000 * Settings.PowerUpRate) / 1000;
       Settings.MaxPowerUps *= 2.5;
-      setTimeout(function () {
+      setTimeout(() => {
         Settings.PowerUpRate *= 2.5;
         Settings.MaxPowerUps /= 2.5;
       }, 8000);

@@ -3,7 +3,7 @@ import { store, Settings } from "./store";
 // databinding for menus and options
 export function databinding(): void {
   // input elements
-  [].forEach.call(document.querySelectorAll("input[data-bind]"), function (elem: HTMLInputElement) {
+  [].forEach.call(document.querySelectorAll("input[data-bind]"), (elem: HTMLInputElement) => {
     const bind = elem.getAttribute("data-bind");
     const prefix = elem.hasAttribute("data-prefix") ? elem.getAttribute("data-prefix") : "";
     const suffix = elem.hasAttribute("data-suffix") ? elem.getAttribute("data-suffix") : "";
@@ -40,7 +40,7 @@ export function databinding(): void {
   });
 
   // select elements
-  [].forEach.call(document.querySelectorAll("select[data-bind]"), function (elem: HTMLSelectElement) {
+  [].forEach.call(document.querySelectorAll("select[data-bind]"), (elem: HTMLSelectElement) => {
     const bind = elem.getAttribute("data-bind");
     if (!bind || !(bind in Settings)) {
       console.error("databinding: " + bind + " not found in Settings");

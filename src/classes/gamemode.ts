@@ -164,7 +164,7 @@ export class TeamDeathmatch extends Gamemode {
           for (let j = 0; j < bases.length; j++) {
             const stile = this.game.map!.getTileByPos(bases[j].x, bases[j].y);
             if (stile === -1) continue;
-            const path = (tile as Tile).pathTo(function (destination) {
+            const path = (tile as Tile).pathTo((destination) => {
               return destination.id === stile.id;
             });
             if (path !== -1) length += path.length * path.length;
@@ -270,7 +270,7 @@ export class CaptureTheFlag extends Gamemode {
           for (let j = 0; j < bases.length; j++) {
             const stile = this.game.map!.getTileByPos(bases[j].x, bases[j].y);
             if (stile === -1) continue;
-            const path = (tile as Tile).pathTo(function (destination) {
+            const path = (tile as Tile).pathTo((destination) => {
               return destination.id === stile.id;
             });
             if (path !== -1) length += path.length * path.length;
@@ -388,7 +388,7 @@ export class KingOfTheHill extends Gamemode {
         for (let j = 0; j < bases.length; j++) {
           const stile = this.game.map!.getTileByPos(bases[j].x, bases[j].y);
           if (stile === -1) continue;
-          const path = (tile as Tile).pathTo(function (destination) {
+          const path = (tile as Tile).pathTo((destination) => {
             return destination.id === stile.id;
           });
           if (path !== -1) length += path.length * path.length;

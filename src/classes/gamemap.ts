@@ -326,7 +326,7 @@ export class Tile {
    */
   xypathToObj(condition: (obj: GameObject) => boolean, maxPathLength: number = -1): Array<{ x: number; y: number } | GameObject> | -1 {
     const tilepath = this.pathTo(
-      function (dest) {
+      (dest) => {
         for (let i = 0; i < dest.objs.length; i++) if (condition(dest.objs[i])) return true;
         return false;
       },
