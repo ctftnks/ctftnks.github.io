@@ -7,7 +7,7 @@ import { WallBuilder } from "./weapons";
 import { store } from "../state";
 import { SOUNDS } from "../assets";
 import Game from "./game";
-import { Tile } from "./map";
+import { Tile } from "./gamemap";
 
 /**
  * Base class for game modes.

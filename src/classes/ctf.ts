@@ -1,4 +1,4 @@
-import GameObject from "./object";
+import GameObject from "./gameobject";
 import { playSound } from "../effects";
 import { SOUNDS } from "../assets";
 import Game from "./game";

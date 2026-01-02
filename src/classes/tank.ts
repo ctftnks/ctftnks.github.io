@@ -1,11 +1,11 @@
-import GameObject from "./object";
+import GameObject from "./gameobject";
 import { Gun, Weapon } from "./weapons";
 import { generateCloud } from "./smoke";
 import { playSound } from "../effects";
 import { Settings } from "../state";
 import { SOUNDS } from "../assets";
 import Player from "./player";
-import GameMap, { Tile } from "./map";
+import GameMap, { Tile } from "./gamemap";
 import { PowerUp } from "./powerup";
 import Bullet from "./bullet";
 import Bot from "./bot";

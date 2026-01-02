@@ -1,4 +1,4 @@
-import GameObject from "./object";
+import GameObject from "./gameobject";
 import { Settings } from "../state";
 import Game from "./game";
 

@@ -1,6 +1,6 @@
 import Player from "./player";
 import { store, Settings } from "../state";
-import { Tile } from "./map";
+import { Tile } from "./gamemap";
 import { PowerUp } from "./powerup";
 
 let NBots: number = 0;

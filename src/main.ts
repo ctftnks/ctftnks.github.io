@@ -2,7 +2,7 @@ import Canvas from "./classes/canvas";
 import Player from "./classes/player";
 import Bot from "./classes/bot";
 import Game from "./classes/game";
-import GameMap from "./classes/map";
+import GameMap from "./classes/gamemap";
 import MapGenerator from "./classes/mapGenerator";
 import { Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill, MapEditor } from "./classes/gamemode";
 import { openPage } from "../pages/pages";

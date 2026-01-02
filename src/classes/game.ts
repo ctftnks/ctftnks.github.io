@@ -1,4 +1,4 @@
-import GameMap from "./map";
+import GameMap from "./gamemap";
 import MapGenerator from "./mapGenerator";
 import { Deathmatch, Gamemode } from "./gamemode";
 import { getRandomPowerUp } from "./powerup";
@@ -8,7 +8,7 @@ import { store, Settings } from "../state";
 import { SOUNDS } from "../assets";
 import Canvas from "./canvas";
 import Player from "./player";
-import GameObject from "./object";
+import GameObject from "./gameobject";
 import { PowerUp } from "./powerup";
 
 /**

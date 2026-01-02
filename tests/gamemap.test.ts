@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import GameMap, { Tile } from "../src/classes/map";
+import GameMap, { Tile } from "../src/classes/gamemap";
 import { store } from "../src/state";
 
 describe("Map Class", () => {

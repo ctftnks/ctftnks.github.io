@@ -1,4 +1,4 @@
-import GameObject from "./object";
+import GameObject from "./gameobject";
 import { Smoke, generateCloud } from "./smoke";
 import { playSound } from "../effects";
 import { Settings } from "../state";

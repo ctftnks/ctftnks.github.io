@@ -1,4 +1,4 @@
-import GameObject from "./object";
+import GameObject from "./gameobject";
 import { Settings, store } from "../state";
 import { playSound, playMusic, stopMusic, fogOfWar } from "../effects";
 import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot, WallBuilder } from "./weapons";

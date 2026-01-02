@@ -1,6 +1,6 @@
-import GameObject from "./object";
+import GameObject from "./gameobject";
 import { Settings } from "../state";
-import GameMap from "./map";
+import GameMap from "./gamemap";
 
 /**
  * Represents a trajectory for ray-casting or lasers.

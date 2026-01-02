@@ -1,4 +1,4 @@
-import GameMap, { Tile } from "./map";
+import GameMap, { Tile } from "./gamemap";
 import { store, Settings } from "../state";
 
 // Static class for some map generation methods
