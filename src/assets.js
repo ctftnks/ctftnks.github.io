@@ -14,7 +14,6 @@ import imgLaser from "../res/img/laser.png";
 import imgMulti from "../res/img/multi.png";
 import imgWreckingBall from "../res/img/wreckingBall.png";
 import imgInvincible from "../res/img/invincible.png";
-import imgMarc from "../res/img/Marc.png";
 
 export const IMAGES = {
   gun: imgGun,
@@ -32,7 +31,6 @@ export const IMAGES = {
   multi: imgMulti,
   wreckingBall: imgWreckingBall,
   invincible: imgInvincible,
-  marc: imgMarc,
 };
 
 // Sounds

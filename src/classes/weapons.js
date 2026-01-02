@@ -121,10 +121,6 @@ export class Gun extends Weapon {
     this.name = "Gun";
     this.image = new Image();
     this.image.src = IMAGES.gun;
-    // Extra rule for face
-    if (this.tank.player.name === "Marc" || this.tank.player.name === "marc") {
-      this.image.src = IMAGES.marc;
-    }
     this.bot.fleeing_duration = 0;
   }
 

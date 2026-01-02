@@ -93,9 +93,7 @@ export default class Tank extends GameObject {
       context.fillStyle = "#000";
       context.rect(-this.carriedFlag.size / 2, -this.carriedFlag.size / 2, this.carriedFlag.size / 6, this.carriedFlag.size * 1.1);
       context.fill();
-    } else if (this.weapon.image.src.split("/").slice(-1)[0] === "Marc.png") {
-      context.drawImage(this.weapon.image, -this.width / 2, (-1.8 * this.height) / 2, this.width, this.height * 1.4);
-    } else if (this.weapon.image !== "") {
+    } else if (this.weapon.image !== "" && this.weapon.image.src !== "") {
       context.drawImage(this.weapon.image, -this.width / 2, -this.width / 2, this.width, this.width);
     }
     // draw label
