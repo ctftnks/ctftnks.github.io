@@ -1,4 +1,5 @@
 import Bullet from "./bullet";
+import Tank from "./tank";
 import Trajectory from "./trajectory";
 import { playSound, hexToRgbA } from "../effects";
 import { Smoke, generateCloud } from "./smoke";
@@ -194,7 +195,7 @@ export class MG extends Weapon {
       );
     }
 
-    if (this.tank.player.isBot && this.nshots > 15) {
+    if (this.tank.isBot() && this.nshots > 15) {
       setTimeout(function () {
         self.shoot();
       }, Settings.GameFrequency);
@@ -482,7 +483,7 @@ export class Guided extends Weapon {
         const tile = e.map.getTileByPos(oldx, oldy);
         const path = tile.pathTo(function (destination: any) {
           for (let i = 0; i < destination.objs.length; i++)
-            if (destination.objs[i].isTank && destination.objs[i].player.team !== e.player.team) return true;
+            if (destination.objs[i] instanceof Tank && destination.objs[i].player.team !== e.player.team) return true;
           return false;
         });
         // set next path tile as goto point
@@ -491,7 +492,7 @@ export class Guided extends Weapon {
         } else {
           // if there is no next tile, hit the tank in the tile
           for (let i = 0; i < tile.objs.length; i++) {
-            if (tile.objs[i].isTank) {
+            if (tile.objs[i] instanceof Tank) {
               e.goto = { x: tile.objs[i].x, y: tile.objs[i].y, dx: 0, dy: 0 };
             }
           }

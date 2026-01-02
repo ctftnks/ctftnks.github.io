@@ -6,8 +6,9 @@ import { Settings } from "../state";
 import { SOUNDS } from "../assets";
 import Player from "./player";
 import GameMap, { Tile } from "./map";
-import { PowerUp } from "./powerup.js"; // Not converted yet
+import { PowerUp } from "./powerup";
 import Bullet from "./bullet";
+import Bot from "./bot";
 
 /**
  * Represents a Tank controlled by a player.
@@ -35,8 +36,6 @@ export default class Tank extends GameObject {
   weapon: Weapon;
   /** Movement speed. */
   speed: number;
-  /** Indicates this is a tank. */
-  isTank: boolean;
   /** Timers for effects. */
   timers: { spawnshield: number; invincible: number };
   /** The flag currently carried, or -1. */
@@ -62,7 +61,6 @@ export default class Tank extends GameObject {
     this.height = Settings.TankHeight;
     this.weapon = new Gun(this);
     this.speed = Settings.TankSpeed;
-    this.isTank = true;
     this.type = "Tank";
     this.timers = { spawnshield: -1, invincible: -1 };
     this.carriedFlag = -1;
@@ -254,7 +252,7 @@ export default class Tank extends GameObject {
    * @returns {number} Index of colliding corner or -1.
    */
   checkWallCollision(): number {
-    if (this.player.isBot) return -1;
+    if (this.player instanceof Bot) return -1;
     if (!this.map) return -1;
     const tile = this.map.getTileByPos(this.x, this.y);
     if (tile === -1) return -1;
@@ -293,8 +291,8 @@ export default class Tank extends GameObject {
       if (tile !== -1) {
         for (let j = 0; j < tile.objs.length; j++) {
           const obj: GameObject = tile.objs[j];
-          if (obj.isBullet && (obj as Bullet).age > 0) bullets.push(obj as Bullet);
-          if (obj.isPowerUp) powerups.push(obj as PowerUp);
+          if (obj instanceof Bullet && (obj as Bullet).age > 0) bullets.push(obj as Bullet);
+          if (obj instanceof PowerUp) powerups.push(obj as PowerUp);
         }
       }
     }
@@ -354,7 +352,7 @@ export default class Tank extends GameObject {
    * @returns {boolean} True if bot.
    */
   isBot(): boolean {
-    return this.player.isBot;
+    return this.player instanceof Bot;
   }
 
   /**

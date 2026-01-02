@@ -9,7 +9,6 @@ import { SOUNDS } from "../assets";
  * @extends GameObject
  */
 export default class Bullet extends GameObject {
-  isBullet: boolean = true;
   image: string | HTMLImageElement = "";
   player: any;
   map: any;
@@ -33,7 +32,6 @@ export default class Bullet extends GameObject {
    */
   constructor(weapon: any) {
     super();
-    this.isBullet = true;
     this.image = "";
     this.player = weapon.tank.player;
     this.map = this.player.game.map;
@@ -131,7 +129,7 @@ export default class Bullet extends GameObject {
     const tile = this.map.getTileByPos(this.x, this.y);
     if (tile !== -1) {
       for (let j = 0; j < tile.objs.length; j++) {
-        if (tile.objs[j].isBullet && tile.objs[j].age > 0 && tile.objs[j] !== this) bullets.push(tile.objs[j]);
+        if (tile.objs[j] instanceof Bullet && tile.objs[j].age > 0 && tile.objs[j] !== this) bullets.push(tile.objs[j]);
       }
     }
 

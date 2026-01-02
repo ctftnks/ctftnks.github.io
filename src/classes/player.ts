@@ -22,7 +22,6 @@ export default class Player {
   keys: string[];
   tank: Tank;
   stats: { deaths: number; kills: number; miles: number; shots: number };
-  isBot: boolean = false;
 
   /**
    * Creates a new Player.
@@ -40,7 +39,6 @@ export default class Player {
     this.keys = keymaps[this.id] || keymaps[0].slice();
     this.tank = new Tank(this);
     this.stats = { deaths: 0, kills: 0, miles: 0, shots: 0 };
-    this.isBot = false;
   }
 
   /**

@@ -33,7 +33,7 @@ describe("Tank Class", () => {
 
   it("should initialize with correct default properties", () => {
     const tank = new Tank(mockPlayer);
-    expect(tank.isTank).toBe(true);
+    expect(tank instanceof Tank).toBe(true);
     expect(tank.speed).toBe(200);
     expect(tank.player).toBe(mockPlayer);
   });

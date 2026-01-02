@@ -1,6 +1,7 @@
 import Player from "./player";
 import { store, Settings } from "../state";
 import { Tile } from "./map";
+import { PowerUp } from "./powerup";
 
 let NBots: number = 0;
 
@@ -9,7 +10,7 @@ let NBots: number = 0;
  * @extends Player
  */
 export default class Bot extends Player {
-  // isBot and keys are inherited from Player
+  // keys are inherited from Player
   goto: any;
   fleeing: { from: any; condition: any };
   lastChecked: number;
@@ -21,7 +22,6 @@ export default class Bot extends Player {
   constructor(player?: Player) {
     super();
     this.name = "Bot " + (NBots + 1);
-    this.isBot = true;
     this.keys = []; // Empty keys for bot
     this.goto = -1;
     this.fleeing = { from: -1, condition: -1 };
@@ -60,7 +60,7 @@ export default class Bot extends Player {
     const opts: any[] = [];
 
     const powerupPath = tile.xypathToObj((obj: any) => {
-      return obj.isPowerUp && obj.attractsBots;
+      return obj instanceof PowerUp && obj.attractsBots;
     }, 2);
 
     if (powerupPath !== -1)
@@ -205,7 +205,7 @@ export default class Bot extends Player {
     const disty = target.y - tank.y;
     tank.angle = Math.atan2(-distx, disty) + Math.PI;
 
-    if (typeof target !== "undefined" && typeof target["player"] !== "undefined" && target.player.isBot) {
+    if (typeof target !== "undefined" && typeof target["player"] !== "undefined" && target.player instanceof Bot) {
       setTimeout(() => {
         tank.shoot();
       }, 180 * Math.random());
@@ -339,7 +339,7 @@ export function adaptBotSpeed(team: any, val: number = 0.1): number | undefined 
       teams.push(store.game!.players[i].team);
       botcounts.push(0);
     }
-    botcounts[id] += store.game!.players[i].isBot ? 1 : 0;
+    botcounts[id] += store.game!.players[i] instanceof Bot ? 1 : 0;
   }
 
   let avgbots = 0;

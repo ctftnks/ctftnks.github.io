@@ -55,7 +55,7 @@ function updatePlayersMenu(): void {
     entryRow += "<button class='name' onclick='editPlayerName(" + i + ")' style='color:" + players[i].color + ";'>";
     entryRow += players[i].name;
     entryRow += "</button>";
-    if (players[i].isBot) entryRow += editableKeymap(-2);
+    if (players[i] instanceof Bot) entryRow += editableKeymap(-2);
     else entryRow += editableKeymap(players[i].id);
     entryRow += "<button class='remove' onclick='removePlayer(" + id + ")'>&times;</button>";
     entryRow += "</div>";
@@ -64,7 +64,7 @@ function updatePlayersMenu(): void {
   updateScores();
 }
 
-// edit the keymap from the menu
+/** edit the keymap from the menu */
 function editableKeymap(mapID: number): string {
   if (mapID === -1) {
     let html = "";

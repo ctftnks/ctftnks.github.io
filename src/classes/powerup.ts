@@ -10,8 +10,6 @@ import Tank from "./tank";
  * @extends GameObject
  */
 export class PowerUp extends GameObject {
-  /** Indicates this is a powerup. */
-  isPowerUp: boolean = true;
   /** Collision radius. */
   radius: number = 40;
   /** Whether bots are attracted to it. */
@@ -22,7 +20,6 @@ export class PowerUp extends GameObject {
    */
   constructor() {
     super();
-    this.isPowerUp = true;
     this.image = new Image();
     this.width = 30;
     this.x = 0; // Initialized later

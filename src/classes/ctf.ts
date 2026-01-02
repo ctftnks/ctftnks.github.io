@@ -89,7 +89,7 @@ export class Flag extends GameObject {
     if (tile === -1) return;
     for (let i = 0; i < tile.objs.length; i++) {
       const tank: GameObject = tile.objs[i];
-      if (tank.isTank && Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)) {
+      if (tank instanceof Tank && Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)) {
         if ((tank as Tank).player.team === this.team) {
           if (!this.base.hasFlag()) {
             // return flag to base
@@ -194,7 +194,7 @@ export class Base extends GameObject {
     for (let i = 0; i < this.tile.objs.length; i++) {
       const tank: Tank = this.tile.objs[i];
       if (
-        tank.isTank &&
+        tank instanceof Tank &&
         tank.player.team === this.team &&
         Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)
       ) {
@@ -243,7 +243,7 @@ export class Hill extends Base {
     for (let i = 0; i < this.tile.objs.length; i++) {
       const tank: Tank = this.tile.objs[i];
       if (
-        tank.isTank &&
+        tank instanceof Tank &&
         tank.player.team !== this.team &&
         Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)
       ) {

@@ -4,9 +4,6 @@
  */
 export default class GameObject {
   deleted: boolean = false;
-  isBullet: boolean = false;
-  isTank: boolean = false;
-  isPowerUp: boolean = false;
   type: string = "Object";
   image: HTMLImageElement;
   x: number = 0;
@@ -21,9 +18,6 @@ export default class GameObject {
     // every object can be deleted
     // the loop will then delete it from the game object list
     this.deleted = false;
-    this.isBullet = false;
-    this.isTank = false;
-    this.isPowerUp = false;
     this.type = "Object";
     this.image = new Image();
     this.x = 0;
