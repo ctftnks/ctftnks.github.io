@@ -7,49 +7,19 @@ import { store, Settings } from "../state.js";
  * Static class containing map generation algorithms.
  */
 export default class MapGenerator {
-  /**
-   * Generates a random map with walls.
-   * @param {Map} map - The map to modify.
-   */
-  static randomMap(map) {
-    // generate walls at frame borders
-    for (let i = 0; i < map.Nx; i++) {
-      map.tiles[i * map.Ny].walls[0] = true;
-      map.tiles[i * map.Ny + map.Nx - 1].walls[2] = true;
-    }
-    for (let j = 0; j < map.Ny; j++) {
-      map.tiles[j].walls[1] = true;
-      map.tiles[(map.Nx - 1) * map.Ny + j].walls[3] = true;
-    }
-    for (let i = 0; i < map.Nx; i++) {
-      for (let j = 0; j < map.Ny - 1; j++) {
-        if (Math.random() < 0.6 / 2) {
-          map.tiles[i * map.Ny + j].walls[2] = true;
-          map.tiles[i * map.Ny + j + 1].walls[0] = true;
-        }
-      }
-    }
-    for (let i = 0; i < map.Nx - 1; i++) {
-      for (let j = 0; j < map.Ny; j++) {
-        if (Math.random() < 0.6 / 2) {
-          map.tiles[i * map.Ny + j].walls[3] = true;
-          map.tiles[(i + 1) * map.Ny + j].walls[1] = true;
-        }
-      }
-    }
-  }
 
-  // Prim's maze algorithm
-  // Start with a grid full of walls.
-  // Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
-  // While there are walls in the list:
-  // Pick a random wall from the list. If the cell on the opposite side isn't in the maze yet:
-  // Make the wall a passage and mark the cell on the opposite side as part of the maze.
-  // Add the neighboring walls of the cell to the wall list.
-  // If the cell on the opposite side already was in the maze, remove the wall from the list.
-
+  
   /**
    * Generates a maze using Prim's algorithm.
+   * 
+   * Start with a grid full of walls.
+   * Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
+   * While there are walls in the list:
+   * Pick a random wall from the list. If the cell on the opposite side isn't in the maze yet:
+   * Make the wall a passage and mark the cell on the opposite side as part of the maze.
+   * Add the neighboring walls of the cell to the wall list.
+   * If the cell on the opposite side already was in the maze, remove the wall from the list.
+   * 
    * @param {Map} map - The map to modify.
    */
   static primsMaze(map) {
