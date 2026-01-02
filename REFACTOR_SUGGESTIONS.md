@@ -4,23 +4,23 @@ This document lists issues, risks, and concrete improvement options found in the
 
 **High-priority Issues**
 
-- **Global namespace pollution**: many values are exported onto `window` for legacy pages. This makes refactors fragile and couples code to globals. See the main bridge: [js/main.js](js/main.js#L14).
+- **Global namespace pollution**: many values are exported onto `window` for legacy pages. This makes refactors fragile and couples code to globals. See the main bridge: [src/main.js](src/main.js#L14).
 
 - **Fixed-timestep / `setInterval` usage**: multiple places use `setInterval` for logic and rendering which is suboptimal for modern browsers and causes timing drift. Examples:
-  - Game loop: [js/classes/game.js](js/classes/game.js#L88)
-  - Canvas drawing / effect loops: [js/classes/canvas.js](js/classes/canvas.js#L51) and [js/classes/canvas.js](js/classes/canvas.js#L95)
-  - Misc effects/leaderboard: [js/effects.js](js/effects.js#L56), [pages/leaderboard/main.js](pages/leaderboard/main.js#L16)
+  - Game loop: [src/classes/game.js](src/classes/game.js#L88)
+  - Canvas drawing / effect loops: [src/classes/canvas.js](src/classes/canvas.js#L51) and [src/classes/canvas.js](src/classes/canvas.js#L95)
+  - Misc effects/leaderboard: [src/effects.js](src/effects.js#L56), [pages/leaderboard/main.js](pages/leaderboard/main.js#L16)
     Recommendation: use `requestAnimationFrame` for rendering; for game logic either (a) convert everything to time-based updates using a `dt` argument (preferred), or (b) keep a stable physics tick using an accumulator + fixed-step updates (capped) when determinism is required.
 
-- **Mixed concerns: logic & DOM**: code often manipulates the DOM directly inside core classes (e.g. updating `GameTimer` in [js/classes/game.js](js/classes/game.js#L143), many `document.getElementById` occurrences). This couples game logic with presentation; extract DOM updates into renderer/UI modules and pass only data/events.
+- **Mixed concerns: logic & DOM**: code often manipulates the DOM directly inside core classes (e.g. updating `GameTimer` in [src/classes/game.js](src/classes/game.js#L143), many `document.getElementById` occurrences). This couples game logic with presentation; extract DOM updates into renderer/UI modules and pass only data/events.
 
 **Medium-priority Issues**
 
 - **Inconsistent time units / naming**: `GameFrequency` and `FrameFrequency` are numeric constants but the units are unclear (ms vs frames). Prefer explicit names (`GAME_TICK_MS`, `RENDER_INTERVAL_MS`) and use seconds for `dt` inside update methods.
 
-- **Window-based callbacks / event bridging**: global functions like `window.openPage`, `window.updateScores`, and other `window.*` exports are used as callbacks across modules (e.g. [js/classes/game.js](js/classes/game.js#L95), [js/classes/gamemode.js](js/classes/gamemode.js#L63)). Replace with an event emitter or explicit API surface so modules can subscribe without depending on globals.
+- **Window-based callbacks / event bridging**: global functions like `window.openPage`, `window.updateScores`, and other `window.*` exports are used as callbacks across modules (e.g. [src/classes/game.js](src/classes/game.js#L95), [src/classes/gamemode.js](src/classes/gamemode.js#L63)). Replace with an event emitter or explicit API surface so modules can subscribe without depending on globals.
 
-- **Frequent innerHTML/string concatenation**: functions like `updateScores()` in [js/main.js](js/main.js#L36) rebuild HTML via string concatenation in a loop. This is inefficient and can cause layout thrashing. Use `DocumentFragment`, template cloning, or minimal DOM updates.
+- **Frequent innerHTML/string concatenation**: functions like `updateScores()` in [src/main.js](src/main.js#L36) rebuild HTML via string concatenation in a loop. This is inefficient and can cause layout thrashing. Use `DocumentFragment`, template cloning, or minimal DOM updates.
 
 - **Direct prompts and synchronous user input**: `newGame()` uses `prompt()` to get map dimensions. Synchronous prompts block rendering; prefer a modal UI or form.
 
@@ -74,15 +74,15 @@ This document lists issues, risks, and concrete improvement options found in the
 **Files / lines with concrete examples**
 
 - `setInterval` usages:
-  - [js/classes/game.js](js/classes/game.js#L88)
-  - [js/classes/canvas.js](js/classes/canvas.js#L51)
-  - [js/classes/canvas.js](js/classes/canvas.js#L95)
-  - [js/effects.js](js/effects.js#L56)
+  - [src/classes/game.js](src/classes/game.js#L88)
+  - [src/classes/canvas.js](src/classes/canvas.js#L51)
+  - [src/classes/canvas.js](src/classes/canvas.js#L95)
+  - [src/effects.js](src/effects.js#L56)
   - [pages/leaderboard/main.js](pages/leaderboard/main.js#L16)
 
-- Global exposure / window bridge: [js/main.js](js/main.js#L14)
+- Global exposure / window bridge: [src/main.js](src/main.js#L14)
 
-- Direct DOM access examples: many `document.getElementById` calls across `pages/*` and `js/*` (e.g. [js/classes/game.js](js/classes/game.js#L143), [js/main.js](js/main.js#L36)).
+- Direct DOM access examples: many `document.getElementById` calls across `pages/*` and `src/*` (e.g. [src/classes/game.js](src/classes/game.js#L143), [src/main.js](src/main.js#L36)).
 
 **Quick wins I can implement for you**
 

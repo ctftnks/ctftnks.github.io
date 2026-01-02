@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import Tank from "../js/classes/tank.js";
-import { Settings } from "../js/state.js";
+import Tank from "../src/classes/tank.js";
+import { Settings } from "../src/state.js";
 
 describe("Tank Class", () => {
   let mockPlayer;

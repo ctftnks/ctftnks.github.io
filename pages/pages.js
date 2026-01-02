@@ -1,5 +1,5 @@
 // create page div in container, load content into page
-import { databinding } from "../js/databinding.js";
+import { databinding } from "../src/databinding.js";
 
 let pageID = 0;
 

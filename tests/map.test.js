@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import Map, { Tile } from "../js/classes/map.js";
-import { store } from "../js/state.js";
+import Map, { Tile } from "../src/classes/map.js";
+import { store } from "../src/state.js";
 
 describe("Map Class", () => {
   let mockCanvas;

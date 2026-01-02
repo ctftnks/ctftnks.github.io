@@ -1,9 +1,9 @@
 import template from "./main.html?raw";
 import "./style.css";
-import Bot from "../../js/classes/bot.js";
-import Player from "../../js/classes/player.js";
-import { updateScores } from "../../js/main.js";
-import { keymaps, getKeyLabel } from "../../js/keybindings.js";
+import Bot from "../../src/classes/bot.js";
+import Player from "../../src/classes/player.js";
+import { updateScores } from "../../src/main.js";
+import { keymaps, getKeyLabel } from "../../src/keybindings.js";
 
 export function init(container) {
   container.innerHTML = template;
