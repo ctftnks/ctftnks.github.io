@@ -2,8 +2,9 @@ import Canvas from "./classes/canvas";
 import Player from "./classes/player";
 import Bot from "./classes/bot";
 import { openPage } from "./pages/pages";
-import { store } from "./store";
+import { Settings, store } from "./store";
 import { newGame } from "./classes/game";
+import { databinding } from "./databinding";
 
 // generate canvas object and players list
 window.onload = () => {
@@ -36,4 +37,6 @@ window.onresize = () => {
 
 // Put some objects into the global scope such that they can be called by inline JS (onclick=...)
 (window as any).store = store;
+(window as any).Settings = Settings;
+(window as any).databinding = databinding;
 (window as any).newGame = newGame;
