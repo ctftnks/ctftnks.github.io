@@ -249,7 +249,7 @@ export default class MapGenerator {
   }
 }
 
-export let prefetchedMap: GameMap | undefined = undefined;
+export const prefetchedMap: GameMap | undefined = undefined;
 
 // List of all algorithms
 MapGenerator.algorithms = [

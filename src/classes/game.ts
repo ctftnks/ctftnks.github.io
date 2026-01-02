@@ -153,8 +153,8 @@ export default class Game {
       if (this.t % 1000 === Settings.GameFrequency) {
         let dt = Settings.RoundTime * 60 - (this.t - Settings.GameFrequency) / 1000;
         dt = dt < 0 ? 0 : dt;
-        let dtm: number = Math.floor(dt / 60);
-        let dts: number = Math.floor(dt - dtm * 60);
+        const dtm: number = Math.floor(dt / 60);
+        const dts: number = Math.floor(dt - dtm * 60);
         const timerElem = document.getElementById("GameTimer");
         if (timerElem) timerElem.innerHTML = `${String(dtm).padStart(2, "0")}:${String(dts).padStart(2, "0")}`;
       }

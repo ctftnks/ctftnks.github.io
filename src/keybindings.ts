@@ -70,7 +70,7 @@ export function getKeyLabel(code: string): string {
 
   // Clean up common codes
   // KeyW -> W, ArrowUp -> Up, Digit1 -> 1, Numpad1 -> Num1
-  let label = code
+  const label = code
     .replace(/^Key/, "")
     .replace(/^Arrow/, "")
     .replace(/^Digit/, "")

@@ -63,7 +63,7 @@ class GameStore {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        for (let key in parsed) {
+        for (const key in parsed) {
           if (key in this.settings) {
             (this.settings as any)[key] = parsed[key];
           }
