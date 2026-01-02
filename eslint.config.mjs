@@ -5,24 +5,23 @@ import eslintConfigPrettier from "eslint-config-prettier";
 import jsdoc from "eslint-plugin-jsdoc";
 
 export default [
-  js.configs.recommended,
-  ...tseslint.configs.recommended,
-  eslintConfigPrettier,
   {
     ignores: ["dist/**", "node_modules/**", "coverage/**", "public/**"],
   },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  jsdoc.configs["flat/recommended"],
+  eslintConfigPrettier,
   {
     files: ["**/*.{js,mjs,cjs,ts}"],
-
-    plugins: {
-      jsdoc,
-    },
-
     languageOptions: {
-      globals: globals.browser,
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
     },
-
     rules: {
+      ...eslintConfigPrettier.rules,
       // Enforce braces for all control statements
       curly: ["error", "all"],
       // Enforce JSDoc comments for functions and methods
@@ -40,6 +39,12 @@ export default [
           enableFixer: false,
         },
       ],
+      "jsdoc/require-param-description": "off",
+      "jsdoc/require-param-type": "off",
+      "jsdoc/require-returns": "off",
+      "jsdoc/require-returns-type": "off",
+      "jsdoc/require-returns-description": "off",
+      // "@typescript-eslint/no-explicit-any": "off",
     },
   },
 ];
