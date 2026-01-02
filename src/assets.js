@@ -1,36 +1,20 @@
-// Images
-import imgGun from "../res/img/gun.png";
-import imgMine from "../res/img/mine.png";
-import imgSlingshot from "../res/img/slingshot.png";
-import imgMg from "../res/img/mg.png";
-import imgFog from "../res/img/fog.png";
-import imgTerminator from "../res/img/terminator.png";
-import imgTiled from "../res/img/textures/tiled.png";
-import imgGuided from "../res/img/guided.png";
-import imgGrenade from "../res/img/grenade.png";
-import imgWallBuilder from "../res/img/wallBuilder.png";
-import imgSpeed from "../res/img/speed.png";
-import imgLaser from "../res/img/laser.png";
-import imgMulti from "../res/img/multi.png";
-import imgWreckingBall from "../res/img/wreckingBall.png";
-import imgInvincible from "../res/img/invincible.png";
-
+// Images (served statically from public/img/)
 export const IMAGES = {
-  gun: imgGun,
-  mine: imgMine,
-  slingshot: imgSlingshot,
-  mg: imgMg,
-  fog: imgFog,
-  terminator: imgTerminator,
-  tiled: imgTiled,
-  guided: imgGuided,
-  grenade: imgGrenade,
-  wallBuilder: imgWallBuilder,
-  speed: imgSpeed,
-  laser: imgLaser,
-  multi: imgMulti,
-  wreckingBall: imgWreckingBall,
-  invincible: imgInvincible,
+  gun: "/img/gun.png",
+  mine: "/img/mine.png",
+  slingshot: "/img/slingshot.png",
+  mg: "/img/mg.png",
+  fog: "/img/fog.png",
+  terminator: "/img/terminator.png",
+  tiled: "/img/textures/tiled.png",
+  guided: "/img/guided.png",
+  grenade: "/img/grenade.png",
+  wallBuilder: "/img/wallBuilder.png",
+  speed: "/img/speed.png",
+  laser: "/img/laser.png",
+  multi: "/img/multi.png",
+  wreckingBall: "/img/wreckingBall.png",
+  invincible: "/img/invincible.png",
 };
 
 // Sounds (served statically from public/sound/)
