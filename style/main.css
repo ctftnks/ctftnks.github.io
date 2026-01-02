@@ -2,7 +2,7 @@ body {
   font-family: sans-serif;
   background: #333;
   background-color: #282936;
-  background-image: url("../res/img/textures/tiled.png");
+  background-image: url("/img/textures/tiled.png");
 }
 
 #gameFrame,
