@@ -3,8 +3,8 @@ import { Smoke, generateCloud } from "./smoke";
 import { playSound } from "@/game/effects";
 import { Settings } from "@/game/store";
 import { SOUNDS } from "@/game/assets";
-import Player from "@/game/player";
-import GameMap from "@/game/gamemap";
+import type Player from "@/game/player";
+import type GameMap from "@/game/gamemap";
 import { Weapon } from "./weapons/weapons";
 
 /**

@@ -3,7 +3,7 @@ import { Flag, Base, Hill } from "@/entities/ctf";
 import { playSound } from "./effects";
 import { adaptBotSpeed } from "./bot";
 import { SOUNDS } from "@/game/assets";
-import Game from "./game";
+import type Game from "./game";
 import Tile from "./tile";
 import { updateScores } from "@/ui/ui";
 

@@ -1,6 +1,6 @@
 import GameObject from "@/entities/gameobject";
 import { Coord } from "@/entities/coord";
-import GameMap from "./gamemap";
+import type GameMap from "./gamemap";
 
 /**
  * Class for tiles of a {@link GameMap}.

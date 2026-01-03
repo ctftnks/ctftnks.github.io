@@ -3,7 +3,7 @@ import { Settings } from "@/game/store";
 import { playSound, playMusic, stopMusic, fogOfWar } from "@/game/effects";
 import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot } from "./weapons/weapons";
 import { IMAGES, SOUNDS } from "@/game/assets";
-import Tank from "./tank";
+import type Tank from "./tank";
 
 /**
  * Base class for all PowerUps.
