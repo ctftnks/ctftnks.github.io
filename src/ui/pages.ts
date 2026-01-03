@@ -1,8 +1,12 @@
 import { databinding } from "@/ui/databinding";
-import { BasePage } from "@/ui/components/BasePage";
+import { BasePage } from "@/ui/BasePage";
 
 // Pre-register all page Web Components
-import "./pages/index.ts";
+import "./components/menu/main";
+import "./components/settings/main";
+import "./components/powerups/main";
+import "./components/quickstart/main";
+import "./components/leaderboard/main";
 
 /**
  * Open a page by name

@@ -1,4 +1,4 @@
-import { BasePage } from "@/ui/components/BasePage";
+import { BasePage } from "@/ui/BasePage";
 import { newGame } from "@/game/game";
 import type Player from "@/game/player";
 import template from "./main.html?raw";

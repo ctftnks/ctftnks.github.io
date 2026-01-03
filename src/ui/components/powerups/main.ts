@@ -1,4 +1,4 @@
-import { BasePage } from "@/ui/components/BasePage";
+import { BasePage } from "@/ui/BasePage";
 import { PowerUps } from "@/entities/powerup";
 import template from "./main.html?raw";
 import "./style.css";
