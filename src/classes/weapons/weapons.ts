@@ -5,7 +5,6 @@ import { playSound, hexToRgbA } from "@/effects";
 import { Smoke, generateCloud } from "../smoke";
 import { Settings } from "@/store";
 import { IMAGES, SOUNDS } from "@/assets";
-import Tile from "@/classes/tile";
 
 /**
  * Base class for all weapons.
@@ -18,7 +17,7 @@ export class Weapon {
   isDeleted: boolean = false;
   bot: { shootingRange: number; fleeingDuration: number; fleeIfActive: boolean };
   trajectory: Trajectory | undefined;
-  bullet: Bullet | undefined;
+  bullet: Bullet | null = null;
   nshots: number | undefined;
   every: number | undefined;
   fired: boolean | undefined;
@@ -62,13 +61,13 @@ export class Weapon {
     bullet.x = (corners[0].x + corners[1].x) / 2;
     bullet.y = (corners[0].y + corners[1].y) / 2;
     bullet.lethal = false;
-    setTimeout(() => {
+    window.setTimeout(() => {
       bullet.lethal = true;
     }, 100);
     bullet.angle = this.tank.angle;
     bullet.player = this.tank.player;
     bullet.color = this.tank.player.color;
-    this.tank.player.game.addObject(bullet);
+    this.tank.player.game!.addObject(bullet);
     return bullet;
   }
 
@@ -81,14 +80,14 @@ export class Weapon {
     }
     this.isActive = false;
     if (this.tank.rapidfire) {
-      this.tank.player.game.timeouts.push(
-        setTimeout(() => {
+      this.tank.player.game!.timeouts.push(
+        window.setTimeout(() => {
           this.activate();
         }, 500),
       );
     } else {
-      this.tank.player.game.timeouts.push(
-        setTimeout(() => {
+      this.tank.player.game!.timeouts.push(
+        window.setTimeout(() => {
           this.delete();
         }, 1800),
       );
@@ -188,15 +187,15 @@ export class MG extends Weapon {
     }
 
     if (this.nshots === 20) {
-      this.tank.player.game.timeouts.push(
-        setTimeout(() => {
+      this.tank.player.game!.timeouts.push(
+        window.setTimeout(() => {
           this.deactivate();
         }, 3000),
       );
     }
 
     if (this.tank.player.isBot() && this.nshots > 15) {
-      setTimeout(() => {
+      window.setTimeout(() => {
         this.shoot();
       }, Settings.GameFrequency);
     }
@@ -231,14 +230,14 @@ export class Laser extends Weapon {
   constructor(tank: Tank) {
     super(tank);
     this.image.src = IMAGES.laser;
-    this.trajectory = new Trajectory(this.tank.player.game.map);
+    this.trajectory = new Trajectory(this.tank.player.game!.map);
     this.trajectory.x = this.tank.x;
     this.trajectory.y = this.tank.y;
     this.trajectory.angle = this.tank.angle;
     this.trajectory.length = 620;
     this.trajectory.drawevery = 3;
     this.trajectory.color = hexToRgbA(this.tank.player.color, 0.4);
-    this.tank.player.game.addObject(this.trajectory);
+    this.tank.player.game!.addObject(this.trajectory);
     this.bot.fleeingDuration = 0;
   }
 
@@ -264,7 +263,7 @@ export class Laser extends Weapon {
       bullet.color = this.tank.player.color;
       bullet.bounceSound = "";
       bullet.age = 0;
-      this.tank.player.game.addObject(bullet);
+      this.tank.player.game!.addObject(bullet);
     }
     this.deactivate();
   }
@@ -289,7 +288,6 @@ export class Laser extends Weapon {
  */
 export class Grenade extends Weapon {
   name: string = "Grenade";
-  bullet: any;
   nshrapnels: number = 30;
 
   /**
@@ -299,7 +297,6 @@ export class Grenade extends Weapon {
   constructor(tank: Tank) {
     super(tank);
     this.image.src = IMAGES.grenade;
-    this.bullet = undefined;
     this.bot.fleeingDuration = 4000;
     this.bot.fleeIfActive = false;
   }
@@ -318,7 +315,7 @@ export class Grenade extends Weapon {
         e.exploded = true;
         playSound(SOUNDS.grenade);
         for (let i = 0; i < this.nshrapnels; i++) {
-          const shrapnel = new Bullet(this);
+          const shrapnel = new Bullet(this as Weapon);
           shrapnel.x = e.x;
           shrapnel.y = e.y;
           shrapnel.radius = 2;
@@ -327,10 +324,10 @@ export class Grenade extends Weapon {
           shrapnel.angle = 2 * Math.PI * Math.random();
           shrapnel.timeout = (360 * 280) / Settings.BulletSpeed;
           shrapnel.extrahitbox = -3;
-          shrapnel.checkCollision = function (x: number, y: number) {};
-          this.tank.player.game.addObject(shrapnel);
+          shrapnel.checkCollision = function () {};
+          this.tank.player.game!.addObject(shrapnel);
         }
-        this.bullet = undefined;
+        this.bullet = null;
         this.deactivate();
       }
     };
@@ -342,11 +339,11 @@ export class Grenade extends Weapon {
     if (!this.isActive) {
       return;
     }
-    if (typeof this.bullet === "undefined") {
+    if (!this.bullet) {
       if (!this.isDeleted) {
         this.bullet = this.newBullet();
       } else {
-        this.bullet = undefined;
+        this.bullet = null;
       }
     } else if (this.bullet.age > 300) {
       const bullet = this.bullet;
@@ -364,7 +361,6 @@ export class Grenade extends Weapon {
  */
 export class Mine extends Weapon {
   name: string = "Mine";
-  bullet: any;
   nshrapnels: number = 24;
 
   /**
@@ -374,7 +370,6 @@ export class Mine extends Weapon {
   constructor(tank: Tank) {
     super(tank);
     this.image.src = IMAGES.mine;
-    this.bullet = undefined;
   }
 
   newBullet(): Bullet {
@@ -391,7 +386,7 @@ export class Mine extends Weapon {
         e.exploded = true;
         playSound(SOUNDS.grenade);
         for (let i = 0; i < this.nshrapnels; i++) {
-          const shrapnel = new Bullet(this);
+          const shrapnel = new Bullet(this as Weapon);
           shrapnel.x = e.x;
           shrapnel.y = e.y;
           shrapnel.radius = 2;
@@ -400,14 +395,14 @@ export class Mine extends Weapon {
           shrapnel.angle = 2 * Math.PI * Math.random();
           shrapnel.timeout = 600;
           shrapnel.extrahitbox = -3;
-          this.tank.player.game.addObject(shrapnel);
+          this.tank.player.game!.addObject(shrapnel);
         }
-        this.bullet = undefined;
+        this.bullet = null;
       }
     };
 
-    e.player.game.timeouts.push(
-      setTimeout(() => {
+    e.player.game!.timeouts.push(
+      window.setTimeout(() => {
         e.speed = 0;
       }, 600),
     );
@@ -442,7 +437,7 @@ export class Guided extends Weapon {
     e.color = "#555";
     e.smokeColor = "#555";
     e.speed = 1.1 * Settings.TankSpeed;
-    e.goto = null;
+    let gotoTarget: { x: number; y: number; dx: number; dy: number } | null = null;
     e.extrahitbox = 10;
 
     e.step = function () {
@@ -455,14 +450,14 @@ export class Guided extends Weapon {
       const oldx = e.x;
       const oldy = e.y;
       // normal translation
-      if (e.goto === null) {
+      if (gotoTarget === null) {
         e.x -= (e.speed * Math.sin(-e.angle) * Settings.GameFrequency) / 1000;
         e.y -= (e.speed * Math.cos(-e.angle) * Settings.GameFrequency) / 1000;
       } else {
         // guided translation:
-        // if e.goto has point data stored go into it's direction
-        const distx = e.goto.x + e.goto.dx / 2 - e.x;
-        const disty = e.goto.y + e.goto.dy / 2 - e.y;
+        // if egoto has point data stored go into it's direction
+        const distx = gotoTarget.x + gotoTarget.dx / 2 - e.x;
+        const disty = gotoTarget.y + gotoTarget.dy / 2 - e.y;
         const len = Math.sqrt(distx * distx + disty * disty);
         e.x += (e.speed * (distx / len) * Settings.GameFrequency) / 1000;
         e.y += (e.speed * (disty / len) * Settings.GameFrequency) / 1000;
@@ -478,36 +473,40 @@ export class Guided extends Weapon {
         e.age -= 250;
         playSound(SOUNDS.guided);
         // get current tile and path
-        const tile = e.map.getTileByPos(oldx, oldy);
-        const path = tile.pathTo((destination: any) => {
+        const tile = e.map.getTileByPos(oldx, oldy)!;
+        const path = tile.pathTo((destination) => {
           for (let i = 0; i < destination.objs.length; i++) {
-            if (destination.objs[i] instanceof Tank && destination.objs[i].player.team !== e.player.team) {
+            const obj = destination.objs[i];
+            if (obj instanceof Tank && obj.player.team !== e.player.team) {
               return true;
             }
           }
           return false;
         });
         // set next path tile as goto point
-        if (path.length > 1) {
-          e.goto = path[1];
+        if (path && path.length > 1) {
+          gotoTarget = path[1];
         } // if there is no next tile, hit the tank in the tile
         else {
           for (let i = 0; i < tile.objs.length; i++) {
             if (tile.objs[i] instanceof Tank) {
-              e.goto = { x: tile.objs[i].x, y: tile.objs[i].y, dx: 0, dy: 0 };
+              gotoTarget = { x: tile.objs[i].x, y: tile.objs[i].y, dx: 0, dy: 0 };
             }
           }
         }
 
-        if (path.length > 0) {
-          e.smokeColor = path[path.length - 1].objs[0].color;
+        if (path && path.length > 0) {
+          const target = path[path.length - 1].objs[0];
+          if (target instanceof Tank) {
+            e.smokeColor = target.color;
+          }
         }
       }
       e.leaveTrace = function () {
         if (Math.random() > 0.8) {
           const smoke = new Smoke(this.x, this.y, 400, this.radius / 1.4, 0.6);
-          smoke.color = e.smokeColor;
-          e.player.game.addObject(smoke);
+          smoke.color = e.smokeColor!;
+          e.player.game!.addObject(smoke);
         }
       };
     };
@@ -541,7 +540,7 @@ export class WreckingBall extends Weapon {
     bullet.speed = Settings.TankSpeed * 1.1;
     bullet.timeout = 1000;
     bullet.checkCollision = function (x: number, y: number) {
-      const tile: Tile = bullet.map.getTileByPos(x, y);
+      const tile = bullet.map.getTileByPos(x, y);
       if (tile === null) {
         return;
       }
@@ -565,7 +564,7 @@ export class WreckingBall extends Weapon {
         } else {
           // hit a wall: remove it!
           playSound(SOUNDS.grenade);
-          generateCloud(this.player.game, bullet.x, bullet.y, 3);
+          generateCloud(this.player.game!, bullet.x, bullet.y, 3);
           bullet.delete();
           tile.addWall(wall, true);
         }
@@ -577,7 +576,7 @@ export class WreckingBall extends Weapon {
       if (Math.random() > 0.96) {
         const smoke = new Smoke(this.x, this.y, 800, bullet.radius, 0.6);
         smoke.color = "rgba(0,0,0,0.3)";
-        bullet.player.game.addObject(smoke);
+        bullet.player.game!.addObject(smoke);
       }
     };
 
@@ -615,14 +614,14 @@ export class Slingshot extends Weapon {
     bullet.color = "#333";
     bullet.speed = 2 * Settings.BulletSpeed;
     bullet.timeout = 2000;
-    bullet.checkCollision = function (x: number, y: number) {};
+    bullet.checkCollision = function () {};
     bullet.trace = true;
     bullet.leaveTrace = function () {
       if (Math.random() > 0.96) {
         bullet.speed *= 0.92;
         const smoke = new Smoke(this.x, this.y, 800, bullet.radius, 0.6);
         smoke.color = "rgba(0,0,0,0.3)";
-        bullet.player.game.addObject(smoke);
+        bullet.player.game!.addObject(smoke);
       }
     };
 

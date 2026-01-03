@@ -22,9 +22,11 @@ export default class Bullet extends GameObject {
   timeout: number;
   age: number = 0;
   trace: boolean = false;
-  bounceSound: any;
+  bounceSound: string = SOUNDS.bounce;
   lethal: boolean = true;
   extrahitbox: number = 0;
+  exploded: boolean = false; // used only for some powerups
+  smokeColor: string | null = null; // used only for some powerups
 
   /**
    * Creates a new Bullet.
@@ -33,11 +35,10 @@ export default class Bullet extends GameObject {
   constructor(weapon: Weapon) {
     super();
     this.player = weapon.tank.player;
-    this.map = this.player.game!.map!;
+    this.map = this.player.game!.map;
     this.weapon = weapon;
     this.speed = Settings.BulletSpeed;
     this.timeout = Settings.BulletTimeout * 1000;
-    this.bounceSound = SOUNDS.bounce;
   }
 
   /**
@@ -143,7 +144,7 @@ export default class Bullet extends GameObject {
         this.explode();
         bullets[i].delete();
         this.delete();
-        generateCloud(this.player.game, this.x!, this.y!, 1);
+        generateCloud(this.player.game!, this.x!, this.y!, 1);
         playSound(SOUNDS.origGun);
         return;
       }
@@ -154,7 +155,7 @@ export default class Bullet extends GameObject {
    * Leave a trace of smoke.
    */
   leaveTrace(): void {
-    this.player.game.addObject(new Smoke(this.x, this.y, 300, this.radius, 1));
+    this.player.game!.addObject(new Smoke(this.x, this.y, 300, this.radius, 1));
   }
 
   /**

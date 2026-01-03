@@ -74,14 +74,14 @@ export default class Tank extends GameObject {
     context.rect(-this.width / 2, -this.height / 2, this.width, this.height);
     context.fillStyle = this.player.color;
 
-    if (this.timers.invincible > this.player.game.t) {
-      const dt = (this.timers.invincible - this.player.game.t) / 600;
+    if (this.timers.invincible > this.player.game!.t) {
+      const dt = (this.timers.invincible - this.player.game!.t) / 600;
       context.fillStyle = "hsl(" + parseInt((360 * dt).toString()) + ",100%,40%)";
     }
     if (this.spawnshield()) {
       context.fillStyle = "#555";
       // context.globalAlpha = 0.5;
-      context.globalAlpha = 0.7 * (1 - (this.timers.spawnshield - this.player.game.t) / (Settings.SpawnShieldTime * 1000));
+      context.globalAlpha = 0.7 * (1 - (this.timers.spawnshield - this.player.game!.t) / (Settings.SpawnShieldTime * 1000));
     }
 
     context.fill();
@@ -343,9 +343,9 @@ export default class Tank extends GameObject {
           bullets[i].player.stats.kills += 1;
         }
         // fancy explosion cloud
-        generateCloud(this.player.game, this.x, this.y, 6);
+        generateCloud(this.player.game!, this.x, this.y, 6);
         // let gamemode handle scoring
-        this.player.game.mode.newKill(bullets[i].player, this.player);
+        this.player.game!.mode.newKill(bullets[i].player, this.player);
         // kill the player, delete the tank and bullet
         playSound(SOUNDS.kill);
         this.delete();
@@ -367,7 +367,7 @@ export default class Tank extends GameObject {
    * @returns {boolean} True if spawnshield active.
    */
   spawnshield(): boolean {
-    const t = this.player.game.t;
+    const t = this.player.game!.t;
     return this.timers.spawnshield > t;
   }
 
@@ -376,7 +376,7 @@ export default class Tank extends GameObject {
    * @returns {boolean} True if invincible.
    */
   invincible(): boolean {
-    const t = this.player.game.t;
+    const t = this.player.game!.t;
     return this.timers.spawnshield > t || this.timers.invincible > t;
   }
 

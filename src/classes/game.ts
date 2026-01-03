@@ -9,7 +9,7 @@ import Canvas from "./canvas";
 import Player from "./player";
 import GameObject from "./gameobject";
 import { Gamemode, Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill } from "./gamemode";
-import { openPage } from "../pages/pages";
+import { openPage } from "@/pages/pages";
 import { updateScores } from "@/ui";
 
 /**
@@ -23,7 +23,7 @@ export default class Game {
   /** The canvas manager, used for size/resolution. */
   canvas: Canvas;
   /** The game map. */
-  map: GameMap | undefined;
+  map: GameMap;
   /** List of players. */
   players: Player[] = [];
   /** List of game objects. */
@@ -31,15 +31,15 @@ export default class Game {
   /** Whether the game is paused. */
   paused: boolean = false;
   /** Interval ID for the game loop. */
-  loop: any;
+  loop: number | undefined;
   /** Number of players alive. */
   nPlayersAlive: number = 0;
   /** Game time counter. */
   t: number = 0;
   /** List of interval IDs to clear on stop. */
-  intvls: any[] = [];
+  intvls: number[] = [];
   /** List of timeout IDs to clear on stop. */
-  timeouts: any[] = [];
+  timeouts: number[] = [];
   /** Total kills in the game. */
   nkills: number = 0;
   /** The current game mode. */
@@ -94,7 +94,7 @@ export default class Game {
       this.players[i].spawn();
     }
 
-    this.loop = setInterval(() => {
+    this.loop = window.setInterval(() => {
       this.step();
     }, Settings.GameFrequency);
     playSound(SOUNDS.gamestart);
@@ -138,7 +138,7 @@ export default class Game {
         p.y = pos.y;
         this.addObject(p);
         this.timeouts.push(
-          setTimeout(
+          window.setTimeout(
             () => {
               p.delete();
             },
@@ -180,13 +180,13 @@ export default class Game {
   stop(): void {
     this.paused = true;
     if (this.loop) {
-      clearInterval(this.loop);
+      window.clearInterval(this.loop);
     }
     for (let i = 0; i < this.intvls.length; i++) {
-      clearInterval(this.intvls[i]);
+      window.clearInterval(this.intvls[i]);
     }
     for (let i = 0; i < this.timeouts.length; i++) {
-      clearTimeout(this.timeouts[i]);
+      window.clearTimeout(this.timeouts[i]);
     }
     clearEffects();
     stopMusic();
@@ -217,12 +217,12 @@ export default class Game {
 }
 
 // start a new round
-export function newGame(map: GameMap | null = null) {
+export function newGame(map: GameMap | null = null): Game {
   if (store.game) {
     store.game.stop();
   }
 
-  store.game = new Game(store.canvas, map);
+  store.game = new Game(store.canvas!, map);
 
   if (Settings.GameMode === "DM") {
     store.game.mode = new Deathmatch(store.game);
@@ -245,7 +245,7 @@ export function newGame(map: GameMap | null = null) {
   }
 
   store.game.start();
-  store.canvas.sync();
+  store.canvas?.sync();
   if (Settings.ResetStatsEachGame) {
     for (let i = 0; i < store.game.players.length; i++) {
       store.game.players[i].resetStats();

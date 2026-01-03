@@ -38,7 +38,7 @@ export class Flag extends GameObject {
     super();
     this.game = game;
     this.base = base;
-    this.team = base.team;
+    this.team = base.team!;
     this.color = base.color;
     this.x = base.x;
     this.y = base.y;
@@ -158,7 +158,7 @@ export class Base extends GameObject {
    * @param {number} x - X coordinate.
    * @param {number} y - Y coordinate.
    */
-  constructor(game: Game, player: Player | { color: string; team: number }, x: number, y: number) {
+  constructor(game: Game, player: Player | { color: string; team: number | null }, x: number, y: number) {
     super();
     this.team = player.team;
     this.color = player.color;
@@ -247,7 +247,7 @@ export class Hill extends Base {
       return;
     }
     for (let i = 0; i < this.tile.objs.length; i++) {
-      const tank: Tank = this.tile.objs[i];
+      const tank: GameObject = this.tile.objs[i];
       if (
         tank instanceof Tank &&
         tank.player.team !== this.team &&

@@ -23,7 +23,7 @@ export default class Trajectory extends GameObject {
   map: GameMap;
   drawevery: number = 1;
   timeout: number = 100;
-  targets: Coord[] = [];
+  targets: Tank[] = [];
 
   /**
    * Creates a new Trajectory.
@@ -97,8 +97,9 @@ export default class Trajectory extends GameObject {
       this.points.push(nextpoint);
       // see if any tanks targeted
       for (let i = 0; i < tile.objs.length; i++) {
-        if (tile && tile.objs[i] instanceof Tank) {
-          this.targets.push(tile.objs[i]);
+        const obj = tile.objs[i];
+        if (tile && obj instanceof Tank) {
+          this.targets.push(obj);
         }
       }
     }

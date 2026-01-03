@@ -1,5 +1,5 @@
 // create page div in container, load content into page
-import { databinding } from "../databinding";
+import { databinding } from "@/databinding";
 
 let pageID = 0;
 
@@ -36,7 +36,7 @@ export async function openPage(name: string): Promise<number> {
 }
 
 // close a page by ID or child
-export function closePage(id: number | HTMLElement): void {
+export function closePage(id: number | HTMLElement | GlobalEventHandlers | ParentNode): void {
   if (typeof id === "number") {
     const elem = document.getElementById("page" + id);
     if (elem != null && typeof elem !== "undefined" && elem.parentNode) {
@@ -44,10 +44,10 @@ export function closePage(id: number | HTMLElement): void {
     }
   }
   if (typeof id === "object") {
-    let elem: any = id;
+    let elem: HTMLElement = id as HTMLElement;
     let count = 0;
     while (elem && (!elem.matches || !elem.matches(".page")) && count < 100) {
-      elem = elem.parentNode;
+      elem = elem.parentNode as HTMLElement;
       count++;
     }
     if (elem && elem.parentNode) {

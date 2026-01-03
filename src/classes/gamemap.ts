@@ -2,6 +2,7 @@ import { store } from "@/store";
 import GameObject from "./gameobject";
 import Canvas from "./canvas";
 import Tile from "./tile";
+import { Coord } from "./coord";
 
 /**
  * Represents the game map.
@@ -123,7 +124,7 @@ export default class GameMap {
    * @param {number} tries - Recursion counter.
    * @returns {object} {x, y} coordinates.
    */
-  spawnPoint(tries: number = 0): { x: number; y: number } {
+  spawnPoint(tries: number = 0): Coord {
     const rInt = parseInt((Math.random() * (this.Nx * this.Ny - 1)).toString());
     const tile = this.tiles[rInt];
     // if there is something else already, find another point

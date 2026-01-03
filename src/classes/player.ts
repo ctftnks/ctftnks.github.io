@@ -1,5 +1,5 @@
 import Tank from "./tank";
-import { Key } from "../key";
+import { Key } from "@/key";
 import { generateCloud } from "./smoke";
 import { store, Settings } from "@/store";
 import type Game from "./game";
@@ -79,7 +79,7 @@ export default class Player {
     this.game!.nPlayersAlive += 1;
 
     this.game!.timeouts.push(
-      setTimeout(() => {
+      window.setTimeout(() => {
         generateCloud(this.game!, this.tank.x, this.tank.y, 4, 20, 2);
       }, 10),
     );
@@ -99,7 +99,7 @@ export default class Player {
     this.spree = 0;
     this.stats.deaths += 1;
     this.game!.timeouts.push(
-      setTimeout(() => {
+      window.setTimeout(() => {
         this.spawn();
       }, Settings.RespawnTime * 1000),
     );

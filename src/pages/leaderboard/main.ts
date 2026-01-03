@@ -21,16 +21,16 @@ export function init(container: HTMLElement): void {
     counterElem.innerHTML = leaderTime + "s";
   }
 
-  const leaderIntvl = setInterval(() => {
+  const leaderIntvl = window.setInterval(() => {
     leaderTime -= 1;
     if (counterElem) {
       counterElem.innerHTML = leaderTime + "s";
     }
   }, 1000);
 
-  const leaderTimeout = setTimeout(() => {
-    clearInterval(leaderIntvl);
-    closePage(shadeElem.parentNode);
+  const leaderTimeout = window.setTimeout(() => {
+    window.clearInterval(leaderIntvl);
+    closePage(shadeElem.parentNode!);
     newGame();
   }, Settings.EndScreenTime * 1000);
 
@@ -38,8 +38,8 @@ export function init(container: HTMLElement): void {
     shadeElem.onclick = function () {
       closePage(this);
       newGame();
-      clearInterval(leaderIntvl);
-      clearTimeout(leaderTimeout);
+      window.clearInterval(leaderIntvl);
+      window.clearTimeout(leaderTimeout);
     };
   }
 }
@@ -65,8 +65,7 @@ export function updateLeaderboard(): void {
   content += "<th>Miles</th>";
   content += "</tr>";
 
-  for (const i in players) {
-    const p = players[i];
+  for (const p of store.players) {
     content += "<tr>";
     content += "<td>" + p.name + "</td>";
     content += "<td>" + p.score + "</td>";

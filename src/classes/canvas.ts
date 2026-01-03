@@ -32,7 +32,7 @@ export default class Canvas {
     if (!store.game) {
       return;
     }
-    store.game.map!.draw(this.context);
+    store.game.map.draw(this.context);
     for (let i = 0; i < store.game.objs.length; i++) {
       store.game.objs[i].draw(this.context);
     }
@@ -92,21 +92,21 @@ export default class Canvas {
     const duration = 660;
     let i = 0;
 
-    const intvl = setInterval(() => {
+    const intvl = window.setInterval(() => {
       const randx = amp * (Math.random() - 0.5) * Math.exp((i * 250) / duration);
       const randy = amp * (Math.random() - 0.5) * Math.exp((i * 250) / duration);
       i -= 1;
       this.canvas.style.marginLeft = randx + "px";
       this.canvas.style.marginTop = randy + "px";
-      setTimeout(() => {
+      window.setTimeout(() => {
         this.canvas.style.marginLeft = 0 + "px";
         this.canvas.style.marginTop = 0 + "px";
       }, speed);
     }, 2 * speed);
 
     store.game!.timeouts.push(
-      setTimeout(() => {
-        clearInterval(intvl);
+      window.setTimeout(() => {
+        window.clearInterval(intvl);
       }, duration),
     );
   }

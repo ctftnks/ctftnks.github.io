@@ -6,6 +6,7 @@ import { SOUNDS } from "@/assets";
 import Game from "./game";
 import Tile from "./tile";
 import { updateScores } from "@/ui";
+import { Coord } from "./coord";
 
 /**
  * Base class for game modes.
@@ -34,17 +35,19 @@ export class Gamemode {
 
   /**
    * Handle a new kill event.
-   * @param {Player} player1 - The killer.
-   * @param {Player} player2 - The victim.
+   * @param {Player} _player1 - The killer.
+   * @param {Player} _player2 - The victim.
    */
-  newKill(player1: Player, player2: Player): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  newKill(_player1: Player, _player2: Player): void {}
 
   /**
    * Updates player score (Default implementation)
-   * @param player
-   * @param val
+   * @param _player
+   * @param _val
    */
-  giveScore(player: Player, val: number = 1): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  giveScore(_player: Player, _val: number = 1): void {}
 }
 
 /**
@@ -175,11 +178,11 @@ export class TeamDeathmatch extends Gamemode {
           let length = 0;
           let initfirst = false;
           if (bases.length === 0) {
-            bases.push(game.map.spawnPoint() as any); // Using spawnPoint directly as base placeholder for dist calc
+            bases.push(game.map.spawnPoint()); // Using spawnPoint directly as base placeholder for dist calc
             initfirst = true;
           }
           for (let j = 0; j < bases.length; j++) {
-            const stile = this.game.map!.getTileByPos(bases[j].x, bases[j].y);
+            const stile = this.game.map.getTileByPos(bases[j].x, bases[j].y);
             if (stile === null) {
               continue;
             }
@@ -206,8 +209,8 @@ export class TeamDeathmatch extends Gamemode {
         const b = new Base(game, player, maxPos.x, maxPos.y);
         bases.push(b);
         game.addObject(b);
-        let spawnPoint: Tile = b.tile;
-        while (spawnPoint.id === b.tile.id) {
+        let spawnPoint: Tile = b.tile!;
+        while (spawnPoint.id === b.tile!.id) {
           spawnPoint = spawnPoint.randomWalk(this.game.mode.BaseSpawnDistance + Math.round(Math.random()));
         }
         player.tank.x = spawnPoint.x + spawnPoint.dx / 2;
@@ -306,7 +309,7 @@ export class CaptureTheFlag extends Gamemode {
             initfirst = true;
           }
           for (let j = 0; j < bases.length; j++) {
-            const stile = this.game.map!.getTileByPos(bases[j].x, bases[j].y);
+            const stile = this.game.map.getTileByPos(bases[j].x, bases[j].y);
             if (stile === null) {
               continue;
             }
@@ -335,8 +338,8 @@ export class CaptureTheFlag extends Gamemode {
         b.flag.drop(maxPos.x, maxPos.y);
         bases.push(b);
         game.addObject(b);
-        let spawnPoint: Tile = b.tile;
-        while (spawnPoint.id === b.tile.id) {
+        let spawnPoint: Tile = b.tile!;
+        while (spawnPoint.id === b.tile!.id) {
           spawnPoint = spawnPoint.randomWalk(this.game.mode.BaseSpawnDistance + Math.round(Math.random()));
         }
         player.tank.x = spawnPoint.x + spawnPoint.dx / 2;
@@ -406,7 +409,7 @@ export class KingOfTheHill extends Gamemode {
       }
 
       const team = this.bases[0].team;
-      if (equal && team !== "#555" && this.game.t % scoreevery === 0) {
+      if (equal && team !== null && this.game.t % scoreevery === 0) {
         for (let i = 0; i < this.game.players.length; i++) {
           if (this.game.players[i].team === team) {
             this.giveScore(this.game.players[i], 1);
@@ -445,7 +448,7 @@ export class KingOfTheHill extends Gamemode {
           initfirst = true;
         }
         for (let j = 0; j < bases.length; j++) {
-          const stile = this.game.map!.getTileByPos(bases[j].x, bases[j].y);
+          const stile = this.game.map.getTileByPos(bases[j].x, bases[j].y);
           if (stile === null) {
             continue;
           }

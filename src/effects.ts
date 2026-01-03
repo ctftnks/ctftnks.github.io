@@ -1,4 +1,5 @@
 import { store, Settings } from "@/store";
+import Game from "./classes/game";
 
 export function playSound(file: string): void {
   if (file !== "" && !Settings.muted) {
@@ -49,7 +50,7 @@ export function newEffectCanvas(): HTMLCanvasElement {
   return canv;
 }
 
-export function fogOfWar(game: any): number {
+export function fogOfWar(game: Game): number {
   const canv = document.getElementById("effectFrame") as HTMLCanvasElement;
   canv.height = game.canvas.canvas.clientHeight;
   canv.width = game.canvas.canvas.clientWidth;
@@ -62,7 +63,7 @@ export function fogOfWar(game: any): number {
   ctx.scale(game.canvas.scale, game.canvas.scale);
   let ambientLight = 1;
 
-  const intvl = setInterval(() => {
+  const intvl: number = window.setInterval(() => {
     ctx.clearRect(0, 0, 2 * canv.width, 2 * canv.height);
     if (time < 300) {
       ambientLight -= frequency / 300;
@@ -87,8 +88,8 @@ export function fogOfWar(game: any): number {
   }, frequency);
 
   game.intvls.push(intvl);
-  setTimeout(() => {
-    clearInterval(intvl);
+  window.setTimeout(() => {
+    window.clearInterval(intvl);
     ctx.clearRect(0, 0, 2 * canv.width, 2 * canv.height);
   }, duration);
   return intvl;

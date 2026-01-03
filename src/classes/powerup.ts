@@ -1,5 +1,5 @@
 import GameObject from "./gameobject";
-import { Settings, store } from "@/store";
+import { Settings } from "@/store";
 import { playSound, playMusic, stopMusic, fogOfWar } from "@/effects";
 import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot } from "./weapons/weapons";
 import { IMAGES, SOUNDS } from "@/assets";
@@ -25,9 +25,10 @@ export class PowerUp extends GameObject {
 
   /**
    * Applies the powerup effect to a tank.
-   * @param {Tank} tank - The tank picking up the powerup.
+   * @param {Tank} _tank - The tank picking up the powerup.
    */
-  apply(tank: Tank): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  apply(_tank: Tank): void {}
 
   /**
    * Update step.
@@ -168,9 +169,9 @@ class SpeedBonus extends PowerUp {
 
   apply(tank: Tank): void {
     tank.speed *= 1.1;
-    tank.player.game.timeouts.push(
-      setTimeout(() => {
-        this.speed /= 1.1;
+    tank.player.game!.timeouts.push(
+      window.setTimeout(() => {
+        tank.speed /= 1.1;
       }, 8000),
     );
   }
@@ -199,9 +200,9 @@ class InvincibleBonus extends PowerUp {
       playMusic(SOUNDS.invincible);
     }
     tank.speed *= 1.14;
-    tank.timers.invincible = tank.player.game.t + 10000;
-    tank.player.game.timeouts.push(
-      setTimeout(() => {
+    tank.timers.invincible = tank.player.game!.t + 10000;
+    tank.player.game!.timeouts.push(
+      window.setTimeout(() => {
         tank.speed /= 1.14;
         if (Settings.bgmusic) {
           // playMusic(SOUNDS.bgmusic); // Assuming we might want to add bgmusic later.
@@ -232,8 +233,8 @@ class TerminatorBonus extends PowerUp {
     this.applied = true;
     tank.rapidfire = true;
     playSound(SOUNDS.terminator);
-    tank.player.game.timeouts.push(
-      setTimeout(() => {
+    tank.player.game!.timeouts.push(
+      window.setTimeout(() => {
         tank.rapidfire = false;
       }, 120000),
     );
@@ -252,13 +253,14 @@ class MultiBonus extends PowerUp {
     this.image.src = IMAGES.multi;
   }
 
-  apply(tank: Tank): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  apply(_tank: Tank): void {
     if (!this.used) {
       this.used = true;
       Settings.PowerUpRate /= 2.5;
       Settings.PowerUpRate = Math.round(1000 * Settings.PowerUpRate) / 1000;
       Settings.MaxPowerUps *= 2.5;
-      setTimeout(() => {
+      window.setTimeout(() => {
         Settings.PowerUpRate *= 2.5;
         Settings.MaxPowerUps /= 2.5;
       }, 8000);
@@ -278,7 +280,8 @@ export class FogBonus extends PowerUp {
   }
   apply(tank: Tank): void {
     if (!this.used) {
-      tank.player.game.intvls.push(fogOfWar(store.game));
+      const game = tank.player.game!;
+      game.intvls.push(fogOfWar(game));
     }
   }
 }
