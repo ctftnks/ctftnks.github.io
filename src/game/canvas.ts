@@ -4,18 +4,18 @@ import { store } from "@/game/store";
  * Manages the game canvas and rendering loop.
  */
 export default class Canvas {
-  canvas: HTMLCanvasElement;
-  context: CanvasRenderingContext2D;
-  height: number;
-  width: number;
-  loop: number | undefined;
-  scale: number = 1;
+  public canvas: HTMLCanvasElement;
+  public context: CanvasRenderingContext2D;
+  public height: number;
+  public width: number;
+  private loop: number | undefined;
+  public scale: number = 1;
 
   /**
    * Creates a new Canvas manager.
    * @param {string} id - The ID of the canvas element.
    */
-  constructor(id: string) {
+  public constructor(id: string) {
     this.canvas = document.getElementById(id) as HTMLCanvasElement;
     this.context = this.canvas.getContext("2d")!;
     this.canvas.height = this.canvas.clientHeight;
@@ -27,7 +27,7 @@ export default class Canvas {
   /**
    * Clear canvas and draw all objects.
    */
-  draw(): void {
+  public draw(): void {
     this.context.clearRect(0, 0, this.canvas.width / this.scale, this.canvas.height / this.scale);
     if (!store.game) {
       return;
@@ -41,7 +41,7 @@ export default class Canvas {
   /**
    * Keep canvas in sync with game: redraw every few milliseconds.
    */
-  sync(): void {
+  public sync(): void {
     if (typeof this.loop === "undefined") {
       const drawLoop = (): void => {
         this.draw();
@@ -54,7 +54,7 @@ export default class Canvas {
   /**
    * Stop syncing of canvas.
    */
-  stopSync(): void {
+  public stopSync(): void {
     if (typeof this.loop !== "undefined") {
       cancelAnimationFrame(this.loop);
     }
@@ -64,7 +64,7 @@ export default class Canvas {
    * Zoom into the canvas.
    * @param {number} factor - The scale factor.
    */
-  rescale(factor: number): void {
+  public rescale(factor: number): void {
     this.scale = factor;
     this.context.setTransform(1, 0, 0, 1, 0, 0);
     this.context.scale(factor, factor);
@@ -73,7 +73,7 @@ export default class Canvas {
   /**
    * Update sizes of canvas and map for window.onresize.
    */
-  resize(): void {
+  public resize(): void {
     this.canvas.height = this.canvas.clientHeight;
     this.height = this.canvas.clientHeight;
     this.canvas.width = this.canvas.clientWidth;
@@ -86,7 +86,7 @@ export default class Canvas {
   /**
    * Shakes the canvas visually.
    */
-  shake(): void {
+  public shake(): void {
     const amp = 14;
     const speed = 25;
     const duration = 660;

@@ -9,18 +9,18 @@ import { TEAMS } from "./team";
  * Data Structure for the global state of the website
  */
 class GameStore {
-  game: Game | undefined = undefined;
-  canvas: Canvas | undefined;
-  players: Player[] = [];
-  nplayers: number = 0;
-  editingKeymap: boolean = false;
-  GameID: number = 0;
+  public game: Game | undefined = undefined;
+  public canvas: Canvas | undefined;
+  public players: Player[] = [];
+  public nplayers: number = 0;
+  public editingKeymap: boolean = false;
+  public GameID: number = 0;
 
   /**
    * Default keymaps using modern KeyboardEvent.code strings.
    * order: up, left, down, right, fire
    */
-  keymaps: string[][] = [
+  public keymaps: string[][] = [
     ["ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight", "Space"],
     ["KeyW", "KeyA", "KeyS", "KeyD", "KeyQ"],
     ["Numpad8", "Numpad4", "Numpad5", "Numpad6", "Numpad7"],
@@ -31,11 +31,11 @@ class GameStore {
     ["Digit8", "KeyU", "KeyI", "Digit9", "Digit7"],
   ];
 
-  constructor() {
+  public constructor() {
     this.loadSettings();
   }
 
-  createPlayer(isBot: boolean = false): Player {
+  public createPlayer(isBot: boolean = false): Player {
     const id = this.nplayers;
     this.nplayers++;
     const name = (isBot ? "Bot " : "Player ") + (id + 1);
@@ -48,11 +48,11 @@ class GameStore {
     return new Player(id, name, team, keys);
   }
 
-  saveSettings(): void {
+  public saveSettings(): void {
     localStorage.setItem("ctftanks_settings", JSON.stringify(Settings));
   }
 
-  loadSettings(): void {
+  private loadSettings(): void {
     const saved = localStorage.getItem("ctftanks_settings");
     if (saved) {
       try {

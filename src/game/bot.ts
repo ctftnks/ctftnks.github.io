@@ -24,9 +24,9 @@ declare interface AutopilotOption {
  */
 export default class Bot extends Player {
   // keys are inherited from Player
-  goto: Coord | null = null;
-  fleeing: { from: Tile[] | null; condition: (() => boolean) | null } = { from: null, condition: null };
-  lastChecked: number = 0;
+  public goto: Coord | null = null;
+  public fleeing: { from: Tile[] | null; condition: (() => boolean) | null } = { from: null, condition: null };
+  public lastChecked: number = 0;
 
   /**
    * Creates a new Bot.
@@ -34,21 +34,21 @@ export default class Bot extends Player {
    * @param {string} name - The bot name.
    * @param {Team} team - The team of the bot.
    */
-  constructor(id: number, name: string, team: Team) {
+  public constructor(id: number, name: string, team: Team) {
     super(id, name, team, []);
   }
 
   /**
    * Is the player a bot or a user?
    */
-  isBot(): boolean {
+  public isBot(): boolean {
     return true;
   }
 
   /**
    * Updates the bot's state.
    */
-  step(): void {
+  public step(): void {
     this.autopilot();
     this.performMovements();
   }
@@ -56,7 +56,7 @@ export default class Bot extends Player {
   /**
    * Decides the next action for the bot.
    */
-  autopilot(): void {
+  public autopilot(): void {
     this.lastChecked += Settings.GameFrequency;
     if (this.lastChecked < 72000 / this.tank.speed) {
       return;
@@ -193,7 +193,7 @@ export default class Bot extends Player {
    * Sets a goto target from a path.
    * @param {Coord[]} path - The path to follow.
    */
-  follow(path: Coord[]): void {
+  public follow(path: Coord[]): void {
     if (path.length < 2) {
       this.goto = path[0];
     } else {
@@ -204,7 +204,7 @@ export default class Bot extends Player {
   /**
    * Performs movements towards the goto target.
    */
-  performMovements(): void {
+  public performMovements(): void {
     if (this.goto === null) {
       return;
     }
@@ -245,7 +245,7 @@ export default class Bot extends Player {
    * Handles shooting logic.
    * @param {Tank} target - The target to shoot at.
    */
-  shoot(target: Tank): void {
+  public shoot(target: Tank): void {
     this.goto = null;
     const tank = this.tank;
     const distx = target.x - tank.x;
@@ -269,7 +269,7 @@ export default class Bot extends Player {
    * @param {Array|number} path - Path to the enemy.
    * @returns {object} Result with shouldShoot, target, and weight.
    */
-  aimbot(enemy: Tank, path: Coord[] | null = null): { shouldShoot: boolean; target: Tank; weight: number } {
+  public aimbot(enemy: Tank, path: Coord[] | null = null): { shouldShoot: boolean; target: Tank; weight: number } {
     const result = { shouldShoot: false, target: enemy, weight: 500 };
     const weapon = this.tank.weapon;
 
@@ -325,7 +325,7 @@ export default class Bot extends Player {
    * Calculates a path to flee from danger.
    * @returns {Array|null} The flee path or null if no path found.
    */
-  getFleePath(): Coord[] | null {
+  public getFleePath(): Coord[] | null {
     if (this.fleeing.from === null || this.fleeing.condition === null || !this.fleeing.condition()) {
       return null;
     }
@@ -362,7 +362,7 @@ export default class Bot extends Player {
   /**
    * Initiates fleeing behavior.
    */
-  flee(): void {
+  public flee(): void {
     if (this.tank.weapon.bot.fleeingDuration <= 0) {
       return;
     }

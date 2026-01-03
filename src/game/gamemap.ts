@@ -13,17 +13,17 @@ import { Coord } from "@/entities/coord";
  */
 export default class GameMap {
   /** Number of tiles in X. */
-  Nx: number;
+  public Nx: number;
   /** Number of tiles in Y. */
-  Ny: number;
+  public Ny: number;
   /** Tile width. */
-  dx: number = 130;
+  public dx: number = 130;
   /** Tile height. */
-  dy: number;
+  public dy: number;
   /** List of tiles. */
-  tiles: Tile[] = [];
+  public tiles: Tile[] = [];
   /** The canvas. */
-  canvas: Canvas;
+  public canvas: Canvas;
 
   /**
    * Creates a new GameMap.
@@ -31,7 +31,7 @@ export default class GameMap {
    * @param {number} Nx - Number of tiles in X direction.
    * @param {number} Ny - Number of tiles in Y direction.
    */
-  constructor(canvas: Canvas, Nx: number | null = null, Ny: number | null = null) {
+  public constructor(canvas: Canvas, Nx: number | null = null, Ny: number | null = null) {
     this.canvas = canvas;
     if (Nx === null) {
       this.Nx = parseInt((Settings.MapNxMin + (Settings.MapNxMax - Settings.MapNxMin) * Math.random()).toString());
@@ -65,7 +65,7 @@ export default class GameMap {
    * @param {number} j - Y index.
    * @returns {Tile|null} The tile or null if out of bounds.
    */
-  getTileByIndex(i: number, j: number): Tile | null {
+  public getTileByIndex(i: number, j: number): Tile | null {
     if (i < this.Nx && j < this.Ny && i >= 0 && j >= 0) {
       return this.tiles[i * this.Ny + j];
     }
@@ -75,7 +75,7 @@ export default class GameMap {
   /**
    * Links neighboring tiles.
    */
-  linkNeighbors(): void {
+  private linkNeighbors(): void {
     for (let i = 0; i < this.Nx; i++) {
       for (let j = 0; j < this.Ny; j++) {
         this.tiles[i * this.Ny + j].neighbors = [
@@ -94,7 +94,7 @@ export default class GameMap {
    * @param {number} y - Y coordinate.
    * @returns {Tile|null} The tile or null.
    */
-  getTileByPos(x: number, y: number): Tile | null {
+  public getTileByPos(x: number, y: number): Tile | null {
     const i = parseInt((x / this.dx).toString());
     const j = parseInt((y / this.dy).toString());
     return this.getTileByIndex(i, j);
@@ -103,7 +103,7 @@ export default class GameMap {
   /**
    * Spatial sorting: clear tile object lists.
    */
-  clearObjectLists(): void {
+  public clearObjectLists(): void {
     for (let i = 0; i < this.tiles.length; i++) {
       this.tiles[i].objs = [];
     }
@@ -113,7 +113,7 @@ export default class GameMap {
    * Spatial sorting: add object to corresponding tile list.
    * @param {GameObject} obj - The object to add.
    */
-  addObject(obj: GameObject): void {
+  public addObject(obj: GameObject): void {
     const tile = this.getTileByPos(obj.x, obj.y);
     if (tile === null) {
       obj.delete();
@@ -127,7 +127,7 @@ export default class GameMap {
    * @param {number} tries - Recursion counter.
    * @returns {object} {x, y} coordinates.
    */
-  spawnPoint(tries: number = 0): Coord {
+  public spawnPoint(tries: number = 0): Coord {
     const rInt = parseInt((Math.random() * (this.Nx * this.Ny - 1)).toString());
     const tile = this.tiles[rInt];
     // if there is something else already, find another point
@@ -141,7 +141,7 @@ export default class GameMap {
    * Draws the map.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(context: CanvasRenderingContext2D): void {
+  public draw(context: CanvasRenderingContext2D): void {
     context.fillStyle = "#edede8";
     context.fillRect(0, 0, this.Nx * this.dx, this.Ny * this.dy);
     for (let i = 0; i < this.tiles.length; i++) {
@@ -152,7 +152,7 @@ export default class GameMap {
   /**
    * Update sizes of map and tiles, for window.onresize.
    */
-  resize(): void {
+  public resize(): void {
     if (this.canvas instanceof Canvas) {
       this.canvas.rescale(Math.min(this.canvas.width / (this.dx * this.Nx), this.canvas.height / (this.dy * this.Ny)));
     }

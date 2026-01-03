@@ -5,13 +5,13 @@ import { Coord } from "./coord";
  * Base class for Tanks, Bullets, PowerUps, etc.
  */
 export default abstract class GameObject implements Coord {
-  image: HTMLImageElement;
-  x: number = 0;
-  y: number = 0;
-  width: number = 0;
+  public image: HTMLImageElement;
+  public x: number = 0;
+  public y: number = 0;
+  public width: number = 0;
   // every object can be deleted
   // the loop will then delete it from the game object list
-  deleted: boolean = false;
+  public deleted: boolean = false;
 
   /**
    * Creates a new GameObject.
@@ -23,7 +23,7 @@ export default abstract class GameObject implements Coord {
   /**
    * Marks the object as deleted.
    */
-  delete(): void {
+  public delete(): void {
     this.deleted = true;
   }
 
@@ -31,7 +31,7 @@ export default abstract class GameObject implements Coord {
    * Default draw function.
    * @param {CanvasRenderingContext2D} context - The 2D rendering context.
    */
-  draw(context: CanvasRenderingContext2D): void {
+  public draw(context: CanvasRenderingContext2D): void {
     if (this.image) {
       context.save();
       context.translate(this.x, this.y);
@@ -43,5 +43,5 @@ export default abstract class GameObject implements Coord {
   /**
    * Update method called every frame.
    */
-  step(): void {}
+  public step(): void {}
 }

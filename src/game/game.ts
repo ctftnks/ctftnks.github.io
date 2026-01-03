@@ -22,40 +22,40 @@ import { openPage } from "@/ui/pages";
  */
 export default class Game {
   /** The canvas manager, used for size/resolution. */
-  canvas: Canvas;
+  public canvas: Canvas;
   /** The game map. */
-  map: GameMap;
+  public map: GameMap;
   /** List of players. */
-  players: Player[] = [];
+  public players: Player[] = [];
   /** List of game objects. */
-  objs: GameObject[] = [];
+  public objs: GameObject[] = [];
   /** Whether the game is paused. */
-  paused: boolean = false;
+  public paused: boolean = false;
   /** Interval ID for the game loop. */
-  loop: number | undefined;
+  public loop: number | undefined;
   /** Number of players alive. */
-  nPlayersAlive: number = 0;
+  public nPlayersAlive: number = 0;
   /** Game time counter. */
-  t: number = 0;
+  public t: number = 0;
   /** Timestamp of the last frame. */
-  lastTime: number = 0;
+  public lastTime: number = 0;
   /** Accumulated time for fixed-step updates. */
-  accumulator: number = 0;
+  public accumulator: number = 0;
   /** List of interval IDs to clear on stop. */
-  intvls: number[] = [];
+  public intvls: number[] = [];
   /** List of timeout IDs to clear on stop. */
-  timeouts: number[] = [];
+  public timeouts: number[] = [];
   /** Total kills in the game. */
-  nkills: number = 0;
+  public nkills: number = 0;
   /** The current game mode. */
-  mode: Gamemode;
+  public mode: Gamemode;
 
   /**
    * Creates a new Game instance.
    * @param {Canvas} canvas - The canvas manager.
    * @param {GameMap|null} map - The map object or null to generate a new one.
    */
-  constructor(canvas: Canvas, map: GameMap | null = null) {
+  public constructor(canvas: Canvas, map: GameMap | null = null) {
     this.canvas = canvas;
     // create new random map
     if (!map) {
@@ -76,7 +76,7 @@ export default class Game {
    * Adds a player to the game.
    * @param {Player} player - The player to add.
    */
-  addPlayer(player: Player): void {
+  public addPlayer(player: Player): void {
     this.players.push(player);
     player.game = this;
   }
@@ -85,14 +85,14 @@ export default class Game {
    * Adds an object to the game.
    * @param {GameObject} object - The object to add.
    */
-  addObject(object: GameObject): void {
+  public addObject(object: GameObject): void {
     this.objs.push(object);
   }
 
   /**
    * Starts the game loop.
    */
-  start(): void {
+  public start(): void {
     this.mode.init();
     for (let i = 0; i < this.players.length; i++) {
       this.players[i].spawn();
@@ -114,7 +114,7 @@ export default class Game {
    * Uses an accumulator to ensure fixed-timestep updates.
    * @param {number} timestamp - The current time.
    */
-  gameLoop(timestamp: number): void {
+  public gameLoop(timestamp: number): void {
     if (!this.loop) {
       return;
     }
@@ -140,7 +140,7 @@ export default class Game {
   /**
    * A single step of the game loop.
    */
-  step(): void {
+  public step(): void {
     this.t += Settings.GameFrequency;
     if (!this.map) {
       return;
@@ -195,7 +195,7 @@ export default class Game {
   /**
    * Pauses or unpauses the game.
    */
-  pause(): void {
+  public pause(): void {
     this.paused = !this.paused;
     stopMusic(); // prevent 'invincible' sound from playing all over
   }
@@ -203,7 +203,7 @@ export default class Game {
   /**
    * Stops the game loop and clears intervals/timeouts.
    */
-  stop(): void {
+  public stop(): void {
     this.paused = true;
     if (this.loop) {
       cancelAnimationFrame(this.loop);
@@ -225,7 +225,7 @@ export default class Game {
   /**
    * Ends the game and shows the leaderboard.
    */
-  end(): void {
+  public end(): void {
     this.paused = true;
     openPage("leaderboard");
     this.stop();
@@ -234,7 +234,7 @@ export default class Game {
   /**
    * Resets the game time and player timers.
    */
-  resetTime(): void {
+  public resetTime(): void {
     this.t = 0;
     for (let i = 0; i < this.players.length; i++) {
       this.players[i].tank.timers.invincible = 0;

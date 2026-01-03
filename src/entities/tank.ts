@@ -22,35 +22,35 @@ import type { Flag } from "./ctf";
  */
 export default class Tank extends GameObject {
   /** The player. */
-  player: Player;
+  public player: Player;
   /** Tank color. */
-  color: string;
+  public color: string;
   /** The game map. */
-  map: GameMap | undefined;
+  public map: GameMap | undefined;
   /** Rotation angle. */
-  angle: number;
+  public angle: number;
   /** Tank width. */
-  width: number;
+  public width: number;
   /** Tank height. */
-  height: number;
+  public height: number;
   /** Current weapon. */
-  weapon: Weapon;
+  public weapon: Weapon;
   /** Movement speed. */
-  speed: number;
+  public speed: number;
   /** Timers for effects. */
-  timers: { spawnshield: number; invincible: number } = { spawnshield: 0, invincible: 0 };
+  public timers: { spawnshield: number; invincible: number } = { spawnshield: 0, invincible: 0 };
   /** The flag currently carried, or null if none. */
-  carriedFlag: Flag | null = null;
+  public carriedFlag: Flag | null = null;
   /** Inventory of weapons (unused?). */
-  weapons: Weapon[] = [];
+  public weapons: Weapon[] = [];
   /** Whether rapid fire is active. */
-  rapidfire: boolean = false;
+  public rapidfire: boolean = false;
 
   /**
    * Creates a new Tank.
    * @param {Player} player - The player owning this tank.
    */
-  constructor(player: Player) {
+  public constructor(player: Player) {
     super();
     this.player = player;
     this.color = this.player.team.color;
@@ -65,7 +65,7 @@ export default class Tank extends GameObject {
    * Draws the tank (rotated) on map.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(context: CanvasRenderingContext2D): void {
+  public draw(context: CanvasRenderingContext2D): void {
     context.save();
     context.beginPath();
     context.translate(this.x, this.y);
@@ -119,7 +119,7 @@ export default class Tank extends GameObject {
    * Let player class check for key presses and move tank.
    * Check for collisions and handle them.
    */
-  step(): void {
+  public step(): void {
     this.player.step();
     if (this.weapon.isDeleted) {
       this.defaultWeapon();
@@ -132,7 +132,7 @@ export default class Tank extends GameObject {
    * Move the tank forward/backwards.
    * @param {number} direction - 1 for forward, -1 for backward.
    */
-  move(direction: number): void {
+  public move(direction: number): void {
     this.player.stats.miles += 1;
     const oldx = this.x;
     const oldy = this.y;
@@ -157,7 +157,7 @@ export default class Tank extends GameObject {
    * Rotate the tank.
    * @param {number} direction - 1 for right, -1 for left.
    */
-  turn(direction: number): void {
+  public turn(direction: number): void {
     const oldangle = this.angle;
     this.angle += (((direction * Settings.TankTurnSpeed * Settings.GameFrequency) / 1000) * Settings.TankSpeed) / 180;
 
@@ -183,7 +183,7 @@ export default class Tank extends GameObject {
   /**
    * Use the weapon.
    */
-  shoot(): void {
+  public shoot(): void {
     if (this.spawnshield()) {
       return;
     }
@@ -196,7 +196,7 @@ export default class Tank extends GameObject {
   /**
    * Return to the default weapon.
    */
-  defaultWeapon(): void {
+  public defaultWeapon(): void {
     this.weapon = new Gun(this);
   }
 
@@ -205,7 +205,7 @@ export default class Tank extends GameObject {
    * Needed for collision detection and weapon firing.
    * @returns {Array<object>} List of corners {x, y}.
    */
-  corners(): { x: number; y: number }[] {
+  public corners(): { x: number; y: number }[] {
     return [
       {
         x: this.x - (this.width / 2) * Math.cos(-this.angle) - (this.height / 2) * Math.sin(-this.angle),
@@ -232,7 +232,7 @@ export default class Tank extends GameObject {
    * @param {number} y - Y coordinate.
    * @returns {boolean} True if intersecting.
    */
-  intersects(x: number, y: number): boolean {
+  private intersects(x: number, y: number): boolean {
     // checks if (0 < AM*AB < AB*AB) ^ (0 < AM*AD < AD*AD)
     // see: https://math.stackexchange.com/questions/190111/how-to-check-if-a-point-is-inside-a-rectangle
     const corners = this.corners();
@@ -251,7 +251,7 @@ export default class Tank extends GameObject {
    * Checks if there is a wall between the center of the tank and each corner.
    * @returns {number} Index of colliding corner or -1.
    */
-  checkWallCollision(): number {
+  private checkWallCollision(): number {
     if (this.player.isBot()) {
       return -1;
     }
@@ -294,7 +294,7 @@ export default class Tank extends GameObject {
    * Uses spatial sorting of the map class.
    * Only checks thos bullets that lie within the tiles of the tanks corners.
    */
-  checkBulletCollision(): void {
+  private checkBulletCollision(): void {
     if (this.spawnshield()) {
       return;
     }
@@ -366,7 +366,7 @@ export default class Tank extends GameObject {
    * Is the spawnshield active?
    * @returns {boolean} True if spawnshield active.
    */
-  spawnshield(): boolean {
+  public spawnshield(): boolean {
     const t = this.player.game!.t;
     return this.timers.spawnshield > t;
   }
@@ -375,7 +375,7 @@ export default class Tank extends GameObject {
    * Properties: is invincible?
    * @returns {boolean} True if invincible.
    */
-  invincible(): boolean {
+  public invincible(): boolean {
     const t = this.player.game!.t;
     return this.timers.spawnshield > t || this.timers.invincible > t;
   }
@@ -383,7 +383,7 @@ export default class Tank extends GameObject {
   /**
    * Deletes the tank.
    */
-  delete(): void {
+  public delete(): void {
     // CTF: if tank has flag, drop it
     if (this.carriedFlag !== null) {
       this.carriedFlag.drop(this.x, this.y);

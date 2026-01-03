@@ -11,14 +11,14 @@ import type Tank from "./tank";
  */
 export abstract class PowerUp extends GameObject {
   /** Collision radius. */
-  radius: number = 40;
+  public radius: number = 40;
   /** Whether bots are attracted to it. */
-  attractsBots: boolean = false;
+  public attractsBots: boolean = false;
 
   /**
    * Creates a new PowerUp.
    */
-  constructor() {
+  public constructor() {
     super();
     this.width = 30;
   }
@@ -27,18 +27,18 @@ export abstract class PowerUp extends GameObject {
    * Applies the powerup effect to a tank.
    * @param {Tank} tank - The tank picking up the powerup.
    */
-  abstract apply(tank: Tank): void;
+  public abstract apply(tank: Tank): void;
 
   /**
    * Update step.
    */
-  step(): void {}
+  public step(): void {}
 
   /**
    * Draws the powerup.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(context: CanvasRenderingContext2D): void {
+  public draw(context: CanvasRenderingContext2D): void {
     context.save();
     context.translate(this.x, this.y);
     context.drawImage(this.image, -this.width / 2, -this.width / 2, this.width, this.width);
@@ -51,12 +51,12 @@ export abstract class PowerUp extends GameObject {
  * @augments PowerUp
  */
 class LaserBonus extends PowerUp {
-  constructor() {
+  public constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.laser;
   }
-  apply(tank: Tank): void {
+  public apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new Laser(tank);
   }
@@ -67,12 +67,12 @@ class LaserBonus extends PowerUp {
  * @augments PowerUp
  */
 class MGBonus extends PowerUp {
-  constructor() {
+  public constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.mg;
   }
-  apply(tank: Tank): void {
+  public apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new MG(tank);
   }
@@ -83,11 +83,11 @@ class MGBonus extends PowerUp {
  * @augments PowerUp
  */
 class GrenadeBonus extends PowerUp {
-  constructor() {
+  public constructor() {
     super();
     this.image.src = IMAGES.grenade;
   }
-  apply(tank: Tank): void {
+  public apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new Grenade(tank);
   }
@@ -98,11 +98,11 @@ class GrenadeBonus extends PowerUp {
  * @augments PowerUp
  */
 class MineBonus extends PowerUp {
-  constructor() {
+  public constructor() {
     super();
     this.image.src = IMAGES.mine;
   }
-  apply(tank: Tank): void {
+  public apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new Mine(tank);
   }
@@ -113,12 +113,12 @@ class MineBonus extends PowerUp {
  * @augments PowerUp
  */
 class GuidedBonus extends PowerUp {
-  constructor() {
+  public constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.guided;
   }
-  apply(tank: Tank): void {
+  public apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new Guided(tank);
   }
@@ -129,11 +129,11 @@ class GuidedBonus extends PowerUp {
  * @augments PowerUp
  */
 class WreckingBallBonus extends PowerUp {
-  constructor() {
+  public constructor() {
     super();
     this.image.src = IMAGES.wreckingBall;
   }
-  apply(tank: Tank): void {
+  public apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new WreckingBall(tank);
   }
@@ -144,12 +144,12 @@ class WreckingBallBonus extends PowerUp {
  * @augments PowerUp
  */
 class SlingshotBonus extends PowerUp {
-  constructor() {
+  public constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.slingshot;
   }
-  apply(tank: Tank): void {
+  public apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new Slingshot(tank);
   }
@@ -160,13 +160,13 @@ class SlingshotBonus extends PowerUp {
  * @augments PowerUp
  */
 class SpeedBonus extends PowerUp {
-  constructor() {
+  public constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.speed;
   }
 
-  apply(tank: Tank): void {
+  public apply(tank: Tank): void {
     tank.speed *= 1.1;
     tank.player.game!.timeouts.push(
       window.setTimeout(() => {
@@ -181,15 +181,15 @@ class SpeedBonus extends PowerUp {
  * @augments PowerUp
  */
 class InvincibleBonus extends PowerUp {
-  applied: boolean = false;
+  private applied: boolean = false;
 
-  constructor() {
+  public constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.invincible;
   }
 
-  apply(tank: Tank): void {
+  public apply(tank: Tank): void {
     if (this.applied) {
       return;
     }
@@ -218,14 +218,14 @@ class InvincibleBonus extends PowerUp {
  * @augments PowerUp
  */
 class TerminatorBonus extends PowerUp {
-  applied: boolean = false;
+  private applied: boolean = false;
 
-  constructor() {
+  public constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.terminator;
   }
-  apply(tank: Tank): void {
+  public apply(tank: Tank): void {
     if (this.applied) {
       return;
     }
@@ -245,14 +245,14 @@ class TerminatorBonus extends PowerUp {
  * @augments PowerUp
  */
 class MultiBonus extends PowerUp {
-  used: boolean = false;
+  private used: boolean = false;
 
-  constructor() {
+  public constructor() {
     super();
     this.image.src = IMAGES.multi;
   }
 
-  apply(): void {
+  public apply(): void {
     if (!this.used) {
       this.used = true;
       Settings.PowerUpRate /= 2.5;
@@ -271,12 +271,12 @@ class MultiBonus extends PowerUp {
  * @augments PowerUp
  */
 export class FogBonus extends PowerUp {
-  used: boolean = false;
-  constructor() {
+  private used: boolean = false;
+  public constructor() {
     super();
     this.image.src = IMAGES.fog;
   }
-  apply(tank: Tank): void {
+  public apply(tank: Tank): void {
     if (!this.used) {
       const game = tank.player.game!;
       game.intvls.push(fogOfWar(game));

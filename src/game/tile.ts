@@ -8,27 +8,27 @@ import type GameMap from "./gamemap";
  */
 export default class Tile implements Coord {
   /** X index. */
-  i: number;
+  public i: number;
   /** Y index. */
-  j: number;
+  public j: number;
   /** The map. */
-  map: GameMap;
+  public map: GameMap;
   /** Unique tile ID. */
-  id: number;
+  public id: number;
   /** X coordinate in pixels. */
-  x: number;
+  public x: number;
   /** Y coordinate in pixels. */
-  y: number;
+  public y: number;
   /** Width. */
-  dx: number;
+  public dx: number;
   /** Height. */
-  dy: number;
+  public dy: number;
   /** Objects currently in this tile. */
-  objs: GameObject[] = [];
+  public objs: GameObject[] = [];
   /** List of Walls [top, left, bottom, right]. */
-  walls: boolean[] = [false, false, false, false];
+  public walls: boolean[] = [false, false, false, false];
   /** List of neighboring tiles [top, left, bottom, right]. */
-  neighbors: (Tile | null)[] = [null, null, null, null];
+  public neighbors: (Tile | null)[] = [null, null, null, null];
 
   /**
    * Creates a new Tile.
@@ -36,7 +36,7 @@ export default class Tile implements Coord {
    * @param {number} j - Y index.
    * @param {GameMap} map - The map instance.
    */
-  constructor(i: number, j: number, map: GameMap) {
+  public constructor(i: number, j: number, map: GameMap) {
     this.i = i;
     this.j = j;
     this.map = map;
@@ -51,7 +51,7 @@ export default class Tile implements Coord {
    * Return the coordinates of the corners of the tile and whether they're part of some wall.
    * @returns {Array<object>} List of corners with {x, y, w}.
    */
-  corners(): { x: number; y: number; w: boolean }[] {
+  public corners(): { x: number; y: number; w: boolean }[] {
     return [
       { x: this.x, y: this.y, w: this.walls[0] || this.walls[1] }, // top left
       { x: this.x, y: this.y + this.dy, w: this.walls[1] || this.walls[2] }, // bottom left
@@ -64,7 +64,7 @@ export default class Tile implements Coord {
    * Draw the tile walls.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  draw(context: CanvasRenderingContext2D): void {
+  public draw(context: CanvasRenderingContext2D): void {
     context.fillStyle = "#555";
     if (this.walls[0]) {
       context.fillRect(this.x - 2, this.y - 2, this.dx + 4, 4);
@@ -86,7 +86,7 @@ export default class Tile implements Coord {
    * @param {boolean} remove - Whether to remove the wall.
    * @param {boolean} neighbor - Whether to update the neighbor as well.
    */
-  addWall(direction: number, remove: boolean = false, neighbor: boolean = true): void {
+  public addWall(direction: number, remove: boolean = false, neighbor: boolean = true): void {
     direction = direction % 4;
     this.walls[direction] = !remove;
     if (neighbor && typeof this.neighbors[direction] !== "undefined" && this.neighbors[direction] !== null) {
@@ -100,7 +100,7 @@ export default class Tile implements Coord {
    * @param {number} y - Y coordinate.
    * @returns {Array<boolean>} List of walls encountered.
    */
-  getWalls(x: number, y: number): boolean[] {
+  public getWalls(x: number, y: number): boolean[] {
     const distx = this.x - x;
     const disty = this.y - y;
     const walls = [false, false, false, false];
@@ -128,7 +128,7 @@ export default class Tile implements Coord {
    * @param {number|null} maxPathLength - Max allowed path length.
    * @returns {Array<Tile>|null} The path or null if not found.
    */
-  pathTo(
+  public pathTo(
     condition: (tile: Tile) => boolean,
     path: Tile[] = [],
     minPathLength: number | null = null,
@@ -180,7 +180,7 @@ export default class Tile implements Coord {
    * @param {number} distance - Steps to walk.
    * @returns {Tile} The final tile.
    */
-  randomWalk(distance: number): Tile {
+  public randomWalk(distance: number): Tile {
     if (distance === 0) {
       return this;
     }
@@ -200,7 +200,7 @@ export default class Tile implements Coord {
    * @param {number|null} maxPathLength - Max path length.
    * @returns {Array|null} Path to object or null.
    */
-  xypathToObj(
+  public xypathToObj(
     condition: (obj: GameObject) => boolean,
     maxPathLength: number | null = null,
   ): Array<{ x: number; y: number } | GameObject> | null {
