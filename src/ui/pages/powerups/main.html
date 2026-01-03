@@ -1,5 +1,5 @@
-<div class="popupshade" onclick="closePage(this)"></div>
-<div class="popup">
+<div class="popupshade" id="powerupsShade"></div>
+<div class="popup" id="powerupsMenu">
   <h2>Powerups:</h2>
 
   <div id="powerupsOptions"></div>
@@ -8,49 +8,17 @@
 
   <div class="option vspace">
     <span>Rate</span>
-    <button
-      class="left"
-      onclick="
-        Settings.PowerUpRate -= 1;
-        databinding();
-      "
-    >
-      -
-    </button>
+    <button class="left" data-action="updateSetting" data-key="PowerUpRate" data-delta="-1">-</button>
     <input class="left right" data-bind="PowerUpRate" data-suffix="s" data-min="1" data-max="60" size="1" readonly />
-    <button
-      class="right"
-      onclick="
-        Settings.PowerUpRate += 1;
-        databinding();
-      "
-    >
-      +
-    </button>
+    <button class="right" data-action="updateSetting" data-key="PowerUpRate" data-delta="1">+</button>
   </div>
 
   <div class="option vspace">
     <span>Amount</span>
-    <button
-      class="left"
-      onclick="
-        Settings.MaxPowerUps -= 2;
-        databinding();
-      "
-    >
-      -
-    </button>
+    <button class="left" data-action="updateSetting" data-key="MaxPowerUps" data-delta="-2">-</button>
     <input class="left right" data-bind="MaxPowerUps" data-min="0" size="1" readonly />
-    <button
-      class="right"
-      onclick="
-        Settings.MaxPowerUps += 2;
-        databinding();
-      "
-    >
-      +
-    </button>
+    <button class="right" data-action="updateSetting" data-key="MaxPowerUps" data-delta="2">+</button>
   </div>
 
-  <button class="option vspace" onclick="closePage(this)">Close</button>
+  <button class="option vspace" id="btnClose">Close</button>
 </div>

@@ -55,7 +55,3 @@ export function closePage(id: number | HTMLElement | GlobalEventHandlers | Paren
     }
   }
 }
-
-// Put some objects into the global scope such that they can be called by inline JS (onclick=...)
-(window as any).openPage = openPage;
-(window as any).closePage = closePage;

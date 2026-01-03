@@ -1,4 +1,4 @@
-<div class="popupshade" onclick="closePage(this)"></div>
+<div class="popupshade" id="settingsShade"></div>
 <div class="popup" id="settingsMenu">
   <h2>Settings</h2>
 
@@ -6,163 +6,51 @@
     <div class="leftCol">
       <div class="option">
         <span>Tank speed</span>
-        <button
-          class="left"
-          onclick="
-            Settings.TankSpeed -= 20;
-            databinding();
-          "
-        >
-          -
-        </button>
+        <button class="left" data-action="updateSetting" data-key="TankSpeed" data-delta="-20">-</button>
         <input class="left right" data-bind="TankSpeed" data-min="0" size="1" readonly />
-        <button
-          class="right"
-          onclick="
-            Settings.TankSpeed += 20;
-            databinding();
-          "
-        >
-          +
-        </button>
+        <button class="right" data-action="updateSetting" data-key="TankSpeed" data-delta="20">+</button>
       </div>
       <br />
       <div class="option">
         <span>Bullet speed</span>
-        <button
-          class="left"
-          onclick="
-            Settings.BulletSpeed -= 20;
-            databinding();
-          "
-        >
-          -
-        </button>
+        <button class="left" data-action="updateSetting" data-key="BulletSpeed" data-delta="-20">-</button>
         <input class="left right" data-bind="BulletSpeed" data-min="0" size="1" readonly />
-        <button
-          class="right"
-          onclick="
-            Settings.BulletSpeed += 20;
-            databinding();
-          "
-        >
-          +
-        </button>
+        <button class="right" data-action="updateSetting" data-key="BulletSpeed" data-delta="20">+</button>
       </div>
       <br />
       <div class="option">
         <span>Bullet timeout</span>
-        <button
-          class="left"
-          onclick="
-            Settings.BulletTimeout -= 1;
-            databinding();
-          "
-        >
-          -
-        </button>
+        <button class="left" data-action="updateSetting" data-key="BulletTimeout" data-delta="-1">-</button>
         <input class="left right" data-bind="BulletTimeout" data-suffix="s" data-min="1" size="1" readonly />
-        <button
-          class="right"
-          onclick="
-            Settings.BulletTimeout += 1;
-            databinding();
-          "
-        >
-          +
-        </button>
+        <button class="right" data-action="updateSetting" data-key="BulletTimeout" data-delta="1">+</button>
       </div>
       <br />
       <div class="option">
         <span>Respawn time</span>
-        <button
-          class="left"
-          onclick="
-            Settings.RespawnTime -= 0.5;
-            databinding();
-          "
-        >
-          -
-        </button>
+        <button class="left" data-action="updateSetting" data-key="RespawnTime" data-delta="-0.5">-</button>
         <input class="left right" data-bind="RespawnTime" data-min="0" data-suffix="s" size="1" readonly />
-        <button
-          class="right"
-          onclick="
-            Settings.RespawnTime += 0.5;
-            databinding();
-          "
-        >
-          +
-        </button>
+        <button class="right" data-action="updateSetting" data-key="RespawnTime" data-delta="0.5">+</button>
       </div>
       <br />
       <div class="option">
         <span>Spawn shield</span>
-        <button
-          class="left"
-          onclick="
-            Settings.SpawnShieldTime -= 0.5;
-            databinding();
-          "
-        >
-          -
-        </button>
+        <button class="left" data-action="updateSetting" data-key="SpawnShieldTime" data-delta="-0.5">-</button>
         <input class="left right" data-bind="SpawnShieldTime" data-min="0" data-suffix="s" size="1" readonly />
-        <button
-          class="right"
-          onclick="
-            Settings.SpawnShieldTime += 0.5;
-            databinding();
-          "
-        >
-          +
-        </button>
+        <button class="right" data-action="updateSetting" data-key="SpawnShieldTime" data-delta="0.5">+</button>
       </div>
       <br />
       <div class="option">
         <span>Map min-size</span>
-        <button
-          class="left"
-          onclick="
-            Settings.MapNxMin -= 1;
-            databinding();
-          "
-        >
-          -
-        </button>
+        <button class="left" data-action="updateSetting" data-key="MapNxMin" data-delta="-1">-</button>
         <input class="left right" data-bind="MapNxMin" data-min="2" size="1" readonly />
-        <button
-          class="right"
-          onclick="
-            Settings.MapNxMin += 1;
-            databinding();
-          "
-        >
-          +
-        </button>
+        <button class="right" data-action="updateSetting" data-key="MapNxMin" data-delta="1">+</button>
       </div>
       <br />
       <div class="option">
         <span>Map max-size</span>
-        <button
-          class="left"
-          onclick="
-            Settings.MapNxMax -= 1;
-            databinding();
-          "
-        >
-          -
-        </button>
+        <button class="left" data-action="updateSetting" data-key="MapNxMax" data-delta="-1">-</button>
         <input class="left right" data-bind="MapNxMax" data-min="2" size="1" readonly />
-        <button
-          class="right"
-          onclick="
-            Settings.MapNxMax += 1;
-            databinding();
-          "
-        >
-          +
-        </button>
+        <button class="right" data-action="updateSetting" data-key="MapNxMax" data-delta="1">+</button>
       </div>
       <br />
       <div class="option">
@@ -173,58 +61,20 @@
         </select>
       </div>
       <br />
-      <!-- <div class="option">
-        <span>Leaderboard time</span>
-        <button class="left" onclick="Settings.EndScreenTime -= 1; databinding();">-</button>
-        <input class="left right" data-bind="EndScreenTime" data-min="0"  data-suffix="s" size="1" readonly/>
-        <button class="right" onclick="Settings.EndScreenTime += 1; databinding();">+</button>
-      </div><br /> -->
     </div>
     <div class="rightCol">
       <div class="option">
         <div class="option">
           <span>Respawn time</span>
-          <button
-            class="left"
-            onclick="
-              Settings.RespawnTime -= 0.5;
-              databinding();
-            "
-          >
-            -
-          </button>
+          <button class="left" data-action="updateSetting" data-key="RespawnTime" data-delta="-0.5">-</button>
           <input class="left right" data-bind="RespawnTime" data-min="0" data-suffix=" s" size="1" readonly />
-          <button
-            class="right"
-            onclick="
-              Settings.RespawnTime += 0.5;
-              databinding();
-            "
-          >
-            +
-          </button>
+          <button class="right" data-action="updateSetting" data-key="RespawnTime" data-delta="0.5">+</button>
         </div>
         <br />
         <span>Round time</span>
-        <button
-          class="left"
-          onclick="
-            Settings.RoundTime -= 0.5;
-            databinding();
-          "
-        >
-          -
-        </button>
+        <button class="left" data-action="updateSetting" data-key="RoundTime" data-delta="-0.5">-</button>
         <input class="left right" data-bind="RoundTime" data-min="1" data-suffix=" min" size="1" readonly />
-        <button
-          class="right"
-          onclick="
-            Settings.RoundTime += 0.5;
-            databinding();
-          "
-        >
-          +
-        </button>
+        <button class="right" data-action="updateSetting" data-key="RoundTime" data-delta="0.5">+</button>
       </div>
       <br />
       <div class="option">
@@ -275,13 +125,6 @@
         </select>
       </div>
       <br />
-      <!-- <div class="option">
-        <span class="left">Music</span>
-        <select class="right" data-bind="bgmusic">
-          <option value="true">on</option>
-          <option value="false">off</option>
-        </select>
-      </div><br /> -->
     </div>
   </div>
 </div>

@@ -1,11 +1,11 @@
-<div class="popupshade" onclick="closePage(this)"></div>
+<div class="popupshade" id="templateShade"></div>
 <div class="popup">
   <!-- example content -->
   <h2>Popup template</h2>
   <div class="options">
     <div class="option">
       <span class="label">Mode</span>
-      <select onchange="Settings.GameMode = this.value">
+      <select data-bind="GameMode" data-type="string">
         <option value="DM">DM</option>
         <option value="TDM">TDM</option>
         <option value="CTF">CTF</option>
@@ -13,9 +13,9 @@
     </div>
     <div class="option">
       <span class="label">Sound</span>
-      <select onchange="Settings.muted = this.value !== 'on'">
-        <option value="on">on</option>
-        <option value="off">off</option>
+      <select data-bind="muted">
+        <option value="false">on</option>
+        <option value="true">off</option>
       </select>
     </div>
   </div>

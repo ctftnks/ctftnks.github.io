@@ -1,41 +1,64 @@
 import template from "./main.html?raw";
 import "./style.css";
-import Bot from "@/game/bot";
-import Player from "@/game/player";
 import { store } from "@/game/store";
-import { updatePlayersMenu } from "@/ui/ui";
+import { updatePlayersMenu, addPlayer, setupPlayersMenuListeners } from "@/ui/ui";
+import { openPage, closePage } from "@/ui/pages";
+import { newGame } from "@/game/game";
 
 export function init(container: HTMLElement): void {
   container.innerHTML = template;
   updatePlayersMenu();
+  setupPlayersMenuListeners();
+
   if (typeof store.game !== "undefined") {
     store.game.paused = true;
   }
-}
 
-function addPlayer(bot: boolean = false): void {
-  if (store.players.length >= store.keymaps.length) {
-    store.keymaps.push(store.keymaps[0].slice());
+  // Bind events
+  const shade = container.querySelector("#menuShade");
+  if (shade) {
+    shade.addEventListener("click", () => {
+      closePage(container);
+      if (!store.game) {
+        newGame();
+      } else {
+        store.game.paused = false;
+      }
+      window.dispatchEvent(new Event("resize"));
+    });
   }
-  if (bot) {
-    store.players.push(new Bot());
-  } else {
-    store.players.push(new Player());
-  }
-  updatePlayersMenu();
-}
 
-function removePlayer(id: number): void {
-  const newPlayers = [];
-  for (let i = 0; i < store.players.length; i++) {
-    if (store.players[i].id !== id) {
-      newPlayers.push(store.players[i]);
-    }
+  const btnPowerups = container.querySelector("#btnPowerups");
+  if (btnPowerups) {
+    btnPowerups.addEventListener("click", () => openPage("powerups"));
   }
-  store.players = newPlayers;
-  updatePlayersMenu();
-}
 
-// Put some objects into the global scope such that they can be called by inline JS (onclick=...)
-(window as any).addPlayer = addPlayer;
-(window as any).removePlayer = removePlayer;
+  const btnSettings = container.querySelector("#btnSettings");
+  if (btnSettings) {
+    btnSettings.addEventListener("click", () => openPage("settings"));
+  }
+
+  const btnAddPlayer = container.querySelector("#btnAddPlayer");
+  if (btnAddPlayer) {
+    btnAddPlayer.addEventListener("click", () => addPlayer());
+  }
+
+  const btnAddBot = container.querySelector("#btnAddBot");
+  if (btnAddBot) {
+    btnAddBot.addEventListener("click", () => addPlayer(true));
+  }
+
+  const btnQuickTeams = container.querySelector("#btnQuickTeams");
+  if (btnQuickTeams) {
+    btnQuickTeams.addEventListener("click", () => openPage("quickstart"));
+  }
+
+  const btnStartGame = container.querySelector("#btnStartGame");
+  if (btnStartGame) {
+    btnStartGame.addEventListener("click", () => {
+      closePage(container);
+      newGame();
+      window.dispatchEvent(new Event("resize"));
+    });
+  }
+}

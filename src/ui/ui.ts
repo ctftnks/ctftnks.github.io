@@ -1,4 +1,6 @@
 import { store } from "@/game/store";
+import Bot from "@/game/bot";
+import Player from "@/game/player";
 
 export function updateScores(): void {
   const scoreBoard = document.getElementById("scoreBoard");
@@ -46,12 +48,8 @@ export function updatePlayersMenu(): void {
     const id = store.players[i].id;
     entryRow += "<div class='entry'>";
     entryRow +=
-      "<button class='team' onclick='store.players[" +
-      i +
-      "].changeColor();updatePlayersMenu();' style='color:" +
-      store.players[i].color +
-      ";'>&diams;</button>";
-    entryRow += "<button class='name' onclick='editPlayerName(" + i + ")' style='color:" + store.players[i].color + ";'>";
+      "<button class='team' data-action='changeColor' data-id='" + i + "' style='color:" + store.players[i].color + ";'>&diams;</button>";
+    entryRow += "<button class='name' data-action='editName' data-id='" + i + "' style='color:" + store.players[i].color + ";'>";
     entryRow += store.players[i].name;
     entryRow += "</button>";
     if (store.players[i].isBot()) {
@@ -59,11 +57,78 @@ export function updatePlayersMenu(): void {
     } else {
       entryRow += editableKeymap(store.players[i].id);
     }
-    entryRow += "<button class='remove' onclick='removePlayer(" + id + ")'>&times;</button>";
+    entryRow += "<button class='remove' data-action='removePlayer' data-id='" + id + "'>&times;</button>";
     entryRow += "</div>";
     pmen.innerHTML += entryRow;
   }
   updateScores();
+}
+
+export function addPlayer(bot: boolean = false): void {
+  if (store.players.length >= store.keymaps.length) {
+    store.keymaps.push(store.keymaps[0].slice());
+  }
+  if (bot) {
+    store.players.push(new Bot());
+  } else {
+    store.players.push(new Player());
+  }
+  updatePlayersMenu();
+}
+
+export function removePlayer(id: number): void {
+  const newPlayers = [];
+  for (let i = 0; i < store.players.length; i++) {
+    if (store.players[i].id !== id) {
+      newPlayers.push(store.players[i]);
+    }
+  }
+  store.players = newPlayers;
+  updatePlayersMenu();
+}
+
+export function setupPlayersMenuListeners(): void {
+  const pmen = document.getElementById("playersMenu");
+  if (!pmen) {
+    return;
+  }
+  // Remove existing listener if any? (Simplest is just to ensure this is called once per page load)
+  // But pages are re-rendered via innerHTML, so listeners on #playersMenu are lost if #playersMenu is inside the re-rendered part.
+  // wait, #playersMenu is inside the 'menu' template. So we need to re-attach every time the menu page is opened.
+  pmen.addEventListener("click", handlePlayersMenuClick);
+}
+
+function handlePlayersMenuClick(event: Event): void {
+  const target = event.target as HTMLElement;
+  // Handle clicks on buttons or inside buttons
+  const button = target.closest("button");
+  if (!button) {
+    return;
+  }
+
+  const action = button.getAttribute("data-action");
+  if (!action) {
+    return;
+  }
+
+  const id = parseInt(button.getAttribute("data-id") || "-1", 10);
+
+  if (action === "changeColor") {
+    if (store.players[id]) {
+      store.players[id].changeColor();
+      updatePlayersMenu();
+    }
+  } else if (action === "editName") {
+    editPlayerName(id);
+  } else if (action === "removePlayer") {
+    removePlayer(id);
+  } else if (action === "editKeymap") {
+    const mapID = parseInt(button.getAttribute("data-map-id") || "-1", 10);
+    const keyID = parseInt(button.getAttribute("data-key-index") || "-1", 10);
+    if (mapID !== -1 && keyID !== -1) {
+      editKeymap(mapID, keyID, button);
+    }
+  }
 }
 
 export function editPlayerName(index: number): void {
@@ -78,10 +143,13 @@ let editingMapID: number | null = null;
 let editingKeyID: number | null = null;
 let editingKeymap: boolean = false;
 
-export function editKeymap(mapID: number, keyID: number): void {
+export function editKeymap(mapID: number, keyID: number, buttonElement?: HTMLElement): void {
   editingMapID = mapID;
   editingKeyID = keyID;
   editingKeymap = true;
+  if (buttonElement) {
+    buttonElement.classList.add("editing");
+  }
 }
 
 window.addEventListener(
@@ -106,6 +174,8 @@ export function doEditKeymap(newKeyCode: string): void {
   }
   store.keymaps[editingMapID][editingKeyID] = newKeyCode;
   editingKeymap = false;
+  // Remove editing class from all buttons (brute force or track it)
+  // updatePlayersMenu re-renders anyway
   updatePlayersMenu();
 }
 
@@ -135,12 +205,7 @@ function editableKeymap(mapID: number | null): string {
   }
   let html = "";
   for (let i = 0; i < store.keymaps[mapID].length; i++) {
-    html +=
-      "<button class='keyEditButton' onclick='editKeymap(" +
-      mapID +
-      ", " +
-      i +
-      ');this.classList.add("editing")\' onfocusout=\'editingKeymap=false;this.classList.remove("editing")\'>';
+    html += "<button class='keyEditButton' data-action='editKeymap' data-map-id='" + mapID + "' data-key-index='" + i + "'>";
     html += getKeyLabel(store.keymaps[mapID][i]);
     html += "</button>";
   }
@@ -170,7 +235,3 @@ export function getKeyLabel(code: string): string {
   }
   return label.toUpperCase();
 }
-
-// Put some objects into the global scope such that they can be called by inline JS (onclick=...)
-(window as any).updatePlayersMenu = updatePlayersMenu;
-(window as any).editKeymap = editKeymap;

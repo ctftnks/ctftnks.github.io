@@ -1,11 +1,10 @@
 import Canvas from "@/game/canvas";
 import Player from "@/game/player";
 import Bot from "@/game/bot";
-import { Settings, store } from "@/game/store";
+import { store } from "@/game/store";
 import { newGame } from "@/game/game";
-import { databinding } from "@/ui/databinding";
-import { openPage } from "@/ui/pages";
 import { initHUD } from "@/ui/hud";
+import { openPage } from "@/ui/pages";
 
 // generate canvas object and players list
 window.onload = () => {
@@ -21,6 +20,24 @@ window.onload = () => {
   const game = newGame();
   game.paused = true;
   openPage("menu");
+
+  // Listeners for the buttons in the sidebar
+  const btnOpenMenu = document.getElementById("btnOpenMenu");
+  if (btnOpenMenu) {
+    btnOpenMenu.addEventListener("click", () => openPage("menu"));
+  }
+  const btnResetTime = document.getElementById("btnResetTime");
+  if (btnResetTime) {
+    btnResetTime.addEventListener("click", () => {
+      if (store.game) {
+        store.game.resetTime();
+      }
+    });
+  }
+  const btnNextMap = document.getElementById("btnNextMap");
+  if (btnNextMap) {
+    btnNextMap.addEventListener("click", () => newGame());
+  }
 };
 
 // prevent accidental leaving
@@ -36,9 +53,3 @@ window.onresize = () => {
     store.game.canvas.resize();
   }
 };
-
-// Put some objects into the global scope such that they can be called by inline JS (onclick=...)
-(window as any).store = store;
-(window as any).Settings = Settings;
-(window as any).databinding = databinding;
-(window as any).newGame = newGame;
