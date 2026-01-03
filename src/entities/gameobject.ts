@@ -4,7 +4,7 @@ import { Coord } from "./coord";
  * Parent class for all objects in the game.
  * Base class for Tanks, Bullets, PowerUps, etc.
  */
-export default class GameObject implements Coord {
+export default abstract class GameObject implements Coord {
   type: string = "Object";
   image: HTMLImageElement;
   x: number = 0;

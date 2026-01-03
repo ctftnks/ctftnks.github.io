@@ -9,7 +9,7 @@ import Tank from "./tank";
  * Base class for all PowerUps.
  * @augments GameObject
  */
-export class PowerUp extends GameObject {
+export abstract class PowerUp extends GameObject {
   /** Collision radius. */
   radius: number = 40;
   /** Whether bots are attracted to it. */
@@ -25,10 +25,9 @@ export class PowerUp extends GameObject {
 
   /**
    * Applies the powerup effect to a tank.
-   * @param {Tank} _tank - The tank picking up the powerup.
+   * @param {Tank} tank - The tank picking up the powerup.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  apply(_tank: Tank): void {}
+  abstract apply(tank: Tank): void;
 
   /**
    * Update step.
@@ -253,8 +252,7 @@ class MultiBonus extends PowerUp {
     this.image.src = IMAGES.multi;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  apply(_tank: Tank): void {
+  apply(): void {
     if (!this.used) {
       this.used = true;
       Settings.PowerUpRate /= 2.5;
