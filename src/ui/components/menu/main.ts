@@ -197,10 +197,10 @@ export class MenuPage extends BasePage {
     const id = parseInt(button.getAttribute("data-id") || "-1", 10);
 
     if (action === "changeTeam") {
-      if (store.players[id]) {
-        store.players[id].changeTeam(TEAMS);
-        this.updatePlayersMenu();
-      }
+      const player = store.players[id];
+      const currentIndex = TEAMS.indexOf(player.team);
+      player.team = TEAMS[(currentIndex + 1) % TEAMS.length];
+      this.updatePlayersMenu();
     } else if (action === "editName") {
       this.editPlayerName(id);
     } else if (action === "removePlayer") {

@@ -4,7 +4,7 @@ import { generateCloud } from "@/entities/smoke";
 import { Settings } from "@/game/settings";
 import type Game from "./game";
 import type { Base } from "@/entities/ctf";
-import Team from "./team";
+import type Team from "./team";
 
 /**
  * Represents a Player in the game.
@@ -105,15 +105,6 @@ export default class Player {
         this.spawn();
       }, Settings.RespawnTime * 1000),
     );
-  }
-
-  /**
-   * Change player color/team.
-   * @param {Team[]} teams - List of available teams.
-   */
-  changeTeam(teams: Team[]): void {
-    const currentIndex = teams.indexOf(this.team);
-    this.team = teams[(currentIndex + 1) % teams.length];
   }
 
   /**

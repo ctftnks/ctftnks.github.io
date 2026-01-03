@@ -42,13 +42,4 @@ describe("Player Class", () => {
     expect(player.stats.miles).toBe(0);
     expect(player.stats.shots).toBe(0);
   });
-
-  it("should change color and team correctly", () => {
-    const player = new Player(0, "P", TEAMS[0], []);
-    const initialColor = player.team.color;
-
-    player.changeTeam([TEAMS[0], TEAMS[1]]);
-    expect(player.team).toBe(TEAMS[1]);
-    expect(player.team.color).not.toBe(initialColor);
-  });
 });
