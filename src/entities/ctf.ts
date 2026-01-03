@@ -230,7 +230,6 @@ export class Base extends GameObject {
  * @augments Base
  */
 export class Hill extends Base {
-
   /**
    * Creates a new Hill.
    * @param {Game} game - The game instance.

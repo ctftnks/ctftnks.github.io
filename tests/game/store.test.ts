@@ -1,0 +1,66 @@
+import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
+import { store } from "@/game/store";
+
+describe("Game Store", () => {
+  let mockLocalStorage: Record<string, string> = {};
+
+  beforeEach(() => {
+    mockLocalStorage = {};
+
+    // Mock localStorage
+    Object.defineProperty(window, "localStorage", {
+      value: {
+        getItem: vi.fn((key: string) => mockLocalStorage[key] || null),
+        setItem: vi.fn((key: string, value: string) => {
+          mockLocalStorage[key] = value;
+        }),
+        removeItem: vi.fn((key: string) => {
+          delete mockLocalStorage[key];
+        }),
+        clear: vi.fn(() => {
+          mockLocalStorage = {};
+        }),
+      },
+      writable: true,
+    });
+
+    // Reset store settings to defaults if possible,
+    // but the store is a singleton already initialized.
+    // We can manually reset specific settings to test loading.
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("should save settings to localStorage", () => {
+    store.settings.GameMode = "DM";
+    store.saveSettings();
+
+    expect(window.localStorage.setItem).toHaveBeenCalledWith("ctftanks_settings", expect.stringContaining('"GameMode":"DM"'));
+  });
+
+  it("should load settings from localStorage", () => {
+    // Setup saved data
+    const savedData = JSON.stringify({
+      GameMode: "KOTH",
+      BotSpeed: 0.5,
+    });
+    mockLocalStorage["ctftanks_settings"] = savedData;
+
+    store.loadSettings();
+
+    expect(store.settings.GameMode).toBe("KOTH");
+    expect(store.settings.BotSpeed).toBe(0.5);
+  });
+
+  it("should handle invalid JSON in localStorage", () => {
+    mockLocalStorage["ctftanks_settings"] = "{ invalid json";
+
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    store.loadSettings();
+
+    expect(consoleSpy).toHaveBeenCalled();
+  });
+});
