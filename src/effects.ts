@@ -1,5 +1,5 @@
 import { store, Settings } from "@/store";
-import Game from "./classes/game";
+import Game from "./game/game";
 
 export function playSound(file: string): void {
   if (file !== "" && !Settings.muted) {

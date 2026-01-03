@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import Player from "@/classes/player";
+import Player from "@/game/player";
 import { store } from "@/store";
-import GameMap from "@/classes/gamemap";
+import GameMap from "@/game/gamemap";
 
 describe("Player Class", () => {
   const mockMap: GameMap = {

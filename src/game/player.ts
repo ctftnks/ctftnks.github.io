@@ -1,9 +1,9 @@
-import Tank from "./tank";
+import Tank from "../objects/tank";
 import { Key } from "@/key";
-import { generateCloud } from "./smoke";
+import { generateCloud } from "../objects/smoke";
 import { store, Settings } from "@/store";
 import type Game from "./game";
-import type { Base } from "./ctf";
+import type { Base } from "../objects/ctf";
 
 /**
  * Represents a Player in the game.

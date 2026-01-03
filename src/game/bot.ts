@@ -1,13 +1,13 @@
 import Player from "./player";
 import { store, Settings } from "@/store";
 import Tile from "./tile";
-import { PowerUp } from "./powerup";
-import Tank from "./tank";
-import { Base, Flag, Hill } from "./ctf";
-import { Coord } from "./coord";
-import { Laser, Guided, WreckingBall, Slingshot } from "./weapons/weapons";
+import { PowerUp } from "../objects/powerup";
+import Tank from "../objects/tank";
+import { Base, Flag, Hill } from "../objects/ctf";
+import { Coord } from "../objects/coord";
+import { Laser, Guided, WreckingBall, Slingshot } from "../objects/weapons/weapons";
 import { CaptureTheFlag, KingOfTheHill } from "./gamemode";
-import GameObject from "./gameobject";
+import GameObject from "../objects/gameobject";
 
 let NBots: number = 0;
 

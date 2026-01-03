@@ -1,9 +1,9 @@
 import template from "./main.html?raw";
 import "./style.css";
-import Bot from "@/classes/bot";
-import Player from "@/classes/player";
+import Bot from "@/game/bot";
+import Player from "@/game/player";
 import { store } from "@/store";
-import { updatePlayersMenu } from "@/ui";
+import { updatePlayersMenu } from "@/ui/ui";
 
 export function init(container: HTMLElement): void {
   container.innerHTML = template;

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import GameMap from "@/classes/gamemap";
-import Tile from "@/classes/tile";
+import GameMap from "@/game/gamemap";
+import Tile from "@/game/tile";
 import { store } from "@/store";
 
 describe("Map Class", () => {

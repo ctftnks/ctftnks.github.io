@@ -1,6 +1,6 @@
-import type Canvas from "@/classes/canvas";
-import type Game from "@/classes/game";
-import type Player from "@/classes/player";
+import type Canvas from "@/ui/canvas";
+import type Game from "@/game/game";
+import type Player from "@/game/player";
 
 const DEFAULT_SETTINGS = {
   muted: true,

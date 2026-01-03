@@ -1,10 +1,10 @@
 // create page div in container, load content into page
-import { databinding } from "@/databinding";
+import { databinding } from "@/ui/databinding";
 
 let pageID = 0;
 
 // Discover all page modules
-const pageModules = import.meta.glob("./**/main.ts");
+const pageModules = import.meta.glob("./pages/*/main.ts");
 
 export async function openPage(name: string): Promise<number> {
   const id = pageID++;
@@ -16,7 +16,7 @@ export async function openPage(name: string): Promise<number> {
     pageContainerElem.appendChild(container);
   }
 
-  const modulePath = `./${name}/main.ts`;
+  const modulePath = `./pages/${name}/main.ts`;
   if (pageModules[modulePath]) {
     try {
       const module = (await pageModules[modulePath]()) as any;

@@ -1,6 +1,6 @@
 import GameObject from "./gameobject";
 import { Settings } from "@/store";
-import Game from "./game";
+import Game from "../game/game";
 
 /**
  * Represents a fancy smoke circle on the map.

@@ -1,12 +1,11 @@
 import Player from "./player";
-import { Flag, Base, Hill } from "./ctf";
+import { Flag, Base, Hill } from "../objects/ctf";
 import { playSound } from "@/effects";
 import { adaptBotSpeed } from "./bot";
 import { SOUNDS } from "@/assets";
 import Game from "./game";
 import Tile from "./tile";
-import { updateScores } from "@/ui";
-import { Coord } from "./coord";
+import { updateScores } from "@/ui/ui";
 
 /**
  * Base class for game modes.

@@ -1,6 +1,6 @@
 import GameObject from "./gameobject";
 import { Settings } from "@/store";
-import GameMap from "./gamemap";
+import GameMap from "../game/gamemap";
 import Tank from "./tank";
 import { Coord } from "./coord";
 

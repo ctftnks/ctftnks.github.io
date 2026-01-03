@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import Tank from "@/classes/tank";
+import Tank from "@/objects/tank";
 import { Settings } from "@/store";
 
 describe("Tank Class", () => {

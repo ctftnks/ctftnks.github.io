@@ -1,10 +1,10 @@
 import GameObject from "./gameobject";
 import { playSound } from "@/effects";
 import { SOUNDS } from "@/assets";
-import Game from "./game";
+import Game from "../game/game";
 import Tank from "./tank";
-import Player from "./player";
-import Tile from "./tile";
+import Player from "../game/player";
+import Tile from "../game/tile";
 
 /**
  * Represents a Flag in Capture the Flag mode.
