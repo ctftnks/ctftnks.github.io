@@ -162,7 +162,7 @@ export default class Game {
     this.mode.step();
 
     // add random PowerUp
-    if (this.t % (1000 * Settings.PowerUpRate) === 0) {
+    if (this.isTrueEvery(1000 * Settings.PowerUpRate)) {
       const p = getRandomPowerUp();
       const pos = this.map.spawnPoint();
       p.x = pos.x;
@@ -170,18 +170,23 @@ export default class Game {
       this.addObject(p);
       this.timeouts.push(window.setTimeout(() => p.delete(), 1000 * Settings.PowerUpRate * Settings.MaxPowerUps));
     }
-    // TODO: move this to some class in the ui-package
-    if (Key.isDown("Escape") && !this.paused) {
-      this.pause();
-      openPage("menu");
-    }
-    if (this.t % 1000 <= Settings.GameFrequency) {
+    // update the timer in the sidebar
+    if (this.isTrueEvery(1000)) {
       const dt = Math.max(0, Settings.RoundTime * 60 - (this.t - Settings.GameFrequency) / 1000);
       gameEvents.emit(EVENTS.TIME_UPDATED, dt);
     }
+    // end the game when the round time is over
     if (this.t > Settings.RoundTime * 60000) {
       this.end();
     }
+  }
+
+  /**
+   * This method returns true every X milliseconds, otherwise false
+   * @param ms the distance between 'true' signals in milliseconds
+   */
+  private isTrueEvery(ms: number): boolean {
+    return this.t % ms < Settings.GameFrequency;
   }
 
   /**

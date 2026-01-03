@@ -30,3 +30,15 @@ window.onresize = () => {
     store.game.canvas.resize();
   }
 };
+
+// Pause the game with the Esc key
+window.addEventListener(
+  "keydown",
+  (e: KeyboardEvent) => {
+    if (e.key === "Escape" && store.game && !store.game.paused) {
+      store.game.pause();
+      openPage("menu");
+    }
+  },
+  false,
+);

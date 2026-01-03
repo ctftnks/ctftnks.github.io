@@ -251,6 +251,7 @@ export class Laser extends Weapon {
       bullet.color = this.tank.player.team.color;
       bullet.bounceSound = "";
       bullet.age = 0;
+      bullet.checkCollision = function () {};
       this.tank.player.game!.addObject(bullet);
     }
     this.deactivate();
