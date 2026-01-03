@@ -1,3 +1,4 @@
+import { BasePage } from "@/ui/components/BasePage";
 import { newGame } from "@/game/game";
 import type Player from "@/game/player";
 import template from "./main.html?raw";
@@ -6,43 +7,72 @@ import { store } from "@/game/store";
 import { Settings } from "@/game/settings";
 import { closePage } from "@/ui/pages";
 
-export function init(container: HTMLElement): void {
-  container.innerHTML = template;
-  updateLeaderboard();
+export class LeaderboardPage extends BasePage {
+  private leaderIntvl: number | null = null;
+  private leaderTimeout: number | null = null;
 
-  let leaderTime = Settings.EndScreenTime;
-  const h2Elem = document.getElementById("leaderboardh2");
-  const counterElem = document.getElementById("leaderboardCounter");
-  const shadeElem = document.getElementById("leaderboardshade") as HTMLElement;
-
-  if (h2Elem) {
-    h2Elem.innerHTML = "Leaderboard:&nbsp;&nbsp;Game #" + store.GameID;
-  }
-  if (counterElem) {
-    counterElem.innerHTML = leaderTime + "s";
+  protected render(): void {
+    this.innerHTML = template;
   }
 
-  const leaderIntvl = window.setInterval(() => {
-    leaderTime -= 1;
+  protected attachListeners(): void {
+    const shadeElem = this.querySelector("#leaderboardshade") as HTMLElement | null;
+    if (shadeElem) {
+      shadeElem.onclick = () => {
+        this.cleanup();
+        closePage(this);
+        newGame();
+      };
+    }
+  }
+
+  protected onMount(): void {
+    updateLeaderboard();
+
+    let leaderTime = Settings.EndScreenTime;
+    const h2Elem = this.querySelector("#leaderboardh2");
+    const counterElem = this.querySelector("#leaderboardCounter");
+
+    if (h2Elem) {
+      h2Elem.innerHTML = "Leaderboard:&nbsp;&nbsp;Game #" + store.GameID;
+    }
     if (counterElem) {
       counterElem.innerHTML = leaderTime + "s";
     }
-  }, 1000);
 
-  const leaderTimeout = window.setTimeout(() => {
-    window.clearInterval(leaderIntvl);
-    closePage(shadeElem.parentNode!);
-    newGame();
-  }, Settings.EndScreenTime * 1000);
+    this.leaderIntvl = window.setInterval(() => {
+      leaderTime -= 1;
+      if (counterElem) {
+        counterElem.innerHTML = leaderTime + "s";
+      }
+    }, 1000);
 
-  if (shadeElem) {
-    shadeElem.onclick = function () {
+    this.leaderTimeout = window.setTimeout(() => {
+      this.cleanup();
       closePage(this);
       newGame();
-      window.clearInterval(leaderIntvl);
-      window.clearTimeout(leaderTimeout);
-    };
+    }, Settings.EndScreenTime * 1000);
   }
+
+  protected onUnmount(): void {
+    this.cleanup();
+  }
+
+  private cleanup(): void {
+    if (this.leaderIntvl !== null) {
+      window.clearInterval(this.leaderIntvl);
+    }
+    if (this.leaderTimeout !== null) {
+      window.clearTimeout(this.leaderTimeout);
+    }
+  }
+}
+
+customElements.define("leaderboard-page", LeaderboardPage);
+
+export function init(container: HTMLElement): void {
+  const component = new LeaderboardPage();
+  container.appendChild(component);
 }
 
 export function updateLeaderboard(): void {

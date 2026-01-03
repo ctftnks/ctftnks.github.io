@@ -1,42 +1,54 @@
+import { BasePage } from "@/ui/components/BasePage";
 import { store } from "@/game/store";
 import { updatePlayersMenu } from "@/ui/ui";
 import { closePage } from "@/ui/pages";
 import template from "./main.html?raw";
 import "./style.css";
 
-export function init(container: HTMLElement): void {
-  container.innerHTML = template;
-
-  const shade = container.querySelector("#quickstartShade");
-  if (shade) {
-    shade.addEventListener("click", () => closePage(container));
+export class QuickstartPage extends BasePage {
+  protected render(): void {
+    this.innerHTML = template;
   }
 
-  const menu = container.querySelector("#quickstartMenu");
-  if (menu) {
-    menu.addEventListener("click", (event) => {
-      const target = event.target as HTMLElement;
-      if (target.tagName === "BUTTON") {
-        const action = target.getAttribute("data-action");
-        const teams = parseInt(target.getAttribute("data-teams") || "0", 10);
-        const size = parseInt(target.getAttribute("data-size") || "0", 10);
+  protected attachListeners(): void {
+    const shade = this.querySelector("#quickstartShade");
+    if (shade) {
+      shade.addEventListener("click", () => closePage(this));
+    }
 
-        if (action && teams && size) {
-          if (action === "quickPvP") {
-            quickPvP(teams, size);
-          } else if (action === "quickPvB") {
-            quickPvB(teams, size);
-          } else if (action === "quickMixed") {
-            quickMixed(teams, size);
-          } else if (action === "quickUnevenMixed") {
-            quickUnevenMixed(teams, size);
+    const menu = this.querySelector("#quickstartMenu");
+    if (menu) {
+      menu.addEventListener("click", (event) => {
+        const target = event.target as HTMLElement;
+        if (target.tagName === "BUTTON") {
+          const action = target.getAttribute("data-action");
+          const teams = parseInt(target.getAttribute("data-teams") || "0", 10);
+          const size = parseInt(target.getAttribute("data-size") || "0", 10);
+
+          if (action && teams && size) {
+            if (action === "quickPvP") {
+              quickPvP(teams, size);
+            } else if (action === "quickPvB") {
+              quickPvB(teams, size);
+            } else if (action === "quickMixed") {
+              quickMixed(teams, size);
+            } else if (action === "quickUnevenMixed") {
+              quickUnevenMixed(teams, size);
+            }
+
+            closePage(this);
           }
-
-          closePage(container);
         }
-      }
-    });
+      });
+    }
   }
+}
+
+customElements.define("quickstart-page", QuickstartPage);
+
+export function init(container: HTMLElement): void {
+  const component = new QuickstartPage();
+  container.appendChild(component);
 }
 
 export function clearPlayers(): void {

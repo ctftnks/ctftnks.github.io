@@ -1,3 +1,4 @@
+import { BasePage } from "@/ui/components/BasePage";
 import { PowerUps } from "@/entities/powerup";
 import template from "./main.html?raw";
 import "./style.css";
@@ -5,46 +6,59 @@ import { Settings } from "@/game/settings";
 import { databinding } from "@/ui/databinding";
 import { closePage } from "@/ui/pages";
 
-export function init(container: HTMLElement): void {
-  container.innerHTML = template;
-  updatePowerupsMenu();
-
-  const shade = container.querySelector("#powerupsShade");
-  if (shade) {
-    shade.addEventListener("click", () => closePage(container));
+export class PowerupsPage extends BasePage {
+  protected render(): void {
+    this.innerHTML = template;
   }
 
-  const btnClose = container.querySelector("#btnClose");
-  if (btnClose) {
-    btnClose.addEventListener("click", () => closePage(container));
-  }
+  protected attachListeners(): void {
+    const shade = this.querySelector("#powerupsShade");
+    if (shade) {
+      shade.addEventListener("click", () => closePage(this));
+    }
 
-  // Delegation for settings buttons and powerup selects
-  container.addEventListener("click", (event) => {
-    const target = event.target as HTMLElement;
-    if (target.tagName === "BUTTON") {
-      const action = target.getAttribute("data-action");
-      if (action === "updateSetting") {
-        const key = target.getAttribute("data-key");
-        const delta = parseFloat(target.getAttribute("data-delta") || "0");
-        if (key && !isNaN(delta) && key in Settings) {
-          (Settings as any)[key] += delta;
-          databinding();
+    const btnClose = this.querySelector("#btnClose");
+    if (btnClose) {
+      btnClose.addEventListener("click", () => closePage(this));
+    }
+
+    this.addEventListener("click", (event) => {
+      const target = event.target as HTMLElement;
+      if (target.tagName === "BUTTON") {
+        const action = target.getAttribute("data-action");
+        if (action === "updateSetting") {
+          const key = target.getAttribute("data-key");
+          const delta = parseFloat(target.getAttribute("data-delta") || "0");
+          if (key && !isNaN(delta) && key in Settings) {
+            (Settings as any)[key] += delta;
+            databinding();
+          }
         }
       }
-    }
-  });
+    });
 
-  container.addEventListener("change", (event) => {
-    const target = event.target as HTMLSelectElement;
-    const action = target.getAttribute("data-action");
-    if (action === "updatePowerupWeight") {
-      const index = parseInt(target.getAttribute("data-index") || "-1", 10);
-      if (index >= 0 && index < PowerUps.length) {
-        PowerUps[index].weight = parseFloat(target.value);
+    this.addEventListener("change", (event) => {
+      const target = event.target as HTMLSelectElement;
+      const action = target.getAttribute("data-action");
+      if (action === "updatePowerupWeight") {
+        const index = parseInt(target.getAttribute("data-index") || "-1", 10);
+        if (index >= 0 && index < PowerUps.length) {
+          PowerUps[index].weight = parseFloat(target.value);
+        }
       }
-    }
-  });
+    });
+  }
+
+  protected onMount(): void {
+    updatePowerupsMenu();
+  }
+}
+
+customElements.define("powerups-page", PowerupsPage);
+
+export function init(container: HTMLElement): void {
+  const component = new PowerupsPage();
+  container.appendChild(component);
 }
 
 export function updatePowerupsMenu(): void {
