@@ -19,13 +19,9 @@ export default class Team {
 
   public constructor(id: number, color?: string) {
     this.id = id;
-    if (color) {
-      this.color = color;
-    } else {
-      this.color = TEAMCOLORS[this.id];
-    }
+    this.color = color ?? TEAMCOLORS[this.id];
   }
 }
 
 // list of available teams
-export const TEAMS = [new Team(0), new Team(1), new Team(2), new Team(3), new Team(4), new Team(5), new Team(6), new Team(7)];
+export const TEAMS = Array.from({ length: 8 }, (_, i) => new Team(i));

@@ -28,15 +28,15 @@ export default class Tank extends GameObject {
   /** The game map. */
   public map: GameMap | undefined;
   /** Rotation angle. */
-  public angle: number;
+  public angle: number = 2 * Math.PI * Math.random();
   /** Tank width. */
-  public width: number;
+  public width: number = Settings.TankWidth;
   /** Tank height. */
-  public height: number;
+  public height: number = Settings.TankHeight;
   /** Current weapon. */
   public weapon: Weapon;
   /** Movement speed. */
-  public speed: number;
+  public speed: number = Settings.TankSpeed;
   /** Timers for effects. */
   public timers: { spawnshield: number; invincible: number } = { spawnshield: 0, invincible: 0 };
   /** The flag currently carried, or null if none. */
@@ -54,11 +54,7 @@ export default class Tank extends GameObject {
     super();
     this.player = player;
     this.color = this.player.team.color;
-    this.angle = 2 * Math.PI * Math.random();
-    this.width = Settings.TankWidth;
-    this.height = Settings.TankHeight;
     this.weapon = new Gun(this);
-    this.speed = Settings.TankSpeed;
   }
 
   /**
@@ -66,6 +62,7 @@ export default class Tank extends GameObject {
    * @param {CanvasRenderingContext2D} context - The context.
    */
   public draw(context: CanvasRenderingContext2D): void {
+    const game = this.player.game!;
     context.save();
     context.beginPath();
     context.translate(this.x, this.y);
@@ -73,14 +70,14 @@ export default class Tank extends GameObject {
     context.rect(-this.width / 2, -this.height / 2, this.width, this.height);
     context.fillStyle = this.player.team.color;
 
-    if (this.timers.invincible > this.player.game!.t) {
-      const dt = (this.timers.invincible - this.player.game!.t) / 600;
-      context.fillStyle = "hsl(" + parseInt((360 * dt).toString()) + ",100%,40%)";
+    if (this.timers.invincible > game.t) {
+      const dt = (this.timers.invincible - game.t) / 600;
+      context.fillStyle = `hsl(${Math.floor(360 * dt)},100%,40%)`;
     }
     if (this.spawnshield()) {
       context.fillStyle = "#555";
       // context.globalAlpha = 0.5;
-      context.globalAlpha = 0.7 * (1 - (this.timers.spawnshield - this.player.game!.t) / (Settings.SpawnShieldTime * 1000));
+      context.globalAlpha = 0.7 * (1 - (this.timers.spawnshield - game.t) / (Settings.SpawnShieldTime * 1000));
     }
 
     context.fill();
@@ -90,7 +87,7 @@ export default class Tank extends GameObject {
     context.rect(this.width / 2 - this.width / 5, -this.height / 2, this.width / 5, this.height);
     context.fill();
 
-    if (this.carriedFlag !== null) {
+    if (this.carriedFlag) {
       context.beginPath();
       context.fillStyle = this.carriedFlag.color;
       context.rect(-this.carriedFlag.size / 2, -this.carriedFlag.size / 2, this.carriedFlag.size / 1.1, this.carriedFlag.size / 2);
@@ -99,7 +96,7 @@ export default class Tank extends GameObject {
       context.fillStyle = "#000";
       context.rect(-this.carriedFlag.size / 2, -this.carriedFlag.size / 2, this.carriedFlag.size / 6, this.carriedFlag.size * 1.1);
       context.fill();
-    } else if (this.weapon.image && this.weapon.image.src !== "") {
+    } else if (this.weapon.image?.src) {
       context.drawImage(this.weapon.image, -this.width / 2, -this.width / 2, this.width, this.width);
     }
 
@@ -107,7 +104,7 @@ export default class Tank extends GameObject {
     if (Settings.ShowTankLabels) {
       context.rotate(-this.angle);
       context.fillStyle = this.player.team.color;
-      context.font = "" + 14 + "px Arial";
+      context.font = "14px Arial";
       context.fillText(this.player.name, -16, -40);
       context.rotate(this.angle);
     }
@@ -252,36 +249,31 @@ export default class Tank extends GameObject {
    * @returns {number} Index of colliding corner or -1.
    */
   private checkWallCollision(): number {
-    if (this.player.isBot()) {
-      return -1;
-    }
-    if (!this.map) {
+    if (this.player.isBot() || !this.map) {
       return -1;
     }
     const tile = this.map.getTileByPos(this.x, this.y);
-    if (tile === null) {
+    if (!tile) {
       return -1;
     }
     const corners = this.corners();
-    const tiles = [];
-    for (let i = 0; i < 4; i++) {
-      if (tile.getWalls(corners[i].x, corners[i].y).filter((w) => w).length !== 0) {
+    const neighborTiles = new Set<Tile>();
+    for (let i = 0; i < corners.length; i++) {
+      const corner = corners[i];
+      if (tile.getWalls(corner.x, corner.y).some((w) => w)) {
         return i;
       }
-      const tile2 = this.map.getTileByPos(corners[i].x, corners[i].y);
-      if (tile2 !== tile) {
-        tiles.push(tile2);
+      const tileAtCorner = this.map.getTileByPos(corner.x, corner.y);
+      if (tileAtCorner && tileAtCorner !== tile) {
+        neighborTiles.add(tileAtCorner);
       }
     }
     // check if any wall corner end intersects with the tank
-    for (let t = 0; t < tiles.length; t++) {
-      const currentTile = tiles[t];
-      if (currentTile === null) {
-        continue;
-      }
-      const corners = (currentTile as Tile).corners();
-      for (let i = 0; i < 4; i++) {
-        if (corners[i].w && this.intersects(corners[i].x, corners[i].y)) {
+    for (const currentTile of neighborTiles) {
+      const tileCorners = currentTile.corners();
+      for (let i = 0; i < tileCorners.length; i++) {
+        const corner = tileCorners[i];
+        if (corner.w && this.intersects(corner.x, corner.y)) {
           return i;
         }
       }
@@ -295,58 +287,49 @@ export default class Tank extends GameObject {
    * Only checks thos bullets that lie within the tiles of the tanks corners.
    */
   private checkBulletCollision(): void {
-    if (this.spawnshield()) {
-      return;
-    }
-    if (!this.map) {
+    if (this.spawnshield() || !this.map) {
       return;
     }
     // create a list of bullets that may hit the tank by looking
     // at the object lists of the tiles of the tanks corners
-    const bullets: Bullet[] = [];
-    const powerups: PowerUp[] = [];
-    const corners = this.corners();
-    for (let m = 0; m < 4; m++) {
-      const tile = this.map.getTileByPos(corners[m].x, corners[m].y);
-      if (tile !== null) {
-        for (let j = 0; j < tile.objs.length; j++) {
-          const obj: GameObject = tile.objs[j];
-          if (obj instanceof Bullet && (obj as Bullet).age > 0) {
-            bullets.push(obj as Bullet);
-          }
-          if (obj instanceof PowerUp) {
-            powerups.push(obj as PowerUp);
+    const bullets = new Set<Bullet>();
+    const powerups = new Set<PowerUp>();
+
+    for (const corner of this.corners()) {
+      const tile = this.map.getTileByPos(corner.x, corner.y);
+      if (tile) {
+        for (const obj of tile.objs) {
+          if (obj instanceof Bullet && obj.age > 0) {
+            bullets.add(obj);
+          } else if (obj instanceof PowerUp) {
+            powerups.add(obj);
           }
         }
       }
     }
     // for each bullet in the list, check if it intersects the tank
-    for (let i = 0; i < bullets.length; i++) {
-      if (!this.intersects(bullets[i].x, bullets[i].y)) {
+    for (const bullet of bullets) {
+      if (!this.intersects(bullet.x, bullet.y)) {
         continue;
       }
       // Friendly fire?
-      if (!Settings.FriendlyFire && this.player.team === bullets[i].player.team && this.player.id !== bullets[i].player.id) {
+      if (!Settings.FriendlyFire && this.player.team === bullet.player.team && this.player.id !== bullet.player.id) {
         continue;
       }
-      if (!bullets[i].lethal) {
+      if (!bullet.lethal || this.invincible()) {
         continue;
       }
       // Hit!
-      if (this.invincible()) {
-        continue;
-      }
-
-      bullets[i].explode();
-      bullets[i].delete();
+      bullet.explode();
+      bullet.delete();
       // count stats
-      if (bullets[i].player.team !== this.player.team) {
-        bullets[i].player.stats.kills += 1;
+      if (bullet.player.team !== this.player.team) {
+        bullet.player.stats.kills += 1;
       }
       // fancy explosion cloud
       generateCloud(this.player.game!, this.x, this.y, 6);
       // let gamemode handle scoring
-      this.player.game!.mode.newKill(bullets[i].player, this.player);
+      this.player.game!.mode.newKill(bullet.player, this.player);
       // kill the player, delete the tank and bullet
       playSound(SOUNDS.kill);
       this.delete();
@@ -354,10 +337,10 @@ export default class Tank extends GameObject {
       return;
     }
 
-    for (let i = 0; i < powerups.length; i++) {
-      if (this.intersects(powerups[i].x, powerups[i].y)) {
-        powerups[i].apply(this);
-        powerups[i].delete();
+    for (const powerup of powerups) {
+      if (this.intersects(powerup.x, powerup.y)) {
+        powerup.apply(this);
+        powerup.delete();
       }
     }
   }

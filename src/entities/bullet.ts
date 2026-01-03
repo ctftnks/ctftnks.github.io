@@ -24,7 +24,7 @@ export default class Bullet extends GameObject {
   public trace: boolean = false;
   public bounceSound: string = SOUNDS.bounce;
   public lethal: boolean = true;
-  public extrahitbox: number = 0;
+  public extrahitbox: number = 0; // size of additional hitbox used for bullet-bullet collisions
   public exploded: boolean = false; // used only for some powerups
   public smokeColor: string | null = null; // used only for some powerups
 
@@ -49,14 +49,14 @@ export default class Bullet extends GameObject {
     if (!this.image.src) {
       context.beginPath();
       context.fillStyle = this.color;
-      context.arc(this.x!, this.y!, this.radius, 0, Math.PI * 2, true);
+      context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
       context.closePath();
       context.fill();
     } else {
       context.save();
-      context.translate(this.x!, this.y!);
-      context.rotate(this.angle!);
-      context.drawImage(this.image as HTMLImageElement, (-this.radius * 5) / 2, (-this.radius * 5) / 2, this.radius * 5, this.radius * 5);
+      context.translate(this.x, this.y);
+      context.rotate(this.angle);
+      context.drawImage(this.image, (-this.radius * 5) / 2, (-this.radius * 5) / 2, this.radius * 5, this.radius * 5);
       context.restore();
     }
   }
@@ -77,8 +77,8 @@ export default class Bullet extends GameObject {
 
     const oldx = this.x;
     const oldy = this.y;
-    this.x! -= (this.speed * Math.sin(-this.angle!) * Settings.GameFrequency) / 1000;
-    this.y! -= (this.speed * Math.cos(-this.angle!) * Settings.GameFrequency) / 1000;
+    this.x -= (this.speed * Math.sin(-this.angle) * Settings.GameFrequency) / 1000;
+    this.y -= (this.speed * Math.cos(-this.angle) * Settings.GameFrequency) / 1000;
 
     this.checkCollision(oldx, oldy);
     if (Settings.BulletsCanCollide) {
@@ -93,12 +93,12 @@ export default class Bullet extends GameObject {
    */
   public checkCollision(oldx: number, oldy: number): void {
     const tile = this.map.getTileByPos(oldx, oldy);
-    if (tile === null) {
+    if (!tile) {
       return;
     }
 
     const walls = tile.getWalls(this.x, this.y);
-    const nwalls = walls.filter((w: boolean) => w).length;
+    const nwalls = walls.filter((w) => w).length;
 
     if (nwalls === 0) {
       return;
@@ -107,15 +107,15 @@ export default class Bullet extends GameObject {
     playSound(this.bounceSound);
 
     if (nwalls === 2) {
-      this.angle! += Math.PI;
+      this.angle += Math.PI;
       this.x = oldx;
       this.y = oldy;
     } else if (walls[1] || walls[3]) {
-      this.angle! *= -1;
-      this.x = 2 * oldx - this.x!;
+      this.angle *= -1;
+      this.x = 2 * oldx - this.x;
     } else if (walls[0] || walls[2]) {
-      this.angle! = Math.PI - this.angle!;
-      this.y = 2 * oldy - this.y!;
+      this.angle = Math.PI - this.angle;
+      this.y = 2 * oldy - this.y;
     }
   }
 
@@ -123,30 +123,28 @@ export default class Bullet extends GameObject {
    * Checks for collision with other bullets.
    */
   public checkBulletCollision(): void {
-    const bullets: Bullet[] = [];
     const tile = this.map.getTileByPos(this.x, this.y);
-    if (tile !== null) {
-      for (let j = 0; j < tile.objs.length; j++) {
-        const obj: GameObject = tile.objs[j];
-        if (obj instanceof Bullet && obj.age > 0 && obj !== this) {
-          bullets.push(obj);
-        }
-      }
+    if (!tile) {
+      return;
     }
 
-    for (let i = 0; i < bullets.length; i++) {
-      const rad = 0.65 * this.radius + 0.65 * bullets[i].radius + this.extrahitbox;
-      if (Math.sqrt(Math.pow(bullets[i].x! - this.x!, 2) + Math.pow(bullets[i].y! - this.y!, 2)) <= rad) {
-        if (!bullets[i].lethal) {
+    for (const obj of tile.objs) {
+      if (obj instanceof Bullet && obj.age > 0 && obj !== this) {
+        const rad = 0.65 * this.radius + 0.65 * obj.radius + this.extrahitbox;
+        const dx = obj.x - this.x;
+        const dy = obj.y - this.y;
+        if (rad > 0 && dx * dx + dy * dy <= rad * rad) {
+          if (!obj.lethal) {
+            return;
+          }
+          obj.explode();
+          this.explode();
+          obj.delete();
+          this.delete();
+          generateCloud(this.player.game!, this.x, this.y, 1);
+          playSound(SOUNDS.origGun);
           return;
         }
-        bullets[i].explode();
-        this.explode();
-        bullets[i].delete();
-        this.delete();
-        generateCloud(this.player.game!, this.x!, this.y!, 1);
-        playSound(SOUNDS.origGun);
-        return;
       }
     }
   }

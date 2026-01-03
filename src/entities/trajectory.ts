@@ -2,7 +2,7 @@ import GameObject from "./gameobject";
 import { Settings } from "@/game/settings";
 import type GameMap from "@/game/gamemap";
 import Tank from "./tank";
-import { Coord } from "./coord";
+import Coord from "./coord";
 
 declare interface TrajectoryPoint extends Coord {
   angle: number;

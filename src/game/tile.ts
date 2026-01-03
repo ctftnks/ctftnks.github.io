@@ -1,5 +1,5 @@
 import GameObject from "@/entities/gameobject";
-import { Coord } from "@/entities/coord";
+import Coord from "@/entities/coord";
 import type GameMap from "./gamemap";
 
 /**
@@ -52,11 +52,12 @@ export default class Tile implements Coord {
    * @returns {Array<object>} List of corners with {x, y, w}.
    */
   public corners(): { x: number; y: number; w: boolean }[] {
+    const { x, y, dx, dy, walls } = this;
     return [
-      { x: this.x, y: this.y, w: this.walls[0] || this.walls[1] }, // top left
-      { x: this.x, y: this.y + this.dy, w: this.walls[1] || this.walls[2] }, // bottom left
-      { x: this.x + this.dx, y: this.y + this.dy, w: this.walls[2] || this.walls[3] }, // bottom right
-      { x: this.x + this.dx, y: this.y, w: this.walls[3] || this.walls[0] }, // top right
+      { x, y, w: walls[0] || walls[1] }, // top left
+      { x, y: y + dy, w: walls[1] || walls[2] }, // bottom left
+      { x: x + dx, y: y + dy, w: walls[2] || walls[3] }, // bottom right
+      { x: x + dx, y, w: walls[3] || walls[0] }, // top right
     ];
   }
 
@@ -65,18 +66,19 @@ export default class Tile implements Coord {
    * @param {CanvasRenderingContext2D} context - The context.
    */
   public draw(context: CanvasRenderingContext2D): void {
+    const { x, y, dx, dy, walls } = this;
     context.fillStyle = "#555";
-    if (this.walls[0]) {
-      context.fillRect(this.x - 2, this.y - 2, this.dx + 4, 4);
+    if (walls[0]) {
+      context.fillRect(x - 2, y - 2, dx + 4, 4);
     }
-    if (this.walls[1]) {
-      context.fillRect(this.x - 2, this.y - 2, 4, this.dy + 4);
+    if (walls[1]) {
+      context.fillRect(x - 2, y - 2, 4, dy + 4);
     }
-    if (this.walls[2]) {
-      context.fillRect(this.x - 2, this.y - 2 + this.dy, this.dx + 4, 4);
+    if (walls[2]) {
+      context.fillRect(x - 2, y - 2 + dy, dx + 4, 4);
     }
-    if (this.walls[3]) {
-      context.fillRect(this.x - 2 + this.dx, this.y - 2, 4, this.dy + 4);
+    if (walls[3]) {
+      context.fillRect(x - 2 + dx, y - 2, 4, dy + 4);
     }
   }
 
@@ -89,8 +91,9 @@ export default class Tile implements Coord {
   public addWall(direction: number, remove: boolean = false, neighbor: boolean = true): void {
     direction = direction % 4;
     this.walls[direction] = !remove;
-    if (neighbor && typeof this.neighbors[direction] !== "undefined" && this.neighbors[direction] !== null) {
-      (this.neighbors[direction] as Tile).addWall(direction + 2, remove, false);
+    const neighborTile = this.neighbors[direction];
+    if (neighbor && neighborTile) {
+      neighborTile.addWall(direction + 2, remove, false);
     }
   }
 
@@ -152,8 +155,9 @@ export default class Tile implements Coord {
     // calculate the path recursively. If a path is found, add it to a list
     const options: Tile[][] = [];
     for (let d = 0; d < 4; d++) {
-      if (!this.walls[d] && this.neighbors[d] && path.indexOf(this.neighbors[d] as Tile) === -1) {
-        const option = (this.neighbors[d] as Tile).pathTo(condition, path.slice(), minPathLength, maxPathLength);
+      const neighbor = this.neighbors[d];
+      if (!this.walls[d] && neighbor && !path.includes(neighbor)) {
+        const option = neighbor.pathTo(condition, [...path], minPathLength, maxPathLength);
         if (option !== null) {
           minPathLength = option.length;
           options.push(option);
@@ -165,14 +169,7 @@ export default class Tile implements Coord {
       return null;
     }
     // find option with minimal length and return
-    let min = 0;
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].length < options[min].length) {
-        min = i;
-      }
-    }
-
-    return options[min];
+    return options.reduce((prev, curr) => (curr.length < prev.length ? curr : prev));
   }
 
   /**
@@ -186,8 +183,9 @@ export default class Tile implements Coord {
     }
     const r = Math.floor(Math.random() * 4);
     for (let d = r; d < 4 + r; d++) {
-      if (!this.walls[d % 4] && this.neighbors[d % 4] !== null) {
-        return (this.neighbors[d % 4] as Tile).randomWalk(distance - 1);
+      const neighbor = this.neighbors[d % 4];
+      if (!this.walls[d % 4] && neighbor) {
+        return neighbor.randomWalk(distance - 1);
       }
     }
 
@@ -204,37 +202,19 @@ export default class Tile implements Coord {
     condition: (obj: GameObject) => boolean,
     maxPathLength: number | null = null,
   ): Array<{ x: number; y: number } | GameObject> | null {
-    const tilepath = this.pathTo(
-      (dest) => {
-        for (let i = 0; i < dest.objs.length; i++) {
-          if (condition(dest.objs[i])) {
-            return true;
-          }
-        }
-        return false;
-      },
-      [],
-      null,
-      maxPathLength,
-    );
-    if (tilepath === null) {
+    const tilepath = this.pathTo((dest) => dest.objs.some(condition), [], null, maxPathLength);
+    if (!tilepath) {
       return null;
     }
-    const xypath: Array<{ x: number; y: number } | GameObject> = [];
-    for (let i = 0; i < tilepath.length; i++) {
-      const tile = tilepath[i];
-      xypath.push({ x: tile.x + tile.dx / 2, y: tile.y + tile.dy / 2 });
-    }
-    let obj: GameObject | null = null;
-    const lasttile = tilepath[tilepath.length - 1];
-    for (let i = 0; i < lasttile.objs.length; i++) {
-      if (condition(lasttile.objs[i])) {
-        obj = lasttile.objs[i];
-        break;
-      }
-    }
+    const xypath: Coord[] = tilepath.map((tile) => ({
+      x: tile.x + tile.dx / 2,
+      y: tile.y + tile.dy / 2,
+    }));
 
-    if (obj === null) {
+    const lasttile = tilepath[tilepath.length - 1];
+    const obj = lasttile.objs.find(condition);
+
+    if (!obj) {
       return null;
     }
     xypath.push(obj);

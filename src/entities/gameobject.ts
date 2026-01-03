@@ -1,4 +1,4 @@
-import { Coord } from "./coord";
+import Coord from "./coord";
 
 /**
  * Parent class for all objects in the game.

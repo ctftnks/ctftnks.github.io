@@ -61,9 +61,7 @@ export class Weapon {
     bullet.x = (corners[0].x + corners[1].x) / 2;
     bullet.y = (corners[0].y + corners[1].y) / 2;
     bullet.lethal = false;
-    window.setTimeout(() => {
-      bullet.lethal = true;
-    }, 100);
+    window.setTimeout(() => (bullet.lethal = true), 100);
     bullet.angle = this.tank.angle;
     bullet.player = this.tank.player;
     bullet.color = this.tank.player.team.color;
@@ -75,23 +73,20 @@ export class Weapon {
    * Deactivates the weapon (cannot shoot temporarily or until deleted).
    */
   public deactivate(): void {
-    if (this.isActive === false) {
+    if (!this.isActive) {
       return;
     }
     this.isActive = false;
-    if (this.tank.rapidfire) {
-      this.tank.player.game!.timeouts.push(
-        window.setTimeout(() => {
+    const delay = this.tank.rapidfire ? 500 : 1800;
+    this.tank.player.game!.timeouts.push(
+      window.setTimeout(() => {
+        if (this.tank.rapidfire) {
           this.activate();
-        }, 500),
-      );
-    } else {
-      this.tank.player.game!.timeouts.push(
-        window.setTimeout(() => {
+        } else {
           this.delete();
-        }, 1800),
-      );
-    }
+        }
+      }, delay),
+    );
   }
 
   /**
@@ -187,17 +182,11 @@ export class MG extends Weapon {
     }
 
     if (this.nshots === 20) {
-      this.tank.player.game!.timeouts.push(
-        window.setTimeout(() => {
-          this.deactivate();
-        }, 3000),
-      );
+      this.tank.player.game!.timeouts.push(window.setTimeout(() => this.deactivate(), 3000));
     }
 
     if (this.tank.player.isBot() && this.nshots! > 15) {
-      window.setTimeout(() => {
-        this.shoot();
-      }, Settings.GameFrequency);
+      window.setTimeout(() => this.shoot(), Settings.GameFrequency);
     }
 
     this.every! -= Settings.GameFrequency;
@@ -250,8 +239,7 @@ export class Laser extends Weapon {
     this.trajectory.delta = 2;
     this.trajectory.step();
 
-    for (let i = 15; i < this.trajectory.points.length; i++) {
-      const p = this.trajectory.points[i];
+    for (const p of this.trajectory.points.slice(15)) {
       const bullet = new Bullet(this);
       bullet.x = p.x;
       bullet.y = p.y;

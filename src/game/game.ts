@@ -94,9 +94,7 @@ export default class Game {
    */
   public start(): void {
     this.mode.init();
-    for (let i = 0; i < this.players.length; i++) {
-      this.players[i].spawn();
-    }
+    this.players.forEach((player) => player.spawn());
 
     this.lastTime = performance.now();
     this.accumulator = 0;
@@ -125,9 +123,8 @@ export default class Game {
     if (!this.paused) {
       this.accumulator += deltaTime;
       // Cap accumulator to avoid spiral of death (max 200ms)
-      if (this.accumulator > 200) {
-        this.accumulator = 200;
-      }
+      this.accumulator = Math.min(this.accumulator, 200);
+
       while (this.accumulator >= Settings.GameFrequency) {
         this.step();
         this.accumulator -= Settings.GameFrequency;
@@ -148,43 +145,38 @@ export default class Game {
     // remove deleted objects and
     // initiate spatial sorting of objects within the map class
     this.map.clearObjectLists();
-    for (let i = this.objs.length - 1; i >= 0; i--) {
-      if (!this.objs[i].deleted) {
-        this.map.addObject(this.objs[i]);
-      } else {
-        this.objs.splice(i, 1);
+    this.objs = this.objs.filter((obj) => {
+      if (!obj.deleted) {
+        this.map.addObject(obj);
+        return true;
       }
-    }
+      return false;
+    });
 
     // call step() function for every object in order for it to move/etc.
-    for (let i = 0; i < this.objs.length; i++) {
-      this.objs[i].step();
+    for (const obj of this.objs) {
+      obj.step();
     }
+
     // do gamemode calculations
     this.mode.step();
+
     // add random PowerUp
     if (this.t % (1000 * Settings.PowerUpRate) === 0) {
-      const p: PowerUp = getRandomPowerUp();
+      const p = getRandomPowerUp();
       const pos = this.map.spawnPoint();
       p.x = pos.x;
       p.y = pos.y;
       this.addObject(p);
-      this.timeouts.push(
-        window.setTimeout(
-          () => {
-            p.delete();
-          },
-          1000 * Settings.PowerUpRate * Settings.MaxPowerUps,
-        ),
-      );
+      this.timeouts.push(window.setTimeout(() => p.delete(), 1000 * Settings.PowerUpRate * Settings.MaxPowerUps));
     }
+    // TODO: move this to some class in the ui-package
     if (Key.isDown("Escape") && !this.paused) {
       this.pause();
       openPage("menu");
     }
     if (this.t % 1000 <= Settings.GameFrequency) {
-      let dt = Settings.RoundTime * 60 - (this.t - Settings.GameFrequency) / 1000;
-      dt = dt < 0 ? 0 : dt;
+      const dt = Math.max(0, Settings.RoundTime * 60 - (this.t - Settings.GameFrequency) / 1000);
       gameEvents.emit(EVENTS.TIME_UPDATED, dt);
     }
     if (this.t > Settings.RoundTime * 60000) {
@@ -209,17 +201,14 @@ export default class Game {
       cancelAnimationFrame(this.loop);
       this.loop = undefined;
     }
-    for (let i = 0; i < this.intvls.length; i++) {
-      window.clearInterval(this.intvls[i]);
-    }
-    for (let i = 0; i < this.timeouts.length; i++) {
-      window.clearTimeout(this.timeouts[i]);
-    }
+    this.intvls.forEach((id) => window.clearInterval(id));
+    this.timeouts.forEach((id) => window.clearTimeout(id));
+    this.intvls = [];
+    this.timeouts = [];
+
     clearEffects();
     stopMusic();
-    for (let i = 0; i < this.players.length; i++) {
-      this.players[i].base = undefined;
-    }
+    this.players.forEach((player) => (player.base = undefined));
   }
 
   /**
@@ -236,9 +225,9 @@ export default class Game {
    */
   public resetTime(): void {
     this.t = 0;
-    for (let i = 0; i < this.players.length; i++) {
-      this.players[i].tank.timers.invincible = 0;
-      this.players[i].tank.timers.spawnshield = 0;
+    for (const player of this.players) {
+      player.tank.timers.invincible = 0;
+      player.tank.timers.spawnshield = 0;
     }
   }
 }
@@ -252,32 +241,23 @@ export function newGame(map: GameMap | null = null): Game {
   store.GameID++;
   store.game = new Game(store.canvas!, map);
 
-  if (Settings.GameMode === "DM") {
-    store.game.mode = new Deathmatch(store.game);
-  }
+  const modeMap: Record<string, new (game: Game) => Gamemode> = {
+    DM: Deathmatch,
+    TDM: TeamDeathmatch,
+    CTF: CaptureTheFlag,
+    KOTH: KingOfTheHill,
+  };
 
-  if (Settings.GameMode === "TDM") {
-    store.game.mode = new TeamDeathmatch(store.game);
-  }
+  const ModeClass = modeMap[Settings.GameMode] || CaptureTheFlag;
+  store.game.mode = new ModeClass(store.game);
 
-  if (Settings.GameMode === "CTF") {
-    store.game.mode = new CaptureTheFlag(store.game);
-  }
-
-  if (Settings.GameMode === "KOTH") {
-    store.game.mode = new KingOfTheHill(store.game);
-  }
-
-  for (let i = 0; i < store.players.length; i++) {
-    store.game.addPlayer(store.players[i]);
-  }
+  store.players.forEach((player) => store.game!.addPlayer(player));
 
   store.game.start();
   store.canvas?.sync();
+
   if (Settings.ResetStatsEachGame) {
-    for (let i = 0; i < store.game.players.length; i++) {
-      store.game.players[i].resetStats();
-    }
+    store.game.players.forEach((player) => player.resetStats());
   }
 
   return store.game;
