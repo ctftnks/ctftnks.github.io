@@ -2,13 +2,11 @@
 
 ## Refactoring
 
-- more tests
 - add JSDoc
 - remove occurrences of "any"
-- stricter TypeScript compiler rules
 - move every class to its own file (and create package folders)
 - resolve all circular dependencies
-- use early returns to flatten indentations
+- single way to access the game variable? not distributed accross all classes
 
 ## Bugs
 
