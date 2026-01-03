@@ -4,8 +4,8 @@ import { playSound } from "@/effects";
 import { adaptBotSpeed } from "./bot";
 import { SOUNDS } from "@/assets";
 import Game from "./game";
-import { Tile } from "./tile";
-import { updateScores } from "../ui";
+import Tile from "./tile";
+import { updateScores } from "@/ui";
 
 /**
  * Base class for game modes.

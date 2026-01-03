@@ -1,6 +1,6 @@
 import Player from "./player";
 import { store, Settings } from "@/store";
-import { Tile } from "./tile";
+import Tile from "./tile";
 import { PowerUp } from "./powerup";
 import Tank from "./tank";
 import { Base, Flag, Hill } from "./ctf";

@@ -1,21 +1,14 @@
 # TODO
 
-- If a class attribute has a default value in the class definition, the same value does not need to be redefined in the class constructor
-- if a child class declares the same attribute that a parent class already has, remove the declaration in the child
-- prefer arrow functions for inlined (anonymous) functions
-- make sure functions returning nothing have type void declared
-- make sure boolean attributes have format "isX" not just "x"
-
 ## Refactoring
 
-- do not use -1 for missing values
-- use arrow functions
 - more tests
 - add JSDoc
 - remove occurrences of "any"
 - stricter TypeScript compiler rules
 - move every class to its own file (and create package folders)
 - resolve all circular dependencies
+- use early returns to flatten indentations
 
 ## Bugs
 

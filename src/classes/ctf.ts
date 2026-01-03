@@ -4,7 +4,7 @@ import { SOUNDS } from "@/assets";
 import Game from "./game";
 import Tank from "./tank";
 import Player from "./player";
-import { type Tile } from "./tile";
+import Tile from "./tile";
 
 /**
  * Represents a Flag in Capture the Flag mode.
