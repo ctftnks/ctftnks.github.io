@@ -1,4 +1,4 @@
-import { store, Settings } from "@/store";
+import { store, Settings } from "@/game/store";
 
 // databinding for menus and options
 export function databinding(): void {

@@ -1,10 +1,10 @@
 import GameMap from "./gamemap";
 import MapGenerator from "./mapGenerator";
 import { getRandomPowerUp, type PowerUp } from "@/entities/powerup";
-import { Key } from "@/key";
-import { playSound, stopMusic, clearEffects } from "@/effects";
-import { store, Settings } from "@/store";
-import { SOUNDS } from "@/assets";
+import { Key } from "./key";
+import { playSound, stopMusic, clearEffects } from "./effects";
+import { store, Settings } from "@/game/store";
+import { SOUNDS } from "@/game/assets";
 import Canvas from "./canvas";
 import Player from "./player";
 import GameObject from "@/entities/gameobject";

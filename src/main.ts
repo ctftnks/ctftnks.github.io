@@ -1,10 +1,10 @@
 import Canvas from "@/game/canvas";
 import Player from "@/game/player";
 import Bot from "@/game/bot";
-import { Settings, store } from "@/store";
+import { Settings, store } from "@/game/store";
 import { newGame } from "@/game/game";
 import { databinding } from "@/ui/databinding";
-import { openPage } from "./ui/pages";
+import { openPage } from "@/ui/pages";
 
 // generate canvas object and players list
 window.onload = () => {

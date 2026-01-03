@@ -1,8 +1,8 @@
 import GameObject from "./gameobject";
 import { Smoke, generateCloud } from "./smoke";
-import { playSound } from "@/effects";
-import { Settings } from "@/store";
-import { SOUNDS } from "@/assets";
+import { playSound } from "@/game/effects";
+import { Settings } from "@/game/store";
+import { SOUNDS } from "@/game/assets";
 import Player from "@/game/player";
 import GameMap from "@/game/gamemap";
 import { Weapon } from "./weapons/weapons";

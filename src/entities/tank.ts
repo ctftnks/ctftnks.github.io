@@ -1,9 +1,9 @@
 import GameObject from "./gameobject";
 import { Gun, Weapon } from "./weapons/weapons";
 import { generateCloud } from "./smoke";
-import { playSound } from "@/effects";
-import { Settings } from "@/store";
-import { SOUNDS } from "@/assets";
+import { playSound } from "@/game/effects";
+import { Settings } from "@/game/store";
+import { SOUNDS } from "@/game/assets";
 import type Player from "@/game/player";
 import type GameMap from "@/game/gamemap";
 import type Tile from "@/game/tile";

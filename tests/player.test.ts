@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import Player from "@/game/player";
-import { store } from "@/store";
+import { store } from "@/game/store";
 import GameMap from "@/game/gamemap";
 
 describe("Player Class", () => {

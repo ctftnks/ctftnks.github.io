@@ -1,4 +1,4 @@
-import { store } from "@/store";
+import { store } from "@/game/store";
 
 /**
  * Manages the game canvas and rendering loop.

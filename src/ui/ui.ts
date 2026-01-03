@@ -1,4 +1,4 @@
-import { store } from "@/store";
+import { store } from "@/game/store";
 
 export function updateScores(): void {
   const scoreBoard = document.getElementById("scoreBoard");

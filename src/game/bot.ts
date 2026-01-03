@@ -1,5 +1,5 @@
 import Player from "./player";
-import { store, Settings } from "@/store";
+import { store, Settings } from "@/game/store";
 import Tile from "./tile";
 import { PowerUp } from "@/entities/powerup";
 import Tank from "@/entities/tank";

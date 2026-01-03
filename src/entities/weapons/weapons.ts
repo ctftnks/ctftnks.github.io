@@ -1,10 +1,10 @@
 import Bullet from "../bullet";
 import Tank from "../tank";
 import Trajectory from "../trajectory";
-import { playSound, hexToRgbA } from "@/effects";
+import { playSound, hexToRgbA } from "@/game/effects";
 import { Smoke, generateCloud } from "../smoke";
-import { Settings } from "@/store";
-import { IMAGES, SOUNDS } from "@/assets";
+import { Settings } from "@/game/store";
+import { IMAGES, SOUNDS } from "@/game/assets";
 
 /**
  * Base class for all weapons.

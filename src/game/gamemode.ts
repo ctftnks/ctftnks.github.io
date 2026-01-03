@@ -1,8 +1,8 @@
 import Player from "./player";
 import { Flag, Base, Hill } from "@/entities/ctf";
-import { playSound } from "@/effects";
+import { playSound } from "./effects";
 import { adaptBotSpeed } from "./bot";
-import { SOUNDS } from "@/assets";
+import { SOUNDS } from "@/game/assets";
 import Game from "./game";
 import Tile from "./tile";
 import { updateScores } from "@/ui/ui";

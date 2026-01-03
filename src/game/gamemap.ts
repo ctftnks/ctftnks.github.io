@@ -1,4 +1,4 @@
-import { store } from "@/store";
+import { store } from "@/game/store";
 import GameObject from "@/entities/gameobject";
 import Canvas from "./canvas";
 import Tile from "./tile";

@@ -1,6 +1,6 @@
 import Bot from "@/game/bot";
 import Player from "@/game/player";
-import { store } from "@/store";
+import { store } from "@/game/store";
 import { updatePlayersMenu } from "@/ui/ui";
 import template from "./main.html?raw";
 import "./style.css";

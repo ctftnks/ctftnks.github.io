@@ -1,7 +1,7 @@
 import Tank from "@/entities/tank";
-import { Key } from "@/key";
+import { Key } from "@/game/key";
 import { generateCloud } from "@/entities/smoke";
-import { store, Settings } from "@/store";
+import { store, Settings } from "@/game/store";
 import type Game from "./game";
 import type { Base } from "@/entities/ctf";
 

@@ -1,6 +1,6 @@
 import { newGame } from "@/game/game";
 import type Player from "@/game/player";
-import { Settings, store } from "@/store";
+import { Settings, store } from "@/game/store";
 import { closePage } from "@/ui/pages";
 import template from "./main.html?raw";
 import "./style.css";
