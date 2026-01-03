@@ -10,4 +10,3 @@ import "./settings/main.ts";
 import "./powerups/main.ts";
 import "./quickstart/main.ts";
 import "./leaderboard/main.ts";
-import "./template/main.ts";
