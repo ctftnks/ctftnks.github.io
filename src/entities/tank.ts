@@ -48,7 +48,7 @@ export default class Tank extends GameObject {
 
   /**
    * Creates a new Tank.
-   * @param {Player} player - The player owning this tank.
+   * @param player - The player owning this tank.
    */
   constructor(player: Player) {
     super();
@@ -59,7 +59,7 @@ export default class Tank extends GameObject {
 
   /**
    * Draws the tank (rotated) on map.
-   * @param {CanvasRenderingContext2D} context - The context.
+   * @param context - The context.
    */
   draw(context: CanvasRenderingContext2D): void {
     const game = this.player.game!;
@@ -127,7 +127,7 @@ export default class Tank extends GameObject {
 
   /**
    * Move the tank forward/backwards.
-   * @param {number} direction - 1 for forward, -1 for backward.
+   * @param direction - 1 for forward, -1 for backward.
    */
   move(direction: number): void {
     this.player.stats.miles += 1;
@@ -152,7 +152,7 @@ export default class Tank extends GameObject {
 
   /**
    * Rotate the tank.
-   * @param {number} direction - 1 for right, -1 for left.
+   * @param direction - 1 for right, -1 for left.
    */
   turn(direction: number): void {
     const oldangle = this.angle;
@@ -200,7 +200,7 @@ export default class Tank extends GameObject {
   /**
    * Get x,y-coordinates of the tanks corners.
    * Needed for collision detection and weapon firing.
-   * @returns {Array<object>} List of corners {x, y}.
+   * @returns List of corners {x, y}.
    */
   corners(): { x: number; y: number }[] {
     return [
@@ -225,9 +225,9 @@ export default class Tank extends GameObject {
 
   /**
    * Does the tank intersect with a point?
-   * @param {number} x - X coordinate.
-   * @param {number} y - Y coordinate.
-   * @returns {boolean} True if intersecting.
+   * @param x - X coordinate.
+   * @param y - Y coordinate.
+   * @returns True if intersecting.
    */
   private intersects(x: number, y: number): boolean {
     // checks if (0 < AM*AB < AB*AB) ^ (0 < AM*AD < AD*AD)
@@ -246,7 +246,7 @@ export default class Tank extends GameObject {
   /**
    * Check for collision of the walls:
    * Checks if there is a wall between the center of the tank and each corner.
-   * @returns {number} Index of colliding corner or -1.
+   * @returns Index of colliding corner or -1.
    */
   private checkWallCollision(): number {
     if (this.player.isBot() || !this.map) {
@@ -347,7 +347,7 @@ export default class Tank extends GameObject {
 
   /**
    * Is the spawnshield active?
-   * @returns {boolean} True if spawnshield active.
+   * @returns True if spawnshield active.
    */
   spawnshield(): boolean {
     const t = this.player.game!.t;
@@ -356,7 +356,7 @@ export default class Tank extends GameObject {
 
   /**
    * Properties: is invincible?
-   * @returns {boolean} True if invincible.
+   * @returns True if invincible.
    */
   invincible(): boolean {
     const t = this.player.game!.t;

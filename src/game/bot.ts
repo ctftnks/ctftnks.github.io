@@ -29,9 +29,9 @@ export default class Bot extends Player {
 
   /**
    * Creates a new Bot.
-   * @param {number} id - The player ID.
-   * @param {string} name - The bot name.
-   * @param {Team} team - The team of the bot.
+   * @param id - The player ID.
+   * @param name - The bot name.
+   * @param team - The team of the bot.
    */
   constructor(id: number, name: string, team: Team) {
     super(id, name, team, []);
@@ -168,7 +168,7 @@ export default class Bot extends Player {
 
   /**
    * Sets a goto target from a path.
-   * @param {Coord[]} path - The path to follow.
+   * @param path - The path to follow.
    */
   follow(path: Coord[]): void {
     this.goto = path.length < 2 ? path[0] : path[1];
@@ -208,7 +208,7 @@ export default class Bot extends Player {
 
   /**
    * Handles shooting logic.
-   * @param {Tank} target - The target to shoot at.
+   * @param target - The target to shoot at.
    */
   shoot(target: Tank): void {
     this.goto = null;
@@ -228,9 +228,9 @@ export default class Bot extends Player {
 
   /**
    * Evaluates whether it is a good idea to shoot.
-   * @param {Tank} enemy - The enemy tank.
-   * @param {Array|number} path - Path to the enemy.
-   * @returns {object} Result with shouldShoot, target, and weight.
+   * @param enemy - The enemy tank.
+   * @param path - Path to the enemy.
+   * @returns Result with shouldShoot, target, and weight.
    */
   aimbot(enemy: Tank, path: Coord[] | null = null): { shouldShoot: boolean; target: Tank; weight: number } {
     const result = { shouldShoot: false, target: enemy, weight: 500 };
@@ -278,7 +278,7 @@ export default class Bot extends Player {
 
   /**
    * Calculates a path to flee from danger.
-   * @returns {Array|null} The flee path or null if no path found.
+   * @returns The flee path or null if no path found.
    */
   getFleePath(): Coord[] | null {
     if (!this.fleeing.from || !this.fleeing.condition || !this.fleeing.condition()) {
@@ -338,9 +338,9 @@ export default class Bot extends Player {
 
 /**
  * Adapts bot speed based on team balance.
- * @param {Team} team - The players team.
- * @param {number} val - The adaptation value.
- * @returns {number|undefined} The new bot speed.
+ * @param team - The players team.
+ * @param val - The adaptation value.
+ * @returns The new bot speed.
  */
 export function adaptBotSpeed(team: Team, val: number = 0.1): number | undefined {
   if (!Settings.AdaptiveBotSpeed) {

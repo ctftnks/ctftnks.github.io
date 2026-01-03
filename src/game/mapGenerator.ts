@@ -19,7 +19,7 @@ export default class MapGenerator {
    * Make the wall a passage and mark the cell on the opposite side as part of the maze.
    * Add the neighboring walls of the cell to the wall list.
    * If the cell on the opposite side already was in the maze, remove the wall from the list.
-   * @param {GameMap} map - The map to modify.
+   * @param map - The map to modify.
    */
   static primsMaze(map: GameMap): void {
     // Start with a grid full of walls.
@@ -67,11 +67,11 @@ export default class MapGenerator {
 
   /**
    * Generates a map using Recursive Division.
-   * @param {GameMap} map - The map to modify.
-   * @param {number} x1 - Start X.
-   * @param {number} y1 - Start Y.
-   * @param {number} x2 - End X.
-   * @param {number} y2 - End Y.
+   * @param map - The map to modify.
+   * @param x1 - Start X.
+   * @param y1 - Start Y.
+   * @param x2 - End X.
+   * @param y2 - End Y.
    */
   static recursiveDivision(map: GameMap, x1: number = -1, y1: number = -1, x2: number = -1, y2: number = -1): void {
     // recursive entry point
@@ -126,11 +126,11 @@ export default class MapGenerator {
 
   /**
    * Generates a map using Recursive Division with more holes.
-   * @param {GameMap} map - The map to modify.
-   * @param {number} x1 - Start X.
-   * @param {number} y1 - Start Y.
-   * @param {number} x2 - End X.
-   * @param {number} y2 - End Y.
+   * @param map - The map to modify.
+   * @param x1 - Start X.
+   * @param y1 - Start Y.
+   * @param x2 - End X.
+   * @param y2 - End Y.
    */
   static porousRecursiveDivision(map: GameMap, x1: number = -1, y1: number = -1, x2: number = -1, y2: number = -1): void {
     // recursive entry point

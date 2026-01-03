@@ -27,7 +27,7 @@ export default class Trajectory extends GameObject {
 
   /**
    * Creates a new Trajectory.
-   * @param {GameMap} map - The map to trace on.
+   * @param map - The map to trace on.
    */
   constructor(map: GameMap) {
     super();
@@ -37,7 +37,7 @@ export default class Trajectory extends GameObject {
 
   /**
    * Draws the trajectory.
-   * @param {CanvasRenderingContext2D} context - The context.
+   * @param context - The context.
    */
   draw(context: CanvasRenderingContext2D): void {
     if (this.hidden || this.points.length < 2) {

@@ -51,8 +51,8 @@ export default class Game {
 
   /**
    * Creates a new Game instance.
-   * @param {Canvas} canvas - The canvas manager.
-   * @param {GameMap|null} map - The map object or null to generate a new one.
+   * @param canvas - The canvas manager.
+   * @param map - The map object or null to generate a new one.
    */
   constructor(canvas: Canvas, map: GameMap | null = null) {
     this.canvas = canvas;
@@ -73,7 +73,7 @@ export default class Game {
 
   /**
    * Adds a player to the game.
-   * @param {Player} player - The player to add.
+   * @param player - The player to add.
    */
   addPlayer(player: Player): void {
     this.players.push(player);
@@ -82,7 +82,7 @@ export default class Game {
 
   /**
    * Adds an object to the game.
-   * @param {GameObject} object - The object to add.
+   * @param object - The object to add.
    */
   addObject(object: GameObject): void {
     this.objs.push(object);
@@ -109,7 +109,7 @@ export default class Game {
   /**
    * Main game loop driven by requestAnimationFrame.
    * Uses an accumulator to ensure fixed-timestep updates.
-   * @param {number} timestamp - The current time.
+   * @param timestamp - The current time.
    */
   gameLoop(timestamp: number): void {
     if (!this.loop) {

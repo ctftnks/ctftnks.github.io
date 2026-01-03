@@ -24,7 +24,7 @@ export class Weapon {
 
   /**
    * Creates a new Weapon.
-   * @param {Tank} tank - The tank owning this weapon.
+   * @param tank - The tank owning this weapon.
    */
   constructor(tank: Tank) {
     this.tank = tank;
@@ -53,7 +53,7 @@ export class Weapon {
 
   /**
    * Creates a new bullet with all the typical properties.
-   * @returns {Bullet} The created bullet.
+   * @returns The created bullet.
    */
   newBullet(): Bullet {
     const bullet = new Bullet(this);
@@ -119,7 +119,7 @@ export class Gun extends Weapon {
 
   /**
    * Creates a new Gun.
-   * @param {Tank} tank - The tank.
+   * @param tank - The tank.
    */
   constructor(tank: Tank) {
     super(tank);
@@ -155,7 +155,7 @@ export class MG extends Weapon {
 
   /**
    * Creates a new MG.
-   * @param {Tank} tank - The tank.
+   * @param tank - The tank.
    */
   constructor(tank: Tank) {
     super(tank);
@@ -214,7 +214,7 @@ export class Laser extends Weapon {
 
   /**
    * Creates a new Laser.
-   * @param {Tank} tank - The tank.
+   * @param tank - The tank.
    */
   constructor(tank: Tank) {
     super(tank);
@@ -283,7 +283,7 @@ export class Grenade extends Weapon {
 
   /**
    * Creates a new Grenade weapon.
-   * @param {Tank} tank - The tank.
+   * @param tank - The tank.
    */
   constructor(tank: Tank) {
     super(tank);
@@ -356,7 +356,7 @@ export class Mine extends Weapon {
 
   /**
    * Creates a new Mine weapon.
-   * @param {Tank} tank - The tank.
+   * @param tank - The tank.
    */
   constructor(tank: Tank) {
     super(tank);
@@ -411,7 +411,7 @@ export class Guided extends Weapon {
 
   /**
    * Creates a new Guided Missile weapon.
-   * @param {Tank} tank - The tank.
+   * @param tank - The tank.
    */
   constructor(tank: Tank) {
     super(tank);
@@ -515,7 +515,7 @@ export class WreckingBall extends Weapon {
 
   /**
    * Creates a new WreckingBall weapon.
-   * @param {Tank} tank - The tank.
+   * @param tank - The tank.
    */
   constructor(tank: Tank) {
     super(tank);
@@ -590,7 +590,7 @@ export class Slingshot extends Weapon {
 
   /**
    * Creates a new Slingshot weapon.
-   * @param {Tank} tank - The tank.
+   * @param tank - The tank.
    */
   constructor(tank: Tank) {
     super(tank);

@@ -32,9 +32,9 @@ export default class Tile implements Coord {
 
   /**
    * Creates a new Tile.
-   * @param {number} i - X index.
-   * @param {number} j - Y index.
-   * @param {GameMap} map - The map instance.
+   * @param i - X index.
+   * @param j - Y index.
+   * @param map - The map instance.
    */
   constructor(i: number, j: number, map: GameMap) {
     this.i = i;
@@ -49,7 +49,7 @@ export default class Tile implements Coord {
 
   /**
    * Return the coordinates of the corners of the tile and whether they're part of some wall.
-   * @returns {Array<object>} List of corners with {x, y, w}.
+   * @returns List of corners with {x, y, w}.
    */
   corners(): { x: number; y: number; w: boolean }[] {
     const { x, y, dx, dy, walls } = this;
@@ -63,7 +63,7 @@ export default class Tile implements Coord {
 
   /**
    * Draw the tile walls.
-   * @param {CanvasRenderingContext2D} context - The context.
+   * @param context - The context.
    */
   draw(context: CanvasRenderingContext2D): void {
     const { x, y, dx, dy, walls } = this;
@@ -84,9 +84,9 @@ export default class Tile implements Coord {
 
   /**
    * Adds or removes a wall.
-   * @param {number} direction - 0: top, 1: left, 2: bottom, 3: right.
-   * @param {boolean} remove - Whether to remove the wall.
-   * @param {boolean} neighbor - Whether to update the neighbor as well.
+   * @param direction - 0: top, 1: left, 2: bottom, 3: right.
+   * @param remove - Whether to remove the wall.
+   * @param neighbor - Whether to update the neighbor as well.
    */
   addWall(direction: number, remove: boolean = false, neighbor: boolean = true): void {
     direction = direction % 4;
@@ -99,9 +99,9 @@ export default class Tile implements Coord {
 
   /**
    * Is there any walls between the tile and a point at x,y?
-   * @param {number} x - X coordinate.
-   * @param {number} y - Y coordinate.
-   * @returns {Array<boolean>} List of walls encountered.
+   * @param x - X coordinate.
+   * @param y - Y coordinate.
+   * @returns List of walls encountered.
    */
   getWalls(x: number, y: number): boolean[] {
     const distx = this.x - x;
@@ -125,11 +125,11 @@ export default class Tile implements Coord {
 
   /**
    * Recursively find the shortest path to any tile in map where condition is met.
-   * @param {Function} condition - Function returning boolean.
-   * @param {Array} path - Current path.
-   * @param {number|null} minPathLength - Optimization: abort if path is longer than this.
-   * @param {number|null} maxPathLength - Max allowed path length.
-   * @returns {Array<Tile>|null} The path or null if not found.
+   * @param condition - Function returning boolean.
+   * @param path - Current path.
+   * @param minPathLength - Optimization: abort if path is longer than this.
+   * @param maxPathLength - Max allowed path length.
+   * @returns The path or null if not found.
    */
   pathTo(
     condition: (tile: Tile) => boolean,
@@ -174,8 +174,8 @@ export default class Tile implements Coord {
 
   /**
    * Random walk along the map.
-   * @param {number} distance - Steps to walk.
-   * @returns {Tile} The final tile.
+   * @param distance - Steps to walk.
+   * @returns The final tile.
    */
   randomWalk(distance: number): Tile {
     if (distance === 0) {
@@ -194,9 +194,9 @@ export default class Tile implements Coord {
 
   /**
    * Find any object that matches the condition and return a path of coordinates to it.
-   * @param {Function} condition - Match condition.
-   * @param {number|null} maxPathLength - Max path length.
-   * @returns {Array|null} Path to object or null.
+   * @param condition - Match condition.
+   * @param maxPathLength - Max path length.
+   * @returns Path to object or null.
    */
   xypathToObj(
     condition: (obj: GameObject) => boolean,

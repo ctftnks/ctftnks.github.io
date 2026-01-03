@@ -31,8 +31,8 @@ export class Flag extends GameObject {
 
   /**
    * Creates a new Flag.
-   * @param {Game} game - The game instance.
-   * @param {Base} base - The base this flag belongs to.
+   * @param game - The game instance.
+   * @param base - The base this flag belongs to.
    */
   constructor(game: Game, base: Base) {
     super();
@@ -54,7 +54,7 @@ export class Flag extends GameObject {
 
   /**
    * Let tank pick up the flag.
-   * @param {Tank} tank - The tank picking up the flag.
+   * @param tank - The tank picking up the flag.
    */
   pickup(tank: Tank): void {
     tank.carriedFlag = this;
@@ -65,8 +65,8 @@ export class Flag extends GameObject {
 
   /**
    * Drop the flag at a specific location.
-   * @param {number} x - X coordinate.
-   * @param {number} y - Y coordinate.
+   * @param x - X coordinate.
+   * @param y - Y coordinate.
    */
   drop(x: number, y: number): void {
     this.deleted = false;
@@ -115,7 +115,7 @@ export class Flag extends GameObject {
 
   /**
    * Draws the flag.
-   * @param {CanvasRenderingContext2D} context - The context.
+   * @param context - The context.
    */
   draw(context: CanvasRenderingContext2D): void {
     context.save();
@@ -152,10 +152,10 @@ export class Base extends GameObject {
 
   /**
    * Creates a new Base.
-   * @param {Game} game - The game instance.
-   * @param {Player} player - The player/team owning the base.
-   * @param {number} x - X coordinate.
-   * @param {number} y - Y coordinate.
+   * @param game - The game instance.
+   * @param player - The player/team owning the base.
+   * @param x - X coordinate.
+   * @param y - Y coordinate.
    */
   constructor(game: Game, player: Player | null, x: number, y: number) {
     super();
@@ -174,7 +174,7 @@ export class Base extends GameObject {
 
   /**
    * Draws the base.
-   * @param {CanvasRenderingContext2D} context - The context.
+   * @param context - The context.
    */
   draw(context: CanvasRenderingContext2D): void {
     context.save();
@@ -216,7 +216,7 @@ export class Base extends GameObject {
 
   /**
    * Checks if the base currently holds its flag.
-   * @returns {boolean} True if the flag is in the base.
+   * @returns True if the flag is in the base.
    */
   hasFlag(): boolean {
     if (typeof this.flag === "undefined") {
@@ -233,9 +233,9 @@ export class Base extends GameObject {
 export class Hill extends Base {
   /**
    * Creates a new Hill.
-   * @param {Game} game - The game instance.
-   * @param {number} x - X coordinate.
-   * @param {number} y - Y coordinate.
+   * @param game - The game instance.
+   * @param x - X coordinate.
+   * @param y - Y coordinate.
    */
   constructor(game: Game, x: number, y: number) {
     super(game, null, x, y);

@@ -25,7 +25,7 @@ export abstract class PowerUp extends GameObject {
 
   /**
    * Applies the powerup effect to a tank.
-   * @param {Tank} tank - The tank picking up the powerup.
+   * @param tank - The tank picking up the powerup.
    */
   abstract apply(tank: Tank): void;
 
@@ -36,7 +36,7 @@ export abstract class PowerUp extends GameObject {
 
   /**
    * Draws the powerup.
-   * @param {CanvasRenderingContext2D} context - The context.
+   * @param context - The context.
    */
   draw(context: CanvasRenderingContext2D): void {
     context.save();
@@ -349,7 +349,7 @@ export const PowerUps = [
 
 /**
  * Returns a random powerup based on weights.
- * @returns {PowerUp} A new PowerUp instance.
+ * @returns A new PowerUp instance.
  */
 export function getRandomPowerUp(): PowerUp {
   let totalWeights = 0;

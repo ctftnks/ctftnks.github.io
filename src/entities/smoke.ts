@@ -14,11 +14,11 @@ export class Smoke extends GameObject {
 
   /**
    * Creates a new Smoke particle.
-   * @param {number} x - X coordinate.
-   * @param {number} y - Y coordinate.
-   * @param {number} timeout - Lifetime in ms.
-   * @param {number} radius - Initial radius.
-   * @param {number} rspeed - Radius shrinking speed.
+   * @param x - X coordinate.
+   * @param y - Y coordinate.
+   * @param timeout - Lifetime in ms.
+   * @param radius - Initial radius.
+   * @param rspeed - Radius shrinking speed.
    */
   constructor(x: number, y: number, timeout: number = 300, radius: number = 10, rspeed: number = 1) {
     // inherit from GameObject class
@@ -34,7 +34,7 @@ export class Smoke extends GameObject {
 
   /**
    * Draws the smoke particle.
-   * @param {CanvasRenderingContext2D} context - The context.
+   * @param context - The context.
    */
   override draw(context: CanvasRenderingContext2D): void {
     context.beginPath();
@@ -62,13 +62,13 @@ export class Smoke extends GameObject {
 
 /**
  * Creates a cluster of smoke particles (Cloud).
- * @param {Game} game - The game instance.
- * @param {number} x - X coordinate.
- * @param {number} y - Y coordinate.
- * @param {number} n - Number of particles.
- * @param {number} radius - Radius of the cloud.
- * @param {number} rspeed - Shrink speed.
- * @param {string|number} color - Color override.
+ * @param game - The game instance.
+ * @param x - X coordinate.
+ * @param y - Y coordinate.
+ * @param n - Number of particles.
+ * @param radius - Radius of the cloud.
+ * @param rspeed - Shrink speed.
+ * @param color - Color override.
  */
 export const generateCloud = function (
   game: Game,

@@ -30,7 +30,7 @@ export default class Bullet extends GameObject {
 
   /**
    * Creates a new Bullet.
-   * @param {Weapon} weapon - The weapon that fired the bullet.
+   * @param weapon - The weapon that fired the bullet.
    */
   constructor(weapon: Weapon) {
     super();
@@ -43,7 +43,7 @@ export default class Bullet extends GameObject {
 
   /**
    * Draws the bullet on the canvas.
-   * @param {CanvasRenderingContext2D} context - The 2D context.
+   * @param context - The 2D context.
    */
   draw(context: CanvasRenderingContext2D): void {
     if (!this.image.src) {
@@ -88,8 +88,8 @@ export default class Bullet extends GameObject {
 
   /**
    * Check for collision with walls, handle them.
-   * @param {number} oldx - Previous X position.
-   * @param {number} oldy - Previous Y position.
+   * @param oldx - Previous X position.
+   * @param oldy - Previous Y position.
    */
   checkCollision(oldx: number, oldy: number): void {
     const tile = this.map.getTileByPos(oldx, oldy);

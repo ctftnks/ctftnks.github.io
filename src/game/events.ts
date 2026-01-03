@@ -11,8 +11,8 @@ class EventEmitter {
 
   /**
    * Registers an event listener.
-   * @param {string} event - The name of the event.
-   * @param {Listener<T>} listener - The callback function.
+   * @param event - The name of the event.
+   * @param listener - The callback function.
    */
   on<T>(event: string, listener: Listener<T>): void {
     if (!this.listeners[event]) {
@@ -23,8 +23,8 @@ class EventEmitter {
 
   /**
    * Unregisters an event listener.
-   * @param {string} event - The name of the event.
-   * @param {Listener<T>} listener - The callback function to remove.
+   * @param event - The name of the event.
+   * @param listener - The callback function to remove.
    */
   off<T>(event: string, listener: Listener<T>): void {
     if (!this.listeners[event]) {
@@ -35,8 +35,8 @@ class EventEmitter {
 
   /**
    * Emits an event, triggering all registered listeners.
-   * @param {string} event - The name of the event.
-   * @param {T} [data] - Optional data to pass to listeners.
+   * @param event - The name of the event.
+   * @param [data] - Optional data to pass to listeners.
    */
   emit<T>(event: string, data?: T): void {
     if (!this.listeners[event]) {

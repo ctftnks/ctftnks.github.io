@@ -29,7 +29,7 @@ export default abstract class GameObject implements Coord {
 
   /**
    * Default draw function.
-   * @param {CanvasRenderingContext2D} context - The 2D rendering context.
+   * @param context - The 2D rendering context.
    */
   draw(context: CanvasRenderingContext2D): void {
     if (this.image) {

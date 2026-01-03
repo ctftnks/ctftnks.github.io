@@ -17,7 +17,7 @@ export abstract class Gamemode {
 
   /**
    * Creates a new Gamemode.
-   * @param {Game} game - The game instance.
+   * @param game - The game instance.
    */
   constructor(game: Game) {
     /** Corresponding Game instance. */
@@ -34,8 +34,8 @@ export abstract class Gamemode {
 
   /**
    * Handle a new kill event.
-   * @param {Player} player1 - The killer.
-   * @param {Player} player2 - The victim.
+   * @param player1 - The killer.
+   * @param player2 - The victim.
    */
   abstract newKill(player1: Player, player2: Player): void;
 
@@ -54,7 +54,7 @@ export abstract class Gamemode {
 export class Deathmatch extends Gamemode {
   /**
    * Creates a new Deathmatch mode.
-   * @param {Game} game - The game instance.
+   * @param game - The game instance.
    */
   constructor(game: Game) {
     super(game);
@@ -63,8 +63,8 @@ export class Deathmatch extends Gamemode {
 
   /**
    * Updates player score.
-   * @param {Player} player - The player to give score to.
-   * @param {number} val - The score value.
+   * @param player - The player to give score to.
+   * @param val - The score value.
    */
   override giveScore(player: Player, val: number = 1): void {
     player.score += val;
@@ -79,8 +79,8 @@ export class Deathmatch extends Gamemode {
 
   /**
    * Handle a new kill event.
-   * @param {Player} player1 - The killer.
-   * @param {Player} player2 - The victim.
+   * @param player1 - The killer.
+   * @param player2 - The victim.
    */
   override newKill(player1: Player, player2: Player): void {
     if (player1.team === player2.team) {
@@ -98,7 +98,7 @@ export class Deathmatch extends Gamemode {
 export class TeamDeathmatch extends Gamemode {
   /**
    * Creates a new TeamDeathmatch mode.
-   * @param {Game} game - The game instance.
+   * @param game - The game instance.
    */
   constructor(game: Game) {
     super(game);
@@ -107,8 +107,8 @@ export class TeamDeathmatch extends Gamemode {
 
   /**
    * Updates team score.
-   * @param {Player} player - The player involved (to identify team).
-   * @param {number} val - The score value.
+   * @param player - The player involved (to identify team).
+   * @param val - The score value.
    */
   override giveScore(player: Player, val: number = 1): void {
     for (let i = 0; i < this.game.players.length; i++) {
@@ -127,8 +127,8 @@ export class TeamDeathmatch extends Gamemode {
 
   /**
    * Handle a new kill event.
-   * @param {Player} player1 - The killer.
-   * @param {Player} player2 - The victim.
+   * @param player1 - The killer.
+   * @param player2 - The victim.
    */
   override newKill(player1: Player, player2: Player): void {
     if (player1.team === player2.team) {
@@ -225,7 +225,7 @@ export class TeamDeathmatch extends Gamemode {
 export class CaptureTheFlag extends Gamemode {
   /**
    * Creates a new CaptureTheFlag mode.
-   * @param {Game} game - The game instance.
+   * @param game - The game instance.
    */
   constructor(game: Game) {
     super(game);
@@ -235,8 +235,8 @@ export class CaptureTheFlag extends Gamemode {
 
   /**
    * Updates team score.
-   * @param {Player} player - The player involved.
-   * @param {number} val - The score value.
+   * @param player - The player involved.
+   * @param val - The score value.
    */
   override giveScore(player: Player, val: number = 1): void {
     for (let i = 0; i < this.game.players.length; i++) {
@@ -250,8 +250,8 @@ export class CaptureTheFlag extends Gamemode {
 
   /**
    * Handle a new kill event.
-   * @param {Player} player1 - The killer.
-   * @param {Player} player2 - The victim.
+   * @param player1 - The killer.
+   * @param player2 - The victim.
    */
   override newKill(player1: Player, player2: Player): void {
     if (player1.team != player2.team) {
@@ -355,7 +355,7 @@ export class KingOfTheHill extends Gamemode {
 
   /**
    * Creates a new KingOfTheHill mode.
-   * @param {Game} game - The game instance.
+   * @param game - The game instance.
    */
   constructor(game: Game) {
     super(game);
@@ -364,8 +364,8 @@ export class KingOfTheHill extends Gamemode {
 
   /**
    * Updates player score.
-   * @param {Player} player - The player.
-   * @param {number} val - Score value.
+   * @param player - The player.
+   * @param val - Score value.
    */
   override giveScore(player: Player, val: number = 1): void {
     player.score += val;
@@ -374,8 +374,8 @@ export class KingOfTheHill extends Gamemode {
 
   /**
    * Handle a new kill event.
-   * @param {Player} player1 - The killer.
-   * @param {Player} player2 - The victim.
+   * @param player1 - The killer.
+   * @param player2 - The victim.
    */
   override newKill(player1: Player, player2: Player): void {
     if (player1.team !== player2.team) {

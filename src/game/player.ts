@@ -25,10 +25,10 @@ export default class Player {
 
   /**
    * Creates a new Player.
-   * @param {number} id - The player ID.
-   * @param {string} name - The player name.
-   * @param {Team} team - The team of the player
-   * @param {string[]} keys - The key mapping.
+   * @param id - The player ID.
+   * @param name - The player name.
+   * @param team - The team of the player
+   * @param keys - The key mapping.
    */
   constructor(id: number, name: string, team: Team, keys: string[]) {
     this.id = id;

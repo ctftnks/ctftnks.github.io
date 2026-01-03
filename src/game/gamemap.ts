@@ -27,9 +27,9 @@ export default class GameMap {
 
   /**
    * Creates a new GameMap.
-   * @param {Canvas} canvas - The canvas object.
-   * @param {number} Nx - Number of tiles in X direction.
-   * @param {number} Ny - Number of tiles in Y direction.
+   * @param canvas - The canvas object.
+   * @param Nx - Number of tiles in X direction.
+   * @param Ny - Number of tiles in Y direction.
    */
   constructor(canvas: Canvas, Nx: number | null = null, Ny: number | null = null) {
     this.canvas = canvas;
@@ -49,9 +49,9 @@ export default class GameMap {
 
   /**
    * Gets a tile by its grid index.
-   * @param {number} i - X index.
-   * @param {number} j - Y index.
-   * @returns {Tile|null} The tile or null if out of bounds.
+   * @param i - X index.
+   * @param j - Y index.
+   * @returns The tile or null if out of bounds.
    */
   getTileByIndex(i: number, j: number): Tile | null {
     if (i >= 0 && i < this.Nx && j >= 0 && j < this.Ny) {
@@ -78,9 +78,9 @@ export default class GameMap {
 
   /**
    * Gets a tile by its world position.
-   * @param {number} x - X coordinate.
-   * @param {number} y - Y coordinate.
-   * @returns {Tile|null} The tile or null.
+   * @param x - X coordinate.
+   * @param y - Y coordinate.
+   * @returns The tile or null.
    */
   getTileByPos(x: number, y: number): Tile | null {
     const i = Math.floor(x / this.dx);
@@ -99,7 +99,7 @@ export default class GameMap {
 
   /**
    * Spatial sorting: add object to corresponding tile list.
-   * @param {GameObject} obj - The object to add.
+   * @param obj - The object to add.
    */
   addObject(obj: GameObject): void {
     const tile = this.getTileByPos(obj.x, obj.y);
@@ -112,8 +112,8 @@ export default class GameMap {
 
   /**
    * Returns a random free spawn point.
-   * @param {number} tries - Recursion counter.
-   * @returns {object} {x, y} coordinates.
+   * @param tries - Recursion counter.
+   * @returns {x, y} coordinates.
    */
   spawnPoint(tries: number = 0): Coord {
     const rInt = Math.floor(Math.random() * this.tiles.length);
@@ -127,7 +127,7 @@ export default class GameMap {
 
   /**
    * Draws the map.
-   * @param {CanvasRenderingContext2D} context - The context.
+   * @param context - The context.
    */
   draw(context: CanvasRenderingContext2D): void {
     context.fillStyle = "#edede8";

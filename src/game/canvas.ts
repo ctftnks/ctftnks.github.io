@@ -13,7 +13,7 @@ export default class Canvas {
 
   /**
    * Creates a new Canvas manager.
-   * @param {string} id - The ID of the canvas element.
+   * @param id - The ID of the canvas element.
    */
   constructor(id: string) {
     this.canvas = document.getElementById(id) as HTMLCanvasElement;
@@ -62,7 +62,7 @@ export default class Canvas {
 
   /**
    * Zoom into the canvas.
-   * @param {number} factor - The scale factor.
+   * @param factor - The scale factor.
    */
   rescale(factor: number): void {
     this.scale = factor;
