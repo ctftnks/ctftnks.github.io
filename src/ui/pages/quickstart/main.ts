@@ -1,6 +1,6 @@
 import { BasePage } from "@/ui/components/BasePage";
 import { store } from "@/game/store";
-import { updatePlayersMenu } from "@/ui/ui";
+import { updatePlayersMenu } from "@/ui/pages/menu/main";
 import { closePage } from "@/ui/pages";
 import template from "./main.html?raw";
 import "./style.css";
