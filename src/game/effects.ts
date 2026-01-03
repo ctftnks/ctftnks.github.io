@@ -2,6 +2,10 @@ import { store } from "@/game/store";
 import { Settings } from "@/game/settings";
 import Game from "./game";
 
+/**
+ * Plays a sound file if audio is not muted.
+ * @param file - Path to the sound file.
+ */
 export function playSound(file: string): void {
   if (file !== "" && !Settings.muted) {
     const audio = new Audio(file);
@@ -12,6 +16,10 @@ export function playSound(file: string): void {
 export let playingMusic: string | null = null;
 export let musicAudio: HTMLAudioElement | null = null;
 
+/**
+ * Plays background music in a loop.
+ * @param file - Path to the music file.
+ */
 export function playMusic(file: string): void {
   if (file === playingMusic) {
     return;
@@ -30,6 +38,9 @@ export function playMusic(file: string): void {
   musicAudio = audio;
 }
 
+/**
+ * Stops the currently playing music.
+ */
 export function stopMusic(): void {
   if (musicAudio !== null) {
     musicAudio.pause();
@@ -41,6 +52,10 @@ export function stopMusic(): void {
 
 export let effectCanvasID: number = 0;
 
+/**
+ * Creates a new overlay canvas for visual effects.
+ * @returns The newly created canvas element.
+ */
 export function newEffectCanvas(): HTMLCanvasElement {
   const canv = document.createElement("canvas");
   effectCanvasID++;
@@ -51,6 +66,12 @@ export function newEffectCanvas(): HTMLCanvasElement {
   return canv;
 }
 
+/**
+ * Initiates a Fog of War effect.
+ * Dims the map and reveals area around tanks.
+ * @param game - The game instance.
+ * @returns The interval ID of the effect loop.
+ */
 export function fogOfWar(game: Game): number {
   const canv = document.getElementById("effectFrame") as HTMLCanvasElement;
   canv.height = game.canvas.canvas.clientHeight;
@@ -96,6 +117,9 @@ export function fogOfWar(game: Game): number {
   return intvl;
 }
 
+/**
+ * Clears all visual effects from the overlay canvas.
+ */
 export function clearEffects(): void {
   const canv = document.getElementById("effectFrame") as HTMLCanvasElement;
   if (store.game && store.game.canvas && store.game.canvas.canvas) {
@@ -106,6 +130,12 @@ export function clearEffects(): void {
   ctx.clearRect(0, 0, 2 * canv.width, 2 * canv.height);
 }
 
+/**
+ * Converts a hex color string to rgba format.
+ * @param hex - The hex color string.
+ * @param a - Alpha value (0-1).
+ * @returns The rgba color string.
+ */
 export function hexToRgbA(hex: string, a: number): string {
   let c;
   if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {

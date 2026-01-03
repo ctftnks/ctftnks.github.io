@@ -6,7 +6,8 @@ import { Settings } from "./settings";
 import { TEAMS } from "./team";
 
 /**
- * Data Structure for the global state of the website
+ * Data Structure for the global state of the website.
+ * Manages players, game instances, and settings persistence.
  */
 class GameStore {
   game: Game | undefined = undefined;
@@ -31,10 +32,18 @@ class GameStore {
     ["Digit8", "KeyU", "KeyI", "Digit9", "Digit7"],
   ];
 
+  /**
+   * Creates a new GameStore and loads saved settings.
+   */
   constructor() {
     this.loadSettings();
   }
 
+  /**
+   * Creates a new player or bot and adds it to the store.
+   * @param isBot - Whether the player should be a bot.
+   * @returns The newly created player.
+   */
   createPlayer(isBot: boolean = false): Player {
     const id = this.nplayers;
     this.nplayers++;
@@ -48,10 +57,16 @@ class GameStore {
     return new Player(id, name, team, keys);
   }
 
+  /**
+   * Saves current settings to localStorage.
+   */
   saveSettings(): void {
     localStorage.setItem("ctftanks_settings", JSON.stringify(Settings));
   }
 
+  /**
+   * Loads settings from localStorage if available.
+   */
   loadSettings(): void {
     const saved = localStorage.getItem("ctftanks_settings");
     if (saved) {

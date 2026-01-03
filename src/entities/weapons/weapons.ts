@@ -39,6 +39,7 @@ export class Weapon {
 
   /**
    * Fires the weapon.
+   * Plays sound and creates a new bullet.
    */
   shoot(): void {
     if (!this.isActive) {
@@ -53,6 +54,7 @@ export class Weapon {
 
   /**
    * Creates a new bullet with all the typical properties.
+   * Handles tank corner positioning and initial lethality delay.
    * @returns The created bullet.
    */
   newBullet(): Bullet {
@@ -165,6 +167,10 @@ export class MG extends Weapon {
     this.bot.fleeIfActive = true;
   }
 
+  /**
+   * Fires a burst of bullets.
+   * @override
+   */
   override newBullet(): Bullet {
     const bullet = super.newBullet();
     bullet.radius = 2;
@@ -176,6 +182,10 @@ export class MG extends Weapon {
     return bullet;
   }
 
+  /**
+   * Fires the MG burst.
+   * @override
+   */
   override shoot(): void {
     if (!this.isActive) {
       return;

@@ -113,7 +113,7 @@ export default class GameMap {
   /**
    * Returns a random free spawn point.
    * @param tries - Recursion counter.
-   * @returns {x, y} coordinates.
+   * @returns coordinates.
    */
   spawnPoint(tries: number = 0): Coord {
     const rInt = Math.floor(Math.random() * this.tiles.length);

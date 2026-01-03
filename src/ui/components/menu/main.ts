@@ -16,10 +16,16 @@ export class MenuPage extends BasePage {
   private editingKeymap: boolean = false;
   private keydownHandler: ((event: KeyboardEvent) => void) | null = null;
 
+  /**
+   * Renders the menu template.
+   */
   protected render(): void {
     this.innerHTML = template;
   }
 
+  /**
+   * Attaches listeners for menu actions and player management.
+   */
   protected attachListeners(): void {
     const shade = this.querySelector("#menuShade");
     if (shade) {
@@ -71,6 +77,9 @@ export class MenuPage extends BasePage {
     this.setupPlayersMenuListeners();
   }
 
+  /**
+   * Pauses the game and sets up keydown listeners on mount.
+   */
   protected onMount(): void {
     this.updatePlayersMenu();
 
@@ -91,6 +100,9 @@ export class MenuPage extends BasePage {
     window.addEventListener("keydown", this.keydownHandler);
   }
 
+  /**
+   * Removes keydown listeners on unmount.
+   */
   protected onUnmount(): void {
     if (this.keydownHandler) {
       window.removeEventListener("keydown", this.keydownHandler);

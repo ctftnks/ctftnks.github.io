@@ -70,7 +70,7 @@ export class Smoke extends GameObject {
  * @param rspeed - Shrink speed.
  * @param color - Color override.
  */
-export const generateCloud = function (
+export function generateCloud(
   game: Game,
   x: number,
   y: number,
@@ -88,4 +88,4 @@ export const generateCloud = function (
     }
     game.addObject(smoke);
   }
-};
+}

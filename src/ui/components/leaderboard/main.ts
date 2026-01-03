@@ -7,14 +7,24 @@ import { store } from "@/game/store";
 import { Settings } from "@/game/settings";
 import { closePage } from "@/ui/pages";
 
+/**
+ * LeaderboardPage - Component for displaying the game results and countdown to next round.
+ * @augments BasePage
+ */
 export class LeaderboardPage extends BasePage {
   private leaderIntvl: number | null = null;
   private leaderTimeout: number | null = null;
 
+  /**
+   * Renders the leaderboard template.
+   */
   protected render(): void {
     this.innerHTML = template;
   }
 
+  /**
+   * Attaches listeners for closing the leaderboard.
+   */
   protected attachListeners(): void {
     const shadeElem = this.querySelector("#leaderboardshade") as HTMLElement | null;
     if (shadeElem) {
@@ -26,6 +36,9 @@ export class LeaderboardPage extends BasePage {
     }
   }
 
+  /**
+   * Updates the leaderboard and starts the countdown on mount.
+   */
   protected onMount(): void {
     updateLeaderboard();
 
@@ -54,10 +67,16 @@ export class LeaderboardPage extends BasePage {
     }, Settings.EndScreenTime * 1000);
   }
 
+  /**
+   * Cleans up intervals on unmount.
+   */
   protected onUnmount(): void {
     this.cleanup();
   }
 
+  /**
+   * Stops leaderboard-related timers.
+   */
   private cleanup(): void {
     if (this.leaderIntvl !== null) {
       window.clearInterval(this.leaderIntvl);

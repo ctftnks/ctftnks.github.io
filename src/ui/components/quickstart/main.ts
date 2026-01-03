@@ -5,11 +5,21 @@ import { closePage } from "@/ui/pages";
 import template from "./main.html?raw";
 import "./style.css";
 
+/**
+ * QuickstartPage - Component for quickly starting pre-configured games.
+ * @augments BasePage
+ */
 export class QuickstartPage extends BasePage {
+  /**
+   * Renders the quickstart menu template.
+   */
   protected render(): void {
     this.innerHTML = template;
   }
 
+  /**
+   * Attaches listeners for quickstart game options.
+   */
   protected attachListeners(): void {
     const shade = this.querySelector("#quickstartShade");
     if (shade) {

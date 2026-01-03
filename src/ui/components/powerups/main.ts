@@ -6,11 +6,21 @@ import { Settings } from "@/game/settings";
 import { databinding } from "@/ui/databinding";
 import { closePage } from "@/ui/pages";
 
+/**
+ * PowerupsPage - Component for configuring powerup weights.
+ * @augments BasePage
+ */
 export class PowerupsPage extends BasePage {
+  /**
+   * Renders the powerups menu template.
+   */
   protected render(): void {
     this.innerHTML = template;
   }
 
+  /**
+   * Attaches listeners for adjusting powerup weights and closing the page.
+   */
   protected attachListeners(): void {
     const shade = this.querySelector("#powerupsShade");
     if (shade) {
@@ -49,6 +59,9 @@ export class PowerupsPage extends BasePage {
     });
   }
 
+  /**
+   * Updates the powerups menu on mount.
+   */
   protected onMount(): void {
     updatePowerupsMenu();
   }

@@ -12,21 +12,21 @@ import Team from "@/game/team";
  * @augments GameObject
  */
 export class Flag extends GameObject {
-  /** Game instance. */
+  /** The game instance. */
   game: Game;
-  /** The home base. */
+  /** The home base of this flag. */
   base: Base;
-  /** Team color. */
+  /** The team this flag belongs to. */
   team: Team;
-  /** Flag color. */
+  /** The color of the flag. */
   color: string;
-  /** Flag size. */
+  /** The size of the flag for drawing and collision. */
   size: number = 24;
-  /** Whether the flag is currently picked up. */
+  /** Whether the flag is currently being carried by a tank. */
   picked: boolean = false;
-  /** Whether the flag is in its base. */
+  /** Whether the flag is currently at its home base. */
   inBase: boolean = true;
-  /** Timer for resetting the flag. */
+  /** Timestamp until which the flag stays at its dropped position before resetting. */
   resetTimer: number = 0;
 
   /**

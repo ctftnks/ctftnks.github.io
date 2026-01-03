@@ -25,10 +25,16 @@ class SideBar extends HTMLElement {
     bs.innerHTML = `BotSpeed:&nbsp;&nbsp;${Math.round(speed * 100)} %`;
   };
 
+  /**
+   * Updates scores in the sidebar.
+   */
   private onScoreUpdated = (): void => {
     this.updateScores();
   };
 
+  /**
+   * Attaches listeners and registers game event handlers on mount.
+   */
   connectedCallback(): void {
     this.render();
     this.attachListeners();
@@ -37,6 +43,9 @@ class SideBar extends HTMLElement {
     gameEvents.on(EVENTS.SCORE_UPDATED, this.onScoreUpdated);
   }
 
+  /**
+   * Unregisters game event handlers and removes listeners on unmount.
+   */
   disconnectedCallback(): void {
     gameEvents.off(EVENTS.TIME_UPDATED, this.onTimeUpdated);
     gameEvents.off(EVENTS.BOT_SPEED_UPDATED, this.onBotSpeedUpdated);
@@ -44,6 +53,9 @@ class SideBar extends HTMLElement {
     this.removeListeners();
   }
 
+  /**
+   * Renders the sidebar template.
+   */
   private render(): void {
     // Inject component CSS and HTML into the element (light DOM)
     this.innerHTML = sideBarHtml;

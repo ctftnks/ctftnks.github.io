@@ -65,6 +65,7 @@ export class Deathmatch extends Gamemode {
    * Updates player score.
    * @param player - The player to give score to.
    * @param val - The score value.
+   * @override
    */
   override giveScore(player: Player, val: number = 1): void {
     player.score += val;
@@ -81,6 +82,7 @@ export class Deathmatch extends Gamemode {
    * Handle a new kill event.
    * @param player1 - The killer.
    * @param player2 - The victim.
+   * @override
    */
   override newKill(player1: Player, player2: Player): void {
     if (player1.team === player2.team) {
@@ -109,6 +111,7 @@ export class TeamDeathmatch extends Gamemode {
    * Updates team score.
    * @param player - The player involved (to identify team).
    * @param val - The score value.
+   * @override
    */
   override giveScore(player: Player, val: number = 1): void {
     for (let i = 0; i < this.game.players.length; i++) {
@@ -129,6 +132,7 @@ export class TeamDeathmatch extends Gamemode {
    * Handle a new kill event.
    * @param player1 - The killer.
    * @param player2 - The victim.
+   * @override
    */
   override newKill(player1: Player, player2: Player): void {
     if (player1.team === player2.team) {
@@ -140,6 +144,7 @@ export class TeamDeathmatch extends Gamemode {
 
   /**
    * Initialize bases and spawn players.
+   * @override
    */
   override init(): void {
     const bases: Base[] = [];
@@ -237,6 +242,7 @@ export class CaptureTheFlag extends Gamemode {
    * Updates team score.
    * @param player - The player involved.
    * @param val - The score value.
+   * @override
    */
   override giveScore(player: Player, val: number = 1): void {
     for (let i = 0; i < this.game.players.length; i++) {
@@ -252,6 +258,7 @@ export class CaptureTheFlag extends Gamemode {
    * Handle a new kill event.
    * @param player1 - The killer.
    * @param player2 - The victim.
+   * @override
    */
   override newKill(player1: Player, player2: Player): void {
     if (player1.team != player2.team) {
@@ -267,6 +274,7 @@ export class CaptureTheFlag extends Gamemode {
 
   /**
    * Initialize bases and spawn players.
+   * @override
    */
   override init(): void {
     const bases: Base[] = [];
@@ -366,6 +374,7 @@ export class KingOfTheHill extends Gamemode {
    * Updates player score.
    * @param player - The player.
    * @param val - Score value.
+   * @override
    */
   override giveScore(player: Player, val: number = 1): void {
     player.score += val;
@@ -376,6 +385,7 @@ export class KingOfTheHill extends Gamemode {
    * Handle a new kill event.
    * @param player1 - The killer.
    * @param player2 - The victim.
+   * @override
    */
   override newKill(player1: Player, player2: Player): void {
     if (player1.team !== player2.team) {
@@ -391,6 +401,7 @@ export class KingOfTheHill extends Gamemode {
 
   /**
    * Updates game state, checking hill control.
+   * @override
    */
   override step(): void {
     // if all bases same color: score in intervals for team
@@ -418,6 +429,7 @@ export class KingOfTheHill extends Gamemode {
 
   /**
    * Initializes hills and spawn points.
+   * @override
    */
   override init(): void {
     const bases: Hill[] = [];

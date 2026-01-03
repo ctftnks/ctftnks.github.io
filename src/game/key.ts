@@ -13,6 +13,10 @@ export const Key = {
     return this._pressed.has(code);
   },
 
+  /**
+   * Event handler for keydown events.
+   * @param event - The keyboard event.
+   */
   onKeydown: function (event: KeyboardEvent) {
     this._pressed.add(event.code);
 
@@ -24,6 +28,10 @@ export const Key = {
     }
   },
 
+  /**
+   * Event handler for keyup events.
+   * @param event - The keyboard event.
+   */
   onKeyup: function (event: KeyboardEvent) {
     this._pressed.delete(event.code);
   },

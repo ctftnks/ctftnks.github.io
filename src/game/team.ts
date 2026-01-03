@@ -17,6 +17,11 @@ export default class Team {
   id: number;
   color: string;
 
+  /**
+   * Creates a new Team.
+   * @param id - The team ID.
+   * @param color - Optional color override.
+   */
   constructor(id: number, color?: string) {
     this.id = id;
     this.color = color ?? TEAMCOLORS[this.id];

@@ -5,6 +5,10 @@
 export class BasePage extends HTMLElement {
   protected isInitialized = false;
 
+  /**
+   * Called when the component is added to the DOM.
+   * Initializes the component if it hasn't been already.
+   */
   connectedCallback(): void {
     if (!this.isInitialized) {
       this.isInitialized = true;
@@ -14,6 +18,9 @@ export class BasePage extends HTMLElement {
     }
   }
 
+  /**
+   * Called when the component is removed from the DOM.
+   */
   disconnectedCallback(): void {
     this.onUnmount();
   }

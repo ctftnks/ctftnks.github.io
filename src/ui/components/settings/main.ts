@@ -5,11 +5,21 @@ import { Settings } from "@/game/settings";
 import { databinding } from "@/ui/databinding";
 import { closePage } from "@/ui/pages";
 
+/**
+ * SettingsPage - Component for editing game settings.
+ * @augments BasePage
+ */
 export class SettingsPage extends BasePage {
+  /**
+   * Renders the settings menu template.
+   */
   protected render(): void {
     this.innerHTML = template;
   }
 
+  /**
+   * Attaches event listeners for closing the page and updating settings.
+   */
   protected attachListeners(): void {
     const shade = this.querySelector("#settingsShade");
     if (shade) {
@@ -35,6 +45,9 @@ export class SettingsPage extends BasePage {
     }
   }
 
+  /**
+   * Refreshes data binding on mount.
+   */
   protected onMount(): void {
     databinding();
   }
