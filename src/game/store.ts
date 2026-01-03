@@ -52,7 +52,7 @@ class GameStore {
     localStorage.setItem("ctftanks_settings", JSON.stringify(Settings));
   }
 
-  private loadSettings(): void {
+  public loadSettings(): void {
     const saved = localStorage.getItem("ctftanks_settings");
     if (saved) {
       try {
