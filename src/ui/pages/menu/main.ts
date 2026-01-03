@@ -2,10 +2,10 @@ import { BasePage } from "@/ui/components/BasePage";
 import template from "./main.html?raw";
 import "./style.css";
 import { store } from "@/game/store";
-import { updateScores } from "@/ui/ui";
 import { openPage, closePage } from "@/ui/pages";
 import { newGame } from "@/game/game";
 import { TEAMS } from "@/game/team";
+import { EVENTS, gameEvents } from "@/game/events";
 
 /**
  * MenuPage - Manages the main menu with player setup and configuration
@@ -137,14 +137,14 @@ export class MenuPage extends BasePage {
       entryRow += "</div>";
       pmen.innerHTML += entryRow;
     }
-    updateScores();
+    gameEvents.emit(EVENTS.SCORE_UPDATED);
   }
 
   /**
    * Add a new player to the game
    * @param bot - Whether the player is a bot
    */
-  protected addPlayer(bot: boolean = false): void {
+  public addPlayer(bot: boolean = false): void {
     if (store.players.length >= store.keymaps.length) {
       store.keymaps.push(store.keymaps[0].slice());
     }
@@ -156,7 +156,7 @@ export class MenuPage extends BasePage {
    * Remove a player from the game
    * @param id - Player ID to remove
    */
-  protected removePlayer(id: number): void {
+  public removePlayer(id: number): void {
     const newPlayers = [];
     for (let i = 0; i < store.players.length; i++) {
       if (store.players[i].id !== id) {
