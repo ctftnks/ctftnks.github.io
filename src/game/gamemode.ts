@@ -5,7 +5,7 @@ import { adaptBotSpeed } from "./bot";
 import { SOUNDS } from "@/game/assets";
 import type Game from "./game";
 import Tile from "./tile";
-import { updateScores } from "@/ui/ui";
+import { gameEvents, EVENTS } from "@/game/events";
 
 /**
  * Base class for game modes.
@@ -73,7 +73,7 @@ export class Deathmatch extends Gamemode {
       player.score += Math.floor(player.spree / 5);
       playSound(SOUNDS.killingspree);
     }
-    updateScores();
+    gameEvents.emit(EVENTS.SCORE_UPDATED);
     adaptBotSpeed(player.team);
   }
 
@@ -123,7 +123,7 @@ export class TeamDeathmatch extends Gamemode {
       player.score += Math.floor(player.spree / 5);
       playSound(SOUNDS.killingspree);
     }
-    updateScores();
+    gameEvents.emit(EVENTS.SCORE_UPDATED);
     adaptBotSpeed(player.team);
   }
 
@@ -248,7 +248,7 @@ export class CaptureTheFlag extends Gamemode {
         this.game.players[i].score += val;
       }
     }
-    updateScores();
+    gameEvents.emit(EVENTS.SCORE_UPDATED);
     adaptBotSpeed(player.team);
   }
 
@@ -265,7 +265,7 @@ export class CaptureTheFlag extends Gamemode {
         playSound(SOUNDS.killingspree);
       }
 
-      updateScores();
+      gameEvents.emit(EVENTS.SCORE_UPDATED);
     }
   }
 
@@ -373,7 +373,7 @@ export class KingOfTheHill extends Gamemode {
    */
   giveScore(player: Player, val: number = 1): void {
     player.score += val;
-    updateScores();
+    gameEvents.emit(EVENTS.SCORE_UPDATED);
   }
 
   /**
@@ -389,7 +389,7 @@ export class KingOfTheHill extends Gamemode {
         playSound(SOUNDS.killingspree);
       }
 
-      updateScores();
+      gameEvents.emit(EVENTS.SCORE_UPDATED);
     }
   }
 

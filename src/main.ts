@@ -5,9 +5,11 @@ import { Settings, store } from "@/game/store";
 import { newGame } from "@/game/game";
 import { databinding } from "@/ui/databinding";
 import { openPage } from "@/ui/pages";
+import { initHUD } from "@/ui/hud";
 
 // generate canvas object and players list
 window.onload = () => {
+  initHUD();
   store.canvas = new Canvas("gameFrame");
 
   store.players = [new Player(), new Bot(), new Bot(), new Bot()];

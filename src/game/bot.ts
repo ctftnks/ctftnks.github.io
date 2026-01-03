@@ -8,6 +8,7 @@ import { Coord } from "@/entities/coord";
 import { Laser, Guided, WreckingBall, Slingshot } from "@/entities/weapons/weapons";
 import { CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import GameObject from "@/entities/gameobject";
+import { gameEvents, EVENTS } from "@/game/events";
 
 let NBots: number = 0;
 
@@ -420,10 +421,6 @@ export function adaptBotSpeed(team: number, val: number = 0.1): number | undefin
   const id = teams.indexOf(team);
   Settings.BotSpeed += (avgbots - botcounts[id]) * val;
 
-  const bs = document.getElementById("BotSpeedometer");
-  if (bs) {
-    bs.style.display = "block";
-    bs.innerHTML = "BotSpeed:&nbsp;&nbsp;" + Math.round(Settings.BotSpeed * 100) + " %";
-  }
+  gameEvents.emit(EVENTS.BOT_SPEED_UPDATED, Settings.BotSpeed);
   return Settings.BotSpeed;
 }

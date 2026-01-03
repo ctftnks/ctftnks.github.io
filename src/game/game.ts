@@ -1,3 +1,4 @@
+import { gameEvents, EVENTS } from "@/game/events";
 import GameMap from "./gamemap";
 import MapGenerator from "./mapGenerator";
 import { getRandomPowerUp, type PowerUp } from "@/entities/powerup";
@@ -10,7 +11,6 @@ import Player from "./player";
 import GameObject from "@/entities/gameobject";
 import { Gamemode, Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import { openPage } from "@/ui/pages";
-import { updateScores } from "@/ui/ui";
 
 /**
  * Manages the game state, loop, and objects.
@@ -106,7 +106,7 @@ export default class Game {
     if (Settings.bgmusic) {
       // playMusic(SOUNDS.bgmusic);
     }
-    updateScores();
+    gameEvents.emit(EVENTS.SCORE_UPDATED);
   }
 
   /**
@@ -182,15 +182,10 @@ export default class Game {
       openPage("menu");
       this.pause();
     }
-    if (this.t % 1000 === Settings.GameFrequency) {
+    if (this.t % 1000 <= Settings.GameFrequency) {
       let dt = Settings.RoundTime * 60 - (this.t - Settings.GameFrequency) / 1000;
       dt = dt < 0 ? 0 : dt;
-      const dtm: number = Math.floor(dt / 60);
-      const dts: number = Math.floor(dt - dtm * 60);
-      const timerElem = document.getElementById("GameTimer");
-      if (timerElem) {
-        timerElem.innerHTML = `${String(dtm).padStart(2, "0")}:${String(dts).padStart(2, "0")}`;
-      }
+      gameEvents.emit(EVENTS.TIME_UPDATED, dt);
     }
     if (this.t > Settings.RoundTime * 60000) {
       this.end();
