@@ -1,57 +1,79 @@
-// create page div in container, load content into page
 import { databinding } from "@/ui/databinding";
+import { BasePage } from "@/ui/components/BasePage";
 
-let pageID = 0;
+// Pre-register all page Web Components
+import "./pages/index.ts";
 
-// Discover all page modules
-const pageModules = import.meta.glob("./pages/*/main.ts");
+/**
+ * Open a page by name
+ * Creates and mounts a Web Component for the specified page
+ * Page names are converted to kebab-case custom element tags (e.g., "menu" → "menu-page")
+ * @param name - The name of the page (e.g., "menu", "settings")
+ * @returns The mounted page element
+ */
+export function openPage(name: string): BasePage {
+  const tag = `${name}-page`;
 
-export async function openPage(name: string): Promise<number> {
-  const id = pageID++;
-  const container = document.createElement("div");
-  container.className = "page";
-  container.id = "page" + id;
-  const pageContainerElem = document.getElementById("pageContainer");
-  if (pageContainerElem) {
-    pageContainerElem.appendChild(container);
+  const container = document.getElementById("pageContainer");
+  if (!container) {
+    throw new Error("pageContainer element not found in DOM");
   }
+  const wrapper = document.createElement("div");
+  wrapper.className = "page";
 
-  const modulePath = `./pages/${name}/main.ts`;
-  if (pageModules[modulePath]) {
-    try {
-      const module = (await pageModules[modulePath]()) as any;
-      if (module.init) {
-        module.init(container);
-      }
+  const page = document.createElement(tag) as BasePage;
+  wrapper.appendChild(page);
+  container.appendChild(wrapper);
 
-      databinding();
-    } catch (e) {
-      console.error(`Failed to load page module: ${name}`, e);
-    }
-  } else {
-    console.error(`Page module not found: ${name}`);
-  }
+  // Run databinding after page is mounted
+  databinding();
 
-  return id;
+  return page;
 }
 
-// close a page by ID or child
-export function closePage(id: number | HTMLElement | GlobalEventHandlers | ParentNode): void {
-  if (typeof id === "number") {
-    const elem = document.getElementById("page" + id);
-    if (elem != null && typeof elem !== "undefined" && elem.parentNode) {
-      elem.parentNode.removeChild(elem);
-    }
+/**
+ * Close a page
+ * Accepts either a page element or any element within a page
+ * @param pageOrElement - A page element, or any element contained within a page
+ */
+export function closePage(pageOrElement: BasePage | HTMLElement): void {
+  if (!pageOrElement) {
+    return;
   }
-  if (typeof id === "object") {
-    let elem: HTMLElement = id as HTMLElement;
-    let count = 0;
-    while (elem && (!elem.matches || !elem.matches(".page")) && count < 100) {
-      elem = elem.parentNode as HTMLElement;
-      count++;
-    }
-    if (elem && elem.parentNode) {
-      elem.parentNode.removeChild(elem);
-    }
+
+  // If it's a Web Component page, just remove it and walk up to the wrapper
+  let elementToRemove: HTMLElement | null = null;
+
+  if (pageOrElement instanceof BasePage) {
+    // It's a Web Component, find its wrapper
+    elementToRemove = pageOrElement.parentElement;
+  } else {
+    // It's a regular element, find the page wrapper
+    elementToRemove = findPageWrapper(pageOrElement as HTMLElement);
   }
+
+  if (elementToRemove?.parentElement) {
+    elementToRemove.remove();
+  }
+}
+
+/**
+ * Find the page wrapper element containing a given element
+ * Walks up the DOM tree to find the closest element with the "page" class
+ * @param element
+ */
+function findPageWrapper(element: HTMLElement): HTMLElement | null {
+  let current: HTMLElement | null = element;
+  let depth = 0;
+  const maxDepth = 100;
+
+  while (current && depth < maxDepth) {
+    if (current.classList.contains("page")) {
+      return current;
+    }
+    current = current.parentElement;
+    depth++;
+  }
+
+  return null;
 }

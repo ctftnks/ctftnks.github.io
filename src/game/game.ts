@@ -178,9 +178,9 @@ export default class Game {
         ),
       );
     }
-    if (Key.isDown("Escape")) {
-      openPage("menu");
+    if (Key.isDown("Escape") && !this.paused) {
       this.pause();
+      openPage("menu");
     }
     if (this.t % 1000 <= Settings.GameFrequency) {
       let dt = Settings.RoundTime * 60 - (this.t - Settings.GameFrequency) / 1000;
