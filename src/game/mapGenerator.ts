@@ -1,7 +1,5 @@
 import GameMap from "./gamemap";
 import Tile from "./tile";
-import { store } from "@/store";
-import { newGame } from "./game";
 
 // Static class for some map generation methods
 
@@ -189,101 +187,6 @@ export default class MapGenerator {
       MapGenerator.recursiveDivision(map, x1, y1, x2, posY + 1);
       MapGenerator.recursiveDivision(map, x1, posY + 1, x2, y2);
     }
-  }
-
-  /**
-   * Export map into bit format.
-   * @param {GameMap} map - The map to export.
-   * @returns {string} The encoded map data.
-   */
-  static exportMap(map: GameMap): string {
-    const Nx = map.Nx;
-    const Ny = map.Ny;
-    let data = "";
-    for (let j = 0; j < Ny; j++) {
-      for (let i = 0; i < Nx; i++) {
-        let number = 0;
-        const t = map.getTileByIndex(i, j) as Tile;
-        for (let d = 0; d < 4; d++) {
-          number += (t.walls[d] ? 1 : 0) * Math.pow(2, d);
-        }
-        data += "" + number;
-        if (i < Nx - 1) {
-          data += " ";
-        }
-      }
-      if (j < Ny - 1) {
-        data += "\n";
-      }
-    }
-    return data;
-  }
-
-  /**
-   * Applies a prefetched map data to an existing map object.
-   * @param {GameMap} map - The map to update.
-   */
-  static importedMap(map: GameMap) {
-    if (!prefetchedMap) {
-      return;
-    }
-    // copy tiles and size to old map
-    map.Nx = prefetchedMap.Nx;
-    map.Ny = prefetchedMap.Ny;
-    map.tiles = prefetchedMap.tiles;
-    // map.dx = prefetchedMap.dx;
-    // map.dy = prefetchedMap.dy;
-    map.resize();
-  }
-
-  /**
-   * Import map from file.
-   * @param {string|number} mapname - Map identifier.
-   */
-  static importMap(mapname: string | null = null): void {
-    // request file
-    const xhttp = new XMLHttpRequest();
-    // TODO: pick random name
-    const maxMapId = 0;
-    if (mapname === null) {
-      mapname = Math.floor(Math.random() * maxMapId).toString();
-    }
-    xhttp.open("GET", "maps/" + mapname + ".csv", true);
-    xhttp.send();
-    xhttp.onreadystatechange = function () {
-      if (this.readyState === 4 && this.status === 200) {
-        // got data from file, now process it
-        const data = this.responseText;
-        const lines = data.match(/[^\r\n]+/g);
-        if (!lines) {
-          return;
-        }
-        const Ny = lines.length;
-        const Nx = lines[0].split(" ").length;
-
-        // Safety check for game
-        const map = new GameMap(store.canvas!, Nx, Ny);
-        for (let j = 0; j < Ny; j++) {
-          const line = lines[j].split(" ");
-          for (let i = 0; i < Nx; i++) {
-            const number = parseInt(line[i]);
-            const t = map.getTileByIndex(i, j) as Tile;
-            for (let d = 0; d < 4; d++) {
-              t.walls[d] = (number >>> d) % 2 === 1;
-            }
-          }
-        }
-        // copy tiles and size to old map
-        // map.Nx = newmap.Nx;
-        // map.Ny = newmap.Ny;
-        // map.tiles = newmap.tiles;
-        // map.dx = newmap.dx;
-        // map.dy = newmap.dy;
-        // map.resize();
-        // prefetchedMap = map;
-        newGame(map);
-      }
-    };
   }
 }
 
