@@ -59,7 +59,6 @@ export default class Tank extends GameObject {
     this.height = Settings.TankHeight;
     this.weapon = new Gun(this);
     this.speed = Settings.TankSpeed;
-    this.type = "Tank";
   }
 
   /**

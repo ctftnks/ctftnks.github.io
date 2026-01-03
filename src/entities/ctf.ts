@@ -11,7 +11,6 @@ import Tile from "@/game/tile";
  * @augments GameObject
  */
 export class Flag extends GameObject {
-  type: string = "Flag";
   /** Game instance. */
   game: Game;
   /** The home base. */
@@ -137,7 +136,6 @@ export class Flag extends GameObject {
  * @augments GameObject
  */
 export class Base extends GameObject {
-  type: string = "Base";
   /** Team identifier. */
   team: number | null;
   /** Base color. */
@@ -206,7 +204,7 @@ export class Base extends GameObject {
       ) {
         if (tank.carriedFlag !== null && this.hasFlag()) {
           // score!
-          this.game.mode.giveScore(tank.player);
+          this.game.mode.giveScore(tank.player, 1);
           playSound(SOUNDS.fanfare);
           tank.carriedFlag.reset();
           tank.carriedFlag = null;
@@ -232,7 +230,6 @@ export class Base extends GameObject {
  * @augments Base
  */
 export class Hill extends Base {
-  type: string = "Hill";
 
   /**
    * Creates a new Hill.

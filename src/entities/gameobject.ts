@@ -5,7 +5,6 @@ import { Coord } from "./coord";
  * Base class for Tanks, Bullets, PowerUps, etc.
  */
 export default abstract class GameObject implements Coord {
-  type: string = "Object";
   image: HTMLImageElement;
   x: number = 0;
   y: number = 0;
