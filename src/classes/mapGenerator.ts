@@ -1,5 +1,6 @@
-import GameMap, { Tile } from "./gamemap";
-import { store } from "../store";
+import GameMap from "./gamemap";
+import Tile from "./tile";
+import { store } from "@/store";
 import { newGame } from "./game";
 
 // Static class for some map generation methods

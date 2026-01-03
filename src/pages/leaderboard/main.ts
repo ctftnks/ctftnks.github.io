@@ -1,7 +1,7 @@
-import { newGame } from "../../classes/game";
-import type Player from "../../classes/player";
-import { Settings, store } from "../../store";
-import { closePage } from "../pages";
+import { newGame } from "@/classes/game";
+import type Player from "@/classes/player";
+import { Settings, store } from "@/store";
+import { closePage } from "@/pages/pages";
 import template from "./main.html?raw";
 import "./style.css";
 

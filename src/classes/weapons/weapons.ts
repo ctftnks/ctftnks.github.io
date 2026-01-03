@@ -1,11 +1,11 @@
-import Bullet from "./bullet";
-import Tank from "./tank";
-import Trajectory from "./trajectory";
-import { playSound, hexToRgbA } from "../effects";
-import { Smoke, generateCloud } from "./smoke";
-import { Settings } from "../store";
-import { IMAGES, SOUNDS } from "../assets";
-import { Tile } from "./gamemap";
+import Bullet from "../bullet";
+import Tank from "../tank";
+import Trajectory from "../trajectory";
+import { playSound, hexToRgbA } from "@/effects";
+import { Smoke, generateCloud } from "../smoke";
+import { Settings } from "@/store";
+import { IMAGES, SOUNDS } from "@/assets";
+import Tile from "@/classes/tile";
 
 /**
  * Base class for all weapons.

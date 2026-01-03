@@ -1,7 +1,7 @@
-import Bot from "../../classes/bot";
-import Player from "../../classes/player";
-import { store } from "../../store";
-import { updatePlayersMenu } from "../../ui";
+import Bot from "@/classes/bot";
+import Player from "@/classes/player";
+import { store } from "@/store";
+import { updatePlayersMenu } from "@/ui";
 import template from "./main.html?raw";
 import "./style.css";
 

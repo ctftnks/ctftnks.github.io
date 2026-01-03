@@ -1,12 +1,12 @@
 import GameObject from "./gameobject";
-import { Gun, Weapon } from "./weapons";
+import { Gun, Weapon } from "./weapons/weapons";
 import { generateCloud } from "./smoke";
-import { playSound } from "../effects";
-import { Settings } from "../store";
-import { SOUNDS } from "../assets";
+import { playSound } from "@/effects";
+import { Settings } from "@/store";
+import { SOUNDS } from "@/assets";
 import type Player from "./player";
 import type GameMap from "./gamemap";
-import type { Tile } from "./gamemap";
+import type Tile from "./tile";
 import { PowerUp } from "./powerup";
 import Bullet from "./bullet";
 import type { Flag } from "./ctf";

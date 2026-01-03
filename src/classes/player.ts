@@ -1,7 +1,7 @@
 import Tank from "./tank";
 import { Key } from "../key";
 import { generateCloud } from "./smoke";
-import { store, Settings } from "../store";
+import { store, Settings } from "@/store";
 import type Game from "./game";
 import type { Base } from "./ctf";
 

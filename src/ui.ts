@@ -1,6 +1,6 @@
-import { store } from "./store";
+import { store } from "@/store";
 
-export function updateScores() {
+export function updateScores(): void {
   const scoreBoard = document.getElementById("scoreBoard");
   if (!scoreBoard) {
     return;
@@ -101,6 +101,9 @@ window.addEventListener(
 );
 
 export function doEditKeymap(newKeyCode: string): void {
+  if (editingMapID === null || editingKeyID === null) {
+    return;
+  }
   store.keymaps[editingMapID][editingKeyID] = newKeyCode;
   editingKeymap = false;
   updatePlayersMenu();

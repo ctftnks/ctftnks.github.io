@@ -1,4 +1,4 @@
-import { store, Settings } from "./store";
+import { store, Settings } from "@/store";
 
 export function playSound(file: string): void {
   if (file !== "" && !Settings.muted) {

@@ -1,17 +1,12 @@
 import Player from "./player";
-import { store, Settings } from "../store";
-import { Tile } from "./gamemap";
+import { store, Settings } from "@/store";
+import { Tile } from "./tile";
 import { PowerUp } from "./powerup";
 import Tank from "./tank";
 import { Base, Flag, Hill } from "./ctf";
+import { Coord } from "./coord";
 
 let NBots: number = 0;
-
-/** Interface for anything that has (x, y) coordinates */
-declare interface Coord {
-  x: number;
-  y: number;
-}
 
 /**
  * A bot player that controls a tank automatically.

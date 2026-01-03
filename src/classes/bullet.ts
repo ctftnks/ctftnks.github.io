@@ -1,11 +1,11 @@
 import GameObject from "./gameobject";
 import { Smoke, generateCloud } from "./smoke";
-import { playSound } from "../effects";
-import { Settings } from "../store";
-import { SOUNDS } from "../assets";
+import { playSound } from "@/effects";
+import { Settings } from "@/store";
+import { SOUNDS } from "@/assets";
 import Player from "./player";
 import GameMap from "./gamemap";
-import { Weapon } from "./weapons";
+import { Weapon } from "./weapons/weapons";
 
 /**
  * Represents a bullet fired by a tank.

@@ -2,10 +2,10 @@
   class="popupshade"
   onclick="
     closePage(this);
-    if (typeof game === 'undefined') {
+    if (!store.game) {
       newGame();
     } else {
-      game.paused = false;
+      store.game.paused = false;
     }
     window.onresize();
   "

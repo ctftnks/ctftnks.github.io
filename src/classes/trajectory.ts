@@ -1,7 +1,12 @@
 import GameObject from "./gameobject";
-import { Settings } from "../store";
+import { Settings } from "@/store";
 import GameMap from "./gamemap";
 import Tank from "./tank";
+import { Coord } from "./coord";
+
+declare interface TrajectoryPoint extends Coord {
+  angle: number;
+}
 
 /**
  * Represents a trajectory for ray-casting or lasers.
@@ -14,11 +19,11 @@ export default class Trajectory extends GameObject {
   length: number = 2000;
   angle: number | undefined;
   delta: number = 4;
-  points: any[] = [];
+  points: TrajectoryPoint[] = [];
   map: GameMap;
   drawevery: number = 1;
   timeout: number = 100;
-  targets: any[] = [];
+  targets: Coord[] = [];
 
   /**
    * Creates a new Trajectory.
@@ -35,19 +40,16 @@ export default class Trajectory extends GameObject {
    * @param {CanvasRenderingContext2D} context - The context.
    */
   draw(context: CanvasRenderingContext2D): void {
-    if (this.hidden) {
+    if (this.hidden || this.points.length < 2) {
       return;
     }
+    context.fillStyle = this.color;
     for (let i = 0; i < this.points.length; i += this.drawevery) {
       const p = this.points[i];
-      // TODO less save & restore
       context.save();
-      context.beginPath();
       context.translate(p.x, p.y);
       context.rotate(p.angle);
-      context.rect(-this.thickness / 2, -this.delta / 2, this.thickness, this.delta);
-      context.fillStyle = this.color;
-      context.fill();
+      context.fillRect(-this.thickness / 2, -this.delta / 2, this.thickness, this.delta);
       context.restore();
     }
   }
@@ -58,13 +60,13 @@ export default class Trajectory extends GameObject {
   step(): void {
     // update points list
     this.targets = [];
-    let point = { x: this.x!, y: this.y!, angle: this.angle! };
+    let point: TrajectoryPoint = { x: this.x!, y: this.y!, angle: this.angle! };
     let length = 0;
     this.points = [point];
 
     while (length < this.length) {
       point = this.points[this.points.length - 1];
-      const nextpoint = {
+      const nextpoint: TrajectoryPoint = {
         x: point.x - this.delta * Math.sin(-point.angle),
         y: point.y - this.delta * Math.cos(-point.angle),
         angle: point.angle,

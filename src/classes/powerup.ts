@@ -1,8 +1,8 @@
 import GameObject from "./gameobject";
-import { Settings, store } from "../store";
-import { playSound, playMusic, stopMusic, fogOfWar } from "../effects";
-import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot } from "./weapons";
-import { IMAGES, SOUNDS } from "../assets";
+import { Settings, store } from "@/store";
+import { playSound, playMusic, stopMusic, fogOfWar } from "@/effects";
+import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot } from "./weapons/weapons";
+import { IMAGES, SOUNDS } from "@/assets";
 import Tank from "./tank";
 
 /**
@@ -50,7 +50,7 @@ export class PowerUp extends GameObject {
  * Laser weapon powerup.
  * @augments PowerUp
  */
-export class LaserBonus extends PowerUp {
+class LaserBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
@@ -66,7 +66,7 @@ export class LaserBonus extends PowerUp {
  * Machine Gun weapon powerup.
  * @augments PowerUp
  */
-export class MGBonus extends PowerUp {
+class MGBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
@@ -82,7 +82,7 @@ export class MGBonus extends PowerUp {
  * Grenade weapon powerup.
  * @augments PowerUp
  */
-export class GrenadeBonus extends PowerUp {
+class GrenadeBonus extends PowerUp {
   constructor() {
     super();
     this.image.src = IMAGES.grenade;
@@ -97,7 +97,7 @@ export class GrenadeBonus extends PowerUp {
  * Mine weapon powerup.
  * @augments PowerUp
  */
-export class MineBonus extends PowerUp {
+class MineBonus extends PowerUp {
   constructor() {
     super();
     this.image.src = IMAGES.mine;
@@ -112,7 +112,7 @@ export class MineBonus extends PowerUp {
  * Guided Missile weapon powerup.
  * @augments PowerUp
  */
-export class GuidedBonus extends PowerUp {
+class GuidedBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
@@ -128,7 +128,7 @@ export class GuidedBonus extends PowerUp {
  * Wrecking Ball weapon powerup.
  * @augments PowerUp
  */
-export class WreckingBallBonus extends PowerUp {
+class WreckingBallBonus extends PowerUp {
   constructor() {
     super();
     this.image.src = IMAGES.wreckingBall;
@@ -143,7 +143,7 @@ export class WreckingBallBonus extends PowerUp {
  * Slingshot weapon powerup.
  * @augments PowerUp
  */
-export class SlingshotBonus extends PowerUp {
+class SlingshotBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
@@ -159,7 +159,7 @@ export class SlingshotBonus extends PowerUp {
  * Speed Boost powerup.
  * @augments PowerUp
  */
-export class SpeedBonus extends PowerUp {
+class SpeedBonus extends PowerUp {
   constructor() {
     super();
     this.attractsBots = true;
@@ -180,7 +180,7 @@ export class SpeedBonus extends PowerUp {
  * Invincibility powerup.
  * @augments PowerUp
  */
-export class InvincibleBonus extends PowerUp {
+class InvincibleBonus extends PowerUp {
   applied: boolean = false;
 
   constructor() {
@@ -217,7 +217,7 @@ export class InvincibleBonus extends PowerUp {
  * Terminator powerup (Rapid Fire).
  * @augments PowerUp
  */
-export class TerminatorBonus extends PowerUp {
+class TerminatorBonus extends PowerUp {
   applied: boolean = false;
 
   constructor() {
@@ -244,7 +244,7 @@ export class TerminatorBonus extends PowerUp {
  * Multiplier powerup (Spawn rate increase).
  * @augments PowerUp
  */
-export class MultiBonus extends PowerUp {
+class MultiBonus extends PowerUp {
   used: boolean = false;
 
   constructor() {
@@ -285,86 +285,62 @@ export class FogBonus extends PowerUp {
 
 export const PowerUps = [
   {
-    create: function () {
-      return new LaserBonus();
-    },
+    create: () => new LaserBonus(),
     name: "Laser",
     weight: 1,
   },
   {
-    create: function () {
-      return new MGBonus();
-    },
+    create: () => new MGBonus(),
     name: "MG",
     weight: 1,
   },
   {
-    create: function () {
-      return new GrenadeBonus();
-    },
+    create: () => new GrenadeBonus(),
     name: "Grenade",
     weight: 1,
   },
   {
-    create: function () {
-      return new MineBonus();
-    },
+    create: () => new MineBonus(),
     name: "Mine",
     weight: 1,
   },
   {
-    create: function () {
-      return new GuidedBonus();
-    },
+    create: () => new GuidedBonus(),
     name: "Guided",
     weight: 1,
   },
   {
-    create: function () {
-      return new WreckingBallBonus();
-    },
+    create: () => new WreckingBallBonus(),
     name: "WreckingBall",
     weight: 0.5,
   },
   {
-    create: function () {
-      return new MultiBonus();
-    },
+    create: () => new MultiBonus(),
     name: "Multiplier",
     weight: 1,
   },
   {
-    create: function () {
-      return new SlingshotBonus();
-    },
+    create: () => new SlingshotBonus(),
     name: "Slingshot",
     weight: 1,
   },
   {
-    create: function () {
-      return new InvincibleBonus();
-    },
+    create: () => new InvincibleBonus(),
     name: "Invincible",
     weight: 1,
   },
   {
-    create: function () {
-      return new TerminatorBonus();
-    },
+    create: () => new TerminatorBonus(),
     name: "Terminator",
     weight: 1,
   },
   {
-    create: function () {
-      return new FogBonus();
-    },
+    create: () => new FogBonus(),
     name: "FogOfWar",
     weight: 0,
   },
   {
-    create: function () {
-      return new SpeedBonus();
-    },
+    create: () => new SpeedBonus(),
     name: "SpeedBoost",
     weight: 1,
   },

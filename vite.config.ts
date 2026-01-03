@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import path from "node:path";
 
 export default defineConfig(() => {
   const basePath = process.env.VITE_BASE_PATH;
@@ -16,6 +17,13 @@ export default defineConfig(() => {
     test: {
       environment: "jsdom",
       globals: true,
+    },
+    define: { "process.env": {} },
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
+      extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
     },
   };
 });
