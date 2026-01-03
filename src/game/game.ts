@@ -36,6 +36,10 @@ export default class Game {
   nPlayersAlive: number = 0;
   /** Game time counter. */
   t: number = 0;
+  /** Timestamp of the last frame. */
+  lastTime: number = 0;
+  /** Accumulated time for fixed-step updates. */
+  accumulator: number = 0;
   /** List of interval IDs to clear on stop. */
   intvls: number[] = [];
   /** List of timeout IDs to clear on stop. */
@@ -94,9 +98,10 @@ export default class Game {
       this.players[i].spawn();
     }
 
-    this.loop = window.setInterval(() => {
-      this.step();
-    }, Settings.GameFrequency);
+    this.lastTime = performance.now();
+    this.accumulator = 0;
+    this.loop = requestAnimationFrame((t) => this.gameLoop(t));
+
     playSound(SOUNDS.gamestart);
     if (Settings.bgmusic) {
       // playMusic(SOUNDS.bgmusic);
@@ -105,13 +110,37 @@ export default class Game {
   }
 
   /**
-   * A single step of the game loop.
+   * Main game loop driven by requestAnimationFrame.
+   * Uses an accumulator to ensure fixed-timestep updates.
+   * @param {number} timestamp - The current time.
    */
-  step(): void {
-    if (this.paused) {
+  gameLoop(timestamp: number): void {
+    if (!this.loop) {
       return;
     }
 
+    const deltaTime = timestamp - this.lastTime;
+    this.lastTime = timestamp;
+
+    if (!this.paused) {
+      this.accumulator += deltaTime;
+      // Cap accumulator to avoid spiral of death (max 200ms)
+      if (this.accumulator > 200) {
+        this.accumulator = 200;
+      }
+      while (this.accumulator >= Settings.GameFrequency) {
+        this.step();
+        this.accumulator -= Settings.GameFrequency;
+      }
+    }
+
+    this.loop = requestAnimationFrame((t) => this.gameLoop(t));
+  }
+
+  /**
+   * A single step of the game loop.
+   */
+  step(): void {
     this.t += Settings.GameFrequency;
     if (!this.map) {
       return;
@@ -182,7 +211,8 @@ export default class Game {
   stop(): void {
     this.paused = true;
     if (this.loop) {
-      window.clearInterval(this.loop);
+      cancelAnimationFrame(this.loop);
+      this.loop = undefined;
     }
     for (let i = 0; i < this.intvls.length; i++) {
       window.clearInterval(this.intvls[i]);

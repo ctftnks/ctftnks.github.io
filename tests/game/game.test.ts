@@ -106,21 +106,21 @@ describe("Game Class", () => {
 
   it("should stop the game", () => {
     game.start();
-    const clearIntervalSpy = vi.spyOn(window, "clearInterval");
+    const cancelAnimationFrameSpy = vi.spyOn(window, "cancelAnimationFrame");
     vi.spyOn(window, "clearTimeout");
 
     game.stop();
 
     expect(game.paused).toBe(true);
-    expect(clearIntervalSpy).toHaveBeenCalled();
+    expect(cancelAnimationFrameSpy).toHaveBeenCalled();
   });
 
   it("should execute step function", () => {
     game.start();
     const modeStepSpy = vi.spyOn(game.mode, "step");
 
-    // Advance time
-    vi.advanceTimersByTime(Settings.GameFrequency);
+    // Advance time enough to trigger frames and accumulation
+    vi.advanceTimersByTime(Settings.GameFrequency * 10);
 
     expect(game.t).toBeGreaterThan(0);
     expect(modeStepSpy).toHaveBeenCalled();

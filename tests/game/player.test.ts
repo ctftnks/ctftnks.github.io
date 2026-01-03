@@ -16,7 +16,9 @@ describe("Player Class", () => {
       nPlayersAlive: 0,
       timeouts: [],
       t: 0,
-    };
+      canvas: { shake: vi.fn() },
+      nkills: 0,
+    } as any;
   });
 
   it("should initialize with unique IDs and default names", () => {

@@ -1,5 +1,5 @@
 import Bullet from "../bullet";
-import type Tank from "../tank";
+import Tank from "../tank";
 import Trajectory from "../trajectory";
 import { playSound, hexToRgbA } from "@/game/effects";
 import { Smoke, generateCloud } from "../smoke";
