@@ -21,9 +21,9 @@ describe("Player Class", () => {
     } as any;
   });
 
-  it("should initialize with unique IDs and default names", () => {
-    const p1 = new Player();
-    const p2 = new Player();
+  it("should initialize with provided values", () => {
+    const p1 = new Player(0, "Player 1", "#fff", []);
+    const p2 = new Player(1, "Player 2", "#000", []);
 
     expect(p1.id).toBe(0);
     expect(p1.name).toBe("Player 1");
@@ -32,7 +32,7 @@ describe("Player Class", () => {
   });
 
   it("should reset stats correctly", () => {
-    const player = new Player();
+    const player = new Player(0, "P", "#000", []);
     player.stats = { deaths: 5, kills: 10, miles: 100, shots: 50 };
 
     player.resetStats();
@@ -43,11 +43,11 @@ describe("Player Class", () => {
   });
 
   it("should change color and team correctly", () => {
-    const player = new Player();
+    const player = new Player(0, "P", "#000", []);
     const initialColor = player.color;
     const initialTeam = player.team;
 
-    player.changeColor();
+    player.changeColor(["#000", "#fff"]);
     expect(player.team).toBe(initialTeam + 1);
     expect(player.color).not.toBe(initialColor);
   });

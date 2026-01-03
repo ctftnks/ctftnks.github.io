@@ -1,5 +1,5 @@
 import GameObject from "./gameobject";
-import { Settings } from "@/game/store";
+import { Settings } from "@/game/settings";
 import type Game from "@/game/game";
 
 /**

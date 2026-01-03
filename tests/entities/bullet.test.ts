@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import Bullet from "@/entities/bullet";
-import { Settings } from "@/game/store";
+import { Settings } from "@/game/settings";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({

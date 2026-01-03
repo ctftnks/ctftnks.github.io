@@ -1,4 +1,4 @@
-import { store } from "@/game/store";
+import { Settings } from "@/game/settings";
 import GameObject from "@/entities/gameobject";
 import Canvas from "./canvas";
 import Tile from "./tile";
@@ -22,6 +22,8 @@ export default class GameMap {
   dy: number;
   /** List of tiles. */
   tiles: Tile[] = [];
+  /** The canvas. */
+  canvas: Canvas;
 
   /**
    * Creates a new GameMap.
@@ -30,8 +32,9 @@ export default class GameMap {
    * @param {number} Ny - Number of tiles in Y direction.
    */
   constructor(canvas: Canvas, Nx: number | null = null, Ny: number | null = null) {
+    this.canvas = canvas;
     if (Nx === null) {
-      this.Nx = parseInt((store.settings.MapNxMin + (store.settings.MapNxMax - store.settings.MapNxMin) * Math.random()).toString());
+      this.Nx = parseInt((Settings.MapNxMin + (Settings.MapNxMax - Settings.MapNxMin) * Math.random()).toString());
     } else {
       this.Nx = Nx;
     }
@@ -150,8 +153,8 @@ export default class GameMap {
    * Update sizes of map and tiles, for window.onresize.
    */
   resize(): void {
-    if (store.canvas instanceof Canvas) {
-      store.canvas.rescale(Math.min(store.canvas.width / (this.dx * this.Nx), store.canvas.height / (this.dy * this.Ny)));
+    if (this.canvas instanceof Canvas) {
+      this.canvas.rescale(Math.min(this.canvas.width / (this.dx * this.Nx), this.canvas.height / (this.dy * this.Ny)));
     }
   }
 }

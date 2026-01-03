@@ -1,5 +1,3 @@
-import Bot from "@/game/bot";
-import Player from "@/game/player";
 import { store } from "@/game/store";
 import { updatePlayersMenu } from "@/ui/ui";
 import { closePage } from "@/ui/pages";
@@ -51,7 +49,7 @@ export function quickPvP(nteams: number, teamsize: number): void {
 
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
-      store.players.push(new Player());
+      store.players.push(store.createPlayer(false));
       const p = store.players[store.players.length - 1];
       if (j > 0) {
         p.team = store.players[store.players.length - 2].team;
@@ -69,9 +67,9 @@ export function quickPvB(nteams: number, teamsize: number): void {
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
       if (i < nteams / 2) {
-        store.players.push(new Player());
+        store.players.push(store.createPlayer(false));
       } else {
-        store.players.push(new Bot());
+        store.players.push(store.createPlayer(true));
       }
       const p = store.players[store.players.length - 1];
       if (j > 0) {
@@ -90,9 +88,9 @@ export function quickMixed(nteams: number, teamsize: number): void {
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
       if (j < teamsize / 2) {
-        store.players.push(new Player());
+        store.players.push(store.createPlayer(false));
       } else {
-        store.players.push(new Bot());
+        store.players.push(store.createPlayer(true));
       }
       const p = store.players[store.players.length - 1];
       if (j > 0) {
@@ -111,9 +109,9 @@ export function quickUnevenMixed(nteams: number, teamsize: number): void {
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
       if (j < teamsize / 2 && i === 0) {
-        store.players.push(new Player());
+        store.players.push(store.createPlayer(false));
       } else {
-        store.players.push(new Bot());
+        store.players.push(store.createPlayer(true));
       }
       const p = store.players[store.players.length - 1];
       if (j > 0) {

@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import Trajectory from "@/entities/trajectory";
-import { Settings } from "@/game/store";
-import Tank from "@/entities/tank";
+import { Settings } from "@/game/settings";
 
 describe("Trajectory Class", () => {
   let mockMap: any;

@@ -2,7 +2,8 @@ import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import Game from "@/game/game";
 import GameMap from "@/game/gamemap";
 import Player from "@/game/player";
-import { store, Settings } from "@/game/store";
+import { store } from "@/game/store";
+import { Settings } from "@/game/settings";
 import Canvas from "@/game/canvas";
 
 // Mock dependencies
@@ -77,14 +78,14 @@ describe("Game Class", () => {
   });
 
   it("should add players", () => {
-    const player = new Player();
+    const player = new Player(0, "P1", "#000", []);
     game.addPlayer(player);
     expect(game.players).toContain(player);
     expect(player.game).toBe(game);
   });
 
   it("should start the game loop", () => {
-    const player = new Player();
+    const player = new Player(0, "P1", "#000", []);
     game.addPlayer(player);
 
     // Spy on player spawn

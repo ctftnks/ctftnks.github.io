@@ -1,7 +1,7 @@
 import Tank from "@/entities/tank";
 import { Key } from "@/game/key";
 import { generateCloud } from "@/entities/smoke";
-import { store, Settings } from "@/game/store";
+import { Settings } from "@/game/settings";
 import type Game from "./game";
 import type { Base } from "@/entities/ctf";
 
@@ -25,14 +25,17 @@ export default class Player {
 
   /**
    * Creates a new Player.
+   * @param {number} id - The player ID.
+   * @param {string} name - The player name.
+   * @param {string} color - The player color.
+   * @param {string[]} keys - The key mapping.
    */
-  constructor() {
-    this.id = store.nplayers;
-    store.nplayers += 1;
-    this.name = "Player " + (this.id + 1);
-    this.color = store.playercolors[this.id % store.playercolors.length];
+  constructor(id: number, name: string, color: string, keys: string[]) {
+    this.id = id;
+    this.name = name;
+    this.color = color;
     this.team = this.id;
-    this.keys = store.keymaps[this.id] || store.keymaps[0].slice();
+    this.keys = keys;
     this.tank = new Tank(this);
   }
 
@@ -107,11 +110,12 @@ export default class Player {
 
   /**
    * Change player color/team.
+   * @param {string[]} colors - List of available colors.
    */
-  changeColor(): void {
+  changeColor(colors: string[]): void {
     this.team += 1;
-    this.team = this.team % store.playercolors.length;
-    this.color = store.playercolors[this.team % store.playercolors.length];
+    this.team = this.team % colors.length;
+    this.color = colors[this.team % colors.length];
   }
 
   /**

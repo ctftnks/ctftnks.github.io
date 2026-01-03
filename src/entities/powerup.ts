@@ -1,5 +1,6 @@
+import { store } from "@/game/store";
+import { Settings } from "@/game/settings";
 import GameObject from "./gameobject";
-import { Settings } from "@/game/store";
 import { playSound, playMusic, stopMusic, fogOfWar } from "@/game/effects";
 import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot } from "./weapons/weapons";
 import { IMAGES, SOUNDS } from "@/game/assets";

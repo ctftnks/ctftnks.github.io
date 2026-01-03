@@ -4,7 +4,8 @@ import MapGenerator from "./mapGenerator";
 import { getRandomPowerUp, type PowerUp } from "@/entities/powerup";
 import { Key } from "./key";
 import { playSound, stopMusic, clearEffects } from "./effects";
-import { store, Settings } from "@/game/store";
+import { store } from "@/game/store";
+import { Settings } from "@/game/settings";
 import { SOUNDS } from "@/game/assets";
 import Canvas from "./canvas";
 import Player from "./player";
@@ -69,7 +70,6 @@ export default class Game {
 
     this.map.resize();
     this.mode = new Deathmatch(this);
-    store.GameID++;
   }
 
   /**
@@ -249,6 +249,7 @@ export function newGame(map: GameMap | null = null): Game {
     store.game.stop();
   }
 
+  store.GameID++;
   store.game = new Game(store.canvas!, map);
 
   if (Settings.GameMode === "DM") {

@@ -63,4 +63,19 @@ describe("Game Store", () => {
 
     expect(consoleSpy).toHaveBeenCalled();
   });
+
+  it("should create players with incrementing IDs", () => {
+    store.nplayers = 0;
+    const p1 = store.createPlayer();
+    const p2 = store.createPlayer();
+    const b1 = store.createPlayer(true);
+
+    expect(p1.id).toBe(0);
+    expect(p1.name).toBe("Player 1");
+    expect(p2.id).toBe(1);
+    expect(p2.name).toBe("Player 2");
+    expect(b1.id).toBe(2);
+    expect(b1.name).toBe("Bot 3");
+    expect(b1.isBot()).toBe(true);
+  });
 });

@@ -1,5 +1,6 @@
 import Player from "./player";
-import { store, Settings } from "@/game/store";
+import { store } from "@/game/store";
+import { Settings } from "@/game/settings";
 import Tile from "./tile";
 import { PowerUp } from "@/entities/powerup";
 import Tank from "@/entities/tank";
@@ -9,8 +10,6 @@ import { Laser, Guided, WreckingBall, Slingshot } from "@/entities/weapons/weapo
 import { CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import GameObject from "@/entities/gameobject";
 import { gameEvents, EVENTS } from "@/game/events";
-
-let NBots: number = 0;
 
 /** Options that are considered by the autopilot */
 declare interface AutopilotOption {
@@ -30,12 +29,12 @@ export default class Bot extends Player {
 
   /**
    * Creates a new Bot.
+   * @param {number} id - The player ID.
+   * @param {string} name - The bot name.
+   * @param {string} color - The bot color.
    */
-  constructor() {
-    super();
-    this.name = "Bot " + (NBots + 1);
-    this.keys = []; // Empty keys for bot
-    NBots++;
+  constructor(id: number, name: string, color: string) {
+    super(id, name, color, []);
   }
 
   /**

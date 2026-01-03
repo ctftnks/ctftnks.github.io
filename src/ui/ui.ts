@@ -1,6 +1,4 @@
 import { store } from "@/game/store";
-import Bot from "@/game/bot";
-import Player from "@/game/player";
 
 export function updateScores(): void {
   const scoreBoard = document.getElementById("scoreBoard");
@@ -68,11 +66,7 @@ export function addPlayer(bot: boolean = false): void {
   if (store.players.length >= store.keymaps.length) {
     store.keymaps.push(store.keymaps[0].slice());
   }
-  if (bot) {
-    store.players.push(new Bot());
-  } else {
-    store.players.push(new Player());
-  }
+  store.players.push(store.createPlayer(bot));
   updatePlayersMenu();
 }
 
@@ -115,7 +109,7 @@ function handlePlayersMenuClick(event: Event): void {
 
   if (action === "changeColor") {
     if (store.players[id]) {
-      store.players[id].changeColor();
+      store.players[id].changeColor(store.playercolors);
       updatePlayersMenu();
     }
   } else if (action === "editName") {

@@ -1,6 +1,6 @@
 import template from "./main.html?raw";
 import "./style.css";
-import { Settings } from "@/game/store";
+import { Settings } from "@/game/settings";
 import { databinding } from "@/ui/databinding";
 import { closePage } from "@/ui/pages";
 

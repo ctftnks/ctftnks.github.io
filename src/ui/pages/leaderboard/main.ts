@@ -1,9 +1,10 @@
 import { newGame } from "@/game/game";
 import type Player from "@/game/player";
-import { Settings, store } from "@/game/store";
-import { closePage } from "@/ui/pages";
 import template from "./main.html?raw";
 import "./style.css";
+import { store } from "@/game/store";
+import { Settings } from "@/game/settings";
+import { closePage } from "@/ui/pages";
 
 export function init(container: HTMLElement): void {
   container.innerHTML = template;

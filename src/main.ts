@@ -1,6 +1,4 @@
 import Canvas from "@/game/canvas";
-import Player from "@/game/player";
-import Bot from "@/game/bot";
 import { store } from "@/game/store";
 import { newGame } from "@/game/game";
 import { initHUD } from "@/ui/hud";
@@ -11,7 +9,7 @@ window.onload = () => {
   initHUD();
   store.canvas = new Canvas("gameFrame");
 
-  store.players = [new Player(), new Bot(), new Bot(), new Bot()];
+  store.players = [store.createPlayer(false), store.createPlayer(true), store.createPlayer(true), store.createPlayer(true)];
   store.players[1].color = store.players[0].color;
   store.players[1].team = store.players[0].team;
   store.players[3].color = store.players[2].color;

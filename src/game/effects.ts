@@ -1,4 +1,6 @@
-import { store, Settings } from "@/game/store";
+import { store } from "@/game/store";
+import { Settings } from "@/game/settings";
+import { SOUNDS } from "@/game/assets";
 import Game from "./game";
 
 export function playSound(file: string): void {

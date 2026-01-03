@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import Bot from "@/game/bot";
-import { store, Settings } from "@/game/store";
+import { store } from "@/game/store";
+import { Settings } from "@/game/settings";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -61,7 +62,7 @@ describe("Bot Class", () => {
     store.game = mockGame;
 
     // Create Bot
-    bot = new Bot();
+    bot = new Bot(0, "Bot 1", "#000");
     bot.game = mockGame;
     bot.tank = mockTank; // Replace real tank with mock
   });

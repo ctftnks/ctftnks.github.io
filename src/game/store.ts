@@ -1,36 +1,8 @@
 import type Canvas from "@/game/canvas";
 import type Game from "@/game/game";
-import type Player from "@/game/player";
-
-const DEFAULT_SETTINGS = {
-  muted: true,
-  bgmusic: false,
-  GameMode: "CTF",
-  PowerUpRate: 4,
-  MaxPowerUps: 8,
-  RoundTime: 10,
-  SpawnShieldTime: 1,
-  FriendlyFire: true,
-  BotsShootBots: true,
-  BotSpeed: 1,
-  ResetStatsEachGame: true,
-  AdaptiveBotSpeed: true,
-  BulletsCanCollide: true,
-  TankSpeed: 200,
-  TankTurnSpeed: 3.9,
-  BulletSpeed: 320,
-  BulletTimeout: 7,
-  RespawnTime: 3,
-  EndScreenTime: 15,
-  ShowTankLabels: true,
-  MapNxMin: 9,
-  MapNxMax: 15,
-  GameFrequency: 16,
-  TankWidth: 34,
-  TankHeight: 50,
-};
-
-type Settings = typeof DEFAULT_SETTINGS;
+import Player from "@/game/player";
+import Bot from "@/game/bot";
+import { Settings, DEFAULT_SETTINGS, type SettingsType } from "@/game/settings";
 
 /**
  * Data Structure for the global state of the website
@@ -43,7 +15,7 @@ class GameStore {
   editingKeymap: boolean = false;
   GameID: number = 0;
 
-  settings: Settings;
+  settings: SettingsType;
 
   /**
    * Default keymaps using modern KeyboardEvent.code strings.
@@ -72,8 +44,21 @@ class GameStore {
   ];
 
   constructor() {
-    this.settings = { ...DEFAULT_SETTINGS };
+    this.settings = Settings;
     this.loadSettings();
+  }
+
+  createPlayer(isBot: boolean = false): Player {
+    const id = this.nplayers;
+    this.nplayers++;
+    const name = (isBot ? "Bot " : "Player ") + (id + 1);
+    const color = this.playercolors[id % this.playercolors.length];
+    const keys = this.keymaps[id] || this.keymaps[0].slice();
+
+    if (isBot) {
+      return new Bot(id, name, color);
+    }
+    return new Player(id, name, color, keys);
   }
 
   saveSettings(): void {
@@ -99,6 +84,3 @@ class GameStore {
 
 // Export a singleton instance
 export const store = new GameStore();
-
-// Export a reference to settings for convenience
-export const Settings = store.settings;
