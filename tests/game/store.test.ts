@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { store } from "@/game/store";
+import { Settings } from "@/game/settings";
 
 describe("Game Store", () => {
   let mockLocalStorage: Record<string, string> = {};
@@ -34,7 +35,7 @@ describe("Game Store", () => {
   });
 
   it("should save settings to localStorage", () => {
-    store.settings.GameMode = "DM";
+    Settings.GameMode = "DM";
     store.saveSettings();
 
     expect(window.localStorage.setItem).toHaveBeenCalledWith("ctftanks_settings", expect.stringContaining('"GameMode":"DM"'));
@@ -50,8 +51,8 @@ describe("Game Store", () => {
 
     store.loadSettings();
 
-    expect(store.settings.GameMode).toBe("KOTH");
-    expect(store.settings.BotSpeed).toBe(0.5);
+    expect(Settings.GameMode).toBe("KOTH");
+    expect(Settings.BotSpeed).toBe(0.5);
   });
 
   it("should handle invalid JSON in localStorage", () => {

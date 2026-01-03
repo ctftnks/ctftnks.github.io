@@ -1,4 +1,3 @@
-import { store } from "@/game/store";
 import { Settings } from "@/game/settings";
 import GameObject from "./gameobject";
 import { playSound, playMusic, stopMusic, fogOfWar } from "@/game/effects";

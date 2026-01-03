@@ -2,7 +2,7 @@ import type Canvas from "@/game/canvas";
 import type Game from "@/game/game";
 import Player from "@/game/player";
 import Bot from "@/game/bot";
-import { Settings, DEFAULT_SETTINGS, type SettingsType } from "@/game/settings";
+import { Settings } from "./settings";
 
 /**
  * Data Structure for the global state of the website
@@ -14,8 +14,6 @@ class GameStore {
   nplayers: number = 0;
   editingKeymap: boolean = false;
   GameID: number = 0;
-
-  settings: SettingsType;
 
   /**
    * Default keymaps using modern KeyboardEvent.code strings.
@@ -44,7 +42,6 @@ class GameStore {
   ];
 
   constructor() {
-    this.settings = Settings;
     this.loadSettings();
   }
 
@@ -62,7 +59,7 @@ class GameStore {
   }
 
   saveSettings(): void {
-    localStorage.setItem("ctftanks_settings", JSON.stringify(this.settings));
+    localStorage.setItem("ctftanks_settings", JSON.stringify(Settings));
   }
 
   loadSettings(): void {
@@ -71,8 +68,8 @@ class GameStore {
       try {
         const parsed = JSON.parse(saved);
         for (const key in parsed) {
-          if (key in this.settings) {
-            (this.settings as any)[key] = parsed[key];
+          if (key in Settings) {
+            (Settings as any)[key] = parsed[key];
           }
         }
       } catch (e) {

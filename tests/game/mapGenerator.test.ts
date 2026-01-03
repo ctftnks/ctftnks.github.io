@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import MapGenerator from "@/game/mapGenerator";
 import GameMap from "@/game/gamemap";
 import Tile from "@/game/tile";
-import { store } from "@/game/store";
+import { Settings } from "@/game/settings";
 
 describe("MapGenerator", () => {
   let mockCanvas: any;
@@ -14,8 +14,8 @@ describe("MapGenerator", () => {
       height: 1000,
       rescale: vi.fn(),
     };
-    store.settings.MapNxMin = 10;
-    store.settings.MapNxMax = 10;
+    Settings.MapNxMin = 10;
+    Settings.MapNxMax = 10;
 
     // Initialize a fresh map for each test
     map = new GameMap(mockCanvas, 10, 10);

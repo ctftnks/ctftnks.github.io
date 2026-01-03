@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import GameMap from "@/game/gamemap";
 import Tile from "@/game/tile";
-import { store } from "@/game/store";
+import { Settings } from "@/game/settings";
 
 describe("Map Class", () => {
   let mockCanvas: any;
@@ -13,8 +13,8 @@ describe("Map Class", () => {
       rescale: vi.fn(),
     };
     // Ensure settings are stable for tests
-    store.settings.MapNxMin = 10;
-    store.settings.MapNxMax = 10;
+    Settings.MapNxMin = 10;
+    Settings.MapNxMax = 10;
   });
 
   it("should initialize with correct dimensions", () => {
