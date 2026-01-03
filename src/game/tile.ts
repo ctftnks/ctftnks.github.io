@@ -8,27 +8,27 @@ import type GameMap from "./gamemap";
  */
 export default class Tile implements Coord {
   /** X index. */
-  public i: number;
+  i: number;
   /** Y index. */
-  public j: number;
+  j: number;
   /** The map. */
-  public map: GameMap;
+  map: GameMap;
   /** Unique tile ID. */
-  public id: number;
+  id: number;
   /** X coordinate in pixels. */
-  public x: number;
+  x: number;
   /** Y coordinate in pixels. */
-  public y: number;
+  y: number;
   /** Width. */
-  public dx: number;
+  dx: number;
   /** Height. */
-  public dy: number;
+  dy: number;
   /** Objects currently in this tile. */
-  public objs: GameObject[] = [];
+  objs: GameObject[] = [];
   /** List of Walls [top, left, bottom, right]. */
-  public walls: boolean[] = [false, false, false, false];
+  walls: boolean[] = [false, false, false, false];
   /** List of neighboring tiles [top, left, bottom, right]. */
-  public neighbors: (Tile | null)[] = [null, null, null, null];
+  neighbors: (Tile | null)[] = [null, null, null, null];
 
   /**
    * Creates a new Tile.
@@ -36,7 +36,7 @@ export default class Tile implements Coord {
    * @param {number} j - Y index.
    * @param {GameMap} map - The map instance.
    */
-  public constructor(i: number, j: number, map: GameMap) {
+  constructor(i: number, j: number, map: GameMap) {
     this.i = i;
     this.j = j;
     this.map = map;
@@ -51,7 +51,7 @@ export default class Tile implements Coord {
    * Return the coordinates of the corners of the tile and whether they're part of some wall.
    * @returns {Array<object>} List of corners with {x, y, w}.
    */
-  public corners(): { x: number; y: number; w: boolean }[] {
+  corners(): { x: number; y: number; w: boolean }[] {
     const { x, y, dx, dy, walls } = this;
     return [
       { x, y, w: walls[0] || walls[1] }, // top left
@@ -65,7 +65,7 @@ export default class Tile implements Coord {
    * Draw the tile walls.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  public draw(context: CanvasRenderingContext2D): void {
+  draw(context: CanvasRenderingContext2D): void {
     const { x, y, dx, dy, walls } = this;
     context.fillStyle = "#555";
     if (walls[0]) {
@@ -88,7 +88,7 @@ export default class Tile implements Coord {
    * @param {boolean} remove - Whether to remove the wall.
    * @param {boolean} neighbor - Whether to update the neighbor as well.
    */
-  public addWall(direction: number, remove: boolean = false, neighbor: boolean = true): void {
+  addWall(direction: number, remove: boolean = false, neighbor: boolean = true): void {
     direction = direction % 4;
     this.walls[direction] = !remove;
     const neighborTile = this.neighbors[direction];
@@ -103,7 +103,7 @@ export default class Tile implements Coord {
    * @param {number} y - Y coordinate.
    * @returns {Array<boolean>} List of walls encountered.
    */
-  public getWalls(x: number, y: number): boolean[] {
+  getWalls(x: number, y: number): boolean[] {
     const distx = this.x - x;
     const disty = this.y - y;
     const walls = [false, false, false, false];
@@ -131,7 +131,7 @@ export default class Tile implements Coord {
    * @param {number|null} maxPathLength - Max allowed path length.
    * @returns {Array<Tile>|null} The path or null if not found.
    */
-  public pathTo(
+  pathTo(
     condition: (tile: Tile) => boolean,
     path: Tile[] = [],
     minPathLength: number | null = null,
@@ -177,7 +177,7 @@ export default class Tile implements Coord {
    * @param {number} distance - Steps to walk.
    * @returns {Tile} The final tile.
    */
-  public randomWalk(distance: number): Tile {
+  randomWalk(distance: number): Tile {
     if (distance === 0) {
       return this;
     }
@@ -198,7 +198,7 @@ export default class Tile implements Coord {
    * @param {number|null} maxPathLength - Max path length.
    * @returns {Array|null} Path to object or null.
    */
-  public xypathToObj(
+  xypathToObj(
     condition: (obj: GameObject) => boolean,
     maxPathLength: number | null = null,
   ): Array<{ x: number; y: number } | GameObject> | null {

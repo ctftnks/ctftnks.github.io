@@ -22,35 +22,35 @@ import type { Flag } from "./ctf";
  */
 export default class Tank extends GameObject {
   /** The player. */
-  public player: Player;
+  player: Player;
   /** Tank color. */
-  public color: string;
+  color: string;
   /** The game map. */
-  public map: GameMap | undefined;
+  map: GameMap | undefined;
   /** Rotation angle. */
-  public angle: number = 2 * Math.PI * Math.random();
+  angle: number = 2 * Math.PI * Math.random();
   /** Tank width. */
-  public width: number = Settings.TankWidth;
+  width: number = Settings.TankWidth;
   /** Tank height. */
-  public height: number = Settings.TankHeight;
+  height: number = Settings.TankHeight;
   /** Current weapon. */
-  public weapon: Weapon;
+  weapon: Weapon;
   /** Movement speed. */
-  public speed: number = Settings.TankSpeed;
+  speed: number = Settings.TankSpeed;
   /** Timers for effects. */
-  public timers: { spawnshield: number; invincible: number } = { spawnshield: 0, invincible: 0 };
+  timers: { spawnshield: number; invincible: number } = { spawnshield: 0, invincible: 0 };
   /** The flag currently carried, or null if none. */
-  public carriedFlag: Flag | null = null;
+  carriedFlag: Flag | null = null;
   /** Inventory of weapons (unused?). */
-  public weapons: Weapon[] = [];
+  weapons: Weapon[] = [];
   /** Whether rapid fire is active. */
-  public rapidfire: boolean = false;
+  rapidfire: boolean = false;
 
   /**
    * Creates a new Tank.
    * @param {Player} player - The player owning this tank.
    */
-  public constructor(player: Player) {
+  constructor(player: Player) {
     super();
     this.player = player;
     this.color = this.player.team.color;
@@ -61,7 +61,7 @@ export default class Tank extends GameObject {
    * Draws the tank (rotated) on map.
    * @param {CanvasRenderingContext2D} context - The context.
    */
-  public draw(context: CanvasRenderingContext2D): void {
+  draw(context: CanvasRenderingContext2D): void {
     const game = this.player.game!;
     context.save();
     context.beginPath();
@@ -116,7 +116,7 @@ export default class Tank extends GameObject {
    * Let player class check for key presses and move tank.
    * Check for collisions and handle them.
    */
-  public step(): void {
+  step(): void {
     this.player.step();
     if (this.weapon.isDeleted) {
       this.defaultWeapon();
@@ -129,7 +129,7 @@ export default class Tank extends GameObject {
    * Move the tank forward/backwards.
    * @param {number} direction - 1 for forward, -1 for backward.
    */
-  public move(direction: number): void {
+  move(direction: number): void {
     this.player.stats.miles += 1;
     const oldx = this.x;
     const oldy = this.y;
@@ -154,7 +154,7 @@ export default class Tank extends GameObject {
    * Rotate the tank.
    * @param {number} direction - 1 for right, -1 for left.
    */
-  public turn(direction: number): void {
+  turn(direction: number): void {
     const oldangle = this.angle;
     this.angle += (((direction * Settings.TankTurnSpeed * Settings.GameFrequency) / 1000) * Settings.TankSpeed) / 180;
 
@@ -180,7 +180,7 @@ export default class Tank extends GameObject {
   /**
    * Use the weapon.
    */
-  public shoot(): void {
+  shoot(): void {
     if (this.spawnshield()) {
       return;
     }
@@ -193,7 +193,7 @@ export default class Tank extends GameObject {
   /**
    * Return to the default weapon.
    */
-  public defaultWeapon(): void {
+  defaultWeapon(): void {
     this.weapon = new Gun(this);
   }
 
@@ -202,7 +202,7 @@ export default class Tank extends GameObject {
    * Needed for collision detection and weapon firing.
    * @returns {Array<object>} List of corners {x, y}.
    */
-  public corners(): { x: number; y: number }[] {
+  corners(): { x: number; y: number }[] {
     return [
       {
         x: this.x - (this.width / 2) * Math.cos(-this.angle) - (this.height / 2) * Math.sin(-this.angle),
@@ -349,7 +349,7 @@ export default class Tank extends GameObject {
    * Is the spawnshield active?
    * @returns {boolean} True if spawnshield active.
    */
-  public spawnshield(): boolean {
+  spawnshield(): boolean {
     const t = this.player.game!.t;
     return this.timers.spawnshield > t;
   }
@@ -358,7 +358,7 @@ export default class Tank extends GameObject {
    * Properties: is invincible?
    * @returns {boolean} True if invincible.
    */
-  public invincible(): boolean {
+  invincible(): boolean {
     const t = this.player.game!.t;
     return this.timers.spawnshield > t || this.timers.invincible > t;
   }
@@ -366,7 +366,7 @@ export default class Tank extends GameObject {
   /**
    * Deletes the tank.
    */
-  public delete(): void {
+  delete(): void {
     // CTF: if tank has flag, drop it
     if (this.carriedFlag !== null) {
       this.carriedFlag.drop(this.x, this.y);

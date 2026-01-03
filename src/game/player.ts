@@ -12,16 +12,16 @@ import Team from "./team";
  * and the tank to be controlled
  */
 export default class Player {
-  public id: number;
-  public name: string;
-  public team: Team;
-  public game: Game | undefined;
-  public base: Base | undefined;
-  public score: number = 0;
-  public spree: number = 0;
-  public keys: string[];
-  public tank: Tank;
-  public stats: { deaths: number; kills: number; miles: number; shots: number } = { deaths: 0, kills: 0, miles: 0, shots: 0 };
+  id: number;
+  name: string;
+  team: Team;
+  game: Game | undefined;
+  base: Base | undefined;
+  score: number = 0;
+  spree: number = 0;
+  keys: string[];
+  tank: Tank;
+  stats: { deaths: number; kills: number; miles: number; shots: number } = { deaths: 0, kills: 0, miles: 0, shots: 0 };
 
   /**
    * Creates a new Player.
@@ -30,7 +30,7 @@ export default class Player {
    * @param {Team} team - The team of the player
    * @param {string[]} keys - The key mapping.
    */
-  public constructor(id: number, name: string, team: Team, keys: string[]) {
+  constructor(id: number, name: string, team: Team, keys: string[]) {
     this.id = id;
     this.name = name;
     this.team = team;
@@ -41,7 +41,7 @@ export default class Player {
   /**
    * Timestep: check if keys pressed and act accordingly.
    */
-  public step(): void {
+  step(): void {
     if (Key.isDown(this.keys[0])) {
       this.tank.move(1);
     }
@@ -62,7 +62,7 @@ export default class Player {
   /**
    * Spawn at some point.
    */
-  public spawn(): void {
+  spawn(): void {
     this.tank = new Tank(this);
     this.tank.deleted = false;
     this.tank.map = this.game!.map;
@@ -93,7 +93,7 @@ export default class Player {
    * Kill the player, called when tank is shot.
    * Check if game should end.
    */
-  public kill(): void {
+  kill(): void {
     this.game!.nPlayersAlive -= 1;
     this.tank.weapon.isActive = false;
     this.game!.nkills++;
@@ -111,7 +111,7 @@ export default class Player {
    * Change player color/team.
    * @param {Team[]} teams - List of available teams.
    */
-  public changeTeam(teams: Team[]): void {
+  changeTeam(teams: Team[]): void {
     const currentIndex = teams.indexOf(this.team);
     this.team = teams[(currentIndex + 1) % teams.length];
   }
@@ -119,7 +119,7 @@ export default class Player {
   /**
    * Reset stats dictionary to 0.
    */
-  public resetStats(): void {
+  resetStats(): void {
     this.stats.deaths = 0;
     this.stats.kills = 0;
     this.stats.miles = 0;
@@ -129,7 +129,7 @@ export default class Player {
   /**
    * Is the player a bot or a user?
    */
-  public isBot(): boolean {
+  isBot(): boolean {
     return false;
   }
 }

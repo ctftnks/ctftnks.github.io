@@ -10,23 +10,23 @@ import { IMAGES, SOUNDS } from "@/game/assets";
  * Base class for all weapons.
  */
 export class Weapon {
-  public name: string = "Weapon";
-  public tank: Tank;
-  public image: HTMLImageElement;
-  public isActive: boolean = true;
-  public isDeleted: boolean = false;
-  public bot: { shootingRange: number; fleeingDuration: number; fleeIfActive: boolean };
-  public trajectory: Trajectory | undefined;
-  public bullet: Bullet | null = null;
-  public nshots: number | undefined;
-  public every: number | undefined;
-  public fired: boolean | undefined;
+  name: string = "Weapon";
+  tank: Tank;
+  image: HTMLImageElement;
+  isActive: boolean = true;
+  isDeleted: boolean = false;
+  bot: { shootingRange: number; fleeingDuration: number; fleeIfActive: boolean };
+  trajectory: Trajectory | undefined;
+  bullet: Bullet | null = null;
+  nshots: number | undefined;
+  every: number | undefined;
+  fired: boolean | undefined;
 
   /**
    * Creates a new Weapon.
    * @param {Tank} tank - The tank owning this weapon.
    */
-  public constructor(tank: Tank) {
+  constructor(tank: Tank) {
     this.tank = tank;
     this.image = new Image();
     this.image.src = "";
@@ -40,7 +40,7 @@ export class Weapon {
   /**
    * Fires the weapon.
    */
-  public shoot(): void {
+  shoot(): void {
     if (!this.isActive) {
       return;
     }
@@ -55,7 +55,7 @@ export class Weapon {
    * Creates a new bullet with all the typical properties.
    * @returns {Bullet} The created bullet.
    */
-  public newBullet(): Bullet {
+  newBullet(): Bullet {
     const bullet = new Bullet(this);
     const corners = this.tank.corners();
     bullet.x = (corners[0].x + corners[1].x) / 2;
@@ -72,7 +72,7 @@ export class Weapon {
   /**
    * Deactivates the weapon (cannot shoot temporarily or until deleted).
    */
-  public deactivate(): void {
+  deactivate(): void {
     if (!this.isActive) {
       return;
     }
@@ -92,14 +92,14 @@ export class Weapon {
   /**
    * Reactivate a deactivated weapon.
    */
-  public activate(): void {
+  activate(): void {
     this.isActive = true;
   }
 
   /**
    * Mark weapon as deleted.
    */
-  public delete(): void {
+  delete(): void {
     this.isActive = false;
     this.isDeleted = true;
   }
@@ -107,7 +107,7 @@ export class Weapon {
   /**
    * Draw crosshair or trajectory preview.
    */
-  public crosshair(): void {}
+  crosshair(): void {}
 }
 
 /**
@@ -115,19 +115,19 @@ export class Weapon {
  * @augments Weapon
  */
 export class Gun extends Weapon {
-  public override name: string = "Gun";
+  override name: string = "Gun";
 
   /**
    * Creates a new Gun.
    * @param {Tank} tank - The tank.
    */
-  public constructor(tank: Tank) {
+  constructor(tank: Tank) {
     super(tank);
     this.image.src = IMAGES.gun;
     this.bot.fleeingDuration = 0;
   }
 
-  public override newBullet(): Bullet {
+  override newBullet(): Bullet {
     const bullet = super.newBullet();
     // bullet explosion leads to weapon reactivation
     bullet.explode = () => {
@@ -141,7 +141,7 @@ export class Gun extends Weapon {
   /**
    * Cannot be deleted.
    */
-  public override delete(): void {}
+  override delete(): void {}
 }
 
 /**
@@ -149,15 +149,15 @@ export class Gun extends Weapon {
  * @augments Weapon
  */
 export class MG extends Weapon {
-  public override name: string = "MG";
-  public override nshots: number = 20;
-  public override every: number = 0;
+  override name: string = "MG";
+  override nshots: number = 20;
+  override every: number = 0;
 
   /**
    * Creates a new MG.
    * @param {Tank} tank - The tank.
    */
-  public constructor(tank: Tank) {
+  constructor(tank: Tank) {
     super(tank);
     this.image.src = IMAGES.mg;
     this.bot.shootingRange = 2;
@@ -165,7 +165,7 @@ export class MG extends Weapon {
     this.bot.fleeIfActive = true;
   }
 
-  public override newBullet(): Bullet {
+  override newBullet(): Bullet {
     const bullet = super.newBullet();
     bullet.radius = 2;
     bullet.bounceSound = "";
@@ -176,7 +176,7 @@ export class MG extends Weapon {
     return bullet;
   }
 
-  public override shoot(): void {
+  override shoot(): void {
     if (!this.isActive) {
       return;
     }
@@ -208,15 +208,15 @@ export class MG extends Weapon {
  * @augments Weapon
  */
 export class Laser extends Weapon {
-  public override name: string = "Laser";
-  public override fired: boolean = false;
-  public override trajectory: Trajectory;
+  override name: string = "Laser";
+  override fired: boolean = false;
+  override trajectory: Trajectory;
 
   /**
    * Creates a new Laser.
    * @param {Tank} tank - The tank.
    */
-  public constructor(tank: Tank) {
+  constructor(tank: Tank) {
     super(tank);
     this.image.src = IMAGES.laser;
     this.trajectory = new Trajectory(this.tank.player.game!.map);
@@ -230,7 +230,7 @@ export class Laser extends Weapon {
     this.bot.fleeingDuration = 0;
   }
 
-  public override shoot(): void {
+  override shoot(): void {
     if (!this.isActive) {
       return;
     }
@@ -257,7 +257,7 @@ export class Laser extends Weapon {
     this.deactivate();
   }
 
-  public override crosshair(): void {
+  override crosshair(): void {
     this.trajectory.x = this.tank.x;
     this.trajectory.y = this.tank.y;
     this.trajectory.angle = this.tank.angle;
@@ -265,7 +265,7 @@ export class Laser extends Weapon {
     this.trajectory.length = this.isActive ? 620 : 0;
   }
 
-  public override delete(): void {
+  override delete(): void {
     this.isDeleted = true;
     this.trajectory.delete();
   }
@@ -276,8 +276,8 @@ export class Laser extends Weapon {
  * @augments Weapon
  */
 export class Grenade extends Weapon {
-  public override name: string = "Grenade";
-  public override nshots: number = 30; // repurposed for nshrapnels if needed, but original used nshrapnels
+  override name: string = "Grenade";
+  override nshots: number = 30; // repurposed for nshrapnels if needed, but original used nshrapnels
 
   private nshrapnels: number = 30;
 
@@ -285,14 +285,14 @@ export class Grenade extends Weapon {
    * Creates a new Grenade weapon.
    * @param {Tank} tank - The tank.
    */
-  public constructor(tank: Tank) {
+  constructor(tank: Tank) {
     super(tank);
     this.image.src = IMAGES.grenade;
     this.bot.fleeingDuration = 4000;
     this.bot.fleeIfActive = false;
   }
 
-  public override newBullet(): Bullet {
+  override newBullet(): Bullet {
     const e = super.newBullet();
     e.image = new Image();
     e.image.src = IMAGES.grenade;
@@ -326,7 +326,7 @@ export class Grenade extends Weapon {
     return e;
   }
 
-  public override shoot(): void {
+  override shoot(): void {
     if (!this.isActive) {
       return;
     }
@@ -351,19 +351,19 @@ export class Grenade extends Weapon {
  * @augments Weapon
  */
 export class Mine extends Weapon {
-  public override name: string = "Mine";
+  override name: string = "Mine";
   private nshrapnels: number = 24;
 
   /**
    * Creates a new Mine weapon.
    * @param {Tank} tank - The tank.
    */
-  public constructor(tank: Tank) {
+  constructor(tank: Tank) {
     super(tank);
     this.image.src = IMAGES.mine;
   }
 
-  public override newBullet(): Bullet {
+  override newBullet(): Bullet {
     const e = super.newBullet();
     e.image = new Image();
     e.image.src = IMAGES.mine;
@@ -407,20 +407,20 @@ export class Mine extends Weapon {
  * @augments Weapon
  */
 export class Guided extends Weapon {
-  public override name: string = "Guided";
+  override name: string = "Guided";
 
   /**
    * Creates a new Guided Missile weapon.
    * @param {Tank} tank - The tank.
    */
-  public constructor(tank: Tank) {
+  constructor(tank: Tank) {
     super(tank);
     this.image.src = IMAGES.guided;
     this.bot.shootingRange = 16;
     this.bot.fleeingDuration = 3000;
   }
 
-  public override newBullet(): Bullet {
+  override newBullet(): Bullet {
     const e = super.newBullet();
     e.radius = 6;
     e.image = new Image();
@@ -510,21 +510,21 @@ export class Guided extends Weapon {
  * @augments Weapon
  */
 export class WreckingBall extends Weapon {
-  public override name: string = "WreckingBall";
-  public override fired: boolean = false;
+  override name: string = "WreckingBall";
+  override fired: boolean = false;
 
   /**
    * Creates a new WreckingBall weapon.
    * @param {Tank} tank - The tank.
    */
-  public constructor(tank: Tank) {
+  constructor(tank: Tank) {
     super(tank);
     this.image.src = IMAGES.wreckingBall;
     this.bot.shootingRange = 99;
     this.bot.fleeingDuration = 0;
   }
 
-  public override newBullet(): Bullet {
+  override newBullet(): Bullet {
     const bullet = super.newBullet();
     bullet.radius = 10;
     bullet.color = "#000";
@@ -585,21 +585,21 @@ export class WreckingBall extends Weapon {
  * @augments Weapon
  */
 export class Slingshot extends Weapon {
-  public override name: string = "Slingshot";
-  public override fired: boolean = false;
+  override name: string = "Slingshot";
+  override fired: boolean = false;
 
   /**
    * Creates a new Slingshot weapon.
    * @param {Tank} tank - The tank.
    */
-  public constructor(tank: Tank) {
+  constructor(tank: Tank) {
     super(tank);
     this.image.src = IMAGES.slingshot;
     this.bot.shootingRange = 8;
     this.bot.fleeingDuration = 0;
   }
 
-  public override newBullet(): Bullet {
+  override newBullet(): Bullet {
     const bullet = super.newBullet();
     bullet.radius = 6;
     bullet.color = "#333";

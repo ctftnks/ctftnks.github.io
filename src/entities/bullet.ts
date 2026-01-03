@@ -12,27 +12,27 @@ import { Weapon } from "./weapons/weapons";
  * @augments GameObject
  */
 export default class Bullet extends GameObject {
-  public player: Player;
-  public map: GameMap;
-  public weapon: Weapon;
-  public angle: number = 0;
-  public radius: number = 4;
-  public speed: number;
-  public color: string = "#000";
-  public timeout: number;
-  public age: number = 0;
-  public trace: boolean = false;
-  public bounceSound: string = SOUNDS.bounce;
-  public lethal: boolean = true;
-  public extrahitbox: number = 0; // size of additional hitbox used for bullet-bullet collisions
-  public exploded: boolean = false; // used only for some powerups
-  public smokeColor: string | null = null; // used only for some powerups
+  player: Player;
+  map: GameMap;
+  weapon: Weapon;
+  angle: number = 0;
+  radius: number = 4;
+  speed: number;
+  color: string = "#000";
+  timeout: number;
+  age: number = 0;
+  trace: boolean = false;
+  bounceSound: string = SOUNDS.bounce;
+  lethal: boolean = true;
+  extrahitbox: number = 0; // size of additional hitbox used for bullet-bullet collisions
+  exploded: boolean = false; // used only for some powerups
+  smokeColor: string | null = null; // used only for some powerups
 
   /**
    * Creates a new Bullet.
    * @param {Weapon} weapon - The weapon that fired the bullet.
    */
-  public constructor(weapon: Weapon) {
+  constructor(weapon: Weapon) {
     super();
     this.player = weapon.tank.player;
     this.map = this.player.game!.map;
@@ -45,7 +45,7 @@ export default class Bullet extends GameObject {
    * Draws the bullet on the canvas.
    * @param {CanvasRenderingContext2D} context - The 2D context.
    */
-  public draw(context: CanvasRenderingContext2D): void {
+  draw(context: CanvasRenderingContext2D): void {
     if (!this.image.src) {
       context.beginPath();
       context.fillStyle = this.color;
@@ -64,7 +64,7 @@ export default class Bullet extends GameObject {
   /**
    * Timestepping: translation, aging, collision.
    */
-  public step(): void {
+  step(): void {
     this.age += Settings.GameFrequency;
     if (this.age > this.timeout) {
       this.explode();
@@ -91,7 +91,7 @@ export default class Bullet extends GameObject {
    * @param {number} oldx - Previous X position.
    * @param {number} oldy - Previous Y position.
    */
-  public checkCollision(oldx: number, oldy: number): void {
+  checkCollision(oldx: number, oldy: number): void {
     const tile = this.map.getTileByPos(oldx, oldy);
     if (!tile) {
       return;
@@ -122,7 +122,7 @@ export default class Bullet extends GameObject {
   /**
    * Checks for collision with other bullets.
    */
-  public checkBulletCollision(): void {
+  checkBulletCollision(): void {
     const tile = this.map.getTileByPos(this.x, this.y);
     if (!tile) {
       return;
@@ -152,19 +152,19 @@ export default class Bullet extends GameObject {
   /**
    * Leave a trace of smoke.
    */
-  public leaveTrace(): void {
+  leaveTrace(): void {
     this.player.game!.addObject(new Smoke(this.x, this.y, 300, this.radius, 1));
   }
 
   /**
    * Delete bullet from map.
    */
-  public delete(): void {
+  delete(): void {
     this.deleted = true;
   }
 
   /**
    * Called when the bullet explodes.
    */
-  public explode(): void {}
+  explode(): void {}
 }

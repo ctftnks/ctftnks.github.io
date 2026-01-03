@@ -100,7 +100,7 @@ export class MenuPage extends BasePage {
   /**
    * Update the players menu UI
    */
-  public updatePlayersMenu(): void {
+  updatePlayersMenu(): void {
     const pmen = this.querySelector("#playersMenu");
     if (!pmen) {
       return;
@@ -144,7 +144,7 @@ export class MenuPage extends BasePage {
    * Add a new player to the game
    * @param bot - Whether the player is a bot
    */
-  public addPlayer(bot: boolean = false): void {
+  addPlayer(bot: boolean = false): void {
     if (store.players.length >= store.keymaps.length) {
       store.keymaps.push(store.keymaps[0].slice());
     }
@@ -156,7 +156,7 @@ export class MenuPage extends BasePage {
    * Remove a player from the game
    * @param id - Player ID to remove
    */
-  public removePlayer(id: number): void {
+  removePlayer(id: number): void {
     const newPlayers = [];
     for (let i = 0; i < store.players.length; i++) {
       if (store.players[i].id !== id) {

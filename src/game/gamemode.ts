@@ -11,40 +11,40 @@ import { gameEvents, EVENTS } from "@/game/events";
  * Base class for game modes.
  */
 export abstract class Gamemode {
-  public name: string = "defaultmode";
-  public game: Game;
-  public BaseSpawnDistance: number = 2;
+  name: string = "defaultmode";
+  game: Game;
+  BaseSpawnDistance: number = 2;
 
   /**
    * Creates a new Gamemode.
    * @param {Game} game - The game instance.
    */
-  public constructor(game: Game) {
+  constructor(game: Game) {
     /** Corresponding Game instance. */
     this.game = game;
   }
   /**
    * Called every game step.
    */
-  public step(): void {}
+  step(): void {}
   /**
    * Initializes the game mode.
    */
-  public init(): void {}
+  init(): void {}
 
   /**
    * Handle a new kill event.
    * @param {Player} player1 - The killer.
    * @param {Player} player2 - The victim.
    */
-  public abstract newKill(player1: Player, player2: Player): void;
+  abstract newKill(player1: Player, player2: Player): void;
 
   /**
    * Updates player score (Default implementation)
    * @param player
    * @param val
    */
-  public abstract giveScore(player: Player, val: number): void;
+  abstract giveScore(player: Player, val: number): void;
 }
 
 /**
@@ -56,7 +56,7 @@ export class Deathmatch extends Gamemode {
    * Creates a new Deathmatch mode.
    * @param {Game} game - The game instance.
    */
-  public constructor(game: Game) {
+  constructor(game: Game) {
     super(game);
     this.name = "Deathmatch";
   }
@@ -66,7 +66,7 @@ export class Deathmatch extends Gamemode {
    * @param {Player} player - The player to give score to.
    * @param {number} val - The score value.
    */
-  public override giveScore(player: Player, val: number = 1): void {
+  override giveScore(player: Player, val: number = 1): void {
     player.score += val;
     player.spree += 1;
     if (player.spree >= 5 && player.spree % 5 === 0) {
@@ -82,7 +82,7 @@ export class Deathmatch extends Gamemode {
    * @param {Player} player1 - The killer.
    * @param {Player} player2 - The victim.
    */
-  public override newKill(player1: Player, player2: Player): void {
+  override newKill(player1: Player, player2: Player): void {
     if (player1.team === player2.team) {
       this.giveScore(player1, -1);
     } else {
@@ -100,7 +100,7 @@ export class TeamDeathmatch extends Gamemode {
    * Creates a new TeamDeathmatch mode.
    * @param {Game} game - The game instance.
    */
-  public constructor(game: Game) {
+  constructor(game: Game) {
     super(game);
     this.name = "TeamDeathmatch";
   }
@@ -110,7 +110,7 @@ export class TeamDeathmatch extends Gamemode {
    * @param {Player} player - The player involved (to identify team).
    * @param {number} val - The score value.
    */
-  public override giveScore(player: Player, val: number = 1): void {
+  override giveScore(player: Player, val: number = 1): void {
     for (let i = 0; i < this.game.players.length; i++) {
       if (this.game.players[i].team === player.team) {
         this.game.players[i].score += val;
@@ -130,7 +130,7 @@ export class TeamDeathmatch extends Gamemode {
    * @param {Player} player1 - The killer.
    * @param {Player} player2 - The victim.
    */
-  public override newKill(player1: Player, player2: Player): void {
+  override newKill(player1: Player, player2: Player): void {
     if (player1.team === player2.team) {
       this.giveScore(player1, -1);
     } else {
@@ -141,7 +141,7 @@ export class TeamDeathmatch extends Gamemode {
   /**
    * Initialize bases and spawn players.
    */
-  public override init(): void {
+  override init(): void {
     const bases: Base[] = [];
     const game = this.game;
     if (!game.map) {
@@ -227,7 +227,7 @@ export class CaptureTheFlag extends Gamemode {
    * Creates a new CaptureTheFlag mode.
    * @param {Game} game - The game instance.
    */
-  public constructor(game: Game) {
+  constructor(game: Game) {
     super(game);
     this.name = "CaptureTheFlag";
     this.BaseSpawnDistance = 7;
@@ -238,7 +238,7 @@ export class CaptureTheFlag extends Gamemode {
    * @param {Player} player - The player involved.
    * @param {number} val - The score value.
    */
-  public override giveScore(player: Player, val: number = 1): void {
+  override giveScore(player: Player, val: number = 1): void {
     for (let i = 0; i < this.game.players.length; i++) {
       if (this.game.players[i].team === player.team) {
         this.game.players[i].score += val;
@@ -253,7 +253,7 @@ export class CaptureTheFlag extends Gamemode {
    * @param {Player} player1 - The killer.
    * @param {Player} player2 - The victim.
    */
-  public override newKill(player1: Player, player2: Player): void {
+  override newKill(player1: Player, player2: Player): void {
     if (player1.team != player2.team) {
       player1.spree += 1;
       if (player1.spree >= 5 && player1.spree % 5 === 0) {
@@ -268,7 +268,7 @@ export class CaptureTheFlag extends Gamemode {
   /**
    * Initialize bases and spawn players.
    */
-  public override init(): void {
+  override init(): void {
     const bases: Base[] = [];
     const game = this.game;
     if (!game.map) {
@@ -351,13 +351,13 @@ export class CaptureTheFlag extends Gamemode {
  * @augments Gamemode
  */
 export class KingOfTheHill extends Gamemode {
-  public bases: Hill[] = [];
+  bases: Hill[] = [];
 
   /**
    * Creates a new KingOfTheHill mode.
    * @param {Game} game - The game instance.
    */
-  public constructor(game: Game) {
+  constructor(game: Game) {
     super(game);
     this.name = "KingOfTheHill";
   }
@@ -367,7 +367,7 @@ export class KingOfTheHill extends Gamemode {
    * @param {Player} player - The player.
    * @param {number} val - Score value.
    */
-  public override giveScore(player: Player, val: number = 1): void {
+  override giveScore(player: Player, val: number = 1): void {
     player.score += val;
     gameEvents.emit(EVENTS.SCORE_UPDATED);
   }
@@ -377,7 +377,7 @@ export class KingOfTheHill extends Gamemode {
    * @param {Player} player1 - The killer.
    * @param {Player} player2 - The victim.
    */
-  public override newKill(player1: Player, player2: Player): void {
+  override newKill(player1: Player, player2: Player): void {
     if (player1.team !== player2.team) {
       player1.spree += 1;
       if (player1.spree >= 5 && player1.spree % 5 === 0) {
@@ -392,7 +392,7 @@ export class KingOfTheHill extends Gamemode {
   /**
    * Updates game state, checking hill control.
    */
-  public override step(): void {
+  override step(): void {
     // if all bases same color: score in intervals for team
     const scoreevery = 2000;
     let equal = true;
@@ -419,7 +419,7 @@ export class KingOfTheHill extends Gamemode {
   /**
    * Initializes hills and spawn points.
    */
-  public override init(): void {
+  override init(): void {
     const bases: Hill[] = [];
     const game = this.game;
     if (!game.map) {

@@ -14,10 +14,10 @@ const TEAMCOLORS = [
  * Represents a team of players in the game.
  */
 export default class Team {
-  public id: number;
-  public color: string;
+  id: number;
+  color: string;
 
-  public constructor(id: number, color?: string) {
+  constructor(id: number, color?: string) {
     this.id = id;
     this.color = color ?? TEAMCOLORS[this.id];
   }
