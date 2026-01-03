@@ -1,81 +1,69 @@
-**Summary**
+# Codebase Analysis & Refactoring Roadmap
 
-This document lists issues, risks, and concrete improvement options found in the current codebase. I focused on timing/looping, architecture, performance hotspots, globals/DOM mixing, and testing/tooling.
+**Last Updated:** 2026-01-03
+**Scope:** `src/`, `tests/`
 
-**High-priority Issues**
+## Executive Summary
 
-- **Global namespace pollution**: many values are exported onto `window` for legacy pages. This makes refactors fragile and couples code to globals. See the main bridge: [src/main.js](src/main.js#L14).
-
-- **Fixed-timestep / `setInterval` usage**: multiple places use `setInterval` for logic and rendering which is suboptimal for modern browsers and causes timing drift. Examples:
-  - Game loop: [src/classes/game.js](src/classes/game.js#L88)
-  - Canvas drawing / effect loops: [src/classes/canvas.js](src/classes/canvas.js#L51) and [src/classes/canvas.js](src/classes/canvas.js#L95)
-  - Misc effects/leaderboard: [src/effects.js](src/effects.js#L56), [pages/leaderboard/main.js](pages/leaderboard/main.js#L16)
-    Recommendation: use `requestAnimationFrame` for rendering; for game logic either (a) convert everything to time-based updates using a `dt` argument (preferred), or (b) keep a stable physics tick using an accumulator + fixed-step updates (capped) when determinism is required.
-
-- **Mixed concerns: logic & DOM**: code often manipulates the DOM directly inside core classes (e.g. updating `GameTimer` in [src/classes/game.js](src/classes/game.js#L143), many `document.getElementById` occurrences). This couples game logic with presentation; extract DOM updates into renderer/UI modules and pass only data/events.
-
-**Medium-priority Issues**
-
-- **Inconsistent time units / naming**: `GameFrequency` and `FrameFrequency` are numeric constants but the units are unclear (ms vs frames). Prefer explicit names (`GAME_TICK_MS`, `RENDER_INTERVAL_MS`) and use seconds for `dt` inside update methods.
-
-- **Frequent innerHTML/string concatenation**: functions like `updateScores()` in [src/main.js](src/main.js#L36) rebuild HTML via string concatenation in a loop. This is inefficient and can cause layout thrashing. Use `DocumentFragment`, template cloning, or minimal DOM updates.
-
-- **Direct prompts and synchronous user input**: `newGame()` uses `prompt()` to get map dimensions. Synchronous prompts block rendering; prefer a modal UI or form.
-
-- **Uncapped accumulators / spiral of death**: if switching to accumulator-based fixed-step loops, cap the number of iterations per frame to avoid long stalls (e.g., max 5 steps per frame) and/or clamp accumulated time.
-
-**Performance / Algorithmic**
-
-- **Per-tick object reclassification**: each tick the game clears object lists and re-adds all objects to spatial lists (`map.clearObjectLists()` + `addObject()` per object). This may be expensive for many objects; consider incremental updates, spatial hashing, or reuse of buckets to reduce allocations.
-
-- **High-frequency DOM/CSS changes**: code that manipulates styles (e.g. canvas shake via marginLeft/marginTop every few ms) can be expensive. Prefer CSS transforms with `will-change` and RAF-driven updates.
-
-**Correctness / Robustness**
-
-- **Implicit mutation while iterating**: the code removes deleted objects by splicing while iterating backward which is OK, but be careful if other loops assume object indices; prefer a `deleted` flag and a separate cleanup pass or a stable removal queue.
-
-- **No clear units for timers**: `this.t` is incremented by `GameFrequency` and compared against `Settings.RoundTime * 60000`. Using mixed units makes reasoning error-prone; normalize on seconds (floating) for calculations and UI formatting.
-
-**Testing / Tooling / DX**
-
-- **Broader unit tests**: current tests exist in `tests/` but expand coverage to include deterministic game-tick logic (physics, collisions, scoring). Decouple logic from DOM to make tests pure and fast.
-
-**UX / Accessibility**
-
-- **Keyboard focus & ARIA**: ensure menus and dynamic UI elements are keyboard-navigable and implement ARIA attributes where appropriate.
-
-- **Audio controls**: centralize audio management; respect reduced-motion / mute OS preferences.
-
-**Concrete refactor plan (incremental)**
-
-1. Introduce a canonical time unit and `dt` API
-   - Define `TIME_MS_PER_TICK` or prefer `tick(dtSeconds)` where `dtSeconds` is a float number of seconds since last update.
-   - Update `Game.step()` and all `object.step()` signatures to accept `dt` (seconds).
-2. Replace render loop with `requestAnimationFrame` and implement a fixed-step accumulator with a maximum iterations cap and a clamp on accumulated time.
-   - Option A: fully time-based (variable-step) — easiest but less deterministic.
-   - Option B: accumulator fixed-step + RAF rendering — keeps determinism and smoother rendering.
-3. Extract DOM updates
-   - Remove `document.getElementById` calls from core classes; raise events or call a renderer module to update UI elements (timer, scoreboard).
-4. Replace global `window` API with an explicit bridge
-   - Add a `bridge` module that exposes only the needed functions or an event emitter.
-   - Migrate callers gradually; tests will help check regressions.
-5. Optimize hotspots
-   - Rework `updateScores()` to use `DocumentFragment` or virtual DOM approach.
-   - Evaluate `map` spatial indexing to avoid per-tick full reclassification.
-6. Tooling & tests
-   - Add ESLint, stricter Prettier rules, and expand unit tests for game logic.
-
-**Quick wins I can implement for you**
-
-- Convert the canvas drawing loop to `requestAnimationFrame` and keep the current fixed-step `Game.step()` semantics using an accumulator (with a cap) — this minimizes code changes.
-- Or: convert all `step()` signatures to accept `dt` (seconds) and propagate `dt` to objects; then swap the loop to RAF with variable-step updates.
-- Replace `updateScores()` HTML concatenation with a `DocumentFragment` implementation.
-
-If you want, I can: (pick one)
-
-- Implement the RAF + accumulator loop and safety caps (minimal risk), or
-- Implement the `dt`-based step refactor (requires changes across many object classes but is cleaner long-term).
+The codebase is a TypeScript-based game engine utilizing HTML5 Canvas for rendering. While it has transitioned to modern tooling (Vite, ESLint, Prettier, Vitest), significant legacy patterns persist. The primary challenges include tight coupling via a global state singleton, mixed concerns between game logic and DOM manipulation, and suboptimal performance in the core game loop and spatial partitioning.
 
 ---
 
-If you want I can commit these suggestions as a single PR and start with the RAF + accumulator change (small, safe), then follow the incremental plan above. Which option would you like me to implement first?
+## 1. Architecture & Coupling
+
+- **Global Singleton Pattern:** The `store` singleton (`src/game/store.ts`) is heavily used across classes like `Player`, `Game`, and `Canvas`. This leads to state leakage between tests and makes dependency tracking difficult.
+- **Circular Dependencies:** Modules like `Game`, `Player`, and `Tank` are structurally coupled, often leading to circular import patterns.
+- **Global Namespace Pollution:** `src/main.ts` attaches core objects (`store`, `Settings`, `newGame`) to the `window` object, likely to support legacy inline HTML event handlers.
+- **Mixed Concerns:** UI management (DOM) and game logic (Canvas/Simulation) are often interleaved. For example, `Canvas.shake()` directly manipulates DOM styles instead of using a purely visual rendering transform.
+
+## 2. Performance & Algorithmic Hotspots
+
+- **Per-Tick Object Reclassification:** Every tick, the game clears and rebuilds the spatial map object lists (`map.clearObjectLists()` -> `map.addObject()`). This is an $O(N)$ operation that could be optimized with incremental updates or spatial hashing.
+- **Frequent innerHTML/String Concatenation:** UI updates (e.g., `updateScores()`) rebuild HTML via string concatenation in loops, causing layout thrashing.
+- **Layout Thrashing:** Effects like "shake" manipulate `marginLeft`/`marginTop` every few milliseconds. These should be replaced with hardware-accelerated CSS `transform: translate()` and `will-change`.
+- **DOM/CSS Overhead:** High-frequency style changes outside of the Canvas should be minimized or driven by `requestAnimationFrame`.
+
+## 3. Code Quality & Standards
+
+- **Inconsistent Time Units:** `GameFrequency` and `FrameFrequency` are used inconsistently. The engine should normalize on seconds (floating point) for all internal calculations (`dt`).
+- **Type Safety:** Residual usage of `any` exists (e.g., in `store.loadSettings()` and UI components) to bypass type checks or handle legacy data.
+- **Documentation:** Many UI components and newer utility functions lack JSDoc comments.
+
+## 4. Correctness & Robustness
+
+- **Implicit Mutation while Iterating:** Removing objects by splicing during iteration (even backward) can be fragile if other systems rely on stable indices. A `deleted` flag with a dedicated cleanup pass is preferred.
+- **Timer Reasoning:** Mixed units (ms vs. rounded minutes) for timers like `RoundTime` make reasoning error-prone. Normalize calculations on seconds and only format for UI display.
+
+## 5. UX & Accessibility
+
+- **Keyboard Navigation:** Menus and dynamic UI elements need implementation of ARIA attributes and better focus management.
+- **Audio Management:** Centralize audio controls to respect OS-level preferences (e.g., mute, reduced-motion).
+
+---
+
+## 6. Refactoring Roadmap
+
+### Phase 1: Core Loop & Timing (High Priority)
+
+1. **Introduce a Canonical `dt` API:**
+   - Update `Game.step()` and `GameObject.step()` to accept `dt` (seconds).
+   - Replace raw frequency increments with delta-time based updates.
+2. **Stabilize the Game Loop:**
+   - Implement a robust fixed-step accumulator with a maximum iterations cap to prevent the "spiral of death."
+
+### Phase 2: Decoupling & Maintainability (Medium Priority)
+
+1. **Dependency Injection:**
+   - Pass dependencies (Game, Map, Store) via constructors instead of importing global singletons.
+2. **UI/Logic Separation:**
+   - Move DOM-manipulating logic out of entity classes.
+   - Use a template-based or reactive approach for UI updates to avoid `innerHTML` loops.
+
+### Phase 3: Optimization & Polish (Low Priority)
+
+1. **Optimize Spatial Partitioning:**
+   - Only update objects in the spatial map when they move or are created/destroyed.
+2. **Hardware Acceleration:**
+   - Refactor visual effects to use CSS transforms or Canvas-level translations.
+3. **Finalize Type Coverage:**
+   - Eliminate remaining `any` types and strictly enforce JSDoc for public APIs.
