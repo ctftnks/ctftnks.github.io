@@ -322,35 +322,36 @@ export default class Tank extends GameObject {
     }
     // for each bullet in the list, check if it intersects the tank
     for (let i = 0; i < bullets.length; i++) {
-      if (this.intersects(bullets[i].x, bullets[i].y)) {
-        // Friendly fire?
-        if (!Settings.FriendlyFire && this.player.team === bullets[i].player.team && this.player.id !== bullets[i].player.id) {
-          return;
-        }
-        if (!bullets[i].lethal) {
-          return;
-        }
-        // Hit!
-        if (this.invincible()) {
-          return;
-        }
-
-        bullets[i].explode();
-        bullets[i].delete();
-        // count stats
-        if (bullets[i].player.team !== this.player.team) {
-          bullets[i].player.stats.kills += 1;
-        }
-        // fancy explosion cloud
-        generateCloud(this.player.game!, this.x, this.y, 6);
-        // let gamemode handle scoring
-        this.player.game!.mode.newKill(bullets[i].player, this.player);
-        // kill the player, delete the tank and bullet
-        playSound(SOUNDS.kill);
-        this.delete();
-        this.player.kill();
-        return;
+      if (!this.intersects(bullets[i].x, bullets[i].y)) {
+        continue;
       }
+      // Friendly fire?
+      if (!Settings.FriendlyFire && this.player.team === bullets[i].player.team && this.player.id !== bullets[i].player.id) {
+        continue;
+      }
+      if (!bullets[i].lethal) {
+        continue;
+      }
+      // Hit!
+      if (this.invincible()) {
+        continue;
+      }
+
+      bullets[i].explode();
+      bullets[i].delete();
+      // count stats
+      if (bullets[i].player.team !== this.player.team) {
+        bullets[i].player.stats.kills += 1;
+      }
+      // fancy explosion cloud
+      generateCloud(this.player.game!, this.x, this.y, 6);
+      // let gamemode handle scoring
+      this.player.game!.mode.newKill(bullets[i].player, this.player);
+      // kill the player, delete the tank and bullet
+      playSound(SOUNDS.kill);
+      this.delete();
+      this.player.kill();
+      return;
     }
 
     for (let i = 0; i < powerups.length; i++) {

@@ -108,61 +108,63 @@ export default class Game {
    * A single step of the game loop.
    */
   step(): void {
-    if (!this.paused) {
-      this.t += Settings.GameFrequency;
-      if (!this.map) {
-        return;
-      }
-      // remove deleted objects and
-      // initiate spatial sorting of objects within the map class
-      this.map.clearObjectLists();
-      for (let i = this.objs.length - 1; i >= 0; i--) {
-        if (!this.objs[i].deleted) {
-          this.map.addObject(this.objs[i]);
-        } else {
-          this.objs.splice(i, 1);
-        }
-      }
+    if (this.paused) {
+      return;
+    }
 
-      // call step() function for every object in order for it to move/etc.
-      for (let i = 0; i < this.objs.length; i++) {
-        this.objs[i].step();
+    this.t += Settings.GameFrequency;
+    if (!this.map) {
+      return;
+    }
+    // remove deleted objects and
+    // initiate spatial sorting of objects within the map class
+    this.map.clearObjectLists();
+    for (let i = this.objs.length - 1; i >= 0; i--) {
+      if (!this.objs[i].deleted) {
+        this.map.addObject(this.objs[i]);
+      } else {
+        this.objs.splice(i, 1);
       }
-      // do gamemode calculations
-      this.mode.step();
-      // add random PowerUp
-      if (this.t % (1000 * Settings.PowerUpRate) === 0) {
-        const p: PowerUp = getRandomPowerUp();
-        const pos = this.map.spawnPoint();
-        p.x = pos.x;
-        p.y = pos.y;
-        this.addObject(p);
-        this.timeouts.push(
-          window.setTimeout(
-            () => {
-              p.delete();
-            },
-            1000 * Settings.PowerUpRate * Settings.MaxPowerUps,
-          ),
-        );
+    }
+
+    // call step() function for every object in order for it to move/etc.
+    for (let i = 0; i < this.objs.length; i++) {
+      this.objs[i].step();
+    }
+    // do gamemode calculations
+    this.mode.step();
+    // add random PowerUp
+    if (this.t % (1000 * Settings.PowerUpRate) === 0) {
+      const p: PowerUp = getRandomPowerUp();
+      const pos = this.map.spawnPoint();
+      p.x = pos.x;
+      p.y = pos.y;
+      this.addObject(p);
+      this.timeouts.push(
+        window.setTimeout(
+          () => {
+            p.delete();
+          },
+          1000 * Settings.PowerUpRate * Settings.MaxPowerUps,
+        ),
+      );
+    }
+    if (Key.isDown("Escape")) {
+      openPage("menu");
+      this.pause();
+    }
+    if (this.t % 1000 === Settings.GameFrequency) {
+      let dt = Settings.RoundTime * 60 - (this.t - Settings.GameFrequency) / 1000;
+      dt = dt < 0 ? 0 : dt;
+      const dtm: number = Math.floor(dt / 60);
+      const dts: number = Math.floor(dt - dtm * 60);
+      const timerElem = document.getElementById("GameTimer");
+      if (timerElem) {
+        timerElem.innerHTML = `${String(dtm).padStart(2, "0")}:${String(dts).padStart(2, "0")}`;
       }
-      if (Key.isDown("Escape")) {
-        openPage("menu");
-        this.pause();
-      }
-      if (this.t % 1000 === Settings.GameFrequency) {
-        let dt = Settings.RoundTime * 60 - (this.t - Settings.GameFrequency) / 1000;
-        dt = dt < 0 ? 0 : dt;
-        const dtm: number = Math.floor(dt / 60);
-        const dts: number = Math.floor(dt - dtm * 60);
-        const timerElem = document.getElementById("GameTimer");
-        if (timerElem) {
-          timerElem.innerHTML = `${String(dtm).padStart(2, "0")}:${String(dts).padStart(2, "0")}`;
-        }
-      }
-      if (this.t > Settings.RoundTime * 60000) {
-        this.end();
-      }
+    }
+    if (this.t > Settings.RoundTime * 60000) {
+      this.end();
     }
   }
 
