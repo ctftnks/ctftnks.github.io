@@ -22,38 +22,23 @@ export class BasePage extends HTMLElement {
    * Render the component HTML
    * Override in subclass
    */
-  protected render(): void {
-    // Override in subclass
-  }
+  protected render(): void {}
 
   /**
    * Attach event listeners
    * Override in subclass
    */
-  protected attachListeners(): void {
-    // Override in subclass
-  }
+  protected attachListeners(): void {}
 
   /**
    * Called after component is mounted to DOM
    * Override in subclass
    */
-  protected onMount(): void {
-    // Override in subclass
-  }
+  protected onMount(): void {}
 
   /**
    * Called before component is removed from DOM
    * Override in subclass
    */
-  protected onUnmount(): void {
-    // Override in subclass
-  }
-
-  /**
-   * Close this page component
-   */
-  closePage(): void {
-    this.remove();
-  }
+  protected onUnmount(): void {}
 }
