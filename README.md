@@ -6,7 +6,7 @@ Play the game now at: [ctftnks.github.io](https://ctftnks.github.io)
 
 ## Features
 
-- **Multiple Game Modes:** CTF, Deathmatch, Team Deathmatch, King of the Hill, and a built-in Map Editor.
+- **Multiple Game Modes:** CTF, Deathmatch, Team Deathmatch, and King of the Hill.
 - **Smart AI Bots:** Adaptive bot speed and strategic behavior.
 - **Dynamic Power-ups:** Laser, Machine Gun, Guided Missiles, Wrecking Ball, and more.
 
