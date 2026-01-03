@@ -13,14 +13,12 @@ The codebase is a TypeScript-based game engine utilizing HTML5 Canvas for render
 
 - **Global Singleton Pattern:** The `store` singleton (`src/game/store.ts`) is heavily used across classes like `Player`, `Game`, and `Canvas`. This leads to state leakage between tests and makes dependency tracking difficult.
 - **Circular Dependencies:** Modules like `Game`, `Player`, and `Tank` are structurally coupled, often leading to circular import patterns.
-- **Global Namespace Pollution:** `src/main.ts` attaches core objects (`store`, `Settings`, `newGame`) to the `window` object, likely to support legacy inline HTML event handlers.
-- **Mixed Concerns:** UI management (DOM) and game logic (Canvas/Simulation) are often interleaved. For example, `Canvas.shake()` directly manipulates DOM styles instead of using a purely visual rendering transform.
+- **Mixed Concerns:** UI management (DOM) and game logic (Canvas/Simulation) are often interleaved.
 
 ## 2. Performance & Algorithmic Hotspots
 
 - **Per-Tick Object Reclassification:** Every tick, the game clears and rebuilds the spatial map object lists (`map.clearObjectLists()` -> `map.addObject()`). This is an $O(N)$ operation that could be optimized with incremental updates or spatial hashing.
 - **Frequent innerHTML/String Concatenation:** UI updates (e.g., `updateScores()`) rebuild HTML via string concatenation in loops, causing layout thrashing.
-- **Layout Thrashing:** Effects like "shake" manipulate `marginLeft`/`marginTop` every few milliseconds. These should be replaced with hardware-accelerated CSS `transform: translate()` and `will-change`.
 - **DOM/CSS Overhead:** High-frequency style changes outside of the Canvas should be minimized or driven by `requestAnimationFrame`.
 
 ## 3. Code Quality & Standards

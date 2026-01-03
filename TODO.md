@@ -7,6 +7,8 @@
 - move every class to its own file (and create package folders)
 - resolve all circular dependencies
 - single way to access the game variable? not distributed accross all classes
+- move CSS to web components
+- add favicon
 
 ## Bugs
 

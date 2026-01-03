@@ -84,30 +84,12 @@ export default class Canvas {
   }
 
   /**
-   * Shakes the canvas visually.
+   * Shakes the canvas visually using CSS animation.
    */
   public shake(): void {
-    const amp = 14;
-    const speed = 25;
-    const duration = 660;
-    let i = 0;
-
-    const intvl = window.setInterval(() => {
-      const randx = amp * (Math.random() - 0.5) * Math.exp((i * 250) / duration);
-      const randy = amp * (Math.random() - 0.5) * Math.exp((i * 250) / duration);
-      i -= 1;
-      this.canvas.style.marginLeft = randx + "px";
-      this.canvas.style.marginTop = randy + "px";
-      window.setTimeout(() => {
-        this.canvas.style.marginLeft = 0 + "px";
-        this.canvas.style.marginTop = 0 + "px";
-      }, speed);
-    }, 2 * speed);
-
-    store.game!.timeouts.push(
-      window.setTimeout(() => {
-        window.clearInterval(intvl);
-      }, duration),
-    );
+    this.canvas.classList.remove("shake");
+    // Trigger reflow to restart animation if it's already running
+    void this.canvas.offsetWidth;
+    this.canvas.classList.add("shake");
   }
 }

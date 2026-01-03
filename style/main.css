@@ -52,3 +52,44 @@ body {
   color: #ff0000;
   margin-right: 10px;
 }
+
+@keyframes shake {
+  0% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-2px, -2px);
+  }
+  20% {
+    transform: translate(1px, 2px);
+  }
+  30% {
+    transform: translate(-1px, -2px);
+  }
+  40% {
+    transform: translate(1px, 2px);
+  }
+  50% {
+    transform: translate(-2px, -1px);
+  }
+  60% {
+    transform: translate(1px, 1px);
+  }
+  70% {
+    transform: translate(-1px, -1px);
+  }
+  80% {
+    transform: translate(1px, 1px);
+  }
+  90% {
+    transform: translate(-1px, 0px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.shake {
+  animation: shake 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  will-change: transform;
+}
