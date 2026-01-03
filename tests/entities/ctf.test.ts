@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { Base, Flag, Hill } from "@/entities/ctf";
 import Tank from "@/entities/tank";
+import { TEAMS } from "@/game/team";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -33,8 +34,7 @@ describe("CTF Entities", () => {
     };
 
     mockPlayer = {
-      team: 1,
-      color: "#f00",
+      team: TEAMS[1],
     };
   });
 
@@ -45,8 +45,8 @@ describe("CTF Entities", () => {
   describe("Base Class", () => {
     it("should initialize correctly", () => {
       const base = new Base(mockGame, mockPlayer, 50, 50);
-      expect(base.team).toBe(1);
-      expect(base.color).toBe("#f00");
+      expect(base.team).toBe(mockPlayer.team);
+      expect(base.color).toBe(mockPlayer.team.color);
       expect(base.x).toBe(50);
       expect(base.y).toBe(50);
     });
@@ -134,7 +134,7 @@ describe("CTF Entities", () => {
       // Mock tank on hill
       const enemyTank = Object.create(Tank.prototype);
       Object.assign(enemyTank, {
-        player: { team: 2, color: "#0f0" },
+        player: { team: TEAMS[2] },
         x: 200,
         y: 200,
       });
@@ -143,8 +143,8 @@ describe("CTF Entities", () => {
 
       hill.step();
 
-      expect(hill.team).toBe(2);
-      expect(hill.color).toBe("#0f0");
+      expect(hill.team).toBe(TEAMS[2]);
+      expect(hill.team!.color).toBe(TEAMS[2].color);
     });
   });
 });

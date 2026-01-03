@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import Bot from "@/game/bot";
 import { store } from "@/game/store";
 import { Settings } from "@/game/settings";
+import { TEAMS } from "@/game/team";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -21,7 +22,6 @@ describe("Bot Class", () => {
     // Reset store
     store.GameID = 0;
     store.nplayers = 0;
-    store.playercolors = ["#ff0000", "#00ff00"];
     store.keymaps = [[]];
 
     // Mock Game and Map
@@ -62,7 +62,7 @@ describe("Bot Class", () => {
     store.game = mockGame;
 
     // Create Bot
-    bot = new Bot(0, "Bot 1", "#000");
+    bot = new Bot(0, "Bot 1", TEAMS[0]);
     bot.game = mockGame;
     bot.tank = mockTank; // Replace real tank with mock
   });

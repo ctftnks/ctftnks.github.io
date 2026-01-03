@@ -10,6 +10,7 @@ import { Laser, Guided, WreckingBall, Slingshot } from "@/entities/weapons/weapo
 import { CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import GameObject from "@/entities/gameobject";
 import { gameEvents, EVENTS } from "@/game/events";
+import Team from "./team";
 
 /** Options that are considered by the autopilot */
 declare interface AutopilotOption {
@@ -31,10 +32,10 @@ export default class Bot extends Player {
    * Creates a new Bot.
    * @param {number} id - The player ID.
    * @param {string} name - The bot name.
-   * @param {string} color - The bot color.
+   * @param {Team} team - The team of the bot.
    */
-  constructor(id: number, name: string, color: string) {
-    super(id, name, color, []);
+  constructor(id: number, name: string, team: Team) {
+    super(id, name, team, []);
   }
 
   /**
@@ -390,16 +391,16 @@ export default class Bot extends Player {
 
 /**
  * Adapts bot speed based on team balance.
- * @param {number} team - The team ID.
+ * @param {Team} team - The players team.
  * @param {number} val - The adaptation value.
  * @returns {number|undefined} The new bot speed.
  */
-export function adaptBotSpeed(team: number, val: number = 0.1): number | undefined {
+export function adaptBotSpeed(team: Team, val: number = 0.1): number | undefined {
   if (!Settings.AdaptiveBotSpeed) {
     return;
   }
 
-  const teams: number[] = [];
+  const teams: Team[] = [];
   const botcounts: number[] = [];
 
   for (let i = 0; i < store.players.length; i++) {

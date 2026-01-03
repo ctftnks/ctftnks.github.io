@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import Tank from "@/entities/tank";
 import { Settings } from "@/game/settings";
+import { TEAMS } from "@/game/team";
 
 describe("Tank Class", () => {
   let mockPlayer: any;
@@ -17,7 +18,7 @@ describe("Tank Class", () => {
     };
 
     mockPlayer = {
-      color: "#ff0000",
+      team: TEAMS[1],
       name: "Test Player",
       game: {
         t: 0,

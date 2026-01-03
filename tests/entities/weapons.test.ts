@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { Gun, MG, Grenade } from "@/entities/weapons/weapons";
+import { TEAMS } from "@/game/team";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -66,7 +67,7 @@ describe("Weapon System", () => {
     mockTank = {
       player: {
         game: mockGame,
-        color: "#f00",
+        team: TEAMS[0],
         isBot: () => false,
       },
       corners: () => [

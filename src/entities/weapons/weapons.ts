@@ -66,7 +66,7 @@ export class Weapon {
     }, 100);
     bullet.angle = this.tank.angle;
     bullet.player = this.tank.player;
-    bullet.color = this.tank.player.color;
+    bullet.color = this.tank.player.team.color;
     this.tank.player.game!.addObject(bullet);
     return bullet;
   }
@@ -236,7 +236,7 @@ export class Laser extends Weapon {
     this.trajectory.angle = this.tank.angle;
     this.trajectory.length = 620;
     this.trajectory.drawevery = 3;
-    this.trajectory.color = hexToRgbA(this.tank.player.color, 0.4);
+    this.trajectory.color = hexToRgbA(this.tank.player.team.color, 0.4);
     this.tank.player.game!.addObject(this.trajectory);
     this.bot.fleeingDuration = 0;
   }
@@ -260,7 +260,7 @@ export class Laser extends Weapon {
       bullet.extrahitbox = -100;
       bullet.timeout = 150;
       bullet.speed = 0;
-      bullet.color = this.tank.player.color;
+      bullet.color = this.tank.player.team.color;
       bullet.bounceSound = "";
       bullet.age = 0;
       this.tank.player.game!.addObject(bullet);

@@ -3,6 +3,7 @@ import type Game from "@/game/game";
 import Player from "@/game/player";
 import Bot from "@/game/bot";
 import { Settings } from "./settings";
+import { TEAMS } from "./team";
 
 /**
  * Data Structure for the global state of the website
@@ -30,17 +31,6 @@ class GameStore {
     ["Digit8", "KeyU", "KeyI", "Digit9", "Digit7"],
   ];
 
-  playercolors = [
-    "#DA1918", // red
-    "#31B32B", // green
-    "#1F87FF", // blue
-    "#21B19B", // teal
-    "#A020F0", // purple
-    "#F4641D", // orange
-    "#713B17", // brown
-    "#E7E52C", // yellow
-  ];
-
   constructor() {
     this.loadSettings();
   }
@@ -49,13 +39,13 @@ class GameStore {
     const id = this.nplayers;
     this.nplayers++;
     const name = (isBot ? "Bot " : "Player ") + (id + 1);
-    const color = this.playercolors[id % this.playercolors.length];
+    const team = TEAMS[id % TEAMS.length];
     const keys = this.keymaps[id] || this.keymaps[0].slice();
 
     if (isBot) {
-      return new Bot(id, name, color);
+      return new Bot(id, name, team);
     }
-    return new Player(id, name, color, keys);
+    return new Player(id, name, team, keys);
   }
 
   saveSettings(): void {

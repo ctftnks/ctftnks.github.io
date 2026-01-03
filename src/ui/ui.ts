@@ -1,4 +1,5 @@
 import { store } from "@/game/store";
+import { TEAMS } from "@/game/team";
 
 export function updateScores(): void {
   const scoreBoard = document.getElementById("scoreBoard");
@@ -14,7 +15,7 @@ export function updateScores(): void {
   for (let i = 0; i < store.players.length; i++) {
     let entry = "";
     entry += "<div class='entry'>";
-    entry += "<span class='name' style='color:" + store.players[i].color + ";''>";
+    entry += "<span class='name' style='color:" + store.players[i].team.color + ";''>";
     entry += store.players[i].name;
     entry += "</span><span class='score'>";
     if (store.players[i].spree > 1) {
@@ -46,8 +47,12 @@ export function updatePlayersMenu(): void {
     const id = store.players[i].id;
     entryRow += "<div class='entry'>";
     entryRow +=
-      "<button class='team' data-action='changeColor' data-id='" + i + "' style='color:" + store.players[i].color + ";'>&diams;</button>";
-    entryRow += "<button class='name' data-action='editName' data-id='" + i + "' style='color:" + store.players[i].color + ";'>";
+      "<button class='team' data-action='changeTeam' data-id='" +
+      i +
+      "' style='color:" +
+      store.players[i].team.color +
+      ";'>&diams;</button>";
+    entryRow += "<button class='name' data-action='editName' data-id='" + i + "' style='color:" + store.players[i].team.color + ";'>";
     entryRow += store.players[i].name;
     entryRow += "</button>";
     if (store.players[i].isBot()) {
@@ -107,9 +112,9 @@ function handlePlayersMenuClick(event: Event): void {
 
   const id = parseInt(button.getAttribute("data-id") || "-1", 10);
 
-  if (action === "changeColor") {
+  if (action === "changeTeam") {
     if (store.players[id]) {
-      store.players[id].changeColor(store.playercolors);
+      store.players[id].changeTeam(TEAMS);
       updatePlayersMenu();
     }
   } else if (action === "editName") {

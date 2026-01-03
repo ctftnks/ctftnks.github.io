@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import Player from "@/game/player";
+import { TEAMS } from "@/game/team";
 import { store } from "@/game/store";
 import GameMap from "@/game/gamemap";
+import Player from "@/game/player";
 
 describe("Player Class", () => {
   const mockMap: GameMap = {
@@ -22,8 +23,8 @@ describe("Player Class", () => {
   });
 
   it("should initialize with provided values", () => {
-    const p1 = new Player(0, "Player 1", "#fff", []);
-    const p2 = new Player(1, "Player 2", "#000", []);
+    const p1 = new Player(0, "Player 1", TEAMS[1], []);
+    const p2 = new Player(1, "Player 2", TEAMS[0], []);
 
     expect(p1.id).toBe(0);
     expect(p1.name).toBe("Player 1");
@@ -32,7 +33,7 @@ describe("Player Class", () => {
   });
 
   it("should reset stats correctly", () => {
-    const player = new Player(0, "P", "#000", []);
+    const player = new Player(0, "P", TEAMS[0], []);
     player.stats = { deaths: 5, kills: 10, miles: 100, shots: 50 };
 
     player.resetStats();
@@ -43,12 +44,11 @@ describe("Player Class", () => {
   });
 
   it("should change color and team correctly", () => {
-    const player = new Player(0, "P", "#000", []);
-    const initialColor = player.color;
-    const initialTeam = player.team;
+    const player = new Player(0, "P", TEAMS[0], []);
+    const initialColor = player.team.color;
 
-    player.changeColor(["#000", "#fff"]);
-    expect(player.team).toBe(initialTeam + 1);
-    expect(player.color).not.toBe(initialColor);
+    player.changeTeam([TEAMS[0], TEAMS[1]]);
+    expect(player.team).toBe(TEAMS[1]);
+    expect(player.team.color).not.toBe(initialColor);
   });
 });

@@ -4,6 +4,7 @@ import { generateCloud } from "@/entities/smoke";
 import { Settings } from "@/game/settings";
 import type Game from "./game";
 import type { Base } from "@/entities/ctf";
+import Team from "./team";
 
 /**
  * Represents a Player in the game.
@@ -13,8 +14,7 @@ import type { Base } from "@/entities/ctf";
 export default class Player {
   id: number;
   name: string;
-  color: string;
-  team: number;
+  team: Team;
   game: Game | undefined;
   base: Base | undefined;
   score: number = 0;
@@ -27,14 +27,13 @@ export default class Player {
    * Creates a new Player.
    * @param {number} id - The player ID.
    * @param {string} name - The player name.
-   * @param {string} color - The player color.
+   * @param {Team} team - The team of the player
    * @param {string[]} keys - The key mapping.
    */
-  constructor(id: number, name: string, color: string, keys: string[]) {
+  constructor(id: number, name: string, team: Team, keys: string[]) {
     this.id = id;
     this.name = name;
-    this.color = color;
-    this.team = this.id;
+    this.team = team;
     this.keys = keys;
     this.tank = new Tank(this);
   }
@@ -110,12 +109,11 @@ export default class Player {
 
   /**
    * Change player color/team.
-   * @param {string[]} colors - List of available colors.
+   * @param {Team[]} teams - List of available teams.
    */
-  changeColor(colors: string[]): void {
-    this.team += 1;
-    this.team = this.team % colors.length;
-    this.color = colors[this.team % colors.length];
+  changeTeam(teams: Team[]): void {
+    const currentIndex = teams.indexOf(this.team);
+    this.team = teams[(currentIndex + 1) % teams.length];
   }
 
   /**

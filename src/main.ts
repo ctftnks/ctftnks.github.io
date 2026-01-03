@@ -10,9 +10,7 @@ window.onload = () => {
   store.canvas = new Canvas("gameFrame");
 
   store.players = [store.createPlayer(false), store.createPlayer(true), store.createPlayer(true), store.createPlayer(true)];
-  store.players[1].color = store.players[0].color;
   store.players[1].team = store.players[0].team;
-  store.players[3].color = store.players[2].color;
   store.players[3].team = store.players[2].team;
 
   const game = newGame();

@@ -5,6 +5,7 @@ import Game from "@/game/game";
 import Tank from "./tank";
 import Player from "@/game/player";
 import Tile from "@/game/tile";
+import Team from "@/game/team";
 
 /**
  * Represents a Flag in Capture the Flag mode.
@@ -16,7 +17,7 @@ export class Flag extends GameObject {
   /** The home base. */
   base: Base;
   /** Team color. */
-  team: number;
+  team: Team;
   /** Flag color. */
   color: string;
   /** Flag size. */
@@ -137,7 +138,7 @@ export class Flag extends GameObject {
  */
 export class Base extends GameObject {
   /** Team identifier. */
-  team: number | null;
+  team: Team | null;
   /** Base color. */
   color: string;
   /** Game instance. */
@@ -163,7 +164,7 @@ export class Base extends GameObject {
       this.color = "#555";
     } else {
       this.team = player.team;
-      this.color = player.color;
+      this.color = this.team.color;
     }
     this.game = game;
     this.x = x;
@@ -255,7 +256,7 @@ export class Hill extends Base {
         Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)
       ) {
         this.team = tank.player.team;
-        this.color = tank.player.color;
+        this.color = this.team.color;
       }
     }
   }

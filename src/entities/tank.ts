@@ -53,7 +53,7 @@ export default class Tank extends GameObject {
   constructor(player: Player) {
     super();
     this.player = player;
-    this.color = this.player.color;
+    this.color = this.player.team.color;
     this.angle = 2 * Math.PI * Math.random();
     this.width = Settings.TankWidth;
     this.height = Settings.TankHeight;
@@ -71,7 +71,7 @@ export default class Tank extends GameObject {
     context.translate(this.x, this.y);
     context.rotate(this.angle);
     context.rect(-this.width / 2, -this.height / 2, this.width, this.height);
-    context.fillStyle = this.player.color;
+    context.fillStyle = this.player.team.color;
 
     if (this.timers.invincible > this.player.game!.t) {
       const dt = (this.timers.invincible - this.player.game!.t) / 600;
@@ -106,7 +106,7 @@ export default class Tank extends GameObject {
     // draw label
     if (Settings.ShowTankLabels) {
       context.rotate(-this.angle);
-      context.fillStyle = this.player.color;
+      context.fillStyle = this.player.team.color;
       context.font = "" + 14 + "px Arial";
       context.fillText(this.player.name, -16, -40);
       context.rotate(this.angle);

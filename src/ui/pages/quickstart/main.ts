@@ -53,7 +53,6 @@ export function quickPvP(nteams: number, teamsize: number): void {
       const p = store.players[store.players.length - 1];
       if (j > 0) {
         p.team = store.players[store.players.length - 2].team;
-        p.color = store.players[store.players.length - 2].color;
       }
     }
   }
@@ -74,7 +73,6 @@ export function quickPvB(nteams: number, teamsize: number): void {
       const p = store.players[store.players.length - 1];
       if (j > 0) {
         p.team = store.players[store.players.length - 2].team;
-        p.color = store.players[store.players.length - 2].color;
       }
     }
   }
@@ -95,7 +93,6 @@ export function quickMixed(nteams: number, teamsize: number): void {
       const p = store.players[store.players.length - 1];
       if (j > 0) {
         p.team = store.players[store.players.length - 2].team;
-        p.color = store.players[store.players.length - 2].color;
       }
     }
   }
@@ -116,7 +113,6 @@ export function quickUnevenMixed(nteams: number, teamsize: number): void {
       const p = store.players[store.players.length - 1];
       if (j > 0) {
         p.team = store.players[store.players.length - 2].team;
-        p.color = store.players[store.players.length - 2].color;
       }
     }
   }
