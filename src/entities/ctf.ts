@@ -158,10 +158,15 @@ export class Base extends GameObject {
    * @param {number} x - X coordinate.
    * @param {number} y - Y coordinate.
    */
-  constructor(game: Game, player: Player | { color: string; team: number | null }, x: number, y: number) {
+  constructor(game: Game, player: Player | null, x: number, y: number) {
     super();
-    this.team = player.team;
-    this.color = player.color;
+    if (player === null) {
+      this.team = null;
+      this.color = "#555";
+    } else {
+      this.team = player.team;
+      this.color = player.color;
+    }
     this.game = game;
     this.x = x;
     this.y = y;
@@ -236,7 +241,7 @@ export class Hill extends Base {
    * @param {number} y - Y coordinate.
    */
   constructor(game: Game, x: number, y: number) {
-    super(game, { color: "#555", team: null }, x, y);
+    super(game, null, x, y);
   }
 
   /**

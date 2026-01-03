@@ -10,7 +10,7 @@ import { updateScores } from "@/ui/ui";
 /**
  * Base class for game modes.
  */
-export class Gamemode {
+export abstract class Gamemode {
   name: string = "defaultmode";
   game: Game;
   BaseSpawnDistance: number = 2;
@@ -34,19 +34,17 @@ export class Gamemode {
 
   /**
    * Handle a new kill event.
-   * @param {Player} _player1 - The killer.
-   * @param {Player} _player2 - The victim.
+   * @param {Player} player1 - The killer.
+   * @param {Player} player2 - The victim.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  newKill(_player1: Player, _player2: Player): void {}
+  abstract newKill(player1: Player, player2: Player): void;
 
   /**
    * Updates player score (Default implementation)
-   * @param _player
-   * @param _val
+   * @param player
+   * @param val
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  giveScore(_player: Player, _val: number = 1): void {}
+  abstract giveScore(player: Player, val: number): void;
 }
 
 /**
@@ -177,7 +175,9 @@ export class TeamDeathmatch extends Gamemode {
           let length = 0;
           let initfirst = false;
           if (bases.length === 0) {
-            bases.push(game.map.spawnPoint()); // Using spawnPoint directly as base placeholder for dist calc
+            // Using spawnPoint directly as base placeholder for dist calc
+            const sp = game.map.spawnPoint();
+            bases.push(new Base(game, player, sp.x, sp.y));
             initfirst = true;
           }
           for (let j = 0; j < bases.length; j++) {
@@ -304,7 +304,8 @@ export class CaptureTheFlag extends Gamemode {
           let length = 0;
           let initfirst = false;
           if (bases.length === 0) {
-            bases.push(game.map.spawnPoint() as any);
+            const sp = game.map.spawnPoint();
+            bases.push(new Base(game, player, sp.x, sp.y));
             initfirst = true;
           }
           for (let j = 0; j < bases.length; j++) {
@@ -443,7 +444,8 @@ export class KingOfTheHill extends Gamemode {
         let length = 0;
         let initfirst = false;
         if (bases.length === 0) {
-          bases.push(game.map.spawnPoint() as any);
+          const sp = game.map.spawnPoint();
+          bases.push(new Base(game, null, sp.x, sp.y));
           initfirst = true;
         }
         for (let j = 0; j < bases.length; j++) {
