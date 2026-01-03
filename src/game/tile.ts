@@ -1,5 +1,5 @@
-import GameObject from "../objects/gameobject";
-import { Coord } from "../objects/coord";
+import GameObject from "../entities/gameobject";
+import { Coord } from "../entities/coord";
 import GameMap from "./gamemap";
 
 /**

@@ -1,4 +1,4 @@
-import { PowerUps } from "@/objects/powerup";
+import { PowerUps } from "@/entities/powerup";
 import template from "./main.html?raw";
 import "./style.css";
 

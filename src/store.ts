@@ -1,4 +1,4 @@
-import type Canvas from "@/ui/canvas";
+import type Canvas from "@/game/canvas";
 import type Game from "@/game/game";
 import type Player from "@/game/player";
 

@@ -1,4 +1,4 @@
-import Canvas from "@/ui/canvas";
+import Canvas from "@/game/canvas";
 import Player from "@/game/player";
 import Bot from "@/game/bot";
 import { Settings, store } from "@/store";

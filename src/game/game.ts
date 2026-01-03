@@ -1,13 +1,13 @@
 import GameMap from "./gamemap";
 import MapGenerator from "./mapGenerator";
-import { getRandomPowerUp, type PowerUp } from "../objects/powerup";
+import { getRandomPowerUp, type PowerUp } from "../entities/powerup";
 import { Key } from "@/key";
 import { playSound, stopMusic, clearEffects } from "@/effects";
 import { store, Settings } from "@/store";
 import { SOUNDS } from "@/assets";
-import Canvas from "../ui/canvas";
+import Canvas from "./canvas";
 import Player from "./player";
-import GameObject from "../objects/gameobject";
+import GameObject from "../entities/gameobject";
 import { Gamemode, Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import { openPage } from "@/ui/pages";
 import { updateScores } from "@/ui/ui";
