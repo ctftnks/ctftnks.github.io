@@ -1,5 +1,5 @@
 import Player from "./player";
-import { Flag, Base, Hill } from "../entities/ctf";
+import { Flag, Base, Hill } from "@/entities/ctf";
 import { playSound } from "@/effects";
 import { adaptBotSpeed } from "./bot";
 import { SOUNDS } from "@/assets";

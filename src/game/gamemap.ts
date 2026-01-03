@@ -1,8 +1,8 @@
 import { store } from "@/store";
-import GameObject from "../entities/gameobject";
+import GameObject from "@/entities/gameobject";
 import Canvas from "./canvas";
 import Tile from "./tile";
-import { Coord } from "../entities/coord";
+import { Coord } from "@/entities/coord";
 
 /**
  * Represents the game map.
