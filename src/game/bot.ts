@@ -302,7 +302,7 @@ export default class Bot extends Player {
     } else if (weapon instanceof Guided || weapon instanceof WreckingBall) {
       result.shouldShoot = false;
       result.weight = 200;
-      const tile = store.game!.map.getTileByPos(this.tank.x, this.tank.y);
+      const tile = this.game!.map.getTileByPos(this.tank.x, this.tank.y);
       if (tile !== null) {
         for (let i = 0; i < 4; i++) {
           if (tile.walls[i] !== weapon instanceof Guided) {
@@ -332,7 +332,7 @@ export default class Bot extends Player {
       return null;
     }
 
-    const tile = store.game!.map?.getTileByPos(this.tank.x, this.tank.y);
+    const tile = this.game!.map?.getTileByPos(this.tank.x, this.tank.y);
     if (!tile) {
       return null;
     }
@@ -366,15 +366,15 @@ export default class Bot extends Player {
       return;
     }
 
-    if (!store.game || !store.game.map) {
+    if (!this.game || !this.game.map) {
       return;
     }
-    const tile = store.game.map.getTileByPos(this.tank.x, this.tank.y);
+    const tile = this.game.map.getTileByPos(this.tank.x, this.tank.y);
     if (tile === null) {
       return;
     }
 
-    const nextTile = store.game.map.getTileByPos(
+    const nextTile = this.game.map.getTileByPos(
       this.tank.x + tile.dx * Math.sin(this.tank.angle),
       this.tank.y - tile.dy * Math.cos(this.tank.angle),
     )!;
@@ -402,14 +402,14 @@ export function adaptBotSpeed(team: number, val: number = 0.1): number | undefin
   const teams: number[] = [];
   const botcounts: number[] = [];
 
-  for (let i = 0; i < store.game!.players.length; i++) {
-    let id = teams.indexOf(store.game!.players[i].team);
+  for (let i = 0; i < store.players.length; i++) {
+    let id = teams.indexOf(store.players[i].team);
     if (id === -1) {
       id = teams.length;
-      teams.push(store.game!.players[i].team);
+      teams.push(store.players[i].team);
       botcounts.push(0);
     }
-    botcounts[id] += store.game!.players[i].isBot() ? 1 : 0;
+    botcounts[id] += store.players[i].isBot() ? 1 : 0;
   }
 
   let avgbots = 0;
