@@ -29,7 +29,10 @@ export default class Canvas {
    */
   draw(): void {
     this.context.clearRect(0, 0, this.canvas.width / this.scale, this.canvas.height / this.scale);
-    store.game.map.draw(this.context);
+    if (!store.game) {
+      return;
+    }
+    store.game.map!.draw(this.context);
     for (let i = 0; i < store.game.objs.length; i++) {
       store.game.objs[i].draw(this.context);
     }
@@ -40,7 +43,7 @@ export default class Canvas {
    */
   sync(): void {
     if (typeof this.loop === "undefined") {
-      const drawLoop = () => {
+      const drawLoop = (): void => {
         this.draw();
         this.loop = requestAnimationFrame(drawLoop);
       };
@@ -101,7 +104,7 @@ export default class Canvas {
       }, speed);
     }, 2 * speed);
 
-    store.game.timeouts.push(
+    store.game!.timeouts.push(
       setTimeout(() => {
         clearInterval(intvl);
       }, duration),

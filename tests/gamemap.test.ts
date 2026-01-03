@@ -26,12 +26,13 @@ describe("Map Class", () => {
   it("should link neighbors correctly", () => {
     const map = new GameMap(mockCanvas, 3, 3);
     const centerTile = map.getTileByIndex(1, 1);
+    expect(centerTile).not.toBeNull();
 
     // Neighbors: [top, left, bottom, right]
-    expect(centerTile.neighbors[0]).toBe(map.getTileByIndex(1, 0));
-    expect(centerTile.neighbors[1]).toBe(map.getTileByIndex(0, 1));
-    expect(centerTile.neighbors[2]).toBe(map.getTileByIndex(1, 2));
-    expect(centerTile.neighbors[3]).toBe(map.getTileByIndex(2, 1));
+    expect(centerTile!.neighbors[0]).toBe(map.getTileByIndex(1, 0));
+    expect(centerTile!.neighbors[1]).toBe(map.getTileByIndex(0, 1));
+    expect(centerTile!.neighbors[2]).toBe(map.getTileByIndex(1, 2));
+    expect(centerTile!.neighbors[3]).toBe(map.getTileByIndex(2, 1));
   });
 
   it("should find tile by world position", () => {
@@ -40,8 +41,9 @@ describe("Map Class", () => {
     const dy = map.dy;
 
     const tile = map.getTileByPos(dx * 2.5, dy * 3.5);
-    expect(tile.i).toBe(2);
-    expect(tile.j).toBe(3);
+    expect(tile).not.toBeNull();
+    expect(tile!.i).toBe(2);
+    expect(tile!.j).toBe(3);
   });
 
   it("should return null for out of bounds world position", () => {

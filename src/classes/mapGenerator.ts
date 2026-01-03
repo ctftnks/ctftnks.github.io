@@ -59,8 +59,8 @@ export default class MapGenerator {
           }
         }
         walls.splice(randomWallNo, 1);
-      } // If the cell on the opposite side already was in the maze, remove the wall from the list.
-      else {
+      } else // If the cell on the opposite side already was in the maze, remove the wall from the list.
+      {
         walls.splice(randomWallNo, 1);
       }
     }

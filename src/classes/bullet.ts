@@ -126,8 +126,9 @@ export default class Bullet extends GameObject {
     const tile = this.map.getTileByPos(this.x, this.y);
     if (tile !== null) {
       for (let j = 0; j < tile.objs.length; j++) {
-        if (tile.objs[j] instanceof Bullet && tile.objs[j].age > 0 && tile.objs[j] !== this) {
-          bullets.push(tile.objs[j]);
+        const obj: GameObject = tile.objs[j];
+        if (obj instanceof Bullet && obj.age > 0 && obj !== this) {
+          bullets.push(obj);
         }
       }
     }

@@ -1,14 +1,17 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import Player from "../src/classes/player";
 import { store } from "../src/store";
+import GameMap from "../src/classes/gamemap";
 
 describe("Player Class", () => {
+  const mockMap: GameMap = {
+    spawnPoint: () => ({ x: 100, y: 100 }),
+  } as GameMap;
+
   beforeEach(() => {
     store.nplayers = 0;
     store.game = {
-      map: {
-        spawnPoint: () => ({ x: 100, y: 100 }),
-      },
+      map: mockMap,
       addObject: vi.fn(),
       nPlayersAlive: 0,
       timeouts: [],

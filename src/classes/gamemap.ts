@@ -10,8 +10,6 @@ import Canvas from "./canvas";
  * the canvas is passed to the constructor to provide the size of the canvas
  */
 export default class GameMap {
-  /** The canvas. */
-  canvas: Canvas | { width: number; height: number };
   /** Number of tiles in X. */
   Nx: number;
   /** Number of tiles in Y. */
@@ -30,8 +28,6 @@ export default class GameMap {
    * @param {number} Ny - Number of tiles in Y direction.
    */
   constructor(canvas: Canvas, Nx: number | null = null, Ny: number | null = null) {
-    this.canvas = canvas;
-
     if (Nx === null) {
       this.Nx = parseInt((store.settings.MapNxMin + (store.settings.MapNxMax - store.settings.MapNxMin) * Math.random()).toString());
     } else {
@@ -39,7 +35,7 @@ export default class GameMap {
     }
 
     if (Ny === null) {
-      this.Ny = parseInt((((0.25 * Math.random() + 0.75) * this.Nx * canvas.height) / canvas.width).toString());
+      this.Ny = parseInt((((0.25 * Math.random() + 0.75) * this.Nx * canvas!.height) / canvas!.width).toString());
     } else {
       this.Ny = Ny;
     }
@@ -152,8 +148,8 @@ export default class GameMap {
    * Update sizes of map and tiles, for window.onresize.
    */
   resize(): void {
-    if (this.canvas instanceof Canvas) {
-      this.canvas.rescale(Math.min(this.canvas.width / (this.dx * this.Nx), this.canvas.height / (this.dy * this.Ny)));
+    if (store.canvas instanceof Canvas) {
+      store.canvas.rescale(Math.min(store.canvas.width / (this.dx * this.Nx), store.canvas.height / (this.dy * this.Ny)));
     }
   }
 }
