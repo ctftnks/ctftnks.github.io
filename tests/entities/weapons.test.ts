@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { Gun, MG, Grenade } from "@/entities/weapons/weapons";
+import { Gun, MG, Grenade } from "@/entities/weapons";
 import { TEAMS } from "@/game/team";
 
 // Mock dependencies

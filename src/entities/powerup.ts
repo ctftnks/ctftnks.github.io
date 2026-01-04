@@ -1,7 +1,7 @@
 import { Settings } from "@/stores/settings";
 import GameObject from "./gameobject";
 import { playSound, playMusic, stopMusic, fogOfWar } from "@/game/effects";
-import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot } from "./weapons/weapons";
+import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot } from "./weapons";
 import { IMAGES, SOUNDS } from "@/game/assets";
 import type Tank from "./tank";
 

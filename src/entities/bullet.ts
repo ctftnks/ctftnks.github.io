@@ -5,7 +5,7 @@ import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import type Player from "@/game/player";
 import type GameMap from "@/game/gamemap";
-import { Weapon } from "./weapons/weapons";
+import { Weapon } from "./weapons";
 
 /**
  * Represents a bullet fired by a tank.

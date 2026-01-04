@@ -1,5 +1,5 @@
 import GameObject from "./gameobject";
-import { Gun, Weapon } from "./weapons/weapons";
+import { Gun, Weapon } from "./weapons";
 import { generateCloud } from "./smoke";
 import { playSound } from "@/game/effects";
 import { Settings } from "@/stores/settings";
