@@ -163,5 +163,39 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-@import "./style.css";
+#playersMenu {
+  position: relative;
+  width: 100%;
+  left: 0px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#playersMenu .name {
+  display: inline-block;
+  width: 120px;
+  margin-right: 20px;
+}
+
+#playersMenu .team {
+  display: inline-block;
+  width: 36px;
+  margin-right: 20px;
+}
+
+#playersMenu .remove {
+  display: inline-block;
+  width: 36px;
+  margin-left: 20px;
+  color: #f44336;
+}
+
+.keyEditButton {
+  margin: 2px;
+  width: 60px;
+}
+
+.keyEditButton.editing {
+  opacity: 0.6;
+}
 </style>

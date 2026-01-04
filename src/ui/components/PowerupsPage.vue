@@ -57,5 +57,25 @@ function updateSetting(key: keyof typeof Settings, delta: number, min: number = 
 </script>
 
 <style scoped>
-@import "./style.css";
+#powerupsOptions {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#powerupsOptions .powerupLabel {
+  width: 120px;
+  display: inline-block;
+}
+
+#weaponMenu {
+  position: fixed;
+  top: 8%;
+  left: 30%;
+  min-height: 20%;
+  width: 40%;
+  border: solid 1px #bbb;
+  background-color: #fff;
+  box-shadow: 0px 0px 13px 0px rgba(94, 94, 94, 1);
+  text-align: center;
+}
 </style>

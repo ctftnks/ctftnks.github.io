@@ -154,5 +154,25 @@ function updateSetting(key: keyof typeof Settings, delta: number, min: number = 
 </script>
 
 <style scoped>
-@import "./style.css";
+#settingsTable {
+  width: 80%;
+  position: relative;
+  left: 10%;
+}
+
+#settingsTable .leftCol {
+  float: left;
+  width: 50%;
+  position: relative;
+  left: 0;
+  top: 0;
+}
+
+#settingsTable .rightCol {
+  float: left;
+  width: 50%;
+  position: relative;
+  left: 0;
+  top: 0;
+}
 </style>

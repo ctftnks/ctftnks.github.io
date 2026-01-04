@@ -69,5 +69,25 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-@import "./style.css";
+#leaderboard table {
+  position: relative;
+  width: 80%;
+  left: 10%;
+  border-collapse: collapse;
+}
+
+#leaderboard th {
+  padding: 8px;
+  border-bottom: 1px solid #666;
+}
+
+#leaderboard td {
+  padding: 8px;
+}
+
+#leaderboardCounter {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+}
 </style>
