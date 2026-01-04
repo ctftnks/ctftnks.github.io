@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import Bot from "@/game/bot";
 import { store } from "@/game/store";
-import { Settings } from "@/game/settings";
 import { TEAMS } from "@/game/team";
 
 // Mock dependencies
@@ -11,11 +10,11 @@ vi.mock("@/game/effects", () => ({
 
 vi.mock("@/entities/tank");
 vi.mock("@/entities/weapons/weapons");
+vi.mock("@/game/autopilot");
 
 describe("Bot Class", () => {
   let bot: Bot;
   let mockGame: any;
-  let mockMap: any;
   let mockTank: any;
 
   beforeEach(() => {
@@ -24,38 +23,15 @@ describe("Bot Class", () => {
     store.nplayers = 0;
     store.keymaps = [[]];
 
-    // Mock Game and Map
-    mockMap = {
-      getTileByPos: vi.fn(),
-    };
-
     mockGame = {
-      map: mockMap,
       t: 0,
       mode: {},
       players: [],
+      map: {},
     };
 
-    // Mock Tank
     mockTank = {
-      x: 100,
-      y: 100,
-      angle: 0,
-      speed: 10,
-      weapon: {
-        isActive: false,
-        bot: {
-          shootingRange: 5,
-          fleeIfActive: false,
-          fleeingDuration: 0,
-        },
-        shoot: vi.fn(),
-      },
-      map: mockMap,
-      invincible: vi.fn().mockReturnValue(false),
-      move: vi.fn(),
-      turn: vi.fn(),
-      shoot: vi.fn(),
+      player: null,
     };
 
     // Inject mock game into store if needed, or attach to bot
@@ -64,6 +40,7 @@ describe("Bot Class", () => {
     // Create Bot
     bot = new Bot(0, "Bot 1", TEAMS[0]);
     bot.game = mockGame;
+    mockTank.player = bot;
   });
 
   afterEach(() => {
@@ -76,59 +53,11 @@ describe("Bot Class", () => {
     expect(bot.keys).toEqual([]);
   });
 
-  it("should follow a path", () => {
-    const path = [
-      { x: 100, y: 100 },
-      { x: 200, y: 200 },
-    ];
-    (bot as any).follow(path);
-    expect(bot.goto).toBe(path[1]);
-  });
-
-  it("should perform movements towards target", () => {
-    bot.goto = { x: 200, y: 100 }; // To the right
-
-    // Current state: x=100, y=100, angle=0.
-    // Target is (200, 100).
-    // distx = 100, disty = 0.
-    // atan2(-100, 0) = -PI/2.
-    // target angle = -PI/2 + PI = PI/2.
-
-    (bot as any).performMovements(mockTank);
-
-    // Expect turn or move called
-    // Since angle 0 != PI/2, it should turn
-    expect(mockTank.turn).toHaveBeenCalled();
-  });
-
-  it("should shoot at target", () => {
-    const targetTank = { x: 150, y: 100, player: { isBot: () => false } } as any;
-    vi.useFakeTimers();
-
-    (bot as any).shoot(mockTank, targetTank);
-
-    expect(mockTank.shoot).toHaveBeenCalled();
-    vi.useRealTimers();
-  });
-
-  it("should not autopilot too frequently", () => {
-    bot.lastChecked = 0;
-    Settings.GameFrequency = 10;
-    mockTank.speed = 200;
-
-    // Threshold is 72000 / 200 = 360
-
-    (bot as any).autopilot(mockTank, bot.game);
-    // First call, lastChecked becomes 10. 10 < 360, returns early.
-
-    expect(mockMap.getTileByPos).not.toHaveBeenCalled();
-
-    bot.lastChecked = 1000; // Force ready
-
-    // Mock getTileByPos to return null to avoid further logic
-    mockMap.getTileByPos.mockReturnValue(null);
-
-    (bot as any).autopilot(mockTank, bot.game);
-    expect(mockMap.getTileByPos).toHaveBeenCalled();
+  it("should delegate steer to autopilot", () => {
+    const stepSpy = vi.spyOn((bot as any).autopilot, "step");
+    
+    bot.steer(mockTank as any);
+    
+    expect(stepSpy).toHaveBeenCalledWith(mockTank, mockGame);
   });
 });

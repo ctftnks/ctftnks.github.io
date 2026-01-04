@@ -133,7 +133,7 @@ describe("Player Class", () => {
 
       player.spawn(mockGame as any);
 
-      const tanks = (mockGame.addObject.mock.calls as any[]).map(c => c[0]).filter(o => o instanceof Tank);
+      const tanks = (mockGame.addObject.mock.calls as any[]).map((c) => c[0]).filter((o) => o instanceof Tank);
       const tank = tanks[tanks.length - 1];
 
       expect(tank.x).toBe(200);
@@ -158,7 +158,7 @@ describe("Player Class", () => {
 
       player.spawn(mockGame as any);
 
-      const tanks = (mockGame.addObject.mock.calls as any[]).map(c => c[0]).filter(o => o instanceof Tank);
+      const tanks = (mockGame.addObject.mock.calls as any[]).map((c) => c[0]).filter((o) => o instanceof Tank);
       const tank = tanks[tanks.length - 1];
 
       expect(mockTile.randomWalk).toHaveBeenCalled();

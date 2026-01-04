@@ -1,11 +1,13 @@
 import Player from "./player";
 import { Flag, Base, Hill } from "@/entities/ctf";
 import { playSound } from "./effects";
-import { adaptBotSpeed } from "./bot";
 import { SOUNDS } from "@/game/assets";
 import type Game from "./game";
 import Tile from "./tile";
 import { gameEvents, EVENTS } from "@/game/events";
+import type Team from "./team";
+import { Settings } from "./settings";
+import { store } from "./store";
 
 /**
  * Base class for game modes.
@@ -479,4 +481,33 @@ export class KingOfTheHill extends Gamemode {
     }
     this.bases = bases;
   }
+}
+
+/**
+ * Adapts bot speed based on team balance.
+ * @param team - The players team.
+ * @param val - The adaptation value.
+ * @returns The new bot speed.
+ */
+function adaptBotSpeed(team: Team, val: number = 0.1): number | undefined {
+  if (!Settings.AdaptiveBotSpeed) {
+    return;
+  }
+
+  const teamData = new Map<Team, { botCount: number }>();
+  for (const player of store.players) {
+    const data = teamData.get(player.team) ?? { botCount: 0 };
+    if (player.isBot()) {
+      data.botCount++;
+    }
+    teamData.set(player.team, data);
+  }
+
+  const teams = Array.from(teamData.keys());
+  const avgbots = Array.from(teamData.values()).reduce((sum, d) => sum + d.botCount, 0) / teams.length;
+  const currentTeamBots = teamData.get(team)?.botCount ?? 0;
+  Settings.BotSpeed += (avgbots - currentTeamBots) * val;
+
+  gameEvents.emit(EVENTS.BOT_SPEED_UPDATED, Settings.BotSpeed);
+  return Settings.BotSpeed;
 }
