@@ -97,7 +97,7 @@ describe("MenuPage.vue", () => {
 
   it("removes a player", async () => {
     const mockPlayer = { id: 123, name: "P1", team: TEAMS[0], isBot: () => false };
-    store.players = [mockPlayer];
+    store.players = [mockPlayer] as any;
     const wrapper = mount(MenuPage);
 
     await wrapper.find(".remove").trigger("click");
@@ -107,7 +107,7 @@ describe("MenuPage.vue", () => {
 
   it("changes player team", async () => {
     const mockPlayer = { id: 1, name: "P1", team: TEAMS[0], isBot: () => false };
-    store.players = [mockPlayer];
+    store.players = [mockPlayer] as any;
     const wrapper = mount(MenuPage);
 
     await wrapper.find(".team").trigger("click");
@@ -117,9 +117,9 @@ describe("MenuPage.vue", () => {
 
   it("edits player name", async () => {
     const mockPlayer = { id: 1, name: "P1", team: TEAMS[0], isBot: () => false };
-    store.players = [mockPlayer];
+    store.players = [mockPlayer] as any;
     const wrapper = mount(MenuPage);
-    const promptSpy = vi.stubGlobal("prompt", vi.fn().mockReturnValue("NewName"));
+    vi.stubGlobal("prompt", vi.fn().mockReturnValue("NewName"));
 
     // Find the name button in the player row (not the header)
     await wrapper.find("#playersMenu .entry:nth-child(2) .name").trigger("click");
@@ -131,7 +131,7 @@ describe("MenuPage.vue", () => {
 
   it("edits keymap on keydown", async () => {
     const mockPlayer = { id: 0, name: "P1", team: TEAMS[0], isBot: () => false };
-    store.players = [mockPlayer];
+    store.players = [mockPlayer] as any;
     store.keymaps[0] = ["KeyW", "KeyA", "KeyS", "KeyD", "Space"];
     const wrapper = mount(MenuPage);
 

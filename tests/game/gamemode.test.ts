@@ -16,7 +16,7 @@ vi.mock("@/game/bot", () => ({
 }));
 
 vi.mock("@/entities/base", () => ({
-  default: vi.fn().mockImplementation(function (game, player, x, y) {
+  default: vi.fn().mockImplementation(function (this: any, game, player, x, y) {
     this.game = game;
     this.player = player;
     this.x = x;
@@ -27,7 +27,7 @@ vi.mock("@/entities/base", () => ({
 }));
 
 vi.mock("@/entities/flag", () => ({
-  default: vi.fn().mockImplementation(function (game, base) {
+  default: vi.fn().mockImplementation(function (this: any, game, base) {
     this.game = game;
     this.base = base;
     this.drop = vi.fn();
@@ -35,7 +35,7 @@ vi.mock("@/entities/flag", () => ({
 }));
 
 vi.mock("@/entities/hill", () => ({
-  default: vi.fn().mockImplementation(function (game, x, y) {
+  default: vi.fn().mockImplementation(function (this: any, game, x, y) {
     this.game = game;
     this.x = x;
     this.y = y;

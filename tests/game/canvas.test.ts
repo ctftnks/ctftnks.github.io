@@ -68,8 +68,8 @@ describe("Canvas Class", () => {
   it("should resize correctly", () => {
     const canvasMgr = new Canvas(mockCanvas, mockEffectsCanvas);
 
-    mockCanvas.clientWidth = 1024;
-    mockCanvas.clientHeight = 768;
+    Object.defineProperty(mockCanvas, "clientWidth", { value: 1024, configurable: true });
+    Object.defineProperty(mockCanvas, "clientHeight", { value: 768, configurable: true });
 
     canvasMgr.resize();
 
@@ -78,7 +78,6 @@ describe("Canvas Class", () => {
     expect(mockCanvas.width).toBe(1024);
     expect(mockCanvas.height).toBe(768);
   });
-
   it("should shake the canvas", () => {
     const canvasMgr = new Canvas(mockCanvas, mockEffectsCanvas);
     canvasMgr.shake();

@@ -71,7 +71,6 @@ describe("SettingsPage.vue", () => {
     const wrapper = mount(SettingsPage);
     Settings.MapNxMin = 2; // Set to min
 
-    const minusBtn = wrapper.findAll(".leftCol .option:nth-of-type(6) button.left")[0]; // Map min-size - button
     // Wait, nth-of-type(6) might be tricky. Let's find by text.
     const options = wrapper.findAll(".option");
     const minSizeOption = options.find((o) => o.text().includes("Map min-size"))!;
