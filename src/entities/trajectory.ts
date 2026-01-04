@@ -17,7 +17,7 @@ export default class Trajectory extends GameObject {
   color: string = "#000";
   thickness: number = 2;
   length: number = 2000;
-  angle: number | undefined;
+  angle: number;
   delta: number = 4;
   points: TrajectoryPoint[] = [];
   map: GameMap;
@@ -28,11 +28,16 @@ export default class Trajectory extends GameObject {
   /**
    * Creates a new Trajectory.
    * @param map - The map to trace on.
+   * @param x - X coordinate
+   * @param y - Y coordinate
+   * @param angle - starting angle of the trajectory
    */
-  constructor(map: GameMap) {
+  constructor(map: GameMap, x: number, y: number, angle: number) {
     super();
-
     this.map = map;
+    this.x = x;
+    this.y = y;
+    this.angle = angle;
   }
 
   /**

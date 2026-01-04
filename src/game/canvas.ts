@@ -8,7 +8,7 @@ export default class Canvas {
   context: CanvasRenderingContext2D;
   height: number;
   width: number;
-  private loop: number | undefined;
+  private loop?: number;
   scale: number = 1;
 
   /**

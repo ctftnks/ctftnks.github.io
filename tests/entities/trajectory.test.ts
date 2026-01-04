@@ -18,10 +18,7 @@ describe("Trajectory Class", () => {
       getTileByPos: vi.fn().mockReturnValue(mockTile),
     };
 
-    traj = new Trajectory(mockMap);
-    traj.x = 0;
-    traj.y = 0;
-    traj.angle = 0;
+    traj = new Trajectory(mockMap, 0, 0, 0);
 
     Settings.GameFrequency = 10;
   });

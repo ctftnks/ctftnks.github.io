@@ -31,7 +31,7 @@ export default class Game {
   /** Whether the game is paused. */
   paused: boolean = false;
   /** Interval ID for the game loop. */
-  loop: number | undefined;
+  loop?: number;
   /** Number of players alive. */
   nPlayersAlive: number = 0;
   /** Game time counter. */

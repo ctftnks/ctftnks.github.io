@@ -10,8 +10,8 @@ import { TEAMS } from "./team";
  * Manages players, game instances, and settings persistence.
  */
 class GameStore {
-  game: Game | undefined = undefined;
-  canvas: Canvas | undefined;
+  game?: Game;
+  canvas?: Canvas;
   players: Player[] = [];
   nplayers: number = 0;
   editingKeymap: boolean = false;

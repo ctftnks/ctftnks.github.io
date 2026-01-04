@@ -26,7 +26,7 @@ export default class Tank extends GameObject {
   /** Tank color. */
   color: string;
   /** The game map. */
-  map: GameMap | undefined;
+  map?: GameMap;
   /** Rotation angle. */
   angle: number = 2 * Math.PI * Math.random();
   /** Tank width. */

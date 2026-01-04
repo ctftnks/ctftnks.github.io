@@ -190,8 +190,6 @@ export default class MapGenerator {
   }
 }
 
-export const prefetchedMap: GameMap | undefined = undefined;
-
 // List of all algorithms
 MapGenerator.algorithms = [
   MapGenerator.primsMaze,

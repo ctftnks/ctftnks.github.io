@@ -15,8 +15,8 @@ export default class Player {
   id: number;
   name: string;
   team: Team;
-  game: Game | undefined;
-  base: Base | undefined;
+  game?: Game;
+  base?: Base;
   score: number = 0;
   spree: number = 0;
   keys: string[];

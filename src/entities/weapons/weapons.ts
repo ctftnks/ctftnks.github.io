@@ -16,11 +16,11 @@ export class Weapon {
   isActive: boolean = true;
   isDeleted: boolean = false;
   bot: { shootingRange: number; fleeingDuration: number; fleeIfActive: boolean };
-  trajectory: Trajectory | undefined;
+  trajectory?: Trajectory;
   bullet: Bullet | null = null;
-  nshots: number | undefined;
-  every: number | undefined;
-  fired: boolean | undefined;
+  nshots?: number;
+  every?: number;
+  fired?: boolean;
 
   /**
    * Creates a new Weapon.
@@ -229,10 +229,7 @@ export class Laser extends Weapon {
   constructor(tank: Tank) {
     super(tank);
     this.image.src = IMAGES.laser;
-    this.trajectory = new Trajectory(this.tank.player.game!.map);
-    this.trajectory.x = this.tank.x;
-    this.trajectory.y = this.tank.y;
-    this.trajectory.angle = this.tank.angle;
+    this.trajectory = new Trajectory(this.tank.player.game!.map, this.tank.x, this.tank.y, this.tank.angle);
     this.trajectory.length = 620;
     this.trajectory.drawevery = 3;
     this.trajectory.color = hexToRgbA(this.tank.player.team.color, 0.4);

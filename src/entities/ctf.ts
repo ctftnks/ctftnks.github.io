@@ -144,7 +144,7 @@ export class Base extends GameObject {
   /** Game instance. */
   game: Game;
   /** The flag belonging to this base. */
-  flag: Flag | undefined = undefined;
+  flag?: Flag;
   /** Base size. */
   size: number = 80;
   /** The tile the base is on. */
