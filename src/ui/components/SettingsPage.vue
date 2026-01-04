@@ -8,49 +8,49 @@
         <div class="option">
           <span>Tank speed</span>
           <button class="left" @click="updateSetting('TankSpeed', -20, 0)">-</button>
-          <input class="left right" :value="Settings.TankSpeed" size="1" readonly />
+          <input class="left right" :value="Settings.TankSpeed" size="2" readonly />
           <button class="right" @click="updateSetting('TankSpeed', 20)">+</button>
         </div>
         <br />
         <div class="option">
           <span>Bullet speed</span>
           <button class="left" @click="updateSetting('BulletSpeed', -20, 0)">-</button>
-          <input class="left right" :value="Settings.BulletSpeed" size="1" readonly />
+          <input class="left right" :value="Settings.BulletSpeed" size="2" readonly />
           <button class="right" @click="updateSetting('BulletSpeed', 20)">+</button>
         </div>
         <br />
         <div class="option">
           <span>Bullet timeout</span>
           <button class="left" @click="updateSetting('BulletTimeout', -1, 1)">-</button>
-          <input class="left right" :value="Settings.BulletTimeout + 's'" size="1" readonly />
+          <input class="left right" :value="Settings.BulletTimeout + 's'" size="2" readonly />
           <button class="right" @click="updateSetting('BulletTimeout', 1)">+</button>
         </div>
         <br />
         <div class="option">
           <span>Respawn time</span>
           <button class="left" @click="updateSetting('RespawnTime', -0.5, 0)">-</button>
-          <input class="left right" :value="Settings.RespawnTime + 's'" size="1" readonly />
+          <input class="left right" :value="Settings.RespawnTime + 's'" size="2" readonly />
           <button class="right" @click="updateSetting('RespawnTime', 0.5)">+</button>
         </div>
         <br />
         <div class="option">
           <span>Spawn shield</span>
           <button class="left" @click="updateSetting('SpawnShieldTime', -0.5, 0)">-</button>
-          <input class="left right" :value="Settings.SpawnShieldTime + 's'" size="1" readonly />
+          <input class="left right" :value="Settings.SpawnShieldTime + 's'" size="2" readonly />
           <button class="right" @click="updateSetting('SpawnShieldTime', 0.5)">+</button>
         </div>
         <br />
         <div class="option">
           <span>Map min-size</span>
           <button class="left" @click="updateSetting('MapNxMin', -1, 2)">-</button>
-          <input class="left right" :value="Settings.MapNxMin" size="1" readonly />
+          <input class="left right" :value="Settings.MapNxMin" size="2" readonly />
           <button class="right" @click="updateSetting('MapNxMin', 1)">+</button>
         </div>
         <br />
         <div class="option">
           <span>Map max-size</span>
           <button class="left" @click="updateSetting('MapNxMax', -1, 2)">-</button>
-          <input class="left right" :value="Settings.MapNxMax" size="1" readonly />
+          <input class="left right" :value="Settings.MapNxMax" size="2" readonly />
           <button class="right" @click="updateSetting('MapNxMax', 1)">+</button>
         </div>
         <br />
@@ -68,13 +68,13 @@
           <div class="option">
             <span>Respawn time</span>
             <button class="left" @click="updateSetting('RespawnTime', -0.5, 0)">-</button>
-            <input class="left right" :value="Settings.RespawnTime + ' s'" size="1" readonly />
+            <input class="left right" :value="Settings.RespawnTime + ' s'" size="2" readonly />
             <button class="right" @click="updateSetting('RespawnTime', 0.5)">+</button>
           </div>
           <br />
           <span>Round time</span>
           <button class="left" @click="updateSetting('RoundTime', -0.5, 1)">-</button>
-          <input class="left right" :value="Settings.RoundTime + ' min'" size="1" readonly />
+          <input class="left right" :value="Settings.RoundTime + ' min'" size="2" readonly />
           <button class="right" @click="updateSetting('RoundTime', 0.5)">+</button>
         </div>
         <br />
