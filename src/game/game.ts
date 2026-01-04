@@ -12,6 +12,7 @@ import GameObject from "@/entities/gameobject";
 import { Gamemode, Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import { openPage } from "@/stores/ui";
 import Tank from "@/entities/tank";
+import { markRaw } from "vue";
 
 /**
  * Manages the game state, loop, and objects.
@@ -264,7 +265,7 @@ export function newGame(map: GameMap | null = null): Game {
   const ModeClass = modeMap[Settings.GameMode] || CaptureTheFlag;
   game.mode = new ModeClass(game);
 
-  store.players.forEach((player) => game.addPlayer(player as Player));
+  store.players.forEach((player) => game.addPlayer(player));
 
   game.start();
   store.canvas?.sync();
@@ -273,6 +274,6 @@ export function newGame(map: GameMap | null = null): Game {
     game.players.forEach((player) => player.resetStats());
   }
 
-  store.game = game;
+  store.game = markRaw(game);
   return game;
 }

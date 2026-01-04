@@ -237,7 +237,7 @@ describe("Game Class", () => {
 
       expect(g).toBeInstanceOf(Game);
       expect(store.game).toBe(g);
-      expect(g.players).toContain(player);
+      expect(g.players[0].id).toBe(player.id);
       expect(statsSpy).toHaveBeenCalled();
     });
 
