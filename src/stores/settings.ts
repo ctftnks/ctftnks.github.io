@@ -1,4 +1,4 @@
-const DEFAULT_SETTINGS = {
+export const DEFAULT_SETTINGS = {
   muted: true,
   bgmusic: false,
   GameMode: "CTF",

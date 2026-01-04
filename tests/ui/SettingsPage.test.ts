@@ -42,4 +42,18 @@ describe("SettingsPage.vue", () => {
 
     expect(openPage).toHaveBeenCalledWith("menu");
   });
+
+  it("resets settings to defaults", async () => {
+    const wrapper = mount(SettingsPage);
+    const resetBtn = wrapper.find("#btnResetSettings");
+
+    // Change a setting
+    Settings.TankSpeed = 999;
+    expect(Settings.TankSpeed).toBe(999);
+
+    await resetBtn.trigger("click");
+
+    expect(Settings.TankSpeed).toBe(200); // Default value
+    expect(store.saveSettings).toHaveBeenCalled();
+  });
 });

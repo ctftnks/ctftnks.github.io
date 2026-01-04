@@ -128,11 +128,14 @@
         <br />
       </div>
     </div>
+    <div style="text-align: center; clear: both; padding-top: 20px">
+      <button class="option" @click="resetToDefaults" id="btnResetSettings">Reset to Defaults</button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Settings } from "@/stores/settings";
+import { Settings, DEFAULT_SETTINGS } from "@/stores/settings";
 import { store } from "@/stores/gamestore";
 import { openPage } from "@/stores/ui";
 
@@ -142,6 +145,11 @@ function closeSettings() {
 
 function save() {
   store.saveSettings();
+}
+
+function resetToDefaults() {
+  Object.assign(Settings, DEFAULT_SETTINGS);
+  save();
 }
 
 function updateSetting(key: keyof typeof Settings, delta: number, min: number = 0) {
