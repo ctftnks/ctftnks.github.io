@@ -8,7 +8,6 @@ import Canvas from "@/game/canvas";
 import { TEAMS } from "@/game/team";
 import Tank from "@/entities/tank";
 import { PowerUp } from "@/entities/powerup";
-import { gameEvents, EVENTS } from "@/game/events";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -173,19 +172,7 @@ describe("Game Class", () => {
 
     const powerups = game.objs.filter((o) => o instanceof PowerUp);
     expect(powerups.length).toBeGreaterThan(0);
-  });
-
-  it("should emit time updated event in step", () => {
-    const emitSpy = vi.spyOn(gameEvents, "emit");
-    game.t = 990;
-    Settings.RoundTime = 5;
-    Settings.GameFrequency = 10;
-
-    // game.step increments t by GameFrequency (10)
-    // t becomes 1000, 1000 % 1000 = 0 < 10 -> should trigger
-    game.step();
-
-    expect(emitSpy).toHaveBeenCalledWith(EVENTS.TIME_UPDATED, expect.any(Number));
+    expect(game.nkills).toBe(0);
   });
 
   it("should end game when time is up", () => {

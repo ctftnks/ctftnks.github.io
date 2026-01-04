@@ -1,8 +1,8 @@
 import { mount } from "@vue/test-utils";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import SideBar from "@/ui/components/SideBar.vue";
 import { store } from "@/stores/gamestore";
-import { gameEvents, EVENTS } from "@/game/events";
+import { Settings } from "@/stores/settings";
 import { openPage } from "@/stores/ui";
 
 // Mock dependencies
@@ -10,9 +10,17 @@ vi.mock("@/stores/gamestore", () => ({
   store: {
     players: [],
     game: {
+      t: 0,
       resetTime: vi.fn(),
     },
     startNewGame: vi.fn(),
+  },
+}));
+
+vi.mock("@/stores/settings", () => ({
+  Settings: {
+    RoundTime: 10,
+    BotSpeed: 1,
   },
 }));
 
@@ -20,22 +28,16 @@ vi.mock("@/stores/ui", () => ({
   openPage: vi.fn(),
 }));
 
-vi.mock("@/game/events", () => ({
-  gameEvents: {
-    on: vi.fn(),
-    off: vi.fn(),
-    emit: vi.fn(),
-  },
-  EVENTS: {
-    TIME_UPDATED: "TIME_UPDATED",
-    BOT_SPEED_UPDATED: "BOT_SPEED_UPDATED",
-  },
-}));
-
 describe("SideBar.vue", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.useFakeTimers();
     store.players = [];
+    if (store.game) store.game.t = 0;
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it("renders correctly", () => {
@@ -44,6 +46,18 @@ describe("SideBar.vue", () => {
     expect(wrapper.text()).toContain("Menu");
     expect(wrapper.text()).toContain("Scores");
     expect(wrapper.text()).toContain("Time");
+  });
+
+  it("displays correct time", async () => {
+    Settings.RoundTime = 10;
+    if (store.game) store.game.t = 60000; // 1 minute elapsed
+    const wrapper = mount(SideBar);
+
+    // Advance timers to trigger the polling (SideBar.vue uses 200ms)
+    vi.advanceTimersByTime(200);
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("#GameTimer").text()).toBe("09:00");
   });
 
   it("opens menu when Menu is clicked", async () => {
@@ -76,18 +90,5 @@ describe("SideBar.vue", () => {
     await nextMapBtn!.trigger("click");
 
     expect(store.startNewGame).toHaveBeenCalled();
-  });
-
-  it("registers event listeners on mount", () => {
-    mount(SideBar);
-    expect(gameEvents.on).toHaveBeenCalledWith(EVENTS.TIME_UPDATED, expect.any(Function));
-    expect(gameEvents.on).toHaveBeenCalledWith(EVENTS.BOT_SPEED_UPDATED, expect.any(Function));
-  });
-
-  it("unregisters event listeners on unmount", () => {
-    const wrapper = mount(SideBar);
-    wrapper.unmount();
-    expect(gameEvents.off).toHaveBeenCalledWith(EVENTS.TIME_UPDATED, expect.any(Function));
-    expect(gameEvents.off).toHaveBeenCalledWith(EVENTS.BOT_SPEED_UPDATED, expect.any(Function));
   });
 });

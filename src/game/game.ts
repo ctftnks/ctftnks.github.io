@@ -1,4 +1,3 @@
-import { gameEvents, EVENTS } from "@/game/events";
 import GameMap from "./gamemap";
 import MapGenerator from "./mapGenerator";
 import { getRandomPowerUp } from "@/entities/powerup";
@@ -11,7 +10,6 @@ import GameObject from "@/entities/gameobject";
 import { Gamemode, Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import { openPage } from "@/stores/ui";
 import Tank from "@/entities/tank";
-import { markRaw } from "vue";
 
 /**
  * Manages the game state, loop, and objects.
@@ -112,7 +110,6 @@ export default class Game {
     if (Settings.bgmusic) {
       // playMusic(SOUNDS.bgmusic);
     }
-    gameEvents.emit(EVENTS.SCORE_UPDATED);
   }
 
   /**
@@ -179,11 +176,6 @@ export default class Game {
       p.y = pos.y;
       this.addObject(p);
       this.timeouts.push(window.setTimeout(() => p.delete(), 1000 * Settings.PowerUpRate * Settings.MaxPowerUps));
-    }
-    // update the timer in the sidebar
-    if (this.isTrueEvery(1000)) {
-      const dt = Math.max(0, Settings.RoundTime * 60 - (this.t - Settings.GameFrequency) / 1000);
-      gameEvents.emit(EVENTS.TIME_UPDATED, dt);
     }
     // end the game when the round time is over
     if (this.t > Settings.RoundTime * 60000) {

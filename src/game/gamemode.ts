@@ -4,7 +4,6 @@ import { playSound } from "./effects";
 import { SOUNDS } from "@/game/assets";
 import type Game from "./game";
 import Tile from "./tile";
-import { gameEvents, EVENTS } from "@/game/events";
 import type Team from "./team";
 import { Settings } from "@/stores/settings";
 import { store } from "@/stores/gamestore";
@@ -76,7 +75,6 @@ export class Deathmatch extends Gamemode {
       player.score += Math.floor(player.spree / 5);
       playSound(SOUNDS.killingspree);
     }
-    gameEvents.emit(EVENTS.SCORE_UPDATED);
     adaptBotSpeed(player.team);
   }
 
@@ -126,7 +124,6 @@ export class TeamDeathmatch extends Gamemode {
       player.score += Math.floor(player.spree / 5);
       playSound(SOUNDS.killingspree);
     }
-    gameEvents.emit(EVENTS.SCORE_UPDATED);
     adaptBotSpeed(player.team);
   }
 
@@ -248,7 +245,6 @@ export class CaptureTheFlag extends Gamemode {
         this.game.players[i].score += val;
       }
     }
-    gameEvents.emit(EVENTS.SCORE_UPDATED);
     adaptBotSpeed(player.team);
   }
 
@@ -265,8 +261,6 @@ export class CaptureTheFlag extends Gamemode {
         // player1.score += Math.floor(player1.spree / 5)
         playSound(SOUNDS.killingspree);
       }
-
-      gameEvents.emit(EVENTS.SCORE_UPDATED);
     }
   }
 
@@ -372,7 +366,6 @@ export class KingOfTheHill extends Gamemode {
    */
   override giveScore(player: Player, val: number = 1): void {
     player.score += val;
-    gameEvents.emit(EVENTS.SCORE_UPDATED);
   }
 
   /**
@@ -388,8 +381,6 @@ export class KingOfTheHill extends Gamemode {
         // player1.score += Math.floor(player1.spree / 5)
         playSound(SOUNDS.killingspree);
       }
-
-      gameEvents.emit(EVENTS.SCORE_UPDATED);
     }
   }
 
@@ -508,6 +499,5 @@ function adaptBotSpeed(team: Team, val: number = 0.1): number | undefined {
   const currentTeamBots = teamData.get(team)?.botCount ?? 0;
   Settings.BotSpeed += (avgbots - currentTeamBots) * val;
 
-  gameEvents.emit(EVENTS.BOT_SPEED_UPDATED, Settings.BotSpeed);
   return Settings.BotSpeed;
 }

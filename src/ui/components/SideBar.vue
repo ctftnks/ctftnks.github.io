@@ -26,26 +26,24 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { store } from "@/stores/gamestore";
-import { gameEvents, EVENTS } from "@/game/events";
+import { Settings } from "@/stores/settings";
 import { openPage } from "@/stores/ui";
 
 const timerDisplay = ref("00:00");
-const botSpeed = ref<number | undefined>(undefined);
+let timer: number | undefined;
 
 const sortedPlayers = computed(() => {
   return [...store.players].sort((a, b) => b.score - a.score);
 });
 
-function onTimeUpdated(secs?: number) {
-  if (typeof secs === "undefined") return;
-  const minutes = Math.floor(secs / 60);
-  const seconds = Math.floor(secs - minutes * 60);
+function updateTimer(t: number) {
+  const delta = Math.max(0, Settings.RoundTime * 60 - t / 1000);
+  const minutes = Math.floor(delta / 60);
+  const seconds = Math.floor(delta - minutes * 60);
   timerDisplay.value = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
-function onBotSpeedUpdated(speed?: number) {
-  botSpeed.value = speed;
-}
+const botSpeed = computed(() => Settings.BotSpeed);
 
 function openMenu() {
   openPage("menu");
@@ -62,13 +60,13 @@ function nextMap() {
 }
 
 onMounted(() => {
-  gameEvents.on(EVENTS.TIME_UPDATED, onTimeUpdated);
-  gameEvents.on(EVENTS.BOT_SPEED_UPDATED, onBotSpeedUpdated);
+  timer = window.setInterval(() => {
+    updateTimer(store.game?.t ?? 0);
+  }, 200);
 });
 
 onUnmounted(() => {
-  gameEvents.off(EVENTS.TIME_UPDATED, onTimeUpdated);
-  gameEvents.off(EVENTS.BOT_SPEED_UPDATED, onBotSpeedUpdated);
+  if (timer) clearInterval(timer);
 });
 </script>
 

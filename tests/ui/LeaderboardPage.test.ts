@@ -18,8 +18,7 @@ vi.mock("@/stores/ui", () => ({
   openPage: vi.fn(),
 }));
 
-vi.mock("@/game/game", () => ({
-}));
+vi.mock("@/game/game", () => ({}));
 
 describe("LeaderboardPage.vue", () => {
   beforeEach(() => {
