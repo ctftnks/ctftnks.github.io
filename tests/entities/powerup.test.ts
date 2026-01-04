@@ -72,7 +72,7 @@ describe("PowerUp System", () => {
 
     bonus.apply(mockTank);
 
-    expect(mockTank.speed).toBeCloseTo(110); // 100 * 1.1
+    expect(mockTank.speed).toBeCloseTo(125); // 100 * 1.25
     expect(mockGame.timeouts.length).toBe(1); // Reset timeout
   });
 
