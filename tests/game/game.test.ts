@@ -51,7 +51,7 @@ describe("Game Class", () => {
       width: 800,
       height: 600,
       rescale: vi.fn(),
-      sync: vi.fn(),
+      draw: vi.fn(),
       shake: vi.fn(),
       resize: vi.fn(),
     } as unknown as Canvas;
@@ -222,6 +222,13 @@ describe("Game Class", () => {
     expect(game.t).toBe(0);
     expect(tank.timers.invincible).toBe(0);
     expect(tank.timers.spawnshield).toBe(0);
+  });
+
+  it("should handle resize", () => {
+    game.map.resize = vi.fn();
+    game.resize();
+    expect(mockCanvas.resize).toHaveBeenCalled();
+    expect(game.map.resize).toHaveBeenCalled();
   });
 
   describe("newGame function", () => {

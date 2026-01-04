@@ -140,6 +140,8 @@ export default class Game {
       }
     }
 
+    this.canvas.draw(this);
+
     this.loop = requestAnimationFrame((t) => this.gameLoop(t));
   }
 
@@ -244,6 +246,16 @@ export default class Game {
       tank.timers.spawnshield = 0;
     }
   }
+
+  /**
+   * Handle window resize.
+   */
+  resize(): void {
+    this.canvas.resize();
+    if (this.map) {
+      this.map.resize();
+    }
+  }
 }
 
 // start a new round
@@ -268,7 +280,6 @@ export function newGame(map: GameMap | null = null): Game {
   store.players.forEach((player) => game.addPlayer(player));
 
   game.start();
-  store.canvas?.sync();
 
   if (Settings.ResetStatsEachGame) {
     game.players.forEach((player) => player.resetStats());

@@ -1,4 +1,4 @@
-import { store } from "@/stores/gamestore";
+import type Game from "./game";
 
 /**
  * Manages the game canvas and rendering loop.
@@ -8,7 +8,6 @@ export default class Canvas {
   context: CanvasRenderingContext2D;
   height: number;
   width: number;
-  private loop?: number;
   scale: number = 1;
 
   /**
@@ -26,37 +25,13 @@ export default class Canvas {
 
   /**
    * Clear canvas and draw all objects.
+   * @param game - The game instance to render.
    */
-  draw(): void {
+  draw(game: Game): void {
     this.context.clearRect(0, 0, this.canvas.width / this.scale, this.canvas.height / this.scale);
-    if (!store.game) {
-      return;
-    }
-    store.game.map.draw(this.context);
-    for (let i = 0; i < store.game.objs.length; i++) {
-      store.game.objs[i].draw(this.context);
-    }
-  }
-
-  /**
-   * Keep canvas in sync with game: redraw every few milliseconds.
-   */
-  sync(): void {
-    if (typeof this.loop === "undefined") {
-      const drawLoop = (): void => {
-        this.draw();
-        this.loop = requestAnimationFrame(drawLoop);
-      };
-      this.loop = requestAnimationFrame(drawLoop);
-    }
-  }
-
-  /**
-   * Stop syncing of canvas.
-   */
-  stopSync(): void {
-    if (typeof this.loop !== "undefined") {
-      cancelAnimationFrame(this.loop);
+    game.map.draw(this.context);
+    for (let i = 0; i < game.objs.length; i++) {
+      game.objs[i].draw(this.context);
     }
   }
 
@@ -78,9 +53,6 @@ export default class Canvas {
     this.height = this.canvas.clientHeight;
     this.canvas.width = this.canvas.clientWidth;
     this.width = this.canvas.clientWidth;
-    if (store.game?.map) {
-      store.game.map.resize();
-    }
   }
 
   /**

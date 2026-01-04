@@ -27,7 +27,7 @@ window.onload = () => {
 
 window.onresize = () => {
   if (store.game) {
-    store.game.canvas.resize();
+    store.game.resize();
   }
 };
 
