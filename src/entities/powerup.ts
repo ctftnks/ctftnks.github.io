@@ -1,4 +1,4 @@
-import { Settings } from "@/game/settings";
+import { Settings } from "@/stores/settings";
 import GameObject from "./gameobject";
 import { playSound, playMusic, stopMusic, fogOfWar } from "@/game/effects";
 import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot } from "./weapons/weapons";

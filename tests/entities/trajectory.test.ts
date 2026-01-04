@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import Trajectory from "@/entities/trajectory";
-import { Settings } from "@/game/settings";
+import { Settings } from "@/stores/settings";
 import Tank from "@/entities/tank";
 
 describe("Trajectory Class", () => {

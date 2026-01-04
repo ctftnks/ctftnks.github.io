@@ -1,4 +1,4 @@
-import { Settings } from "@/game/settings";
+import { Settings } from "@/stores/settings";
 import Tile from "./tile";
 import { PowerUp } from "@/entities/powerup";
 import Tank from "@/entities/tank";

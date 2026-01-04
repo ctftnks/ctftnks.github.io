@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { store } from "@/game/store";
+import { store } from "@/stores/game";
 import { openPage } from "@/stores/ui";
 
 function close() {

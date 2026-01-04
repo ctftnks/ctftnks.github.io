@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import Tank from "@/entities/tank";
-import { Settings } from "@/game/settings";
+import { Settings } from "@/stores/settings";
 import { TEAMS } from "@/game/team";
 import Bullet from "@/entities/bullet";
 

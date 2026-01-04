@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import Autopilot from "@/game/autopilot";
-import { Settings } from "@/game/settings";
+import { Settings } from "@/stores/settings";
 import { TEAMS } from "@/game/team";
 import { CaptureTheFlag, KingOfTheHill } from "@/game/gamemode";
 import { Laser, Guided, Slingshot } from "@/entities/weapons/weapons";

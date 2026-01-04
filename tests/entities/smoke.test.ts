@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { Smoke, generateCloud } from "@/entities/smoke";
-import { Settings } from "@/game/settings";
+import { Settings } from "@/stores/settings";
 
 describe("Smoke System", () => {
   let mockGame: any;

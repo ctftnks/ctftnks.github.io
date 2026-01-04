@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import MapGenerator from "@/game/mapGenerator";
 import GameMap from "@/game/gamemap";
 import Tile from "@/game/tile";
-import { Settings } from "@/game/settings";
+import { Settings } from "@/stores/settings";
 
 describe("MapGenerator", () => {
   let mockCanvas: any;

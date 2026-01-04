@@ -1,5 +1,5 @@
 import GameObject from "./gameobject";
-import { Settings } from "@/game/settings";
+import { Settings } from "@/stores/settings";
 import type GameMap from "@/game/gamemap";
 import Tank from "./tank";
 import Coord from "./coord";

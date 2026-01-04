@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { TEAMS } from "@/game/team";
-import { store } from "@/game/store";
+import { store } from "@/stores/game";
 import { Key } from "@/game/key";
-import { Settings } from "@/game/settings";
+import { Settings } from "@/stores/settings";
 import Player from "@/game/player";
 import Tank from "@/entities/tank";
 

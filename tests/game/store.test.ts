@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { store } from "@/game/store";
-import { Settings } from "@/game/settings";
+import { store } from "@/stores/game";
+import { Settings } from "@/stores/settings";
 
 describe("Game Store", () => {
   let mockLocalStorage: Record<string, string> = {};

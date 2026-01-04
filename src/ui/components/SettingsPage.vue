@@ -132,8 +132,8 @@
 </template>
 
 <script setup lang="ts">
-import { Settings } from "@/game/settings";
-import { store } from "@/game/store";
+import { Settings } from "@/stores/settings";
+import { store } from "@/stores/game";
 import { openPage } from "@/stores/ui";
 
 function closeSettings() {

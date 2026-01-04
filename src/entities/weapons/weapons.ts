@@ -3,7 +3,7 @@ import Tank from "../tank";
 import Trajectory from "../trajectory";
 import { playSound, hexToRgbA } from "@/game/effects";
 import { Smoke, generateCloud } from "../smoke";
-import { Settings } from "@/game/settings";
+import { Settings } from "@/stores/settings";
 import { IMAGES, SOUNDS } from "@/game/assets";
 
 /**

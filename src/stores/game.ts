@@ -3,7 +3,7 @@ import type Game from "@/game/game";
 import Player from "@/game/player";
 import Bot from "@/game/bot";
 import { Settings } from "./settings";
-import { TEAMS } from "./team";
+import { TEAMS } from "@/game/team";
 
 /**
  * Data Structure for the global state of the website.

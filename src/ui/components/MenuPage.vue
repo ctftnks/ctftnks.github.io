@@ -68,8 +68,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { store } from "@/game/store";
-import { Settings } from "@/game/settings";
+import { store } from "@/stores/game";
+import { Settings } from "@/stores/settings";
 import { openPage } from "@/stores/ui";
 import { newGame } from "@/game/game";
 import { TEAMS } from "@/game/team";

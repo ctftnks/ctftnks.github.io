@@ -6,8 +6,8 @@ import type Game from "./game";
 import Tile from "./tile";
 import { gameEvents, EVENTS } from "@/game/events";
 import type Team from "./team";
-import { Settings } from "./settings";
-import { store } from "./store";
+import { Settings } from "@/stores/settings";
+import { store } from "@/stores/game";
 
 /**
  * Base class for game modes.

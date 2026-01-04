@@ -1,5 +1,5 @@
-import { store } from "@/game/store";
-import { Settings } from "@/game/settings";
+import { store } from "@/stores/game";
+import { Settings } from "@/stores/settings";
 import Game from "./game";
 
 /**

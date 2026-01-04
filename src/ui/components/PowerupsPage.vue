@@ -37,9 +37,9 @@
 </template>
 
 <script setup lang="ts">
-import { Settings } from "@/game/settings";
+import { Settings } from "@/stores/settings";
 import { PowerUps } from "@/entities/powerup";
-import { store } from "@/game/store";
+import { store } from "@/stores/game";
 import { openPage } from "@/stores/ui";
 
 function close() {

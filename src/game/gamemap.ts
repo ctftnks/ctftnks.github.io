@@ -1,4 +1,4 @@
-import { Settings } from "@/game/settings";
+import { Settings } from "@/stores/settings";
 import GameObject from "@/entities/gameobject";
 import Canvas from "./canvas";
 import Tile from "./tile";
