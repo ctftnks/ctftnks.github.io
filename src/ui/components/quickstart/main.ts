@@ -9,7 +9,7 @@ import "./style.css";
  * QuickstartPage - Component for quickly starting pre-configured games.
  * @augments BasePage
  */
-export class QuickstartPage extends BasePage {
+class QuickstartPage extends BasePage {
   /**
    * Renders the quickstart menu template.
    */
@@ -56,16 +56,7 @@ export class QuickstartPage extends BasePage {
 
 customElements.define("quickstart-page", QuickstartPage);
 
-export function init(container: HTMLElement): void {
-  const component = new QuickstartPage();
-  container.appendChild(component);
-}
-
-export function clearPlayers(): void {
-  store.players = [];
-}
-
-export function quickPvP(nteams: number, teamsize: number): void {
+function quickPvP(nteams: number, teamsize: number): void {
   store.players = [];
   store.nplayers = 0;
 
@@ -81,7 +72,7 @@ export function quickPvP(nteams: number, teamsize: number): void {
   updatePlayersMenu();
 }
 
-export function quickPvB(nteams: number, teamsize: number): void {
+function quickPvB(nteams: number, teamsize: number): void {
   store.players = [];
   store.nplayers = 0;
 
@@ -101,7 +92,7 @@ export function quickPvB(nteams: number, teamsize: number): void {
   updatePlayersMenu();
 }
 
-export function quickMixed(nteams: number, teamsize: number): void {
+function quickMixed(nteams: number, teamsize: number): void {
   store.players = [];
   store.nplayers = 0;
 
@@ -121,7 +112,7 @@ export function quickMixed(nteams: number, teamsize: number): void {
   updatePlayersMenu();
 }
 
-export function quickUnevenMixed(nteams: number, teamsize: number): void {
+function quickUnevenMixed(nteams: number, teamsize: number): void {
   store.players = [];
   store.nplayers = 0;
 

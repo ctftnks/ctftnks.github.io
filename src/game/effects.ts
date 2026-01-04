@@ -13,8 +13,8 @@ export function playSound(file: string): void {
   }
 }
 
-export let playingMusic: string | null = null;
-export let musicAudio: HTMLAudioElement | null = null;
+let playingMusic: string | null = null;
+let musicAudio: HTMLAudioElement | null = null;
 
 /**
  * Plays background music in a loop.
@@ -48,22 +48,6 @@ export function stopMusic(): void {
 
   musicAudio = null;
   playingMusic = null;
-}
-
-export let effectCanvasID: number = 0;
-
-/**
- * Creates a new overlay canvas for visual effects.
- * @returns The newly created canvas element.
- */
-export function newEffectCanvas(): HTMLCanvasElement {
-  const canv = document.createElement("canvas");
-  effectCanvasID++;
-  const id = "effectCanvas" + effectCanvasID;
-  canv.id = id;
-  canv.setAttribute("class", "effectCanvas");
-  document.body.appendChild(canv);
-  return canv;
 }
 
 /**

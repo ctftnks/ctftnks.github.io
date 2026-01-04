@@ -9,7 +9,7 @@ import { closePage } from "@/ui/pages";
  * SettingsPage - Component for editing game settings.
  * @augments BasePage
  */
-export class SettingsPage extends BasePage {
+class SettingsPage extends BasePage {
   /**
    * Renders the settings menu template.
    */
@@ -54,8 +54,3 @@ export class SettingsPage extends BasePage {
 }
 
 customElements.define("settings-page", SettingsPage);
-
-export function init(container: HTMLElement): void {
-  const component = new SettingsPage();
-  container.appendChild(component);
-}

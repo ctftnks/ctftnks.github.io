@@ -1,4 +1,4 @@
-export const DEFAULT_SETTINGS = {
+const DEFAULT_SETTINGS = {
   muted: true,
   bgmusic: false,
   GameMode: "CTF",
@@ -25,8 +25,6 @@ export const DEFAULT_SETTINGS = {
   TankWidth: 34,
   TankHeight: 50,
 };
-
-export type SettingsType = typeof DEFAULT_SETTINGS;
 
 // We export a mutable singleton object for settings to be compatible with existing code structure
 // Ideally this would be an instance passed around.

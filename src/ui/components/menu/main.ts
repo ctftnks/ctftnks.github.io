@@ -10,7 +10,7 @@ import { EVENTS, gameEvents } from "@/game/events";
 /**
  * MenuPage - Manages the main menu with player setup and configuration
  */
-export class MenuPage extends BasePage {
+class MenuPage extends BasePage {
   private editingMapID: number | null = null;
   private editingKeyID: number | null = null;
   private editingKeymap: boolean = false;
@@ -303,7 +303,7 @@ export class MenuPage extends BasePage {
  * Returns a user-friendly label for a given key code
  * @param code - The key code to format
  */
-export function getKeyLabel(code: string): string {
+function getKeyLabel(code: string): string {
   if (!code) {
     return "";
   }
@@ -322,23 +322,11 @@ export function getKeyLabel(code: string): string {
 
 customElements.define("menu-page", MenuPage);
 
-export function init(container: HTMLElement): void {
-  const component = new MenuPage();
-  container.appendChild(component);
-}
-
 // Public exports for backward compatibility with QuickstartPage
 export function updatePlayersMenu(): void {
   // Get the active menu page and update it
   const menuPage = document.querySelector("menu-page") as MenuPage | null;
   if (menuPage) {
     menuPage.updatePlayersMenu();
-  }
-}
-
-export function addPlayer(bot: boolean = false): void {
-  const menuPage = document.querySelector("menu-page") as MenuPage | null;
-  if (menuPage) {
-    menuPage.addPlayer(bot);
   }
 }

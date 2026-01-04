@@ -11,7 +11,7 @@ import { closePage } from "@/ui/pages";
  * LeaderboardPage - Component for displaying the game results and countdown to next round.
  * @augments BasePage
  */
-export class LeaderboardPage extends BasePage {
+class LeaderboardPage extends BasePage {
   private leaderIntvl: number | null = null;
   private leaderTimeout: number | null = null;
 
@@ -89,12 +89,7 @@ export class LeaderboardPage extends BasePage {
 
 customElements.define("leaderboard-page", LeaderboardPage);
 
-export function init(container: HTMLElement): void {
-  const component = new LeaderboardPage();
-  container.appendChild(component);
-}
-
-export function updateLeaderboard(): void {
+function updateLeaderboard(): void {
   store.players.sort((a: Player, b: Player) => {
     return b.score - a.score;
   });

@@ -151,5 +151,3 @@ class SideBar extends HTMLElement {
 if (!customElements.get("side-bar")) {
   customElements.define("side-bar", SideBar);
 }
-
-export default SideBar;

@@ -10,7 +10,7 @@ import { closePage } from "@/ui/pages";
  * PowerupsPage - Component for configuring powerup weights.
  * @augments BasePage
  */
-export class PowerupsPage extends BasePage {
+class PowerupsPage extends BasePage {
   /**
    * Renders the powerups menu template.
    */
@@ -69,12 +69,7 @@ export class PowerupsPage extends BasePage {
 
 customElements.define("powerups-page", PowerupsPage);
 
-export function init(container: HTMLElement): void {
-  const component = new PowerupsPage();
-  container.appendChild(component);
-}
-
-export function updatePowerupsMenu(): void {
+function updatePowerupsMenu(): void {
   const sel = 'selected="selected"';
   let content = "";
 
