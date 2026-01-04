@@ -1,7 +1,9 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { reactive } from "vue";
 import MenuPage from "@/ui/components/MenuPage.vue";
 import { store } from "@/stores/gamestore";
+import { Settings } from "@/stores/settings";
 import { TEAMS } from "@/game/team";
 import { openPage } from "@/stores/ui";
 
@@ -15,7 +17,16 @@ vi.mock("@/stores/gamestore", () => ({
     },
     createPlayer: vi.fn(),
     startNewGame: vi.fn(),
+    saveSettings: vi.fn(),
   },
+}));
+
+vi.mock("@/stores/settings", () => ({
+  Settings: reactive({
+    muted: true,
+    GameMode: "CTF",
+    BotSpeed: 1,
+  }),
 }));
 
 vi.mock("@/stores/ui", () => ({
@@ -68,5 +79,19 @@ describe("MenuPage.vue", () => {
     await settingsBtn.trigger("click");
 
     expect(openPage).toHaveBeenCalledWith("settings");
+  });
+
+  it("toggles mute status", async () => {
+    const wrapper = mount(MenuPage);
+    const muteBtn = wrapper.find("#btnMute");
+
+    expect(Settings.muted).toBe(true);
+    expect(muteBtn.text()).toBe("Sound: off");
+
+    await muteBtn.trigger("click");
+
+    expect(Settings.muted).toBe(false);
+    expect(muteBtn.text()).toBe("Sound: on");
+    expect(store.saveSettings).toHaveBeenCalled();
   });
 });
