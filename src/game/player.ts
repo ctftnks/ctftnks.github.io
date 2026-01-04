@@ -3,7 +3,7 @@ import { Key } from "@/game/key";
 import { generateCloud } from "@/entities/smoke";
 import { Settings } from "@/stores/settings";
 import type Game from "./game";
-import type { Base } from "@/entities/ctf";
+import type { Base } from "@/entities/base";
 import type Team from "./team";
 
 /**

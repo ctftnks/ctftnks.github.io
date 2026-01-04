@@ -1,5 +1,7 @@
 import Player from "./player";
-import { Flag, Base, Hill } from "@/entities/ctf";
+import Flag from "@/entities/flag";
+import Base from "@/entities/base";
+import Hill from "@/entities/hill";
 import { playSound } from "./effects";
 import { SOUNDS } from "@/game/assets";
 import type Game from "./game";

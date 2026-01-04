@@ -8,7 +8,7 @@ import type Player from "@/game/player";
 import type Tile from "@/game/tile";
 import { PowerUp } from "./powerups";
 import Bullet from "./bullet";
-import type { Flag } from "./ctf";
+import type { Flag } from "./flag";
 import type Game from "@/game/game";
 
 /**

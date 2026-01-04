@@ -15,29 +15,33 @@ vi.mock("@/game/bot", () => ({
   adaptBotSpeed: vi.fn(),
 }));
 
-vi.mock("@/entities/ctf", () => {
-  return {
-    Base: vi.fn().mockImplementation(function (game, player, x, y) {
-      this.game = game;
-      this.player = player;
-      this.x = x;
-      this.y = y;
-      this.team = player?.team;
-      this.tile = { id: 1, randomWalk: vi.fn().mockReturnValue({ id: 2, x: 10, y: 10, dx: 1, dy: 1 }) };
-    }),
-    Flag: vi.fn().mockImplementation(function (game, base) {
-      this.game = game;
-      this.base = base;
-      this.drop = vi.fn();
-    }),
-    Hill: vi.fn().mockImplementation(function (game, x, y) {
-      this.game = game;
-      this.x = x;
-      this.y = y;
-      this.team = null;
-    }),
-  };
-});
+vi.mock("@/entities/base", () => ({
+  default: vi.fn().mockImplementation(function (game, player, x, y) {
+    this.game = game;
+    this.player = player;
+    this.x = x;
+    this.y = y;
+    this.team = player?.team;
+    this.tile = { id: 1, randomWalk: vi.fn().mockReturnValue({ id: 2, x: 10, y: 10, dx: 1, dy: 1 }) };
+  }),
+}));
+
+vi.mock("@/entities/flag", () => ({
+  default: vi.fn().mockImplementation(function (game, base) {
+    this.game = game;
+    this.base = base;
+    this.drop = vi.fn();
+  }),
+}));
+
+vi.mock("@/entities/hill", () => ({
+  default: vi.fn().mockImplementation(function (game, x, y) {
+    this.game = game;
+    this.x = x;
+    this.y = y;
+    this.team = null;
+  }),
+}));
 
 describe("Gamemode Classes", () => {
   let mockGame: any;
