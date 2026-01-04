@@ -219,7 +219,7 @@ export class Base extends GameObject {
    * @returns True if the flag is in the base.
    */
   hasFlag(): boolean {
-    if (typeof this.flag === "undefined") {
+    if (!this.flag) {
       return false;
     }
     return this.flag.inBase;
