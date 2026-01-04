@@ -5,7 +5,6 @@ import { playSound } from "@/game/effects";
 import { Settings } from "@/game/settings";
 import { SOUNDS } from "@/game/assets";
 import type Player from "@/game/player";
-import type GameMap from "@/game/gamemap";
 import type Tile from "@/game/tile";
 import { PowerUp } from "./powerup";
 import Bullet from "./bullet";
@@ -25,8 +24,6 @@ export default class Tank extends GameObject {
   player: Player;
   /** Tank color. */
   color: string;
-  /** The game map. */
-  map?: GameMap;
   /** Rotation angle. */
   angle: number = 2 * Math.PI * Math.random();
   /** Tank width. */
@@ -62,7 +59,10 @@ export default class Tank extends GameObject {
    * @param context - The context.
    */
   draw(context: CanvasRenderingContext2D): void {
-    const game = this.player.game!;
+    const game = this.player.game;
+    if (!game) {
+      return;
+    }
     context.save();
     context.beginPath();
     context.translate(this.x, this.y);
@@ -249,10 +249,11 @@ export default class Tank extends GameObject {
    * @returns Index of colliding corner or -1.
    */
   private checkWallCollision(): number {
-    if (this.player.isBot() || !this.map) {
+    const map = this.player.game?.map;
+    if (this.player.isBot() || !map) {
       return -1;
     }
-    const tile = this.map.getTileByPos(this.x, this.y);
+    const tile = map.getTileByPos(this.x, this.y);
     if (!tile) {
       return -1;
     }
@@ -263,7 +264,7 @@ export default class Tank extends GameObject {
       if (tile.getWalls(corner.x, corner.y).some((w) => w)) {
         return i;
       }
-      const tileAtCorner = this.map.getTileByPos(corner.x, corner.y);
+      const tileAtCorner = map.getTileByPos(corner.x, corner.y);
       if (tileAtCorner && tileAtCorner !== tile) {
         neighborTiles.add(tileAtCorner);
       }
@@ -287,7 +288,8 @@ export default class Tank extends GameObject {
    * Only checks thos bullets that lie within the tiles of the tanks corners.
    */
   private checkBulletCollision(): void {
-    if (this.spawnshield() || !this.map) {
+    const game = this.player.game;
+    if (this.spawnshield() || !game?.map) {
       return;
     }
     // create a list of bullets that may hit the tank by looking
@@ -296,7 +298,7 @@ export default class Tank extends GameObject {
     const powerups = new Set<PowerUp>();
 
     for (const corner of this.corners()) {
-      const tile = this.map.getTileByPos(corner.x, corner.y);
+      const tile = game.map.getTileByPos(corner.x, corner.y);
       if (tile) {
         for (const obj of tile.objs) {
           if (obj instanceof Bullet && obj.age > 0) {
@@ -327,9 +329,9 @@ export default class Tank extends GameObject {
         bullet.player.stats.kills += 1;
       }
       // fancy explosion cloud
-      generateCloud(this.player.game!, this.x, this.y, 6);
+      generateCloud(game, this.x, this.y, 6);
       // let gamemode handle scoring
-      this.player.game!.mode.newKill(bullet.player, this.player);
+      game.mode.newKill(bullet.player, this.player);
       // kill the player, delete the tank and bullet
       playSound(SOUNDS.kill);
       this.delete();
@@ -350,7 +352,10 @@ export default class Tank extends GameObject {
    * @returns True if spawnshield active.
    */
   spawnshield(): boolean {
-    const t = this.player.game!.t;
+    const t = this.player.game?.t;
+    if (!t) {
+      return false;
+    }
     return this.timers.spawnshield > t;
   }
 
@@ -359,7 +364,10 @@ export default class Tank extends GameObject {
    * @returns True if invincible.
    */
   invincible(): boolean {
-    const t = this.player.game!.t;
+    const t = this.player.game?.t;
+    if (!t) {
+      return false;
+    }
     return this.timers.spawnshield > t || this.timers.invincible > t;
   }
 

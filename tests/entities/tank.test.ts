@@ -42,7 +42,6 @@ describe("Tank Class", () => {
 
   it("should update stats when moving", () => {
     const tank = new Tank(mockPlayer);
-    tank.map = mockPlayer.game.map;
 
     const initialMiles = mockPlayer.stats.miles;
 

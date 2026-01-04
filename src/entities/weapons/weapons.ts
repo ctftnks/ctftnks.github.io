@@ -195,17 +195,17 @@ export class MG extends Weapon {
       this.tank.player.game!.timeouts.push(window.setTimeout(() => this.deactivate(), 3000));
     }
 
-    if (this.tank.player.isBot() && this.nshots! > 15) {
+    if (this.tank.player.isBot() && this.nshots > 15) {
       window.setTimeout(() => this.shoot(), Settings.GameFrequency);
     }
 
-    this.every! -= Settings.GameFrequency;
-    if (this.nshots! > 0 && this.every! < 0 && this.isActive) {
+    this.every -= Settings.GameFrequency;
+    if (this.nshots > 0 && this.every < 0 && this.isActive) {
       this.every = 50;
       playSound(SOUNDS.mg);
       this.newBullet();
-      this.nshots!--;
-      if (this.nshots! <= 0) {
+      this.nshots--;
+      if (this.nshots <= 0) {
         this.nshots = 20;
         this.deactivate();
       }

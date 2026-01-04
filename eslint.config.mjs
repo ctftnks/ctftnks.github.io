@@ -6,7 +6,7 @@ import jsdoc from "eslint-plugin-jsdoc";
 
 export default [
   {
-    ignores: ["dist/**", "node_modules/**", "coverage/**", "public/**"],
+    ignores: ["dist/**", "node_modules/**", "coverage/**", "public/**", "tests/**"],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -24,6 +24,8 @@ export default [
       ...eslintConfigPrettier.rules,
       // Enforce braces for all control statements
       curly: ["error", "all"],
+      // // disallow the bang operator
+      // "@typescript-eslint/no-non-null-assertion": "error",
       // Enforce JSDoc comments for functions and methods
       "jsdoc/require-jsdoc": [
         "warn",

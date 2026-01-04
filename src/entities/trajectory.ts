@@ -65,7 +65,7 @@ export default class Trajectory extends GameObject {
   step(): void {
     // update points list
     this.targets = [];
-    let point: TrajectoryPoint = { x: this.x!, y: this.y!, angle: this.angle! };
+    let point: TrajectoryPoint = { x: this.x, y: this.y, angle: this.angle };
     let length = 0;
     this.points = [point];
 

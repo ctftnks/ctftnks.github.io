@@ -243,7 +243,7 @@ export function newGame(map: GameMap | null = null): Game {
   }
 
   store.GameID++;
-  store.game = new Game(store.canvas!, map);
+  const game = new Game(store.canvas!, map);
 
   const modeMap: Record<string, new (game: Game) => Gamemode> = {
     DM: Deathmatch,
@@ -253,16 +253,17 @@ export function newGame(map: GameMap | null = null): Game {
   };
 
   const ModeClass = modeMap[Settings.GameMode] || CaptureTheFlag;
-  store.game.mode = new ModeClass(store.game);
+  game.mode = new ModeClass(game);
 
-  store.players.forEach((player) => store.game!.addPlayer(player));
+  store.players.forEach((player) => game.addPlayer(player));
 
-  store.game.start();
+  game.start();
   store.canvas?.sync();
 
   if (Settings.ResetStatsEachGame) {
-    store.game.players.forEach((player) => player.resetStats());
+    game.players.forEach((player) => player.resetStats());
   }
 
-  return store.game;
+  store.game = game;
+  return game;
 }

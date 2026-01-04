@@ -62,10 +62,10 @@ export default class Bot extends Player {
     }
     this.lastChecked = 0;
 
-    const game = this.game!;
+    const game = this.game;
     const tank = this.tank;
 
-    if (!game.map || !tank.map) {
+    if (!game?.map) {
       return;
     }
 
@@ -112,7 +112,7 @@ export default class Bot extends Player {
 
     if (game.mode instanceof CaptureTheFlag) {
       const carriesFlag = tank.carriedFlag !== null;
-      const flagInBase = this.base!.hasFlag();
+      const flagInBase = this.base != undefined && this.base.hasFlag();
       const ctfPath = tile.xypathToObj((obj) => {
         if (!carriesFlag && obj instanceof Flag && obj.team !== this.team) {
           return true;
@@ -237,8 +237,8 @@ export default class Bot extends Player {
     const tank = this.tank;
     const weapon = tank.weapon;
 
-    if (!path && tank.map) {
-      const tile = tank.map.getTileByPos(tank.x, tank.y);
+    if (!path && this.game?.map) {
+      const tile = this.game.map.getTileByPos(tank.x, tank.y);
       if (tile) {
         path = tile.xypathToObj((obj) => obj === enemy);
       }
@@ -258,7 +258,7 @@ export default class Bot extends Player {
     } else if (weapon instanceof Guided || weapon instanceof WreckingBall) {
       result.shouldShoot = false;
       result.weight = 200;
-      const tile = this.game!.map.getTileByPos(tank.x, tank.y);
+      const tile = this.game?.map.getTileByPos(tank.x, tank.y);
       if (tile) {
         for (let i = 0; i < 4; i++) {
           if (tile.walls[i] !== weapon instanceof Guided) {
@@ -288,7 +288,7 @@ export default class Bot extends Player {
       return null;
     }
 
-    const tile = this.game!.map?.getTileByPos(this.tank.x, this.tank.y);
+    const tile = this.game?.map?.getTileByPos(this.tank.x, this.tank.y);
     if (!tile) {
       return null;
     }
@@ -332,7 +332,7 @@ export default class Bot extends Player {
 
     const weapon = this.tank.weapon;
     const fleeUntil = this.game.t + weapon.bot.fleeingDuration;
-    this.fleeing.condition = () => this.game!.t < fleeUntil && (!weapon.bot.fleeIfActive || weapon.isActive);
+    this.fleeing.condition = () => this.game != undefined && this.game.t < fleeUntil && (!weapon.bot.fleeIfActive || weapon.isActive);
   }
 }
 

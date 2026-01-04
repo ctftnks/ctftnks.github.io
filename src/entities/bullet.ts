@@ -153,7 +153,7 @@ export default class Bullet extends GameObject {
    * Leave a trace of smoke.
    */
   leaveTrace(): void {
-    this.player.game!.addObject(new Smoke(this.x, this.y, 300, this.radius, 1));
+    this.player.game?.addObject(new Smoke(this.x, this.y, 300, this.radius, 1));
   }
 
   /**

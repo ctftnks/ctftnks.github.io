@@ -63,30 +63,33 @@ export default class Player {
    * Spawn at some point.
    */
   spawn(): void {
+    const game = this.game;
+    if (!game) {
+      return;
+    }
     this.tank = new Tank(this);
     this.tank.deleted = false;
-    this.tank.map = this.game!.map;
-    let spos = this.game!.map.spawnPoint();
+    let spos = game.map.spawnPoint();
 
     if (this.base?.tile) {
       let spos2 = this.base.tile;
       while (spos2.id === this.base.tile.id) {
-        spos2 = spos2.randomWalk(this.game!.mode.BaseSpawnDistance ** 2 + Math.round(Math.random()));
+        spos2 = spos2.randomWalk(game.mode.BaseSpawnDistance ** 2 + Math.round(Math.random()));
       }
       spos = { x: spos2.x + spos2.dx / 2, y: spos2.y + spos2.dy / 2 };
     }
     this.tank.x = spos.x;
     this.tank.y = spos.y;
-    this.game!.addObject(this.tank);
-    this.game!.nPlayersAlive += 1;
+    game.addObject(this.tank);
+    game.nPlayersAlive += 1;
 
-    this.game!.timeouts.push(
+    game.timeouts.push(
       window.setTimeout(() => {
-        generateCloud(this.game!, this.tank.x, this.tank.y, 4, 20, 2);
+        generateCloud(game, this.tank.x, this.tank.y, 4, 20, 2);
       }, 10),
     );
     // spawn shield
-    this.tank.timers.spawnshield = this.game!.t + Settings.SpawnShieldTime * 1000;
+    this.tank.timers.spawnshield = game.t + Settings.SpawnShieldTime * 1000;
   }
 
   /**
@@ -94,13 +97,16 @@ export default class Player {
    * Check if game should end.
    */
   kill(): void {
-    this.game!.nPlayersAlive -= 1;
+    if (!this.game) {
+      return;
+    }
+    this.game.nPlayersAlive -= 1;
     this.tank.weapon.isActive = false;
-    this.game!.nkills++;
-    this.game!.canvas.shake();
+    this.game.nkills++;
+    this.game.canvas.shake();
     this.spree = 0;
     this.stats.deaths += 1;
-    this.game!.timeouts.push(
+    this.game.timeouts.push(
       window.setTimeout(() => {
         this.spawn();
       }, Settings.RespawnTime * 1000),

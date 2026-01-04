@@ -73,20 +73,26 @@ export function newEffectCanvas(): HTMLCanvasElement {
  * @returns The interval ID of the effect loop.
  */
 export function fogOfWar(game: Game): number {
-  const canv = document.getElementById("effectFrame") as HTMLCanvasElement;
-  canv.height = game.canvas.canvas.clientHeight;
-  canv.width = game.canvas.canvas.clientWidth;
+  const canvas = document.getElementById("effectFrame") as HTMLCanvasElement;
+  if (!canvas) {
+    return -1;
+  }
+  canvas.height = game.canvas.canvas.clientHeight;
+  canvas.width = game.canvas.canvas.clientWidth;
 
   const duration = 10000;
   const frequency = 30;
   let time = 0;
-  const ctx = canv.getContext("2d")!;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    return -1;
+  }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.scale(game.canvas.scale, game.canvas.scale);
   let ambientLight = 1;
 
   const intvl: number = window.setInterval(() => {
-    ctx.clearRect(0, 0, 2 * canv.width, 2 * canv.height);
+    ctx.clearRect(0, 0, 2 * canvas.width, 2 * canvas.height);
     if (time < 300) {
       ambientLight -= frequency / 300;
     }
@@ -112,7 +118,7 @@ export function fogOfWar(game: Game): number {
   game.intvls.push(intvl);
   window.setTimeout(() => {
     window.clearInterval(intvl);
-    ctx.clearRect(0, 0, 2 * canv.width, 2 * canv.height);
+    ctx.clearRect(0, 0, 2 * canvas.width, 2 * canvas.height);
   }, duration);
   return intvl;
 }
@@ -126,7 +132,10 @@ export function clearEffects(): void {
     canv.height = store.game.canvas.canvas.clientHeight;
     canv.width = store.game.canvas.canvas.clientWidth;
   }
-  const ctx = canv.getContext("2d")!;
+  const ctx = canv.getContext("2d");
+  if (!ctx) {
+    return;
+  }
   ctx.clearRect(0, 0, 2 * canv.width, 2 * canv.height);
 }
 
