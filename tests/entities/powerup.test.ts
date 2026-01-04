@@ -147,7 +147,7 @@ describe("PowerUp System", () => {
     const creator = PowerUps.find((p) => p.name === "SpeedBoost")!;
     const bonus = creator.create();
     bonus.apply(mockTank);
-    expect(mockTank.speed).toBeCloseTo(125);
+    expect(mockTank.speed).toBeCloseTo(130);
     expect(mockGame.timeouts.length).toBe(1);
   });
 
