@@ -5,6 +5,7 @@ import type Game from "./game";
  */
 export default class Canvas {
   canvas: HTMLCanvasElement;
+  effectsCanvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
   height: number;
   width: number;
@@ -12,15 +13,19 @@ export default class Canvas {
 
   /**
    * Creates a new Canvas manager.
-   * @param id - The ID of the canvas element.
+   * @param canvas - The game canvas element.
+   * @param effectsCanvas - The effects canvas element.
    */
-  constructor(id: string) {
-    this.canvas = document.getElementById(id) as HTMLCanvasElement;
+  constructor(canvas: HTMLCanvasElement, effectsCanvas: HTMLCanvasElement) {
+    this.canvas = canvas;
+    this.effectsCanvas = effectsCanvas;
     this.context = this.canvas.getContext("2d")!;
     this.canvas.height = this.canvas.clientHeight;
     this.height = this.canvas.clientHeight;
     this.canvas.width = this.canvas.clientWidth;
     this.width = this.canvas.clientWidth;
+    this.effectsCanvas.height = this.canvas.height;
+    this.effectsCanvas.width = this.canvas.width;
   }
 
   /**
@@ -53,6 +58,9 @@ export default class Canvas {
     this.height = this.canvas.clientHeight;
     this.canvas.width = this.canvas.clientWidth;
     this.width = this.canvas.clientWidth;
+
+    this.effectsCanvas.height = this.canvas.height;
+    this.effectsCanvas.width = this.canvas.width;
   }
 
   /**

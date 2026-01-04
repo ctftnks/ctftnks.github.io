@@ -57,7 +57,7 @@ export function stopMusic(): void {
  * @returns The interval ID of the effect loop.
  */
 export function fogOfWar(game: Game): number {
-  const canvas = document.getElementById("effectFrame") as HTMLCanvasElement;
+  const canvas = game.canvas.effectsCanvas;
   if (!canvas) {
     return -1;
   }
@@ -109,11 +109,13 @@ export function fogOfWar(game: Game): number {
  * Clears all visual effects from the overlay canvas.
  */
 export function clearEffects(): void {
-  const canv = document.getElementById("effectFrame") as HTMLCanvasElement;
-  if (store.game && store.game.canvas && store.game.canvas.canvas) {
-    canv.height = store.game.canvas.canvas.clientHeight;
-    canv.width = store.game.canvas.canvas.clientWidth;
+  if (!store.game || !store.game.canvas) {
+    return;
   }
+  const canv = store.game.canvas.effectsCanvas;
+  canv.height = store.game.canvas.canvas.clientHeight;
+  canv.width = store.game.canvas.canvas.clientWidth;
+
   const ctx = canv.getContext("2d");
   if (!ctx) {
     return;

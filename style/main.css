@@ -5,15 +5,6 @@ body {
   background-image: url("/img/textures/tiled.png");
 }
 
-#gameFrame,
-#effectFrame {
-  position: fixed;
-  top: 5%;
-  height: 90%;
-  left: 18%;
-  width: 74%;
-}
-
 @keyframes shake {
   0% {
     transform: translate(0, 0);

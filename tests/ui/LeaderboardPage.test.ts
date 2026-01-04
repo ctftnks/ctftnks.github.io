@@ -28,8 +28,8 @@ describe("LeaderboardPage.vue", () => {
     vi.useFakeTimers();
     Settings.EndScreenTime = 10;
     store.players = [
-        { id: 1, name: "P1", score: 100, stats: { kills: 1, deaths: 0, shots: 10, miles: 500 } },
-        { id: 2, name: "P2", score: 50, stats: { kills: 0, deaths: 1, shots: 5, miles: 200 } }
+      { id: 1, name: "P1", score: 100, stats: { kills: 1, deaths: 0, shots: 10, miles: 500 } },
+      { id: 2, name: "P2", score: 50, stats: { kills: 0, deaths: 1, shots: 5, miles: 200 } },
     ] as any;
   });
 
@@ -47,13 +47,13 @@ describe("LeaderboardPage.vue", () => {
 
   it("sorts players by score", () => {
     store.players = [
-        { id: 2, name: "P2", score: 50, stats: { kills: 0, deaths: 1, shots: 5, miles: 200 } },
-        { id: 1, name: "P1", score: 100, stats: { kills: 1, deaths: 0, shots: 10, miles: 500 } }
+      { id: 2, name: "P2", score: 50, stats: { kills: 0, deaths: 1, shots: 5, miles: 200 } },
+      { id: 1, name: "P1", score: 100, stats: { kills: 1, deaths: 0, shots: 10, miles: 500 } },
     ] as any;
 
     const wrapper = mount(LeaderboardPage);
     const rows = wrapper.findAll("tbody tr");
-    
+
     // First row should be P1 (higher score)
     expect(rows[0].text()).toContain("P1");
     expect(rows[1].text()).toContain("P2");
@@ -71,7 +71,7 @@ describe("LeaderboardPage.vue", () => {
 
   it("starts new game after timeout", () => {
     mount(LeaderboardPage);
-    
+
     vi.advanceTimersByTime(10000); // 10s
 
     expect(newGame).toHaveBeenCalled();

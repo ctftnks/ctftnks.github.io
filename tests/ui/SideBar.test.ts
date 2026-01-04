@@ -63,7 +63,7 @@ describe("SideBar.vue", () => {
     const wrapper = mount(SideBar);
     // "Time: ..." is the second clickable entry that has "Time" text
     const entries = wrapper.findAll(".entry.clickable");
-    const timeBtn = entries.find(e => e.text().includes("Time"));
+    const timeBtn = entries.find((e) => e.text().includes("Time"));
 
     expect(timeBtn).toBeDefined();
     await timeBtn!.trigger("click");
@@ -74,7 +74,7 @@ describe("SideBar.vue", () => {
   it("starts next map when Next Map is clicked", async () => {
     const wrapper = mount(SideBar);
     const entries = wrapper.findAll(".entry.clickable");
-    const nextMapBtn = entries.find(e => e.text().includes("Next Map"));
+    const nextMapBtn = entries.find((e) => e.text().includes("Next Map"));
 
     expect(nextMapBtn).toBeDefined();
     await nextMapBtn!.trigger("click");

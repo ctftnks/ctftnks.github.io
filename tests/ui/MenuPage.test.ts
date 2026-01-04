@@ -40,7 +40,7 @@ describe("MenuPage.vue", () => {
   it("adds a player when Add Player button is clicked", async () => {
     const wrapper = mount(MenuPage);
     const addPlayerBtn = wrapper.find("#btnAddPlayer");
-    
+
     // Mock createPlayer return value
     const mockPlayer = { id: 0, name: "Player 1", team: TEAMS[0], isBot: () => false };
     (store.createPlayer as any).mockReturnValue(mockPlayer);
