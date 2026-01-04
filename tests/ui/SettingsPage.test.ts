@@ -56,4 +56,42 @@ describe("SettingsPage.vue", () => {
     expect(Settings.TankSpeed).toBe(200); // Default value
     expect(store.saveSettings).toHaveBeenCalled();
   });
+
+  it("updates boolean setting via select", async () => {
+    const wrapper = mount(SettingsPage);
+    const select = wrapper.find("select"); // First select (Show tank labels)
+
+    await select.setValue(false);
+
+    expect(Settings.ShowTankLabels).toBe(false);
+    expect(store.saveSettings).toHaveBeenCalled();
+  });
+
+  it("updates numeric setting with min value constraint", async () => {
+    const wrapper = mount(SettingsPage);
+    Settings.MapNxMin = 2; // Set to min
+
+    const minusBtn = wrapper.findAll(".leftCol .option:nth-of-type(6) button.left")[0]; // Map min-size - button
+    // Wait, nth-of-type(6) might be tricky. Let's find by text.
+    const options = wrapper.findAll(".option");
+    const minSizeOption = options.find((o) => o.text().includes("Map min-size"))!;
+    const minus = minSizeOption.find("button.left");
+
+    await minus.trigger("click");
+
+    expect(Settings.MapNxMin).toBe(2); // Should not go below 2
+  });
+
+  it("updates sound setting via select", async () => {
+    const wrapper = mount(SettingsPage);
+    const options = wrapper.findAll(".option");
+    const soundOption = options.find((o) => o.text().includes("Sound"))!;
+    const select = soundOption.find("select");
+
+    await select.setValue(true); // muted = true
+    expect(Settings.muted).toBe(true);
+
+    await select.setValue(false); // muted = false
+    expect(Settings.muted).toBe(false);
+  });
 });

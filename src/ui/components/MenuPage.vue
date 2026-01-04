@@ -23,7 +23,7 @@
         <option value="1.8">Insane</option>
       </select>
     </div>
-    <button class="option" id="btnMute" @click="toggleMute" style="width:90px">Sound: {{ Settings.muted ? "off" : "on" }}</button>
+    <button class="option" id="btnMute" @click="toggleMute" style="width: 90px">Sound: {{ Settings.muted ? "off" : "on" }}</button>
     <button class="option" id="btnPowerups" @click="openPage('powerups')">PowerUps</button>
     <button class="option" id="btnSettings" @click="openPage('settings')">Settings</button>
 

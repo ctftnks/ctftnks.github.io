@@ -94,4 +94,65 @@ describe("MenuPage.vue", () => {
     expect(muteBtn.text()).toBe("Sound: on");
     expect(store.saveSettings).toHaveBeenCalled();
   });
+
+  it("removes a player", async () => {
+    const mockPlayer = { id: 123, name: "P1", team: TEAMS[0], isBot: () => false };
+    store.players = [mockPlayer];
+    const wrapper = mount(MenuPage);
+
+    await wrapper.find(".remove").trigger("click");
+
+    expect(store.players).not.toContain(mockPlayer);
+  });
+
+  it("changes player team", async () => {
+    const mockPlayer = { id: 1, name: "P1", team: TEAMS[0], isBot: () => false };
+    store.players = [mockPlayer];
+    const wrapper = mount(MenuPage);
+
+    await wrapper.find(".team").trigger("click");
+
+    expect(mockPlayer.team).not.toBe(TEAMS[0]);
+  });
+
+  it("edits player name", async () => {
+    const mockPlayer = { id: 1, name: "P1", team: TEAMS[0], isBot: () => false };
+    store.players = [mockPlayer];
+    const wrapper = mount(MenuPage);
+    const promptSpy = vi.stubGlobal("prompt", vi.fn().mockReturnValue("NewName"));
+
+    // Find the name button in the player row (not the header)
+    await wrapper.find("#playersMenu .entry:nth-child(2) .name").trigger("click");
+
+    expect(window.prompt).toHaveBeenCalled();
+    expect(mockPlayer.name).toBe("NewName");
+    vi.unstubAllGlobals();
+  });
+
+  it("edits keymap on keydown", async () => {
+    const mockPlayer = { id: 0, name: "P1", team: TEAMS[0], isBot: () => false };
+    store.players = [mockPlayer];
+    store.keymaps[0] = ["KeyW", "KeyA", "KeyS", "KeyD", "Space"];
+    const wrapper = mount(MenuPage);
+
+    // Start editing first key (Up) of first player
+    await wrapper.find("#playersMenu .entry:nth-child(2) .keyEditButton").trigger("click");
+
+    // Simulate keydown
+    const event = new KeyboardEvent("keydown", { code: "ArrowUp" });
+    window.dispatchEvent(event);
+
+    expect(store.keymaps[0][0]).toBe("ArrowUp");
+  });
+
+  it("starts game and dispatches resize", async () => {
+    const wrapper = mount(MenuPage);
+    const dispatchSpy = vi.spyOn(window, "dispatchEvent");
+
+    await wrapper.find("#btnStartGame").trigger("click");
+
+    expect(store.startNewGame).toHaveBeenCalled();
+    expect(openPage).toHaveBeenCalledWith("game");
+    expect(dispatchSpy).toHaveBeenCalledWith(expect.any(Event));
+  });
 });

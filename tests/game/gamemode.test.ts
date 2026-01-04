@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { Deathmatch, TeamDeathmatch, KingOfTheHill } from "@/game/gamemode";
+import { Deathmatch, TeamDeathmatch, KingOfTheHill, CaptureTheFlag } from "@/game/gamemode";
 import Game from "@/game/game";
 
 // Mock dependencies
@@ -15,22 +15,62 @@ vi.mock("@/game/bot", () => ({
   adaptBotSpeed: vi.fn(),
 }));
 
+vi.mock("@/entities/ctf", () => {
+  return {
+    Base: vi.fn().mockImplementation(function (game, player, x, y) {
+      this.game = game;
+      this.player = player;
+      this.x = x;
+      this.y = y;
+      this.team = player?.team;
+      this.tile = { id: 1, randomWalk: vi.fn().mockReturnValue({ id: 2, x: 10, y: 10, dx: 1, dy: 1 }) };
+    }),
+    Flag: vi.fn().mockImplementation(function (game, base) {
+      this.game = game;
+      this.base = base;
+      this.drop = vi.fn();
+    }),
+    Hill: vi.fn().mockImplementation(function (game, x, y) {
+      this.game = game;
+      this.x = x;
+      this.y = y;
+      this.team = null;
+    }),
+  };
+});
+
 describe("Gamemode Classes", () => {
   let mockGame: any;
   let player1: any;
   let player2: any;
   let player3: any;
+  let redTeam: any;
+  let blueTeam: any;
 
   beforeEach(() => {
-    player1 = { id: 1, team: 1, score: 0, spree: 0, resetStats: vi.fn(), tank: {} };
-    player2 = { id: 2, team: 2, score: 0, spree: 0, resetStats: vi.fn(), tank: {} };
-    player3 = { id: 3, team: 1, score: 0, spree: 0, resetStats: vi.fn(), tank: {} }; // Teammate of player1
+    redTeam = { color: "red" };
+    blueTeam = { color: "blue" };
+
+    player1 = { id: 1, team: redTeam, score: 0, spree: 0, resetStats: vi.fn(), tank: {}, isBot: () => false };
+    player2 = { id: 2, team: blueTeam, score: 0, spree: 0, resetStats: vi.fn(), tank: {}, isBot: () => false };
+    player3 = { id: 3, team: redTeam, score: 0, spree: 0, resetStats: vi.fn(), tank: {}, isBot: () => false }; // Teammate of player1
 
     mockGame = {
       players: [player1, player2, player3],
       t: 0,
-      map: {},
+      map: {
+        spawnPoint: vi.fn().mockReturnValue({ x: 0, y: 0 }),
+        getTileByPos: vi.fn().mockReturnValue({
+          id: 1,
+          x: 0,
+          y: 0,
+          dx: 1,
+          dy: 1,
+          pathTo: vi.fn().mockReturnValue({ length: 1 }),
+        }),
+      },
       addObject: vi.fn(),
+      mode: { BaseSpawnDistance: 2 },
     };
   });
 
@@ -52,7 +92,6 @@ describe("Gamemode Classes", () => {
     });
 
     it("should deduct points for friendly fire (same team)", () => {
-      // In DM usually everyone is own team or different, but logic checks team equality
       mode.newKill(player1, player3);
       expect(player1.score).toBe(-1);
     });
@@ -61,7 +100,6 @@ describe("Gamemode Classes", () => {
       player1.spree = 4;
       mode.giveScore(player1, 1);
       expect(player1.spree).toBe(5);
-      // Bonus for spree: score += floor(5/5) = 1. Total +2.
       expect(player1.score).toBe(2);
     });
   });
@@ -85,6 +123,42 @@ describe("Gamemode Classes", () => {
       expect(player1.score).toBe(1);
       expect(player3.score).toBe(1);
     });
+
+    it("should initialize bases", () => {
+      mode.init();
+      expect(mockGame.addObject).toHaveBeenCalled();
+      expect(player1.base).toBeDefined();
+      expect(player2.base).toBeDefined();
+      expect(player3.base).toBe(player1.base);
+    });
+  });
+
+  describe("CaptureTheFlag", () => {
+    let mode: CaptureTheFlag;
+
+    beforeEach(() => {
+      mode = new CaptureTheFlag(mockGame as Game);
+    });
+
+    it("should give points to all team members", () => {
+      mode.giveScore(player1, 1);
+      expect(player1.score).toBe(1);
+      expect(player3.score).toBe(1);
+      expect(player2.score).toBe(0);
+    });
+
+    it("should handle new kill correctly", () => {
+      mode.newKill(player1, player2);
+      expect(player1.spree).toBe(1);
+      expect(player1.score).toBe(0); // Kill doesn't give score in CTF
+    });
+
+    it("should initialize bases and flags", () => {
+      mode.init();
+      expect(mockGame.addObject).toHaveBeenCalled();
+      expect(player1.base).toBeDefined();
+      expect(player1.base.flag).toBeDefined();
+    });
   });
 
   describe("KingOfTheHill", () => {
@@ -95,27 +169,26 @@ describe("Gamemode Classes", () => {
     });
 
     it("should award points when hills are controlled by one team", () => {
-      // Mock bases
-      mode.bases = [{ team: 1 } as any, { team: 1 } as any];
-
-      mockGame.t = 2000; // Trigger score interval
-
+      mode.bases = [{ team: redTeam } as any, { team: redTeam } as any];
+      mockGame.t = 2000;
       mode.step();
-
       expect(player1.score).toBe(1);
       expect(player3.score).toBe(1);
       expect(player2.score).toBe(0);
     });
 
     it("should not award points if hills are mixed", () => {
-      mode.bases = [{ team: 1 } as any, { team: 2 } as any];
-
+      mode.bases = [{ team: redTeam } as any, { team: blueTeam } as any];
       mockGame.t = 2000;
-
       mode.step();
-
       expect(player1.score).toBe(0);
       expect(player2.score).toBe(0);
+    });
+
+    it("should initialize hills", () => {
+      mode.init();
+      expect(mockGame.addObject).toHaveBeenCalled();
+      expect(mode.bases.length).toBe(mockGame.players.length - 1);
     });
   });
 });
