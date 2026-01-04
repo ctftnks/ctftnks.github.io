@@ -17,6 +17,11 @@ export default defineConfig(() => {
     test: {
       environment: "jsdom",
       globals: true,
+      coverage: {
+        provider: "v8",
+        reporter: ["text", "json", "lcov"],
+        reportsDirectory: "./coverage",
+      },
     },
     define: { "process.env": {} },
     resolve: {
