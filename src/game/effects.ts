@@ -85,14 +85,12 @@ export function fogOfWar(game: Game): number {
     }
     ctx.fillStyle = "rgba(0,0,0," + (1 - ambientLight) + ")";
     ctx.fillRect(0, 0, game.map.Nx * game.map.dx, game.map.Ny * game.map.dy);
-    for (let i = 0; i < game.players.length; i++) {
-      const x = game.players[i].tank.x;
-      const y = game.players[i].tank.y;
+    for (const tank of game.getTanks()) {
       ctx.save();
       ctx.beginPath();
-      ctx.arc(x, y, 100, 0, Math.PI * 2, true);
+      ctx.arc(tank.x, tank.y, 100, 0, Math.PI * 2, true);
       ctx.clip();
-      ctx.clearRect(x - 100, y - 100, 200, 200);
+      ctx.clearRect(tank.x - 100, tank.y - 100, 200, 200);
       ctx.closePath();
       ctx.restore();
     }

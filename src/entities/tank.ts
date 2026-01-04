@@ -9,6 +9,7 @@ import type Tile from "@/game/tile";
 import { PowerUp } from "./powerup";
 import Bullet from "./bullet";
 import type { Flag } from "./ctf";
+import type Game from "@/game/game";
 
 /**
  * Represents a Tank controlled by a player.
@@ -20,8 +21,10 @@ import type { Flag } from "./ctf";
  * @augments GameObject
  */
 export default class Tank extends GameObject {
-  /** The player. */
+  /** The player steering the tank. */
   player: Player;
+  /** The game in which the tank lives. */
+  game: Game;
   /** Tank color. */
   color: string;
   /** Rotation angle. */
@@ -46,10 +49,12 @@ export default class Tank extends GameObject {
   /**
    * Creates a new Tank.
    * @param player - The player owning this tank.
+   * @param game - The game in which the tank lives.
    */
-  constructor(player: Player) {
+  constructor(player: Player, game: Game) {
     super();
     this.player = player;
+    this.game = game;
     this.color = this.player.team.color;
     this.weapon = new Gun(this);
   }
@@ -59,10 +64,6 @@ export default class Tank extends GameObject {
    * @param context - The context.
    */
   draw(context: CanvasRenderingContext2D): void {
-    const game = this.player.game;
-    if (!game) {
-      return;
-    }
     context.save();
     context.beginPath();
     context.translate(this.x, this.y);
@@ -70,14 +71,13 @@ export default class Tank extends GameObject {
     context.rect(-this.width / 2, -this.height / 2, this.width, this.height);
     context.fillStyle = this.player.team.color;
 
-    if (this.timers.invincible > game.t) {
-      const dt = (this.timers.invincible - game.t) / 600;
+    if (this.timers.invincible > this.game.t) {
+      const dt = (this.timers.invincible - this.game.t) / 600;
       context.fillStyle = `hsl(${Math.floor(360 * dt)},100%,40%)`;
     }
     if (this.spawnshield()) {
       context.fillStyle = "#555";
-      // context.globalAlpha = 0.5;
-      context.globalAlpha = 0.7 * (1 - (this.timers.spawnshield - game.t) / (Settings.SpawnShieldTime * 1000));
+      context.globalAlpha = 0.7 * (1 - (this.timers.spawnshield - this.game.t) / (Settings.SpawnShieldTime * 1000));
     }
 
     context.fill();
@@ -117,7 +117,7 @@ export default class Tank extends GameObject {
    * Check for collisions and handle them.
    */
   step(): void {
-    this.player.step();
+    this.player.steer(this);
     if (this.weapon.isDeleted) {
       this.defaultWeapon();
     }
@@ -249,11 +249,10 @@ export default class Tank extends GameObject {
    * @returns Index of colliding corner or -1.
    */
   private checkWallCollision(): number {
-    const map = this.player.game?.map;
-    if (this.player.isBot() || !map) {
+    if (this.player.isBot()) {
       return -1;
     }
-    const tile = map.getTileByPos(this.x, this.y);
+    const tile = this.game.map.getTileByPos(this.x, this.y);
     if (!tile) {
       return -1;
     }
@@ -264,7 +263,7 @@ export default class Tank extends GameObject {
       if (tile.getWalls(corner.x, corner.y).some((w) => w)) {
         return i;
       }
-      const tileAtCorner = map.getTileByPos(corner.x, corner.y);
+      const tileAtCorner = this.game.map.getTileByPos(corner.x, corner.y);
       if (tileAtCorner && tileAtCorner !== tile) {
         neighborTiles.add(tileAtCorner);
       }
@@ -288,8 +287,7 @@ export default class Tank extends GameObject {
    * Only checks thos bullets that lie within the tiles of the tanks corners.
    */
   private checkBulletCollision(): void {
-    const game = this.player.game;
-    if (this.spawnshield() || !game?.map) {
+    if (this.spawnshield()) {
       return;
     }
     // create a list of bullets that may hit the tank by looking
@@ -298,7 +296,7 @@ export default class Tank extends GameObject {
     const powerups = new Set<PowerUp>();
 
     for (const corner of this.corners()) {
-      const tile = game.map.getTileByPos(corner.x, corner.y);
+      const tile = this.game.map.getTileByPos(corner.x, corner.y);
       if (tile) {
         for (const obj of tile.objs) {
           if (obj instanceof Bullet && obj.age > 0) {
@@ -329,13 +327,14 @@ export default class Tank extends GameObject {
         bullet.player.stats.kills += 1;
       }
       // fancy explosion cloud
-      generateCloud(game, this.x, this.y, 6);
+      generateCloud(this.game, this.x, this.y, 6);
       // let gamemode handle scoring
-      game.mode.newKill(bullet.player, this.player);
+      this.game.mode.newKill(bullet.player, this.player);
       // kill the player, delete the tank and bullet
       playSound(SOUNDS.kill);
       this.delete();
       this.player.kill();
+      this.weapon.isActive = false;
       return;
     }
 
@@ -352,11 +351,7 @@ export default class Tank extends GameObject {
    * @returns True if spawnshield active.
    */
   spawnshield(): boolean {
-    const t = this.player.game?.t;
-    if (!t) {
-      return false;
-    }
-    return this.timers.spawnshield > t;
+    return this.timers.spawnshield > this.game.t;
   }
 
   /**
@@ -364,11 +359,7 @@ export default class Tank extends GameObject {
    * @returns True if invincible.
    */
   invincible(): boolean {
-    const t = this.player.game?.t;
-    if (!t) {
-      return false;
-    }
-    return this.timers.spawnshield > t || this.timers.invincible > t;
+    return this.timers.spawnshield > this.game.t || this.timers.invincible > this.game.t;
   }
 
   /**

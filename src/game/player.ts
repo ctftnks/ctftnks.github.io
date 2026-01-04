@@ -20,7 +20,6 @@ export default class Player {
   score: number = 0;
   spree: number = 0;
   keys: string[];
-  tank: Tank;
   stats: { deaths: number; kills: number; miles: number; shots: number } = { deaths: 0, kills: 0, miles: 0, shots: 0 };
 
   /**
@@ -35,42 +34,38 @@ export default class Player {
     this.name = name;
     this.team = team;
     this.keys = keys;
-    this.tank = new Tank(this);
   }
 
   /**
-   * Timestep: check if keys pressed and act accordingly.
+   * Steer a tank: check if keys pressed and act accordingly.
+   * @param tank - the tank to be steered by the player
    */
-  step(): void {
+  steer(tank: Tank): void {
     if (Key.isDown(this.keys[0])) {
-      this.tank.move(1);
+      tank.move(1);
     }
     if (Key.isDown(this.keys[1])) {
-      this.tank.turn(-1);
+      tank.turn(-1);
     }
     if (Key.isDown(this.keys[2])) {
-      this.tank.move(-0.7);
+      tank.move(-0.7);
     }
     if (Key.isDown(this.keys[3])) {
-      this.tank.turn(1);
+      tank.turn(1);
     }
     if (Key.isDown(this.keys[4])) {
-      this.tank.shoot();
+      tank.shoot();
     }
   }
 
   /**
    * Spawn at some point.
+   * @param game - the game in which the tank should spawn
    */
-  spawn(): void {
-    const game = this.game;
-    if (!game) {
-      return;
-    }
-    this.tank = new Tank(this);
-    this.tank.deleted = false;
+  spawn(game: Game): void {
+    const tank = new Tank(this, game);
+    tank.deleted = false;
     let spos = game.map.spawnPoint();
-
     if (this.base?.tile) {
       let spos2 = this.base.tile;
       while (spos2.id === this.base.tile.id) {
@@ -78,37 +73,35 @@ export default class Player {
       }
       spos = { x: spos2.x + spos2.dx / 2, y: spos2.y + spos2.dy / 2 };
     }
-    this.tank.x = spos.x;
-    this.tank.y = spos.y;
-    game.addObject(this.tank);
+    tank.x = spos.x;
+    tank.y = spos.y;
+    game.addObject(tank);
     game.nPlayersAlive += 1;
-
     game.timeouts.push(
       window.setTimeout(() => {
-        generateCloud(game, this.tank.x, this.tank.y, 4, 20, 2);
+        generateCloud(game, tank.x, tank.y, 4, 20, 2);
       }, 10),
     );
     // spawn shield
-    this.tank.timers.spawnshield = game.t + Settings.SpawnShieldTime * 1000;
+    tank.timers.spawnshield = game.t + Settings.SpawnShieldTime * 1000;
   }
 
   /**
    * Kill the player, called when tank is shot.
-   * Check if game should end.
    */
   kill(): void {
     if (!this.game) {
       return;
     }
+    const game = this.game;
     this.game.nPlayersAlive -= 1;
-    this.tank.weapon.isActive = false;
     this.game.nkills++;
     this.game.canvas.shake();
     this.spree = 0;
     this.stats.deaths += 1;
     this.game.timeouts.push(
       window.setTimeout(() => {
-        this.spawn();
+        this.spawn(game);
       }, Settings.RespawnTime * 1000),
     );
   }

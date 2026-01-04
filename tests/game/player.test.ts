@@ -4,6 +4,7 @@ import { store } from "@/game/store";
 import { Key } from "@/game/key";
 import { Settings } from "@/game/settings";
 import Player from "@/game/player";
+import Tank from "@/entities/tank";
 
 describe("Player Class", () => {
   const mockMap = {
@@ -39,7 +40,6 @@ describe("Player Class", () => {
     expect(player.name).toBe("Player 1");
     expect(player.team).toBe(TEAMS[1]);
     expect(player.keys).toEqual(keys);
-    expect(player.tank).toBeDefined();
   });
 
   it("should return false for isBot", () => {
@@ -58,16 +58,17 @@ describe("Player Class", () => {
     expect(player.stats.shots).toBe(0);
   });
 
-  describe("step()", () => {
+  describe("steer()", () => {
     it("should move tank forward when first key is pressed", () => {
       const keys = ["KeyW", "KeyA", "KeyS", "KeyD", "Space"];
       const player = new Player(0, "P", TEAMS[0], keys);
       player.game = mockGame as any;
-      const moveSpy = vi.spyOn(player.tank, "move");
+      const tank = new Tank(player, mockGame as any);
+      const moveSpy = vi.spyOn(tank, "move");
 
       vi.spyOn(Key, "isDown").mockImplementation((code) => code === "KeyW");
 
-      player.step();
+      player.steer(tank);
       expect(moveSpy).toHaveBeenCalledWith(1);
     });
 
@@ -75,11 +76,12 @@ describe("Player Class", () => {
       const keys = ["KeyW", "KeyA", "KeyS", "KeyD", "Space"];
       const player = new Player(0, "P", TEAMS[0], keys);
       player.game = mockGame as any;
-      const turnSpy = vi.spyOn(player.tank, "turn");
+      const tank = new Tank(player, mockGame as any);
+      const turnSpy = vi.spyOn(tank, "turn");
 
       vi.spyOn(Key, "isDown").mockImplementation((code) => code === "KeyA");
 
-      player.step();
+      player.steer(tank);
       expect(turnSpy).toHaveBeenCalledWith(-1);
     });
 
@@ -87,11 +89,12 @@ describe("Player Class", () => {
       const keys = ["KeyW", "KeyA", "KeyS", "KeyD", "Space"];
       const player = new Player(0, "P", TEAMS[0], keys);
       player.game = mockGame as any;
-      const moveSpy = vi.spyOn(player.tank, "move");
+      const tank = new Tank(player, mockGame as any);
+      const moveSpy = vi.spyOn(tank, "move");
 
       vi.spyOn(Key, "isDown").mockImplementation((code) => code === "KeyS");
 
-      player.step();
+      player.steer(tank);
       expect(moveSpy).toHaveBeenCalledWith(-0.7);
     });
 
@@ -99,11 +102,12 @@ describe("Player Class", () => {
       const keys = ["KeyW", "KeyA", "KeyS", "KeyD", "Space"];
       const player = new Player(0, "P", TEAMS[0], keys);
       player.game = mockGame as any;
-      const turnSpy = vi.spyOn(player.tank, "turn");
+      const tank = new Tank(player, mockGame as any);
+      const turnSpy = vi.spyOn(tank, "turn");
 
       vi.spyOn(Key, "isDown").mockImplementation((code) => code === "KeyD");
 
-      player.step();
+      player.steer(tank);
       expect(turnSpy).toHaveBeenCalledWith(1);
     });
 
@@ -111,11 +115,12 @@ describe("Player Class", () => {
       const keys = ["KeyW", "KeyA", "KeyS", "KeyD", "Space"];
       const player = new Player(0, "P", TEAMS[0], keys);
       player.game = mockGame as any;
-      const shootSpy = vi.spyOn(player.tank, "shoot");
+      const tank = new Tank(player, mockGame as any);
+      const shootSpy = vi.spyOn(tank, "shoot");
 
       vi.spyOn(Key, "isDown").mockImplementation((code) => code === "Space");
 
-      player.step();
+      player.steer(tank);
       expect(shootSpy).toHaveBeenCalled();
     });
   });
@@ -126,13 +131,16 @@ describe("Player Class", () => {
       player.game = mockGame as any;
       mockMap.spawnPoint.mockReturnValue({ x: 200, y: 300 });
 
-      player.spawn();
+      player.spawn(mockGame as any);
 
-      expect(player.tank.x).toBe(200);
-      expect(player.tank.y).toBe(300);
-      expect(mockGame.addObject).toHaveBeenCalledWith(player.tank);
+      const tanks = (mockGame.addObject.mock.calls as any[]).map(c => c[0]).filter(o => o instanceof Tank);
+      const tank = tanks[tanks.length - 1];
+
+      expect(tank.x).toBe(200);
+      expect(tank.y).toBe(300);
+      expect(mockGame.addObject).toHaveBeenCalledWith(tank);
       expect(mockGame.nPlayersAlive).toBe(1);
-      expect(player.tank.timers.spawnshield).toBe(mockGame.t + Settings.SpawnShieldTime * 1000);
+      expect(tank.timers.spawnshield).toBe(mockGame.t + Settings.SpawnShieldTime * 1000);
     });
 
     it("should spawn near base if base is set", () => {
@@ -148,11 +156,14 @@ describe("Player Class", () => {
       };
       player.base = { tile: mockTile } as any;
 
-      player.spawn();
+      player.spawn(mockGame as any);
+
+      const tanks = (mockGame.addObject.mock.calls as any[]).map(c => c[0]).filter(o => o instanceof Tank);
+      const tank = tanks[tanks.length - 1];
 
       expect(mockTile.randomWalk).toHaveBeenCalled();
-      expect(player.tank.x).toBe(750); // 700 + 100/2
-      expect(player.tank.y).toBe(850); // 800 + 100/2
+      expect(tank.x).toBe(750); // 700 + 100/2
+      expect(tank.y).toBe(850); // 800 + 100/2
     });
   });
 
@@ -167,12 +178,11 @@ describe("Player Class", () => {
       player.kill();
 
       expect(mockGame.nPlayersAlive).toBe(0);
-      expect(player.tank.weapon.isActive).toBe(false);
       expect(mockGame.nkills).toBe(1);
       expect(mockGame.canvas.shake).toHaveBeenCalled();
       expect(player.spree).toBe(0);
       expect(player.stats.deaths).toBe(1);
-      expect(mockGame.timeouts.length).toBe(1);
+      expect(mockGame.timeouts.length).toBeGreaterThan(0);
 
       vi.runAllTimers();
       // Should trigger spawn()

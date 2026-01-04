@@ -5,6 +5,7 @@ import { TEAMS } from "@/game/team";
 
 describe("Tank Class", () => {
   let mockPlayer: any;
+  let mockGame: any;
 
   beforeEach(() => {
     const mockTile = {
@@ -17,31 +18,34 @@ describe("Tank Class", () => {
       ],
     };
 
+    mockGame = {
+      t: 0,
+      map: {
+        getTileByPos: vi.fn(() => mockTile),
+      },
+    };
+
     mockPlayer = {
       team: TEAMS[1],
       name: "Test Player",
-      game: {
-        t: 0,
-        map: {
-          getTileByPos: vi.fn(() => mockTile),
-        },
-      },
+      game: mockGame,
       stats: { miles: 0, shots: 0 },
       step: vi.fn(),
       isBot: () => false,
     };
+
     Settings.TankSpeed = 200;
   });
 
   it("should initialize with correct default properties", () => {
-    const tank = new Tank(mockPlayer);
+    const tank = new Tank(mockPlayer, mockGame);
     expect(tank instanceof Tank).toBe(true);
     expect(tank.speed).toBe(200);
     expect(tank.player).toBe(mockPlayer);
   });
 
   it("should update stats when moving", () => {
-    const tank = new Tank(mockPlayer);
+    const tank = new Tank(mockPlayer, mockGame);
 
     const initialMiles = mockPlayer.stats.miles;
 
@@ -50,7 +54,7 @@ describe("Tank Class", () => {
   });
 
   it("should be invincible when spawnshield is active", () => {
-    const tank = new Tank(mockPlayer);
+    const tank = new Tank(mockPlayer, mockGame);
     tank.timers.spawnshield = 1000;
     mockPlayer.game.t = 500;
 
@@ -59,7 +63,7 @@ describe("Tank Class", () => {
   });
 
   it("should not be invincible after shield expires", () => {
-    const tank = new Tank(mockPlayer);
+    const tank = new Tank(mockPlayer, mockGame);
     tank.timers.spawnshield = 1000;
     mockPlayer.game.t = 1500;
 

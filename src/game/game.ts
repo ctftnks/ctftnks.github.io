@@ -11,6 +11,7 @@ import Player from "./player";
 import GameObject from "@/entities/gameobject";
 import { Gamemode, Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import { openPage } from "@/ui/pages";
+import Tank from "@/entities/tank";
 
 /**
  * Manages the game state, loop, and objects.
@@ -89,11 +90,19 @@ export default class Game {
   }
 
   /**
+   * Fetches a list of all tanks in the game
+   * @returns list of tanks
+   */
+  getTanks(): Tank[] {
+    return this.objs.filter((o) => o instanceof Tank);
+  }
+
+  /**
    * Starts the game loop.
    */
   start(): void {
     this.mode.init();
-    this.players.forEach((player) => player.spawn());
+    this.players.forEach((player) => player.spawn(this));
 
     this.lastTime = performance.now();
     this.accumulator = 0;
@@ -229,9 +238,9 @@ export default class Game {
    */
   resetTime(): void {
     this.t = 0;
-    for (const player of this.players) {
-      player.tank.timers.invincible = 0;
-      player.tank.timers.spawnshield = 0;
+    for (const tank of this.getTanks()) {
+      tank.timers.invincible = 0;
+      tank.timers.spawnshield = 0;
     }
   }
 }

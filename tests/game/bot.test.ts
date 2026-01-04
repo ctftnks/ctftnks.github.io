@@ -64,7 +64,6 @@ describe("Bot Class", () => {
     // Create Bot
     bot = new Bot(0, "Bot 1", TEAMS[0]);
     bot.game = mockGame;
-    bot.tank = mockTank; // Replace real tank with mock
   });
 
   afterEach(() => {
@@ -82,7 +81,7 @@ describe("Bot Class", () => {
       { x: 100, y: 100 },
       { x: 200, y: 200 },
     ];
-    bot.follow(path);
+    (bot as any).follow(path);
     expect(bot.goto).toBe(path[1]);
   });
 
@@ -95,7 +94,7 @@ describe("Bot Class", () => {
     // atan2(-100, 0) = -PI/2.
     // target angle = -PI/2 + PI = PI/2.
 
-    bot.performMovements();
+    (bot as any).performMovements(mockTank);
 
     // Expect turn or move called
     // Since angle 0 != PI/2, it should turn
@@ -106,7 +105,7 @@ describe("Bot Class", () => {
     const targetTank = { x: 150, y: 100, player: { isBot: () => false } } as any;
     vi.useFakeTimers();
 
-    bot.shoot(targetTank);
+    (bot as any).shoot(mockTank, targetTank);
 
     expect(mockTank.shoot).toHaveBeenCalled();
     vi.useRealTimers();
@@ -115,11 +114,11 @@ describe("Bot Class", () => {
   it("should not autopilot too frequently", () => {
     bot.lastChecked = 0;
     Settings.GameFrequency = 10;
-    bot.tank.speed = 200;
+    mockTank.speed = 200;
 
     // Threshold is 72000 / 200 = 360
 
-    bot.autopilot();
+    (bot as any).autopilot(mockTank, bot.game);
     // First call, lastChecked becomes 10. 10 < 360, returns early.
 
     expect(mockMap.getTileByPos).not.toHaveBeenCalled();
@@ -129,7 +128,7 @@ describe("Bot Class", () => {
     // Mock getTileByPos to return null to avoid further logic
     mockMap.getTileByPos.mockReturnValue(null);
 
-    bot.autopilot();
+    (bot as any).autopilot(mockTank, bot.game);
     expect(mockMap.getTileByPos).toHaveBeenCalled();
   });
 });

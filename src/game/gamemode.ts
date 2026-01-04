@@ -157,12 +157,10 @@ export class TeamDeathmatch extends Gamemode {
     for (let i = 0; i < game.players.length; i++) {
       let baseExists = false;
       const player = game.players[i];
-      for (let j = 0; j < bases.length; j++) {
-        if (player.team === bases[j].team) {
+      for (const base of bases) {
+        if (player.team === base.team) {
           baseExists = true;
-          player.tank.x = bases[j].x;
-          player.tank.y = bases[j].y;
-          player.base = bases[j];
+          player.base = base;
         }
       }
       if (!baseExists) {
@@ -215,8 +213,6 @@ export class TeamDeathmatch extends Gamemode {
         while (spawnPoint.id === b.tile!.id) {
           spawnPoint = spawnPoint.randomWalk(this.game.mode.BaseSpawnDistance + Math.round(Math.random()));
         }
-        player.tank.x = spawnPoint.x + spawnPoint.dx / 2;
-        player.tank.y = spawnPoint.y + spawnPoint.dy / 2;
         player.base = b;
       }
     }
@@ -290,8 +286,6 @@ export class CaptureTheFlag extends Gamemode {
       for (let j = 0; j < bases.length; j++) {
         if (player.team === bases[j].team) {
           baseExists = true;
-          player.tank.x = bases[j].x;
-          player.tank.y = bases[j].y;
           player.base = bases[j];
         }
       }
@@ -346,8 +340,6 @@ export class CaptureTheFlag extends Gamemode {
         while (spawnPoint.id === b.tile!.id) {
           spawnPoint = spawnPoint.randomWalk(this.game.mode.BaseSpawnDistance + Math.round(Math.random()));
         }
-        player.tank.x = spawnPoint.x + spawnPoint.dx / 2;
-        player.tank.y = spawnPoint.y + spawnPoint.dy / 2;
         player.base = b;
       }
     }
