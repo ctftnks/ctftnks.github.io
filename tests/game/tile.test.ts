@@ -159,4 +159,86 @@ describe("Tile Random Walk", () => {
     expect(end).not.toBe(start);
     expect(start.neighbors).toContain(end);
   });
+
+  it("should return self if stuck", () => {
+    const start = grid[0];
+    // Block all exits
+    start.addWall(0, false, false);
+    start.addWall(1, false, false);
+    start.addWall(2, false, false);
+    start.addWall(3, false, false);
+
+    expect(start.randomWalk(1)).toBe(start);
+  });
+});
+
+describe("Tile Visuals and Walls", () => {
+  let grid: Tile[];
+
+  beforeEach(() => {
+    const setup = createMockGrid(3, 3);
+    grid = setup.tiles;
+  });
+
+  it("should return 4 corners with wall info", () => {
+    const tile = grid[0];
+    tile.walls = [true, false, false, false]; // top wall
+    const corners = tile.corners();
+
+    expect(corners.length).toBe(4);
+    expect(corners[0].w).toBe(true); // top-left corner is part of top wall
+    expect(corners[3].w).toBe(true); // top-right corner is part of top wall
+    expect(corners[1].w).toBe(false); // bottom corners are not
+  });
+
+  it("should draw walls correctly", () => {
+    const tile = grid[4];
+    tile.walls = [true, true, true, true];
+    const mockContext = {
+      fillRect: vi.fn(),
+      fillStyle: "",
+    } as any;
+
+    tile.draw(mockContext);
+    expect(mockContext.fillRect).toHaveBeenCalledTimes(4);
+    expect(mockContext.fillStyle).toBe("#555");
+  });
+
+  it("should update neighbors when adding/removing walls", () => {
+    const t1 = grid[0]; // (0,0)
+    const t2 = grid[1]; // (0,1) - bottom neighbor of t1
+
+    t1.addWall(2, false, true); // add bottom wall to t1
+    expect(t1.walls[2]).toBe(true);
+    expect(t2.walls[0]).toBe(true); // top wall of t2 should also be set
+
+    t1.addWall(2, true, true); // remove it
+    expect(t1.walls[2]).toBe(false);
+    expect(t2.walls[0]).toBe(false);
+  });
+
+  it("should identify walls between tile and a point", () => {
+    const tile = grid[4]; // Center at (100, 100), size 100x100
+    tile.x = 100;
+    tile.y = 100;
+    tile.dx = 100;
+    tile.dy = 100;
+    tile.walls = [true, true, true, true];
+
+    // Point above tile
+    const wallsTop = tile.getWalls(150, 50);
+    expect(wallsTop[0]).toBe(true);
+
+    // Point left of tile
+    const wallsLeft = tile.getWalls(50, 150);
+    expect(wallsLeft[1]).toBe(true);
+
+    // Point below tile
+    const wallsBottom = tile.getWalls(150, 250);
+    expect(wallsBottom[2]).toBe(true);
+
+    // Point right of tile
+    const wallsRight = tile.getWalls(250, 150);
+    expect(wallsRight[3]).toBe(true);
+  });
 });
