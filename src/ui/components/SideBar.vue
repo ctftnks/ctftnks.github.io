@@ -4,7 +4,7 @@
     <div class="entry">&nbsp;</div>
     <div class="entry"><b>Scores</b></div>
     <div id="scoreBoard">
-      <div class="entry" v-for="p in sortedPlayers" :key="p.id">
+      <div v-for="p in sortedPlayers" :key="p.id" class="entry">
         <span class="name" :style="{ color: p.team.color }">{{ p.name }}</span>
         <span class="score">
           <span v-if="p.spree > 1" class="spree">{{ ">+" + p.spree }}</span>
@@ -19,7 +19,7 @@
     </div>
     <div class="entry clickable" @click="nextMap">Next Map</div>
     <br />
-    <div class="entry" v-show="botSpeed" id="BotSpeedometer">BotSpeed:&nbsp;&nbsp;{{ Math.round((botSpeed || 0) * 100) }} %</div>
+    <div v-show="botSpeed" id="BotSpeedometer" class="entry">BotSpeed:&nbsp;&nbsp;{{ Math.round((botSpeed || 0) * 100) }} %</div>
   </div>
 </template>
 
@@ -66,7 +66,9 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  if (timer) clearInterval(timer);
+  if (timer) {
+    clearInterval(timer);
+  }
 });
 </script>
 

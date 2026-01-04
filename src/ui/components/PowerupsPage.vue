@@ -1,10 +1,10 @@
 <template>
-  <div class="popupshade" id="powerupsShade" @click="close"></div>
-  <div class="popup" id="powerupsMenu">
+  <div id="powerupsShade" class="popupshade" @click="close"></div>
+  <div id="powerupsMenu" class="popup">
     <h2>Powerups:</h2>
 
     <div id="powerupsOptions">
-      <div class="option" v-for="(p, i) in PowerUps" :key="i">
+      <div v-for="(p, i) in PowerUps" :key="i" class="option">
         <span class="label powerupLabel">{{ p.name }}</span>
         <select v-model.number="p.weight">
           <option :value="0">0%</option>
@@ -32,7 +32,7 @@
       <button class="right" @click="updateSetting('MaxPowerUps', 2)">+</button>
     </div>
 
-    <button class="option vspace" id="btnClose" @click="close">Close</button>
+    <button id="btnClose" class="option vspace" @click="close">Close</button>
   </div>
 </template>
 
@@ -49,8 +49,12 @@ function close() {
 function updateSetting(key: keyof typeof Settings, delta: number, min: number = 0, max?: number) {
   let val = Settings[key] as number;
   val += delta;
-  if (val < min) val = min;
-  if (max !== undefined && val > max) val = max;
+  if (val < min) {
+    val = min;
+  }
+  if (max !== undefined && val > max) {
+    val = max;
+  }
   (Settings as any)[key] = val;
   store.saveSettings();
 }

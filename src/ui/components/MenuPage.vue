@@ -1,11 +1,11 @@
 <template>
-  <div class="popupshade" id="menuShade" @click="closeMenu"></div>
+  <div id="menuShade" class="popupshade" @click="closeMenu"></div>
   <div class="popup">
     <h1>CTF Tanks</h1>
 
     <div class="option">
       <span class="left">Mode</span>
-      <select class="right" v-model="Settings.GameMode">
+      <select v-model="Settings.GameMode" class="right">
         <option value="CTF">CTF</option>
         <option value="DM">DM</option>
         <option value="TDM">TDM</option>
@@ -14,7 +14,7 @@
     </div>
     <div class="option">
       <span class="left">Bots</span>
-      <select class="right" v-model.number="Settings.BotSpeed">
+      <select v-model.number="Settings.BotSpeed" class="right">
         <option value="0.6">Lame</option>
         <option value="0.8">Ok</option>
         <option value="1">Decent</option>
@@ -23,9 +23,9 @@
         <option value="1.8">Insane</option>
       </select>
     </div>
-    <button class="option" id="btnMute" @click="toggleMute" style="width: 90px">Sound: {{ Settings.muted ? "off" : "on" }}</button>
-    <button class="option" id="btnPowerups" @click="openPage('powerups')">PowerUps</button>
-    <button class="option" id="btnSettings" @click="openPage('settings')">Settings</button>
+    <button id="btnMute" class="option" style="width: 90px" @click="toggleMute">Sound: {{ Settings.muted ? "off" : "on" }}</button>
+    <button id="btnPowerups" class="option" @click="openPage('powerups')">PowerUps</button>
+    <button id="btnSettings" class="option" @click="openPage('settings')">Settings</button>
 
     <div id="playersMenu">
       <div class="entry">
@@ -38,9 +38,9 @@
         <button class="keyEditButton notclickable">Fire</button>
         <span style="width: 50px; display: inline-block"></span>
       </div>
-      <div class="entry" v-for="(player, index) in store.players" :key="player.id">
-        <button class="team" @click="changeTeam(index)" :style="{ color: player.team.color }">&diams;</button>
-        <button class="name" @click="editName(index)" :style="{ color: player.team.color }">{{ player.name }}</button>
+      <div v-for="(player, index) in store.players" :key="player.id" class="entry">
+        <button class="team" :style="{ color: player.team.color }" @click="changeTeam(index)">&diams;</button>
+        <button class="name" :style="{ color: player.team.color }" @click="editName(index)">{{ player.name }}</button>
 
         <template v-if="player.isBot()">
           <button v-for="i in 5" :key="i" class="keyEditButton notclickable">-</button>
@@ -60,10 +60,10 @@
       </div>
     </div>
 
-    <button class="option vspace" id="btnAddPlayer" @click="addPlayer(false)">Add Player</button>
-    <button class="option vspace" id="btnAddBot" @click="addPlayer(true)">Add Bot</button>
-    <button class="option vspace" id="btnQuickTeams" @click="openPage('quickstart')">Quick Teams</button>
-    <button class="option vspace" id="btnStartGame" @click="startGame">Start Game!</button>
+    <button id="btnAddPlayer" class="option vspace" @click="addPlayer(false)">Add Player</button>
+    <button id="btnAddBot" class="option vspace" @click="addPlayer(true)">Add Bot</button>
+    <button id="btnQuickTeams" class="option vspace" @click="openPage('quickstart')">Quick Teams</button>
+    <button id="btnStartGame" class="option vspace" @click="startGame">Start Game!</button>
   </div>
 </template>
 
@@ -123,13 +123,17 @@ function editName(index: number) {
 }
 
 function getKeyLabel(code: string): string {
-  if (!code) return "";
+  if (!code) {
+    return "";
+  }
   const label = code
     .replace(/^Key/, "")
     .replace(/^Arrow/, "")
     .replace(/^Digit/, "")
     .replace(/^Numpad/, "Num");
-  if (label === "Space") return "Space";
+  if (label === "Space") {
+    return "Space";
+  }
   return label.toUpperCase();
 }
 
@@ -143,7 +147,9 @@ function startEditKeymap(mapID: number, keyID: number) {
 }
 
 function doEditKeymap(newKeyCode: string) {
-  if (editingMapID.value === null || editingKeyID.value === null) return;
+  if (editingMapID.value === null || editingKeyID.value === null) {
+    return;
+  }
   store.keymaps[editingMapID.value][editingKeyID.value] = newKeyCode;
   editingMapID.value = null;
   editingKeyID.value = null;
@@ -152,13 +158,17 @@ function doEditKeymap(newKeyCode: string) {
 const keydownHandler = (event: KeyboardEvent) => {
   if (editingMapID.value !== null) {
     event.preventDefault();
-    if (event.code.startsWith("Control")) return;
+    if (event.code.startsWith("Control")) {
+      return;
+    }
     doEditKeymap(event.code);
   }
 };
 
 onMounted(() => {
-  if (store.game) store.game.paused = true;
+  if (store.game) {
+    store.game.paused = true;
+  }
   window.addEventListener("keydown", keydownHandler);
 });
 

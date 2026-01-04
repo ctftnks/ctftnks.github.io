@@ -1,6 +1,6 @@
 <template>
-  <div class="popupshade" id="settingsShade" @click="closeSettings"></div>
-  <div class="popup" id="settingsMenu">
+  <div id="settingsShade" class="popupshade" @click="closeSettings"></div>
+  <div id="settingsMenu" class="popup">
     <h2>Settings</h2>
 
     <div id="settingsTable">
@@ -56,7 +56,7 @@
         <br />
         <div class="option">
           <span class="left">Show tank labels</span>
-          <select class="right" v-model="Settings.ShowTankLabels" @change="save">
+          <select v-model="Settings.ShowTankLabels" class="right" @change="save">
             <option :value="true">on</option>
             <option :value="false">off</option>
           </select>
@@ -80,7 +80,7 @@
         <br />
         <div class="option">
           <span class="left">Reset score each round</span>
-          <select class="right" v-model="Settings.ResetStatsEachGame" @change="save">
+          <select v-model="Settings.ResetStatsEachGame" class="right" @change="save">
             <option :value="true">on</option>
             <option :value="false">off</option>
           </select>
@@ -88,7 +88,7 @@
         <br />
         <div class="option">
           <span class="left">Adaptive bot speed</span>
-          <select class="right" v-model="Settings.AdaptiveBotSpeed" @change="save">
+          <select v-model="Settings.AdaptiveBotSpeed" class="right" @change="save">
             <option :value="false">off</option>
             <option :value="true">on</option>
           </select>
@@ -96,7 +96,7 @@
         <br />
         <div class="option">
           <span class="left">Bots shoot bots</span>
-          <select class="right" v-model="Settings.BotsShootBots" @change="save">
+          <select v-model="Settings.BotsShootBots" class="right" @change="save">
             <option :value="true">on</option>
             <option :value="false">off</option>
           </select>
@@ -104,7 +104,7 @@
         <br />
         <div class="option">
           <span class="left">Bullet Collisions</span>
-          <select class="right" v-model="Settings.BulletsCanCollide" @change="save">
+          <select v-model="Settings.BulletsCanCollide" class="right" @change="save">
             <option :value="true">on</option>
             <option :value="false">off</option>
           </select>
@@ -112,7 +112,7 @@
         <br />
         <div class="option">
           <span class="left">Friendly Fire</span>
-          <select class="right" v-model="Settings.FriendlyFire" @change="save">
+          <select v-model="Settings.FriendlyFire" class="right" @change="save">
             <option :value="true">on</option>
             <option :value="false">off</option>
           </select>
@@ -120,7 +120,7 @@
         <br />
         <div class="option">
           <span class="left">Sound</span>
-          <select class="right" v-model="Settings.muted" @change="save">
+          <select v-model="Settings.muted" class="right" @change="save">
             <option :value="false">on</option>
             <option :value="true">off</option>
           </select>
@@ -129,7 +129,7 @@
       </div>
     </div>
     <div style="text-align: center; clear: both; padding-top: 20px">
-      <button class="option" @click="resetToDefaults" id="btnResetSettings">Reset to Defaults</button>
+      <button id="btnResetSettings" class="option" @click="resetToDefaults">Reset to Defaults</button>
     </div>
   </div>
 </template>
@@ -155,7 +155,9 @@ function resetToDefaults() {
 function updateSetting(key: keyof typeof Settings, delta: number, min: number = 0) {
   let val = Settings[key] as number;
   val += delta;
-  if (val < min) val = min;
+  if (val < min) {
+    val = min;
+  }
   (Settings as any)[key] = val;
   save();
 }

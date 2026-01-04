@@ -1,5 +1,5 @@
 <template>
-  <div class="popupshade" id="leaderboardshade" @click="forceNewGame"></div>
+  <div id="leaderboardshade" class="popupshade" @click="forceNewGame"></div>
   <div class="popup">
     <h2>Leaderboard:&nbsp;&nbsp;Game #{{ store.GameID }}</h2>
     <span id="leaderboardCounter">{{ timeLeft }}s</span>
@@ -62,8 +62,12 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  if (timerInt) clearInterval(timerInt);
-  if (timeoutInt) clearTimeout(timeoutInt);
+  if (timerInt) {
+    clearInterval(timerInt);
+  }
+  if (timeoutInt) {
+    clearTimeout(timeoutInt);
+  }
 });
 </script>
 

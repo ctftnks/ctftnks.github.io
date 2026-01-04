@@ -1,6 +1,6 @@
 <template>
-  <div class="popupshade" id="quickstartShade" @click="close"></div>
-  <div class="popup" id="quickstartMenu">
+  <div id="quickstartShade" class="popupshade" @click="close"></div>
+  <div id="quickstartMenu" class="popup">
     <h2>Quick Games:</h2>
 
     <button class="option vspace" @click="quickPvP(2, 2)">2P vs 2P</button><br />
