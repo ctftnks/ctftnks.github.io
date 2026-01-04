@@ -1,6 +1,6 @@
 import GameMap from "./gamemap";
 import MapGenerator from "./mapGenerator";
-import { getRandomPowerUp } from "@/entities/powerup";
+import { getRandomPowerUp } from "@/entities/powerups";
 import { playSound, stopMusic, clearEffects } from "./effects";
 import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";

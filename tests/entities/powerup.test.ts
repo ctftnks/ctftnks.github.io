@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { getRandomPowerUp, PowerUps } from "@/entities/powerup";
+import { getRandomPowerUp, PowerUps } from "@/entities/powerups";
 import { Settings } from "@/stores/settings";
 
 // Mock dependencies

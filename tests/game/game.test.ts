@@ -7,7 +7,7 @@ import { Settings } from "@/stores/settings";
 import Canvas from "@/game/canvas";
 import { TEAMS } from "@/game/team";
 import Tank from "@/entities/tank";
-import { PowerUp } from "@/entities/powerup";
+import { PowerUp } from "@/entities/powerups";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({

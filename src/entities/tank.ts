@@ -6,7 +6,7 @@ import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import type Player from "@/game/player";
 import type Tile from "@/game/tile";
-import { PowerUp } from "./powerup";
+import { PowerUp } from "./powerups";
 import Bullet from "./bullet";
 import type { Flag } from "./ctf";
 import type Game from "@/game/game";

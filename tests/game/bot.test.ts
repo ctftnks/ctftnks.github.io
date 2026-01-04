@@ -9,7 +9,7 @@ vi.mock("@/game/effects", () => ({
 }));
 
 vi.mock("@/entities/tank");
-vi.mock("@/entities/weapons/weapons");
+vi.mock("@/entities/weapons");
 vi.mock("@/game/autopilot");
 
 describe("Bot Class", () => {

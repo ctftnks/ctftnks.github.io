@@ -1,6 +1,6 @@
 import { Settings } from "@/stores/settings";
 import Tile from "./tile";
-import { PowerUp } from "@/entities/powerup";
+import { PowerUp } from "@/entities/powerups";
 import Tank from "@/entities/tank";
 import { Base, Flag, Hill } from "@/entities/ctf";
 import Coord from "@/entities/coord";
