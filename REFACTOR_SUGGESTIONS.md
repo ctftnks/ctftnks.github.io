@@ -13,16 +13,10 @@ The codebase is a TypeScript-based game engine utilizing HTML5 Canvas for render
 
 - **Global Singleton Pattern:** The `store` singleton (`src/game/store.ts`) is heavily used across classes like `Player`, `Game`, and `Canvas`. This leads to state leakage between tests and makes dependency tracking difficult.
 - **Circular Dependencies:** Modules like `Game`, `Player`, and `Tank` are structurally coupled, often leading to circular import patterns.
-- **Mixed Concerns:** UI management (DOM) and game logic (Canvas/Simulation) are often interleaved.
-
-## 2. Performance & Algorithmic Hotspots
-
-- **Frequent innerHTML/String Concatenation:** UI updates (e.g., `updateScores()`) rebuild HTML via string concatenation in loops, causing layout thrashing.
 
 ## 3. Code Quality & Standards
 
 - **Inconsistent Time Units:** `GameFrequency` and `FrameFrequency` are used inconsistently. The engine should normalize on seconds (floating point) for all internal calculations (`dt`).
-- **Type Safety:** Residual usage of `any` exists (e.g., in `store.loadSettings()` and UI components) to bypass type checks or handle legacy data.
 
 ## 4. Correctness & Robustness
 
@@ -49,9 +43,3 @@ The codebase is a TypeScript-based game engine utilizing HTML5 Canvas for render
 **Dependency Injection:**
 
 - Pass dependencies (Game, Map, Store) via constructors instead of importing global singletons.
-
-### Phase 3: Optimization & Polish (Low Priority)
-
-**Finalize Type Coverage:**
-
-- Eliminate remaining `any` types and strictly enforce JSDoc for public APIs.
