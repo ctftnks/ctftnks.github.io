@@ -1,11 +1,14 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import Game from "@/game/game";
+import Game, { newGame } from "@/game/game";
 import GameMap from "@/game/gamemap";
 import Player from "@/game/player";
 import { store } from "@/game/store";
 import { Settings } from "@/game/settings";
 import Canvas from "@/game/canvas";
 import { TEAMS } from "@/game/team";
+import Tank from "@/entities/tank";
+import { PowerUp } from "@/entities/powerup";
+import { gameEvents, EVENTS } from "@/game/events";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -40,6 +43,8 @@ describe("Game Class", () => {
   beforeEach(() => {
     // Reset store
     store.GameID = 0;
+    store.players = [];
+    store.canvas = undefined;
 
     // Mock Canvas
     mockCanvas = {
@@ -48,13 +53,17 @@ describe("Game Class", () => {
       rescale: vi.fn(),
       sync: vi.fn(),
       shake: vi.fn(),
+      resize: vi.fn(),
     } as unknown as Canvas;
+
+    store.canvas = mockCanvas;
 
     // Use a fixed map size for predictability
     Settings.MapNxMin = 10;
     Settings.MapNxMax = 10;
     Settings.GameFrequency = 10;
     Settings.PowerUpRate = 1000; // High value to avoid random powerups in basic tests
+    Settings.RoundTime = 5;
 
     // Mock window timers
     vi.useFakeTimers();
@@ -75,7 +84,12 @@ describe("Game Class", () => {
     expect(game.players).toEqual([]);
     expect(game.objs).toEqual([]);
     expect(game.paused).toBe(false);
-    // expect(store.GameID).toBeGreaterThan(0);
+  });
+
+  it("should initialize with provided map", () => {
+    const customMap = new GameMap(mockCanvas);
+    const customGame = new Game(mockCanvas, customMap);
+    expect(customGame.map).toBe(customMap);
   });
 
   it("should add players", () => {
@@ -151,6 +165,29 @@ describe("Game Class", () => {
     expect(game.objs).not.toContain(mockObj);
   });
 
+  it("should generate powerups in step", () => {
+    Settings.PowerUpRate = 0.01; // Every 10ms
+    game.t = 0;
+    
+    game.step();
+    
+    const powerups = game.objs.filter(o => o instanceof PowerUp);
+    expect(powerups.length).toBeGreaterThan(0);
+  });
+
+  it("should emit time updated event in step", () => {
+    const emitSpy = vi.spyOn(gameEvents, "emit");
+    game.t = 990;
+    Settings.RoundTime = 5;
+    Settings.GameFrequency = 10;
+    
+    // game.step increments t by GameFrequency (10)
+    // t becomes 1000, 1000 % 1000 = 0 < 10 -> should trigger
+    game.step();
+    
+    expect(emitSpy).toHaveBeenCalledWith(EVENTS.TIME_UPDATED, expect.any(Number));
+  });
+
   it("should end game when time is up", () => {
     game.start();
     const endSpy = vi.spyOn(game, "end");
@@ -161,4 +198,58 @@ describe("Game Class", () => {
 
     expect(endSpy).toHaveBeenCalled();
   });
+
+  it("should return tanks with getTanks", () => {
+    const player = new Player(0, "P1", TEAMS[0], []);
+    const tank = new Tank(player, game);
+    game.addObject(tank);
+    game.addObject({} as any); // Some other object
+    
+    const tanks = game.getTanks();
+    expect(tanks).toContain(tank);
+    expect(tanks.length).toBe(1);
+  });
+
+  it("should reset tank timers with resetTime", () => {
+    const player = new Player(0, "P1", TEAMS[0], []);
+    const tank = new Tank(player, game);
+    game.addObject(tank);
+    tank.timers.invincible = 1000;
+    tank.timers.spawnshield = 1000;
+    
+    game.resetTime();
+    
+    expect(game.t).toBe(0);
+    expect(tank.timers.invincible).toBe(0);
+    expect(tank.timers.spawnshield).toBe(0);
+  });
+
+  describe("newGame function", () => {
+    it("should create and start a new game", () => {
+      const player = new Player(0, "P1", TEAMS[0], []);
+      store.players = [player];
+      Settings.GameMode = "DM";
+      Settings.ResetStatsEachGame = true;
+      
+      const statsSpy = vi.spyOn(player, "resetStats");
+      
+      const g = newGame();
+      
+      expect(g).toBeInstanceOf(Game);
+      expect(store.game).toBe(g);
+      expect(g.players).toContain(player);
+      expect(statsSpy).toHaveBeenCalled();
+    });
+
+    it("should stop previous game if it exists", () => {
+      const oldGame = new Game(mockCanvas);
+      store.game = oldGame;
+      const stopSpy = vi.spyOn(oldGame, "stop");
+      
+      newGame();
+      
+      expect(stopSpy).toHaveBeenCalled();
+    });
+  });
 });
+
