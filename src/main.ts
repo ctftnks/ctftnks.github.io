@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import Canvas from "@/game/canvas";
-import { store } from "@/stores/game";
+import { store } from "@/stores/gamestore";
 import { newGame } from "@/game/game";
 import { openPage } from "@/stores/ui";
 

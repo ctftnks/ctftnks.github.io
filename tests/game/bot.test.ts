@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import Bot from "@/game/bot";
-import { store } from "@/stores/game";
+import { store } from "@/stores/gamestore";
 import { TEAMS } from "@/game/team";
 
 // Mock dependencies

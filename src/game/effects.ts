@@ -1,4 +1,4 @@
-import { store } from "@/stores/game";
+import { store } from "@/stores/gamestore";
 import { Settings } from "@/stores/settings";
 import Game from "./game";
 

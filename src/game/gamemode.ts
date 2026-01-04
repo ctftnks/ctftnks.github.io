@@ -7,7 +7,7 @@ import Tile from "./tile";
 import { gameEvents, EVENTS } from "@/game/events";
 import type Team from "./team";
 import { Settings } from "@/stores/settings";
-import { store } from "@/stores/game";
+import { store } from "@/stores/gamestore";
 
 /**
  * Base class for game modes.

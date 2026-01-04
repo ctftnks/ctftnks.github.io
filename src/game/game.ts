@@ -3,7 +3,7 @@ import GameMap from "./gamemap";
 import MapGenerator from "./mapGenerator";
 import { getRandomPowerUp } from "@/entities/powerup";
 import { playSound, stopMusic, clearEffects } from "./effects";
-import { store } from "@/stores/game";
+import { store } from "@/stores/gamestore";
 import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import Canvas from "./canvas";

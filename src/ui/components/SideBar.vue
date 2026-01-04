@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import { store } from "@/stores/game";
+import { store } from "@/stores/gamestore";
 import { gameEvents, EVENTS } from "@/game/events";
 import { openPage } from "@/stores/ui";
 import { newGame } from "@/game/game";

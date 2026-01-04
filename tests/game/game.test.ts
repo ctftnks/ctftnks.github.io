@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import Game, { newGame } from "@/game/game";
 import GameMap from "@/game/gamemap";
 import Player from "@/game/player";
-import { store } from "@/stores/game";
+import { store } from "@/stores/gamestore";
 import { Settings } from "@/stores/settings";
 import Canvas from "@/game/canvas";
 import { TEAMS } from "@/game/team";

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { TEAMS } from "@/game/team";
-import { store } from "@/stores/game";
+import { store } from "@/stores/gamestore";
 import { Key } from "@/game/key";
 import { Settings } from "@/stores/settings";
 import Player from "@/game/player";

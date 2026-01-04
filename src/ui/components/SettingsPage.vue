@@ -133,7 +133,7 @@
 
 <script setup lang="ts">
 import { Settings } from "@/stores/settings";
-import { store } from "@/stores/game";
+import { store } from "@/stores/gamestore";
 import { openPage } from "@/stores/ui";
 
 function closeSettings() {
