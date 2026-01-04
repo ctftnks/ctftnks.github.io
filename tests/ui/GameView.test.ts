@@ -30,6 +30,7 @@ vi.mock("@/stores/gamestore", () => ({
     game: undefined,
     players: [],
     createPlayer: vi.fn().mockReturnValue({ team: { color: "red" } }),
+    initDefaultPlayers: vi.fn(),
   },
 }));
 
@@ -55,7 +56,7 @@ describe("GameView.vue", () => {
     expect(Canvas).toHaveBeenCalled();
     expect(store.canvas).toBeDefined();
     // Verify players are created if empty
-    expect(store.createPlayer).toHaveBeenCalledTimes(4);
+    expect(store.initDefaultPlayers).toHaveBeenCalled();
   });
 
   it("cleans up on unmount", () => {

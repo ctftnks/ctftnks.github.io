@@ -20,12 +20,8 @@ onMounted(() => {
     // Initialize Canvas with the elements directly
     store.canvas = new Canvas(canvasRef.value, effectsRef.value);
 
-    // Setup initial players if empty (bootstrap logic moved from main.ts)
-    if (store.players.length === 0) {
-      store.players = [store.createPlayer(false), store.createPlayer(true), store.createPlayer(true), store.createPlayer(true)];
-      store.players[1].team = store.players[0].team;
-      store.players[3].team = store.players[2].team;
-    }
+    // Setup initial players if empty
+    store.initDefaultPlayers();
 
     // Start Game
     const game = newGame();

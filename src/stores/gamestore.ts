@@ -58,6 +58,18 @@ class GameStore {
   }
 
   /**
+   * Initializes default players if none exist.
+   */
+  initDefaultPlayers(): void {
+    if (this.players.length > 0) {
+      return;
+    }
+    this.players = [this.createPlayer(false), this.createPlayer(true), this.createPlayer(true), this.createPlayer(true)];
+    this.players[1].team = this.players[0].team;
+    this.players[3].team = this.players[2].team;
+  }
+
+  /**
    * Saves current settings to localStorage.
    */
   saveSettings(): void {

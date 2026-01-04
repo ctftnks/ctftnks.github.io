@@ -79,4 +79,17 @@ describe("Game Store", () => {
     expect(b1.name).toBe("Bot 3");
     expect(b1.isBot()).toBe(true);
   });
+
+  it("should initialize default players", () => {
+    store.players = [];
+    store.nplayers = 0;
+
+    store.initDefaultPlayers();
+
+    expect(store.players.length).toBe(4);
+    expect(store.players[0].isBot()).toBe(false);
+    expect(store.players[1].isBot()).toBe(true);
+    expect(store.players[1].team).toBe(store.players[0].team);
+    expect(store.players[3].team).toBe(store.players[2].team);
+  });
 });
