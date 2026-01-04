@@ -1,5 +1,8 @@
 # CTF-TNKS: Capture-the-flag Tank game
 
+[![CI](https://github.com/ctftnks/ctftnks.github.io/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ctftnks/ctftnks.github.io/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/github/ctftnks/ctftnks.github.io/graph/badge.svg?token=6HZPJ7I9C1)](https://codecov.io/github/ctftnks/ctftnks.github.io)
+
 CTF-TNKS is a fast-paced, tank battle browser game featuring multiple game modes, including Capture the Flag, Deathmatch, and King of the Hill. It is built with modern vanilla web technologies.
 
 Play the game now at: [ctftnks.github.io](https://ctftnks.github.io)
