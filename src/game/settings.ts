@@ -21,7 +21,7 @@ const DEFAULT_SETTINGS = {
   ShowTankLabels: true,
   MapNxMin: 9,
   MapNxMax: 15,
-  GameFrequency: 10,
+  GameFrequency: 20,
   TankWidth: 34,
   TankHeight: 50,
 };
