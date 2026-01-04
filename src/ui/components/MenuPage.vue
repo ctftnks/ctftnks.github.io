@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, toRaw } from "vue";
 import { store } from "@/stores/gamestore";
 import { Settings } from "@/stores/settings";
 import { openPage } from "@/stores/ui";
@@ -111,7 +111,7 @@ function removePlayer(id: number): void {
 
 function changeTeam(index: number): void {
   const player = store.players[index];
-  const currentIndex = TEAMS.indexOf(player.team);
+  const currentIndex = TEAMS.indexOf(toRaw(player.team));
   player.team = TEAMS[(currentIndex + 1) % TEAMS.length];
 }
 
