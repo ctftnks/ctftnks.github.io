@@ -36,7 +36,7 @@ const sortedPlayers = computed(() => {
   return [...store.players].sort((a, b) => b.score - a.score);
 });
 
-function updateTimer(t: number) {
+function updateTimer(t: number): void {
   const delta = Math.max(0, Settings.RoundTime * 60 - t / 1000);
   const minutes = Math.floor(delta / 60);
   const seconds = Math.floor(delta - minutes * 60);
@@ -45,17 +45,17 @@ function updateTimer(t: number) {
 
 const botSpeed = computed(() => Settings.BotSpeed);
 
-function openMenu() {
+function openMenu(): void {
   openPage("menu");
 }
 
-function resetTime() {
+function resetTime(): void {
   if (store.game) {
     store.game.resetTime();
   }
 }
 
-function nextMap() {
+function nextMap(): void {
   store.startNewGame();
 }
 

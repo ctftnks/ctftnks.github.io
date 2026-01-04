@@ -44,13 +44,13 @@ onUnmounted(() => {
   window.removeEventListener("keydown", handleKeydown);
 });
 
-function handleResize() {
+function handleResize(): void {
   if (store.game) {
     store.game.resize();
   }
 }
 
-function handleKeydown(e: KeyboardEvent) {
+function handleKeydown(e: KeyboardEvent): void {
   if (e.key === "Escape" && store.game && !store.game.paused) {
     store.game.pause();
     openPage("menu");

@@ -51,11 +51,18 @@ export abstract class PowerUp extends GameObject {
  * @augments PowerUp
  */
 class LaserBonus extends PowerUp {
+  /**
+   * Creates a new LaserBonus.
+   */
   constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.laser;
   }
+  /**
+   * Applies the laser weapon to the tank.
+   * @param tank - The tank.
+   */
   apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new Laser(tank);
@@ -67,11 +74,18 @@ class LaserBonus extends PowerUp {
  * @augments PowerUp
  */
 class MGBonus extends PowerUp {
+  /**
+   * Creates a new MGBonus.
+   */
   constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.mg;
   }
+  /**
+   * Applies the MG weapon to the tank.
+   * @param tank - The tank.
+   */
   apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new MG(tank);
@@ -83,10 +97,17 @@ class MGBonus extends PowerUp {
  * @augments PowerUp
  */
 class GrenadeBonus extends PowerUp {
+  /**
+   * Creates a new GrenadeBonus.
+   */
   constructor() {
     super();
     this.image.src = IMAGES.grenade;
   }
+  /**
+   * Applies the grenade weapon to the tank.
+   * @param tank - The tank.
+   */
   apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new Grenade(tank);
@@ -98,10 +119,17 @@ class GrenadeBonus extends PowerUp {
  * @augments PowerUp
  */
 class MineBonus extends PowerUp {
+  /**
+   * Creates a new MineBonus.
+   */
   constructor() {
     super();
     this.image.src = IMAGES.mine;
   }
+  /**
+   * Applies the mine weapon to the tank.
+   * @param tank - The tank.
+   */
   apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new Mine(tank);
@@ -113,11 +141,18 @@ class MineBonus extends PowerUp {
  * @augments PowerUp
  */
 class GuidedBonus extends PowerUp {
+  /**
+   * Creates a new GuidedBonus.
+   */
   constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.guided;
   }
+  /**
+   * Applies the guided weapon to the tank.
+   * @param tank - The tank.
+   */
   apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new Guided(tank);
@@ -129,10 +164,17 @@ class GuidedBonus extends PowerUp {
  * @augments PowerUp
  */
 class WreckingBallBonus extends PowerUp {
+  /**
+   * Creates a new WreckingBallBonus.
+   */
   constructor() {
     super();
     this.image.src = IMAGES.wreckingBall;
   }
+  /**
+   * Applies the wrecking ball weapon to the tank.
+   * @param tank - The tank.
+   */
   apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new WreckingBall(tank);
@@ -144,11 +186,18 @@ class WreckingBallBonus extends PowerUp {
  * @augments PowerUp
  */
 class SlingshotBonus extends PowerUp {
+  /**
+   * Creates a new SlingshotBonus.
+   */
   constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.slingshot;
   }
+  /**
+   * Applies the slingshot weapon to the tank.
+   * @param tank - The tank.
+   */
   apply(tank: Tank): void {
     playSound(SOUNDS.reload);
     tank.weapon = new Slingshot(tank);
@@ -160,12 +209,19 @@ class SlingshotBonus extends PowerUp {
  * @augments PowerUp
  */
 class SpeedBonus extends PowerUp {
+  /**
+   * Creates a new SpeedBonus.
+   */
   constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.speed;
   }
 
+  /**
+   * Applies the speed boost to the tank.
+   * @param tank - The tank.
+   */
   apply(tank: Tank): void {
     tank.speed *= 1.25;
     tank.player.game!.timeouts.push(
@@ -183,12 +239,19 @@ class SpeedBonus extends PowerUp {
 class InvincibleBonus extends PowerUp {
   private applied: boolean = false;
 
+  /**
+   * Creates a new InvincibleBonus.
+   */
   constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.invincible;
   }
 
+  /**
+   * Applies the invincibility to the tank.
+   * @param tank - The tank.
+   */
   apply(tank: Tank): void {
     if (this.applied) {
       return;
@@ -220,11 +283,18 @@ class InvincibleBonus extends PowerUp {
 class TerminatorBonus extends PowerUp {
   private applied: boolean = false;
 
+  /**
+   * Creates a new TerminatorBonus.
+   */
   constructor() {
     super();
     this.attractsBots = true;
     this.image.src = IMAGES.terminator;
   }
+  /**
+   * Applies the terminator effect to the tank.
+   * @param tank - The tank.
+   */
   apply(tank: Tank): void {
     if (this.applied) {
       return;
@@ -247,11 +317,17 @@ class TerminatorBonus extends PowerUp {
 class MultiBonus extends PowerUp {
   private used: boolean = false;
 
+  /**
+   * Creates a new MultiBonus.
+   */
   constructor() {
     super();
     this.image.src = IMAGES.multi;
   }
 
+  /**
+   * Applies the multiplier effect.
+   */
   apply(): void {
     if (!this.used) {
       this.used = true;
@@ -272,10 +348,17 @@ class MultiBonus extends PowerUp {
  */
 export class FogBonus extends PowerUp {
   private used: boolean = false;
+  /**
+   * Creates a new FogBonus.
+   */
   constructor() {
     super();
     this.image.src = IMAGES.fog;
   }
+  /**
+   * Applies the fog of war effect.
+   * @param tank - The tank.
+   */
   apply(tank: Tank): void {
     if (!this.used) {
       const game = tank.player.game!;

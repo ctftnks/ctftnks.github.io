@@ -129,6 +129,11 @@ export class Gun extends Weapon {
     this.bot.fleeingDuration = 0;
   }
 
+  /**
+   * Creates a new bullet for the gun.
+   * @returns The created bullet.
+   * @override
+   */
   override newBullet(): Bullet {
     const bullet = super.newBullet();
     // bullet explosion leads to weapon reactivation
@@ -169,6 +174,7 @@ export class MG extends Weapon {
 
   /**
    * Fires a burst of bullets.
+   * @returns The created bullet.
    * @override
    */
   override newBullet(): Bullet {
@@ -237,6 +243,10 @@ export class Laser extends Weapon {
     this.bot.fleeingDuration = 0;
   }
 
+  /**
+   * Fires the laser.
+   * @override
+   */
   override shoot(): void {
     if (!this.isActive) {
       return;
@@ -258,12 +268,16 @@ export class Laser extends Weapon {
       bullet.color = this.tank.player.team.color;
       bullet.bounceSound = "";
       bullet.age = 0;
-      bullet.checkCollision = function () {};
+      bullet.checkCollision = () => {};
       this.tank.player.game!.addObject(bullet);
     }
     this.deactivate();
   }
 
+  /**
+   * Updates crosshair position.
+   * @override
+   */
   override crosshair(): void {
     this.trajectory.x = this.tank.x;
     this.trajectory.y = this.tank.y;
@@ -272,6 +286,10 @@ export class Laser extends Weapon {
     this.trajectory.length = this.isActive ? 620 : 0;
   }
 
+  /**
+   * Deletes the weapon and its trajectory.
+   * @override
+   */
   override delete(): void {
     this.isDeleted = true;
     this.trajectory.delete();
@@ -299,6 +317,11 @@ export class Grenade extends Weapon {
     this.bot.fleeIfActive = false;
   }
 
+  /**
+   * Creates a new grenade bullet.
+   * @returns The created bullet.
+   * @override
+   */
   override newBullet(): Bullet {
     const e = super.newBullet();
     e.image = new Image();
@@ -308,6 +331,9 @@ export class Grenade extends Weapon {
     e.timeout = 10000;
     e.exploded = false;
 
+    /**
+     * Explosion logic for grenade.
+     */
     e.explode = () => {
       if (!e.exploded) {
         e.exploded = true;
@@ -322,7 +348,7 @@ export class Grenade extends Weapon {
           shrapnel.angle = 2 * Math.PI * Math.random();
           shrapnel.timeout = (360 * 280) / Settings.BulletSpeed;
           shrapnel.extrahitbox = -3;
-          shrapnel.checkCollision = function () {};
+          shrapnel.checkCollision = () => {};
           this.tank.player.game!.addObject(shrapnel);
         }
         this.bullet = null;
@@ -333,6 +359,10 @@ export class Grenade extends Weapon {
     return e;
   }
 
+  /**
+   * Fires or detonates the grenade.
+   * @override
+   */
   override shoot(): void {
     if (!this.isActive) {
       return;
@@ -370,6 +400,11 @@ export class Mine extends Weapon {
     this.image.src = IMAGES.mine;
   }
 
+  /**
+   * Creates a new mine bullet.
+   * @returns The created bullet.
+   * @override
+   */
   override newBullet(): Bullet {
     const e = super.newBullet();
     e.image = new Image();
@@ -379,6 +414,9 @@ export class Mine extends Weapon {
     e.color = "#000";
     e.timeout = 120000 + 20 * Math.random();
 
+    /**
+     * Explosion logic for mine.
+     */
     e.explode = () => {
       if (!e.exploded) {
         e.exploded = true;
@@ -427,6 +465,11 @@ export class Guided extends Weapon {
     this.bot.fleeingDuration = 3000;
   }
 
+  /**
+   * Creates a new guided missile bullet.
+   * @returns The created bullet.
+   * @override
+   */
   override newBullet(): Bullet {
     const e = super.newBullet();
     e.radius = 6;
@@ -438,7 +481,10 @@ export class Guided extends Weapon {
     let gotoTarget: { x: number; y: number; dx: number; dy: number } | null = null;
     e.extrahitbox = 10;
 
-    e.step = function () {
+    /**
+     * Guided bullet logic.
+     */
+    e.step = function (): void {
       e.age += Settings.GameFrequency;
       if (e.age > e.timeout) {
         e.delete();
@@ -472,6 +518,11 @@ export class Guided extends Weapon {
         playSound(SOUNDS.guided);
         // get current tile and path
         const tile = e.map.getTileByPos(oldx, oldy)!;
+        /**
+         * Pathfinding logic for guided missile.
+         * @param destination - The destination tile.
+         * @returns Whether the tile contains an enemy tank.
+         */
         const path = tile.pathTo((destination) => {
           for (let i = 0; i < destination.objs.length; i++) {
             const obj = destination.objs[i];
@@ -500,7 +551,10 @@ export class Guided extends Weapon {
           }
         }
       }
-      e.leaveTrace = function () {
+      /**
+       * Leaves a smoke trace.
+       */
+      e.leaveTrace = function (): void {
         if (Math.random() > 0.8) {
           const smoke = new Smoke(this.x, this.y, 400, this.radius / 1.4, 0.6);
           smoke.color = e.smokeColor!;
@@ -531,13 +585,23 @@ export class WreckingBall extends Weapon {
     this.bot.fleeingDuration = 0;
   }
 
+  /**
+   * Creates a new wrecking ball bullet.
+   * @returns The created bullet.
+   * @override
+   */
   override newBullet(): Bullet {
     const bullet = super.newBullet();
     bullet.radius = 10;
     bullet.color = "#000";
     bullet.speed = Settings.TankSpeed * 1.1;
     bullet.timeout = 1000;
-    bullet.checkCollision = function (x: number, y: number) {
+    /**
+     * Custom collision logic for wrecking ball.
+     * @param x - Old x position.
+     * @param y - Old y position.
+     */
+    bullet.checkCollision = function (x: number, y: number): void {
       const tile = bullet.map.getTileByPos(x, y);
       if (tile === null) {
         return;
@@ -570,7 +634,10 @@ export class WreckingBall extends Weapon {
     };
 
     bullet.trace = true;
-    bullet.leaveTrace = function () {
+    /**
+     * Leaves a smoke trace.
+     */
+    bullet.leaveTrace = function (): void {
       if (Math.random() > 0.96) {
         const smoke = new Smoke(this.x, this.y, 800, bullet.radius, 0.6);
         smoke.color = "rgba(0,0,0,0.3)";
@@ -606,15 +673,26 @@ export class Slingshot extends Weapon {
     this.bot.fleeingDuration = 0;
   }
 
+  /**
+   * Creates a new slingshot bullet.
+   * @returns The created bullet.
+   * @override
+   */
   override newBullet(): Bullet {
     const bullet = super.newBullet();
     bullet.radius = 6;
     bullet.color = "#333";
     bullet.speed = 2 * Settings.BulletSpeed;
     bullet.timeout = 2000;
-    bullet.checkCollision = function () {};
+    /**
+     * Custom collision check for slingshot bullet.
+     */
+    bullet.checkCollision = function (): void {};
     bullet.trace = true;
-    bullet.leaveTrace = function () {
+    /**
+     * Leaves a smoke trace.
+     */
+    bullet.leaveTrace = function (): void {
       if (Math.random() > 0.96) {
         bullet.speed *= 0.92;
         const smoke = new Smoke(this.x, this.y, 800, bullet.radius, 0.6);

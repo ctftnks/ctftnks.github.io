@@ -42,11 +42,11 @@ import { PowerUps } from "@/entities/powerup";
 import { store } from "@/stores/gamestore";
 import { openPage } from "@/stores/ui";
 
-function close() {
+function close(): void {
   openPage("menu");
 }
 
-function updateSetting(key: keyof typeof Settings, delta: number, min: number = 0, max?: number) {
+function updateSetting(key: keyof typeof Settings, delta: number, min: number = 0, max?: number): void {
   let val = Settings[key] as number;
   val += delta;
   if (val < min) {
@@ -55,6 +55,7 @@ function updateSetting(key: keyof typeof Settings, delta: number, min: number = 
   if (max !== undefined && val > max) {
     val = max;
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (Settings as any)[key] = val;
   store.saveSettings();
 }

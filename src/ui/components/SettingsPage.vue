@@ -139,25 +139,26 @@ import { Settings, DEFAULT_SETTINGS } from "@/stores/settings";
 import { store } from "@/stores/gamestore";
 import { openPage } from "@/stores/ui";
 
-function closeSettings() {
+function closeSettings(): void {
   openPage("menu");
 }
 
-function save() {
+function save(): void {
   store.saveSettings();
 }
 
-function resetToDefaults() {
+function resetToDefaults(): void {
   Object.assign(Settings, DEFAULT_SETTINGS);
   save();
 }
 
-function updateSetting(key: keyof typeof Settings, delta: number, min: number = 0) {
+function updateSetting(key: keyof typeof Settings, delta: number, min: number = 0): void {
   let val = Settings[key] as number;
   val += delta;
   if (val < min) {
     val = min;
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (Settings as any)[key] = val;
   save();
 }

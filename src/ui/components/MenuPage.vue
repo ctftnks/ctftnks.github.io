@@ -77,7 +77,7 @@ import { TEAMS } from "@/game/team";
 const editingMapID = ref<number | null>(null);
 const editingKeyID = ref<number | null>(null);
 
-function closeMenu() {
+function closeMenu(): void {
   if (!store.game) {
     store.startNewGame();
   } else {
@@ -87,35 +87,35 @@ function closeMenu() {
   window.dispatchEvent(new Event("resize"));
 }
 
-function startGame() {
+function startGame(): void {
   store.startNewGame();
   openPage("game");
   window.dispatchEvent(new Event("resize"));
 }
 
-function toggleMute() {
+function toggleMute(): void {
   Settings.muted = !Settings.muted;
   store.saveSettings();
 }
 
-function addPlayer(bot: boolean) {
+function addPlayer(bot: boolean): void {
   if (store.players.length >= store.keymaps.length) {
     store.keymaps.push(store.keymaps[0].slice());
   }
   store.players.push(store.createPlayer(bot));
 }
 
-function removePlayer(id: number) {
+function removePlayer(id: number): void {
   store.players = store.players.filter((p) => p.id !== id);
 }
 
-function changeTeam(index: number) {
+function changeTeam(index: number): void {
   const player = store.players[index];
   const currentIndex = TEAMS.indexOf(player.team);
   player.team = TEAMS[(currentIndex + 1) % TEAMS.length];
 }
 
-function editName(index: number) {
+function editName(index: number): void {
   const name = prompt("Namen eingeben:", store.players[index].name);
   if (name != null) {
     store.players[index].name = name;
@@ -137,16 +137,16 @@ function getKeyLabel(code: string): string {
   return label.toUpperCase();
 }
 
-function isEditing(mapID: number, keyID: number) {
+function isEditing(mapID: number, keyID: number): boolean {
   return editingMapID.value === mapID && editingKeyID.value === keyID;
 }
 
-function startEditKeymap(mapID: number, keyID: number) {
+function startEditKeymap(mapID: number, keyID: number): void {
   editingMapID.value = mapID;
   editingKeyID.value = keyID;
 }
 
-function doEditKeymap(newKeyCode: string) {
+function doEditKeymap(newKeyCode: string): void {
   if (editingMapID.value === null || editingKeyID.value === null) {
     return;
   }
@@ -155,7 +155,7 @@ function doEditKeymap(newKeyCode: string) {
   editingKeyID.value = null;
 }
 
-const keydownHandler = (event: KeyboardEvent) => {
+const keydownHandler = (event: KeyboardEvent): void => {
   if (editingMapID.value !== null) {
     event.preventDefault();
     if (event.code.startsWith("Control")) {

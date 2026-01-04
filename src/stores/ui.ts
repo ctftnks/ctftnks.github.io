@@ -1,7 +1,14 @@
 import { ref } from "vue";
 
-export const currentPage = ref("menu");
+/**
+ * Global UI state.
+ */
+export const page = ref("menu");
 
-export function openPage(name: string): void {
-  currentPage.value = name;
+/**
+ * Changes the active UI page.
+ * @param p - Page name.
+ */
+export function openPage(p: string): void {
+  page.value = p;
 }

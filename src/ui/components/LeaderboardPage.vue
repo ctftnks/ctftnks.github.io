@@ -45,7 +45,7 @@ const sortedPlayers = computed(() => {
   return [...store.players].sort((a, b) => b.score - a.score);
 });
 
-function forceNewGame() {
+function forceNewGame(): void {
   store.startNewGame();
   openPage("game");
   window.dispatchEvent(new Event("resize"));

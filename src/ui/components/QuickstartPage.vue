@@ -20,7 +20,7 @@
 import { store } from "@/stores/gamestore";
 import { openPage } from "@/stores/ui";
 
-function close() {
+function close(): void {
   openPage("menu");
 }
 

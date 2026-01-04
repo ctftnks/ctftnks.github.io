@@ -249,7 +249,13 @@ export default class Game {
   }
 }
 
-// Create and start a new game instance
+/**
+ * Create and start a new game instance.
+ * @param canvas - The canvas manager.
+ * @param players - The list of players.
+ * @param map - The map object.
+ * @returns The new game instance.
+ */
 export function createGame(canvas: Canvas, players: Player[], map: GameMap | null = null): Game {
   const game = new Game(canvas, map);
 
