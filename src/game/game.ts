@@ -3,7 +3,6 @@ import GameMap from "./gamemap";
 import MapGenerator from "./mapGenerator";
 import { getRandomPowerUp } from "@/entities/powerup";
 import { playSound, stopMusic, clearEffects } from "./effects";
-import { store } from "@/stores/gamestore";
 import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import Canvas from "./canvas";
@@ -258,14 +257,9 @@ export default class Game {
   }
 }
 
-// start a new round
-export function newGame(map: GameMap | null = null): Game {
-  if (store.game) {
-    store.game.stop();
-  }
-
-  store.GameID++;
-  const game = new Game(store.canvas!, map);
+// Create and start a new game instance
+export function createGame(canvas: Canvas, players: Player[], map: GameMap | null = null): Game {
+  const game = new Game(canvas, map);
 
   const modeMap: Record<string, new (game: Game) => Gamemode> = {
     DM: Deathmatch,
@@ -277,7 +271,7 @@ export function newGame(map: GameMap | null = null): Game {
   const ModeClass = modeMap[Settings.GameMode] || CaptureTheFlag;
   game.mode = new ModeClass(game);
 
-  store.players.forEach((player) => game.addPlayer(player));
+  players.forEach((player) => game.addPlayer(player));
 
   game.start();
 
@@ -285,6 +279,5 @@ export function newGame(map: GameMap | null = null): Game {
     game.players.forEach((player) => player.resetStats());
   }
 
-  store.game = markRaw(game);
   return game;
 }

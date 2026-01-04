@@ -4,7 +4,6 @@ import SideBar from "@/ui/components/SideBar.vue";
 import { store } from "@/stores/gamestore";
 import { gameEvents, EVENTS } from "@/game/events";
 import { openPage } from "@/stores/ui";
-import { newGame } from "@/game/game";
 
 // Mock dependencies
 vi.mock("@/stores/gamestore", () => ({
@@ -13,15 +12,12 @@ vi.mock("@/stores/gamestore", () => ({
     game: {
       resetTime: vi.fn(),
     },
+    startNewGame: vi.fn(),
   },
 }));
 
 vi.mock("@/stores/ui", () => ({
   openPage: vi.fn(),
-}));
-
-vi.mock("@/game/game", () => ({
-  newGame: vi.fn(),
 }));
 
 vi.mock("@/game/events", () => ({
@@ -79,7 +75,7 @@ describe("SideBar.vue", () => {
     expect(nextMapBtn).toBeDefined();
     await nextMapBtn!.trigger("click");
 
-    expect(newGame).toHaveBeenCalled();
+    expect(store.startNewGame).toHaveBeenCalled();
   });
 
   it("registers event listeners on mount", () => {

@@ -14,15 +14,12 @@ vi.mock("@/stores/gamestore", () => ({
       paused: false,
     },
     createPlayer: vi.fn(),
+    startNewGame: vi.fn(),
   },
 }));
 
 vi.mock("@/stores/ui", () => ({
   openPage: vi.fn(),
-}));
-
-vi.mock("@/game/game", () => ({
-  newGame: vi.fn(),
 }));
 
 describe("MenuPage.vue", () => {

@@ -8,7 +8,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import Canvas from "@/game/canvas";
-import { newGame } from "@/game/game";
 import { store } from "@/stores/gamestore";
 import { openPage } from "@/stores/ui";
 
@@ -24,9 +23,11 @@ onMounted(() => {
     store.initDefaultPlayers();
 
     // Start Game
-    const game = newGame();
+    store.startNewGame();
     // Auto-pause on start so user can see menu
-    game.paused = true;
+    if (store.game) {
+      store.game.paused = true;
+    }
   }
 
   window.addEventListener("resize", handleResize);
