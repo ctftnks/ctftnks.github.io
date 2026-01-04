@@ -14,76 +14,47 @@ body {
   width: 74%;
 }
 
-#sideBar {
-  position: fixed;
-  top: 5%;
-  height: 90%;
-  left: 0;
-  width: 18%;
-  font-weight: bold;
-  color: #ffffff;
-}
-
-#sideBar .entry {
-  position: relative;
-  width: calc(100% - 6px);
-  border-bottom: solid 1px #666;
-  padding: 8px;
-  margin-left: 6px;
-  padding-right: 0px;
-  padding-left: 0px;
-}
-
-#scoreBoard .entry .name {
-  position: relative;
-  left: 6px;
-  width: 1.5em;
-}
-
-#scoreBoard .entry .score {
-  position: absolute;
-  right: 32px;
-  /* width: 1em; */
-  text-align: center;
-}
-
-#scoreBoard .entry .score .spree {
-  font-size: 0.6em;
-  color: #ff0000;
-  margin-right: 10px;
-}
-
 @keyframes shake {
   0% {
     transform: translate(0, 0);
   }
+
   10% {
     transform: translate(-2px, -2px);
   }
+
   20% {
     transform: translate(1px, 2px);
   }
+
   30% {
     transform: translate(-1px, -2px);
   }
+
   40% {
     transform: translate(1px, 2px);
   }
+
   50% {
     transform: translate(-2px, -1px);
   }
+
   60% {
     transform: translate(1px, 1px);
   }
+
   70% {
     transform: translate(-1px, -1px);
   }
+
   80% {
     transform: translate(1px, 1px);
   }
+
   90% {
     transform: translate(-1px, 0px);
   }
+
   100% {
     transform: translate(0, 0);
   }
@@ -92,4 +63,85 @@ body {
 .shake {
   animation: shake 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   will-change: transform;
+}
+
+h1,
+h2 {
+  text-align: center;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.notclickable {
+  cursor: default;
+}
+
+.option {
+  margin: 8px;
+  display: inline-block;
+  white-space: nowrap;
+  color: #000;
+}
+
+.option span,
+.option button,
+.option select,
+.option input,
+#playersMenu button,
+button.option {
+  text-align: center;
+  background: #ddd;
+  border: solid 1px #ccc;
+  box-shadow: 0px 0px 1px 0px rgba(94, 94, 94, 0.06);
+  font-size: 0.8em;
+  padding: 8px;
+  padding-left: 12px;
+  padding-right: 12px;
+  cursor: pointer;
+}
+
+.option select {
+  padding: 8px;
+}
+
+.option .left {
+  margin-right: -3px;
+}
+
+.option .right {
+  margin-left: -3px;
+}
+
+.option .vspace,
+.option.vspace {
+  display: inline-block;
+  margin-right: 16px;
+  margin-left: 16px;
+}
+
+.popup {
+  position: fixed;
+  top: 10%;
+  left: 20%;
+  min-height: 20%;
+  width: 60%;
+  border: solid 1px #bbb;
+  background-color: rgba(40, 40, 40, 0.9);
+  box-shadow: 0px 0px 13px 0px rgba(94, 94, 94, 1);
+  background-image: url("/img/textures/tiled.png");
+  text-align: center;
+  padding-bottom: 32px;
+  color: #fff;
+}
+
+.popupshade {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }

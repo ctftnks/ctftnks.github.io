@@ -1,0 +1,38 @@
+#sideBar {
+  position: fixed;
+  top: 5%;
+  height: 90%;
+  left: 0;
+  width: 18%;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+#sideBar .entry {
+  position: relative;
+  width: calc(100% - 6px);
+  border-bottom: solid 1px #666;
+  padding: 8px;
+  margin-left: 6px;
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+#scoreBoard .entry .name {
+  position: relative;
+  left: 6px;
+  width: 1.5em;
+}
+
+#scoreBoard .entry .score {
+  position: absolute;
+  right: 32px;
+  /* width: 1em; */
+  text-align: center;
+}
+
+#scoreBoard .entry .score .spree {
+  font-size: 0.6em;
+  color: #ff0000;
+  margin-right: 10px;
+}

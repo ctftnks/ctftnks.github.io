@@ -3,7 +3,6 @@ import { store } from "@/game/store";
 import { updatePlayersMenu } from "@/ui/components/menu/main";
 import { closePage } from "@/ui/pages";
 import template from "./main.html?raw";
-import "./style.css";
 
 /**
  * QuickstartPage - Component for quickly starting pre-configured games.

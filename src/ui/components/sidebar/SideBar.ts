@@ -3,6 +3,7 @@ import { newGame } from "@/game/game";
 import { store } from "@/game/store";
 import { gameEvents, EVENTS } from "@/game/events";
 import sideBarHtml from "./SideBar.html?raw";
+import "./style.css";
 
 /** Sidebar web component (light DOM). HTML and CSS are imported from files. */
 class SideBar extends HTMLElement {
