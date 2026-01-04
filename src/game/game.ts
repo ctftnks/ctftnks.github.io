@@ -10,7 +10,7 @@ import Canvas from "./canvas";
 import Player from "./player";
 import GameObject from "@/entities/gameobject";
 import { Gamemode, Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill } from "./gamemode";
-import { openPage } from "@/ui/pages";
+import { openPage } from "@/stores/ui";
 import Tank from "@/entities/tank";
 
 /**
@@ -264,7 +264,7 @@ export function newGame(map: GameMap | null = null): Game {
   const ModeClass = modeMap[Settings.GameMode] || CaptureTheFlag;
   game.mode = new ModeClass(game);
 
-  store.players.forEach((player) => game.addPlayer(player));
+  store.players.forEach((player) => game.addPlayer(player as Player));
 
   game.start();
   store.canvas?.sync();

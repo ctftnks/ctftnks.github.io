@@ -1,59 +1,28 @@
-import { BasePage } from "@/ui/BasePage";
+<template>
+  <div class="popupshade" id="quickstartShade" @click="close"></div>
+  <div class="popup" id="quickstartMenu">
+    <h2>Quick Games:</h2>
+
+    <button class="option vspace" @click="quickPvP(2, 2)">2P vs 2P</button><br />
+    <button class="option vspace" @click="quickPvP(2, 3)">3P vs 3P</button><br />
+    <button class="option vspace" @click="quickPvP(3, 2)">2P vs 2P vs 2P</button><br />
+    <br />
+    <button class="option vspace" @click="quickPvB(2, 2)">2P vs 2C</button><br />
+    <button class="option vspace" @click="quickPvB(2, 3)">3P vs 3C</button><br />
+    <br />
+    <button class="option vspace" @click="quickMixed(2, 2)">2M vs 2M</button><br />
+    <button class="option vspace" @click="quickMixed(3, 2)">2M vs 2M vs 2M</button><br />
+    <button class="option vspace" @click="quickUnevenMixed(2, 2)">2M vs 2B</button>
+  </div>
+</template>
+
+<script setup lang="ts">
 import { store } from "@/game/store";
-import { updatePlayersMenu } from "@/ui/components/menu/main";
-import { closePage } from "@/ui/pages";
-import template from "./main.html?raw";
+import { openPage } from "@/stores/ui";
 
-/**
- * QuickstartPage - Component for quickly starting pre-configured games.
- * @augments BasePage
- */
-class QuickstartPage extends BasePage {
-  /**
-   * Renders the quickstart menu template.
-   */
-  protected render(): void {
-    this.innerHTML = template;
-  }
-
-  /**
-   * Attaches listeners for quickstart game options.
-   */
-  protected attachListeners(): void {
-    const shade = this.querySelector("#quickstartShade");
-    if (shade) {
-      shade.addEventListener("click", () => closePage(this));
-    }
-
-    const menu = this.querySelector("#quickstartMenu");
-    if (menu) {
-      menu.addEventListener("click", (event) => {
-        const target = event.target as HTMLElement;
-        if (target.tagName === "BUTTON") {
-          const action = target.getAttribute("data-action");
-          const teams = parseInt(target.getAttribute("data-teams") || "0", 10);
-          const size = parseInt(target.getAttribute("data-size") || "0", 10);
-
-          if (action && teams && size) {
-            if (action === "quickPvP") {
-              quickPvP(teams, size);
-            } else if (action === "quickPvB") {
-              quickPvB(teams, size);
-            } else if (action === "quickMixed") {
-              quickMixed(teams, size);
-            } else if (action === "quickUnevenMixed") {
-              quickUnevenMixed(teams, size);
-            }
-
-            closePage(this);
-          }
-        }
-      });
-    }
-  }
+function close() {
+  openPage("menu");
 }
-
-customElements.define("quickstart-page", QuickstartPage);
 
 function quickPvP(nteams: number, teamsize: number): void {
   store.players = [];
@@ -68,7 +37,7 @@ function quickPvP(nteams: number, teamsize: number): void {
       }
     }
   }
-  updatePlayersMenu();
+  close();
 }
 
 function quickPvB(nteams: number, teamsize: number): void {
@@ -88,7 +57,7 @@ function quickPvB(nteams: number, teamsize: number): void {
       }
     }
   }
-  updatePlayersMenu();
+  close();
 }
 
 function quickMixed(nteams: number, teamsize: number): void {
@@ -108,7 +77,7 @@ function quickMixed(nteams: number, teamsize: number): void {
       }
     }
   }
-  updatePlayersMenu();
+  close();
 }
 
 function quickUnevenMixed(nteams: number, teamsize: number): void {
@@ -128,5 +97,10 @@ function quickUnevenMixed(nteams: number, teamsize: number): void {
       }
     }
   }
-  updatePlayersMenu();
+  close();
 }
+</script>
+
+<style scoped>
+/* No specific styles found for quickstart, likely uses global or menu styles */
+</style>

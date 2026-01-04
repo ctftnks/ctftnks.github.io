@@ -284,7 +284,9 @@ export class FogBonus extends PowerUp {
   }
 }
 
-export const PowerUps = [
+import { reactive } from "vue";
+
+export const PowerUps = reactive([
   {
     create: () => new LaserBonus(),
     name: "Laser",
@@ -345,7 +347,7 @@ export const PowerUps = [
     name: "SpeedBoost",
     weight: 1,
   },
-];
+]);
 
 /**
  * Returns a random powerup based on weights.

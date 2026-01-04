@@ -85,4 +85,5 @@ class GameStore {
 }
 
 // Export a singleton instance
-export const store = new GameStore();
+import { reactive } from "vue";
+export const store = reactive(new GameStore());

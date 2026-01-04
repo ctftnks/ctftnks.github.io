@@ -1,12 +1,21 @@
+import { createApp } from "vue";
+import App from "./App.vue";
 import Canvas from "@/game/canvas";
 import { store } from "@/game/store";
 import { newGame } from "@/game/game";
-import { openPage } from "@/ui/pages";
-import "@/ui/components/sidebar/SideBar";
+import { openPage } from "@/stores/ui";
 
-// generate canvas object and players list
 window.onload = () => {
-  store.canvas = new Canvas("gameFrame");
+  // Initialize Vue App
+  createApp(App).mount("#app");
+
+  // Initialize Game
+  // Ensure we have the canvas element
+  if (document.getElementById("gameFrame")) {
+    store.canvas = new Canvas("gameFrame");
+  } else {
+    console.error("Canvas element 'gameFrame' not found");
+  }
 
   store.players = [store.createPlayer(false), store.createPlayer(true), store.createPlayer(true), store.createPlayer(true)];
   store.players[1].team = store.players[0].team;
@@ -14,19 +23,10 @@ window.onload = () => {
 
   const game = newGame();
   game.paused = true;
-  openPage("menu");
-};
-
-// prevent accidental leaving
-window.onbeforeunload = () => {
-  const debug = true;
-  if (typeof store.game !== "undefined" && !store.game.paused && !debug) {
-    return "";
-  }
 };
 
 window.onresize = () => {
-  if (typeof store.game !== "undefined") {
+  if (store.game) {
     store.game.canvas.resize();
   }
 };

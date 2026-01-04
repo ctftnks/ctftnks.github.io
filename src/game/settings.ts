@@ -28,4 +28,5 @@ const DEFAULT_SETTINGS = {
 
 // We export a mutable singleton object for settings to be compatible with existing code structure
 // Ideally this would be an instance passed around.
-export const Settings = { ...DEFAULT_SETTINGS };
+import { reactive } from "vue";
+export const Settings = reactive({ ...DEFAULT_SETTINGS });
