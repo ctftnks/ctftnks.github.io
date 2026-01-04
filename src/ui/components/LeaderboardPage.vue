@@ -35,7 +35,6 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { store } from "@/stores/gamestore";
 import { Settings } from "@/stores/settings";
-import { newGame } from "@/game/game";
 import { openPage } from "@/stores/ui";
 
 const timeLeft = ref(Settings.EndScreenTime);
@@ -47,7 +46,7 @@ const sortedPlayers = computed(() => {
 });
 
 function forceNewGame() {
-  newGame();
+  store.startNewGame();
   openPage("game");
   window.dispatchEvent(new Event("resize"));
 }

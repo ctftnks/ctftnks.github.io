@@ -3,14 +3,14 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import LeaderboardPage from "@/ui/components/LeaderboardPage.vue";
 import { store } from "@/stores/gamestore";
 import { openPage } from "@/stores/ui";
-import { newGame } from "@/game/game";
 import { Settings } from "@/stores/settings";
 
 // Mock dependencies
-vi.mock("@/stores/store", () => ({
+vi.mock("@/stores/gamestore", () => ({
   store: {
     GameID: 1,
     players: [],
+    startNewGame: vi.fn(),
   },
 }));
 
@@ -19,7 +19,6 @@ vi.mock("@/stores/ui", () => ({
 }));
 
 vi.mock("@/game/game", () => ({
-  newGame: vi.fn(),
 }));
 
 describe("LeaderboardPage.vue", () => {
@@ -65,7 +64,7 @@ describe("LeaderboardPage.vue", () => {
 
     await shade.trigger("click");
 
-    expect(newGame).toHaveBeenCalled();
+    expect(store.startNewGame).toHaveBeenCalled();
     expect(openPage).toHaveBeenCalledWith("game");
   });
 
@@ -74,7 +73,7 @@ describe("LeaderboardPage.vue", () => {
 
     vi.advanceTimersByTime(10000); // 10s
 
-    expect(newGame).toHaveBeenCalled();
+    expect(store.startNewGame).toHaveBeenCalled();
     expect(openPage).toHaveBeenCalledWith("game");
   });
 });
