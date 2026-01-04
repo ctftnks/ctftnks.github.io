@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { Gun, MG, Grenade } from "@/entities/weapons";
 import { TEAMS } from "@/game/team";
+import { Settings } from "@/stores/settings";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -59,6 +60,7 @@ describe("Weapon System", () => {
     mockGame = {
       addObject: vi.fn(),
       timeouts: [],
+      settings: Settings,
       map: {
         getTileByPos: vi.fn(),
       },
@@ -70,6 +72,7 @@ describe("Weapon System", () => {
         team: TEAMS[0],
         isBot: () => false,
       },
+      game: mockGame,
       corners: () => [
         { x: 0, y: 0 },
         { x: 10, y: 0 },

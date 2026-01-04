@@ -48,6 +48,7 @@ describe("Autopilot Class", () => {
     // Mock Game
     mockGame = {
       map: mockMap,
+      settings: Settings,
       t: 0,
       mode: {},
       players: [],
@@ -107,7 +108,7 @@ describe("Autopilot Class", () => {
   it("should perform movements towards target", () => {
     autopilot.goto = { x: 200, y: 100 }; // To the right
 
-    (autopilot as any).performMovements(mockTank);
+    (autopilot as any).performMovements(mockTank, mockGame);
     expect(mockTank.turn).toHaveBeenCalled();
   });
 

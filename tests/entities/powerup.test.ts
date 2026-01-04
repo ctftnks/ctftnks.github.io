@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { getRandomPowerUp, PowerUps } from "@/entities/powerup";
+import { Settings } from "@/stores/settings";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -41,11 +42,13 @@ describe("PowerUp System", () => {
       timeouts: [],
       t: 0,
       intvls: [],
+      settings: Settings,
     };
 
     mockTank = {
       speed: 100,
       player: { game: mockGame },
+      game: mockGame,
       timers: { invincible: 0 },
       weapon: {},
       rapidfire: false,

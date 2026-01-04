@@ -2,7 +2,6 @@ import GameObject from "./gameobject";
 import { Gun, Weapon } from "./weapons";
 import { generateCloud } from "./smoke";
 import { playSound } from "@/game/effects";
-import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import type Player from "@/game/player";
 import type Tile from "@/game/tile";
@@ -30,13 +29,13 @@ export default class Tank extends GameObject {
   /** Rotation angle. */
   angle: number = 2 * Math.PI * Math.random();
   /** Tank width. */
-  width: number = Settings.TankWidth;
+  width: number;
   /** Tank height. */
-  height: number = Settings.TankHeight;
+  height: number;
   /** Current weapon. */
   weapon: Weapon;
   /** Movement speed. */
-  speed: number = Settings.TankSpeed;
+  speed: number;
   /** Timers for effects. */
   timers: { spawnshield: number; invincible: number } = { spawnshield: 0, invincible: 0 };
   /** The flag currently carried, or null if none. */
@@ -57,6 +56,9 @@ export default class Tank extends GameObject {
     this.game = game;
     this.color = this.player.team.color;
     this.weapon = new Gun(this);
+    this.width = this.game.settings.TankWidth;
+    this.height = this.game.settings.TankHeight;
+    this.speed = this.game.settings.TankSpeed;
   }
 
   /**
@@ -77,7 +79,7 @@ export default class Tank extends GameObject {
     }
     if (this.spawnshield()) {
       context.fillStyle = "#555";
-      context.globalAlpha = 0.7 * (1 - (this.timers.spawnshield - this.game.t) / (Settings.SpawnShieldTime * 1000));
+      context.globalAlpha = 0.7 * (1 - (this.timers.spawnshield - this.game.t) / (this.game.settings.SpawnShieldTime * 1000));
     }
 
     context.fill();
@@ -101,7 +103,7 @@ export default class Tank extends GameObject {
     }
 
     // draw label
-    if (Settings.ShowTankLabels) {
+    if (this.game.settings.ShowTankLabels) {
       context.rotate(-this.angle);
       context.fillStyle = this.player.team.color;
       context.font = "14px Arial";
@@ -135,8 +137,8 @@ export default class Tank extends GameObject {
     const oldy = this.y;
     const speed = this.spawnshield() ? 0 : this.speed;
 
-    this.x -= (direction * speed * Math.sin(-this.angle) * Settings.GameFrequency) / 1000;
-    this.y -= (direction * speed * Math.cos(-this.angle) * Settings.GameFrequency) / 1000;
+    this.x -= (direction * speed * Math.sin(-this.angle) * this.game.settings.GameFrequency) / 1000;
+    this.y -= (direction * speed * Math.cos(-this.angle) * this.game.settings.GameFrequency) / 1000;
 
     const collidingCorner = this.checkWallCollision();
     if (collidingCorner !== -1) {
@@ -156,7 +158,7 @@ export default class Tank extends GameObject {
    */
   turn(direction: number): void {
     const oldangle = this.angle;
-    this.angle += (((direction * Settings.TankTurnSpeed * Settings.GameFrequency) / 1000) * Settings.TankSpeed) / 180;
+    this.angle += (((direction * this.game.settings.TankTurnSpeed * this.game.settings.GameFrequency) / 1000) * this.game.settings.TankSpeed) / 180;
 
     const collidingCorner = this.checkWallCollision();
     if (collidingCorner !== -1) {
@@ -313,7 +315,7 @@ export default class Tank extends GameObject {
         continue;
       }
       // Friendly fire?
-      if (!Settings.FriendlyFire && this.player.team === bullet.player.team && this.player.id !== bullet.player.id) {
+      if (!this.game.settings.FriendlyFire && this.player.team === bullet.player.team && this.player.id !== bullet.player.id) {
         continue;
       }
       if (!bullet.lethal || this.invincible()) {

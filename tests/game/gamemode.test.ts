@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { Deathmatch, TeamDeathmatch, KingOfTheHill } from "@/game/gamemode";
 import Game from "@/game/game";
+import { Settings } from "@/stores/settings";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -28,6 +29,7 @@ describe("Gamemode Classes", () => {
 
     mockGame = {
       players: [player1, player2, player3],
+      settings: Settings,
       t: 0,
       map: {},
       addObject: vi.fn(),

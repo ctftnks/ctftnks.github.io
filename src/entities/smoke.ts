@@ -1,5 +1,4 @@
 import GameObject from "./gameobject";
-import { Settings } from "@/stores/settings";
 import type Game from "@/game/game";
 
 /**
@@ -11,18 +10,21 @@ export class Smoke extends GameObject {
   color: string = "rgba(40, 40, 40, 0.3)";
   rspeed: number;
   timeout: number;
+  game: Game;
 
   /**
    * Creates a new Smoke particle.
+   * @param game - The game instance.
    * @param x - X coordinate.
    * @param y - Y coordinate.
    * @param timeout - Lifetime in ms.
    * @param radius - Initial radius.
    * @param rspeed - Radius shrinking speed.
    */
-  constructor(x: number, y: number, timeout: number = 300, radius: number = 10, rspeed: number = 1) {
+  constructor(game: Game, x: number, y: number, timeout: number = 300, radius: number = 10, rspeed: number = 1) {
     // inherit from GameObject class
     super();
+    this.game = game;
     // to be initialized
     this.x = x;
     this.y = y;
@@ -49,11 +51,11 @@ export class Smoke extends GameObject {
    */
   override step(): void {
     // is bullet timed out?
-    this.timeout -= Settings.GameFrequency;
+    this.timeout -= this.game.settings.GameFrequency;
     if (this.timeout < 0) {
       this.delete();
     }
-    this.radius -= (this.rspeed * Settings.GameFrequency) / 40;
+    this.radius -= (this.rspeed * this.game.settings.GameFrequency) / 40;
     if (this.radius < 0) {
       this.radius = 0;
     }
@@ -82,7 +84,7 @@ export function generateCloud(
   for (let i = 0; i < n; i++) {
     const rx = x + radius * 2 * (Math.random() - 0.5);
     const ry = y + radius * 2 * (Math.random() - 0.5);
-    const smoke = new Smoke(rx, ry, 2000, radius, rspeed);
+    const smoke = new Smoke(game, rx, ry, 2000, radius, rspeed);
     if (color !== "") {
       smoke.color = color;
     }

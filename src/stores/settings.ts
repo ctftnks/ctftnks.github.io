@@ -30,3 +30,4 @@ const DEFAULT_SETTINGS = {
 // Ideally this would be an instance passed around.
 import { reactive } from "vue";
 export const Settings = reactive({ ...DEFAULT_SETTINGS });
+export type GameSettings = typeof DEFAULT_SETTINGS;

@@ -16,6 +16,7 @@ describe("Trajectory Class", () => {
 
     mockMap = {
       getTileByPos: vi.fn().mockReturnValue(mockTile),
+      settings: Settings,
     };
 
     traj = new Trajectory(mockMap, 0, 0, 0);

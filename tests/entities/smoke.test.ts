@@ -8,12 +8,13 @@ describe("Smoke System", () => {
   beforeEach(() => {
     mockGame = {
       addObject: vi.fn(),
+      settings: Settings,
     };
     Settings.GameFrequency = 10;
   });
 
   it("should initialize Smoke particle", () => {
-    const smoke = new Smoke(10, 10, 100, 5, 1);
+    const smoke = new Smoke(mockGame, 10, 10, 100, 5, 1);
     expect(smoke.x).toBe(10);
     expect(smoke.y).toBe(10);
     expect(smoke.radius).toBe(5);
@@ -21,7 +22,7 @@ describe("Smoke System", () => {
   });
 
   it("should update smoke particle in step", () => {
-    const smoke = new Smoke(0, 0, 100, 10, 1);
+    const smoke = new Smoke(mockGame, 0, 0, 100, 10, 1);
     const initialRadius = smoke.radius;
 
     smoke.step();
@@ -31,7 +32,7 @@ describe("Smoke System", () => {
   });
 
   it("should delete smoke when timeout expired", () => {
-    const smoke = new Smoke(0, 0, 5, 10, 1);
+    const smoke = new Smoke(mockGame, 0, 0, 5, 10, 1);
 
     smoke.step(); // -10 ms
 

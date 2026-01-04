@@ -29,6 +29,7 @@ describe("Bullet Class", () => {
     // Mock Game
     mockGame = {
       map: mockMap,
+      settings: Settings,
       t: 0,
       addObject: vi.fn(),
       timeouts: [],
@@ -44,6 +45,7 @@ describe("Bullet Class", () => {
     // Mock Tank
     mockTank = {
       player: mockPlayer,
+      game: mockGame,
     };
 
     // Mock Weapon

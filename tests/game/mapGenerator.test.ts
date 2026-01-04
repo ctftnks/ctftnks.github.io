@@ -18,7 +18,7 @@ describe("MapGenerator", () => {
     Settings.MapNxMax = 10;
 
     // Initialize a fresh map for each test
-    map = new GameMap(mockCanvas, 10, 10);
+    map = new GameMap(mockCanvas, Settings, 10, 10);
   });
 
   it("should have algorithms defined", () => {

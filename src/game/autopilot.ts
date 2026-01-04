@@ -1,4 +1,3 @@
-import { Settings } from "@/stores/settings";
 import Tile from "./tile";
 import { PowerUp } from "@/entities/powerup";
 import Tank from "@/entities/tank";
@@ -34,7 +33,7 @@ export default class Autopilot {
    */
   step(tank: Tank, game: Game): void {
     this.autopilot(tank, game);
-    this.performMovements(tank);
+    this.performMovements(tank, game);
   }
 
   /**
@@ -43,7 +42,7 @@ export default class Autopilot {
    * @param game The game in which the tank lives
    */
   private autopilot(tank: Tank, game: Game): void {
-    this.lastChecked += Settings.GameFrequency;
+    this.lastChecked += game.settings.GameFrequency;
     if (this.lastChecked < 72000 / tank.speed) {
       return;
     }
@@ -158,8 +157,9 @@ export default class Autopilot {
   /**
    * Performs movements towards the goto target.
    * @param tank The tank to be steered by the bot
+   * @param game The game instance
    */
-  private performMovements(tank: Tank): void {
+  private performMovements(tank: Tank, game: Game): void {
     if (!this.goto) {
       return;
     }
@@ -175,15 +175,15 @@ export default class Autopilot {
 
     const diff = Math.abs(tank.angle - newangle);
     if (diff < 0.6 || Math.abs(diff - Math.PI * 2) < 0.6) {
-      tank.move(Settings.BotSpeed);
+      tank.move(game.settings.BotSpeed);
     }
 
     if (diff < 0.1) {
       tank.angle = newangle;
     } else if (tank.angle < newangle) {
-      tank.turn(diff < Math.PI ? 2 * Settings.BotSpeed : -2 * Settings.BotSpeed);
+      tank.turn(diff < Math.PI ? 2 * game.settings.BotSpeed : -2 * game.settings.BotSpeed);
     } else {
-      tank.turn(diff < Math.PI ? -2 * Settings.BotSpeed : 2 * Settings.BotSpeed);
+      tank.turn(diff < Math.PI ? -2 * game.settings.BotSpeed : 2 * game.settings.BotSpeed);
     }
   }
 

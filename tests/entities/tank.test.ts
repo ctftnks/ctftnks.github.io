@@ -23,6 +23,7 @@ describe("Tank Class", () => {
 
     mockGame = {
       t: 0,
+      settings: Settings,
       map: {
         getTileByPos: vi.fn(() => mockTile),
       },

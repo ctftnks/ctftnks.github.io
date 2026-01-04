@@ -1,8 +1,8 @@
-import { Settings } from "@/stores/settings";
 import GameObject from "@/entities/gameobject";
 import Canvas from "./canvas";
 import Tile from "./tile";
 import Coord from "@/entities/coord";
+import { GameSettings } from "@/stores/settings";
 
 /**
  * Represents the game map.
@@ -24,16 +24,20 @@ export default class GameMap {
   tiles: Tile[] = [];
   /** The canvas. */
   canvas: Canvas;
+  /** The game settings. */
+  settings: GameSettings;
 
   /**
    * Creates a new GameMap.
    * @param canvas - The canvas object.
+   * @param settings - The game settings.
    * @param Nx - Number of tiles in X direction.
    * @param Ny - Number of tiles in Y direction.
    */
-  constructor(canvas: Canvas, Nx: number | null = null, Ny: number | null = null) {
+  constructor(canvas: Canvas, settings: GameSettings, Nx: number | null = null, Ny: number | null = null) {
     this.canvas = canvas;
-    this.Nx = Nx ?? Math.floor(Settings.MapNxMin + (Settings.MapNxMax - Settings.MapNxMin) * Math.random());
+    this.settings = settings;
+    this.Nx = Nx ?? Math.floor(this.settings.MapNxMin + (this.settings.MapNxMax - this.settings.MapNxMin) * Math.random());
     this.Ny = Ny ?? Math.floor(((0.25 * Math.random() + 0.75) * this.Nx * canvas.height) / canvas.width);
     this.dy = this.dx;
 

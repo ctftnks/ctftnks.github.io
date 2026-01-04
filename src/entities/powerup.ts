@@ -1,4 +1,3 @@
-import { Settings } from "@/stores/settings";
 import GameObject from "./gameobject";
 import { playSound, playMusic, stopMusic, fogOfWar } from "@/game/effects";
 import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot } from "./weapons";
@@ -195,7 +194,7 @@ class InvincibleBonus extends PowerUp {
     }
     this.applied = true;
     stopMusic();
-    if (!Settings.muted) {
+    if (!tank.game.settings.muted) {
       playMusic(SOUNDS.invincible);
     }
     tank.speed *= 1.14;
@@ -203,7 +202,7 @@ class InvincibleBonus extends PowerUp {
     tank.player.game!.timeouts.push(
       window.setTimeout(() => {
         tank.speed /= 1.14;
-        if (Settings.bgmusic) {
+        if (tank.game.settings.bgmusic) {
           // playMusic(SOUNDS.bgmusic); // Assuming we might want to add bgmusic later.
         } else if (!tank.invincible()) {
           stopMusic();
@@ -252,16 +251,19 @@ class MultiBonus extends PowerUp {
     this.image.src = IMAGES.multi;
   }
 
-  apply(): void {
+  apply(tank: Tank): void {
     if (!this.used) {
       this.used = true;
-      Settings.PowerUpRate /= 2.5;
-      Settings.PowerUpRate = Math.round(1000 * Settings.PowerUpRate) / 1000;
-      Settings.MaxPowerUps *= 2.5;
-      window.setTimeout(() => {
-        Settings.PowerUpRate *= 2.5;
-        Settings.MaxPowerUps /= 2.5;
-      }, 8000);
+      const settings = tank.game.settings;
+      settings.PowerUpRate /= 2.5;
+      settings.PowerUpRate = Math.round(1000 * settings.PowerUpRate) / 1000;
+      settings.MaxPowerUps *= 2.5;
+      tank.player.game!.timeouts.push(
+        window.setTimeout(() => {
+          settings.PowerUpRate *= 2.5;
+          settings.MaxPowerUps /= 2.5;
+        }, 8000),
+      );
     }
   }
 }

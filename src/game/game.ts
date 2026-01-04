@@ -3,7 +3,6 @@ import GameMap from "./gamemap";
 import MapGenerator from "./mapGenerator";
 import { getRandomPowerUp } from "@/entities/powerup";
 import { playSound, stopMusic, clearEffects } from "./effects";
-import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import Canvas from "./canvas";
 import Player from "./player";
@@ -11,7 +10,7 @@ import GameObject from "@/entities/gameobject";
 import { Gamemode, Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import { openPage } from "@/stores/ui";
 import Tank from "@/entities/tank";
-import { markRaw } from "vue";
+import { GameSettings } from "@/stores/settings";
 
 /**
  * Manages the game state, loop, and objects.
@@ -25,6 +24,8 @@ export default class Game {
   canvas: Canvas;
   /** The game map. */
   map: GameMap;
+  /** The game settings. */
+  settings: GameSettings;
   /** List of players. */
   players: Player[] = [];
   /** List of game objects. */
@@ -53,13 +54,15 @@ export default class Game {
   /**
    * Creates a new Game instance.
    * @param canvas - The canvas manager.
+   * @param settings - The game settings.
    * @param map - The map object or null to generate a new one.
    */
-  constructor(canvas: Canvas, map: GameMap | null = null) {
+  constructor(canvas: Canvas, settings: GameSettings, map: GameMap | null = null) {
     this.canvas = canvas;
+    this.settings = settings;
     // create new random map
     if (!map) {
-      this.map = new GameMap(this.canvas);
+      this.map = new GameMap(this.canvas, this.settings);
       // MapGenerator.algorithms[Math.floor(Math.random()*MapGenerator.algorithms.length)](this.map);
       // MapGenerator.primsMaze(this.map);
       // MapGenerator.recursiveDivision(this.map);
@@ -109,7 +112,7 @@ export default class Game {
     this.loop = requestAnimationFrame((t) => this.gameLoop(t));
 
     playSound(SOUNDS.gamestart);
-    if (Settings.bgmusic) {
+    if (this.settings.bgmusic) {
       // playMusic(SOUNDS.bgmusic);
     }
     gameEvents.emit(EVENTS.SCORE_UPDATED);
@@ -133,9 +136,9 @@ export default class Game {
       // Cap accumulator to avoid spiral of death (max 200ms)
       this.accumulator = Math.min(this.accumulator, 200);
 
-      while (this.accumulator >= Settings.GameFrequency) {
+      while (this.accumulator >= this.settings.GameFrequency) {
         this.step();
-        this.accumulator -= Settings.GameFrequency;
+        this.accumulator -= this.settings.GameFrequency;
       }
     }
 
@@ -148,7 +151,7 @@ export default class Game {
    * A single step of the game loop.
    */
   step(): void {
-    this.t += Settings.GameFrequency;
+    this.t += this.settings.GameFrequency;
     if (!this.map) {
       return;
     }
@@ -172,21 +175,21 @@ export default class Game {
     this.mode.step();
 
     // add random PowerUp
-    if (this.isTrueEvery(1000 * Settings.PowerUpRate)) {
+    if (this.isTrueEvery(1000 * this.settings.PowerUpRate)) {
       const p = getRandomPowerUp();
       const pos = this.map.spawnPoint();
       p.x = pos.x;
       p.y = pos.y;
       this.addObject(p);
-      this.timeouts.push(window.setTimeout(() => p.delete(), 1000 * Settings.PowerUpRate * Settings.MaxPowerUps));
+      this.timeouts.push(window.setTimeout(() => p.delete(), 1000 * this.settings.PowerUpRate * this.settings.MaxPowerUps));
     }
     // update the timer in the sidebar
     if (this.isTrueEvery(1000)) {
-      const dt = Math.max(0, Settings.RoundTime * 60 - (this.t - Settings.GameFrequency) / 1000);
+      const dt = Math.max(0, this.settings.RoundTime * 60 - (this.t - this.settings.GameFrequency) / 1000);
       gameEvents.emit(EVENTS.TIME_UPDATED, dt);
     }
     // end the game when the round time is over
-    if (this.t > Settings.RoundTime * 60000) {
+    if (this.t > this.settings.RoundTime * 60000) {
       this.end();
     }
   }
@@ -196,7 +199,7 @@ export default class Game {
    * @param ms the distance between 'true' signals in milliseconds
    */
   private isTrueEvery(ms: number): boolean {
-    return this.t % ms < Settings.GameFrequency;
+    return this.t % ms < this.settings.GameFrequency;
   }
 
   /**
@@ -258,8 +261,8 @@ export default class Game {
 }
 
 // Create and start a new game instance
-export function createGame(canvas: Canvas, players: Player[], map: GameMap | null = null): Game {
-  const game = new Game(canvas, map);
+export function createGame(canvas: Canvas, players: Player[], settings: GameSettings, map: GameMap | null = null): Game {
+  const game = new Game(canvas, settings, map);
 
   const modeMap: Record<string, new (game: Game) => Gamemode> = {
     DM: Deathmatch,
@@ -268,14 +271,14 @@ export function createGame(canvas: Canvas, players: Player[], map: GameMap | nul
     KOTH: KingOfTheHill,
   };
 
-  const ModeClass = modeMap[Settings.GameMode] || CaptureTheFlag;
+  const ModeClass = modeMap[settings.GameMode] || CaptureTheFlag;
   game.mode = new ModeClass(game);
 
   players.forEach((player) => game.addPlayer(player));
 
   game.start();
 
-  if (Settings.ResetStatsEachGame) {
+  if (settings.ResetStatsEachGame) {
     game.players.forEach((player) => player.resetStats());
   }
 

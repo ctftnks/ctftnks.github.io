@@ -6,7 +6,6 @@ import type Game from "./game";
 import Tile from "./tile";
 import { gameEvents, EVENTS } from "@/game/events";
 import type Team from "./team";
-import { Settings } from "@/stores/settings";
 import { store } from "@/stores/gamestore";
 
 /**
@@ -77,7 +76,7 @@ export class Deathmatch extends Gamemode {
       playSound(SOUNDS.killingspree);
     }
     gameEvents.emit(EVENTS.SCORE_UPDATED);
-    adaptBotSpeed(player.team);
+    adaptBotSpeed(this.game, player.team);
   }
 
   /**
@@ -127,7 +126,7 @@ export class TeamDeathmatch extends Gamemode {
       playSound(SOUNDS.killingspree);
     }
     gameEvents.emit(EVENTS.SCORE_UPDATED);
-    adaptBotSpeed(player.team);
+    adaptBotSpeed(this.game, player.team);
   }
 
   /**
@@ -249,7 +248,7 @@ export class CaptureTheFlag extends Gamemode {
       }
     }
     gameEvents.emit(EVENTS.SCORE_UPDATED);
-    adaptBotSpeed(player.team);
+    adaptBotSpeed(this.game, player.team);
   }
 
   /**
@@ -416,7 +415,7 @@ export class KingOfTheHill extends Gamemode {
             this.giveScore(this.game.players[i], 1);
           }
         }
-        adaptBotSpeed(team, 0.02);
+        adaptBotSpeed(this.game, team, 0.02);
       }
     }
   }
@@ -485,12 +484,13 @@ export class KingOfTheHill extends Gamemode {
 
 /**
  * Adapts bot speed based on team balance.
+ * @param game - The game instance.
  * @param team - The players team.
  * @param val - The adaptation value.
  * @returns The new bot speed.
  */
-function adaptBotSpeed(team: Team, val: number = 0.1): number | undefined {
-  if (!Settings.AdaptiveBotSpeed) {
+function adaptBotSpeed(game: Game, team: Team, val: number = 0.1): number | undefined {
+  if (!game.settings.AdaptiveBotSpeed) {
     return;
   }
 
@@ -506,8 +506,8 @@ function adaptBotSpeed(team: Team, val: number = 0.1): number | undefined {
   const teams = Array.from(teamData.keys());
   const avgbots = Array.from(teamData.values()).reduce((sum, d) => sum + d.botCount, 0) / teams.length;
   const currentTeamBots = teamData.get(team)?.botCount ?? 0;
-  Settings.BotSpeed += (avgbots - currentTeamBots) * val;
+  game.settings.BotSpeed += (avgbots - currentTeamBots) * val;
 
-  gameEvents.emit(EVENTS.BOT_SPEED_UPDATED, Settings.BotSpeed);
-  return Settings.BotSpeed;
+  gameEvents.emit(EVENTS.BOT_SPEED_UPDATED, game.settings.BotSpeed);
+  return game.settings.BotSpeed;
 }

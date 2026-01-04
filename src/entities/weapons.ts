@@ -3,7 +3,6 @@ import Tank from "./tank";
 import Trajectory from "./trajectory";
 import { playSound, hexToRgbA } from "@/game/effects";
 import { Smoke, generateCloud } from "./smoke";
-import { Settings } from "@/stores/settings";
 import { IMAGES, SOUNDS } from "@/game/assets";
 
 /**
@@ -195,12 +194,12 @@ export class MG extends Weapon {
       this.tank.player.game!.timeouts.push(window.setTimeout(() => this.deactivate(), 3000));
     }
 
-    if (this.tank.player.isBot() && this.nshots > 15) {
-      window.setTimeout(() => this.shoot(), Settings.GameFrequency);
+    if (this.tank.player.isBot() && (this.nshots || 0) > 15) {
+      window.setTimeout(() => this.shoot(), this.tank.game.settings.GameFrequency);
     }
 
-    this.every -= Settings.GameFrequency;
-    if (this.nshots > 0 && this.every < 0 && this.isActive) {
+    this.every = (this.every || 0) - this.tank.game.settings.GameFrequency;
+    if ((this.nshots || 0) > 0 && this.every < 0 && this.isActive) {
       this.every = 50;
       playSound(SOUNDS.mg);
       this.newBullet();
@@ -318,9 +317,9 @@ export class Grenade extends Weapon {
           shrapnel.y = e.y;
           shrapnel.radius = 2;
           shrapnel.age = 0;
-          shrapnel.speed = 2 * Settings.BulletSpeed * (0.8 + 0.4 * Math.random());
+          shrapnel.speed = 2 * this.tank.game.settings.BulletSpeed * (0.8 + 0.4 * Math.random());
           shrapnel.angle = 2 * Math.PI * Math.random();
-          shrapnel.timeout = (360 * 280) / Settings.BulletSpeed;
+          shrapnel.timeout = (360 * 280) / this.tank.game.settings.BulletSpeed;
           shrapnel.extrahitbox = -3;
           shrapnel.checkCollision = function () {};
           this.tank.player.game!.addObject(shrapnel);
@@ -389,7 +388,7 @@ export class Mine extends Weapon {
           shrapnel.y = e.y;
           shrapnel.radius = 2;
           shrapnel.age = 0;
-          shrapnel.speed = 2 * Settings.BulletSpeed * (0.8 + 0.4 * Math.random());
+          shrapnel.speed = 2 * this.tank.game.settings.BulletSpeed * (0.8 + 0.4 * Math.random());
           shrapnel.angle = 2 * Math.PI * Math.random();
           shrapnel.timeout = 600;
           shrapnel.extrahitbox = -3;
@@ -434,12 +433,12 @@ export class Guided extends Weapon {
     e.image.src = IMAGES.guided;
     e.color = "#555";
     e.smokeColor = "#555";
-    e.speed = 1.1 * Settings.TankSpeed;
+    e.speed = 1.1 * this.tank.game.settings.TankSpeed;
     let gotoTarget: { x: number; y: number; dx: number; dy: number } | null = null;
     e.extrahitbox = 10;
 
     e.step = function () {
-      e.age += Settings.GameFrequency;
+      e.age += this.weapon.tank.game.settings.GameFrequency;
       if (e.age > e.timeout) {
         e.delete();
       }
@@ -449,16 +448,16 @@ export class Guided extends Weapon {
       const oldy = e.y;
       // normal translation
       if (gotoTarget === null) {
-        e.x -= (e.speed * Math.sin(-e.angle) * Settings.GameFrequency) / 1000;
-        e.y -= (e.speed * Math.cos(-e.angle) * Settings.GameFrequency) / 1000;
+        e.x -= (e.speed * Math.sin(-e.angle) * this.weapon.tank.game.settings.GameFrequency) / 1000;
+        e.y -= (e.speed * Math.cos(-e.angle) * this.weapon.tank.game.settings.GameFrequency) / 1000;
       } else {
         // guided translation:
         // if egoto has point data stored go into it's direction
         const distx = gotoTarget.x + gotoTarget.dx / 2 - e.x;
         const disty = gotoTarget.y + gotoTarget.dy / 2 - e.y;
         const len = Math.sqrt(distx * distx + disty * disty);
-        e.x += (e.speed * (distx / len) * Settings.GameFrequency) / 1000;
-        e.y += (e.speed * (disty / len) * Settings.GameFrequency) / 1000;
+        e.x += (e.speed * (distx / len) * this.weapon.tank.game.settings.GameFrequency) / 1000;
+        e.y += (e.speed * (disty / len) * this.weapon.tank.game.settings.GameFrequency) / 1000;
         this.angle = Math.atan2(-distx, disty) + Math.PI;
       }
       // check for wall collisions
@@ -502,7 +501,7 @@ export class Guided extends Weapon {
       }
       e.leaveTrace = function () {
         if (Math.random() > 0.8) {
-          const smoke = new Smoke(this.x, this.y, 400, this.radius / 1.4, 0.6);
+          const smoke = new Smoke(e.player.game!, this.x, this.y, 400, this.radius / 1.4, 0.6);
           smoke.color = e.smokeColor!;
           e.player.game!.addObject(smoke);
         }
@@ -535,7 +534,7 @@ export class WreckingBall extends Weapon {
     const bullet = super.newBullet();
     bullet.radius = 10;
     bullet.color = "#000";
-    bullet.speed = Settings.TankSpeed * 1.1;
+    bullet.speed = this.tank.game.settings.TankSpeed * 1.1;
     bullet.timeout = 1000;
     bullet.checkCollision = function (x: number, y: number) {
       const tile = bullet.map.getTileByPos(x, y);
@@ -572,7 +571,7 @@ export class WreckingBall extends Weapon {
     bullet.trace = true;
     bullet.leaveTrace = function () {
       if (Math.random() > 0.96) {
-        const smoke = new Smoke(this.x, this.y, 800, bullet.radius, 0.6);
+        const smoke = new Smoke(bullet.player.game!, this.x, this.y, 800, bullet.radius, 0.6);
         smoke.color = "rgba(0,0,0,0.3)";
         bullet.player.game!.addObject(smoke);
       }
@@ -610,14 +609,14 @@ export class Slingshot extends Weapon {
     const bullet = super.newBullet();
     bullet.radius = 6;
     bullet.color = "#333";
-    bullet.speed = 2 * Settings.BulletSpeed;
+    bullet.speed = 2 * this.tank.game.settings.BulletSpeed;
     bullet.timeout = 2000;
     bullet.checkCollision = function () {};
     bullet.trace = true;
     bullet.leaveTrace = function () {
       if (Math.random() > 0.96) {
         bullet.speed *= 0.92;
-        const smoke = new Smoke(this.x, this.y, 800, bullet.radius, 0.6);
+        const smoke = new Smoke(bullet.player.game!, this.x, this.y, 800, bullet.radius, 0.6);
         smoke.color = "rgba(0,0,0,0.3)";
         bullet.player.game!.addObject(smoke);
       }

@@ -1,7 +1,6 @@
 import GameObject from "./gameobject";
 import { Smoke, generateCloud } from "./smoke";
 import { playSound } from "@/game/effects";
-import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import type Player from "@/game/player";
 import type GameMap from "@/game/gamemap";
@@ -37,8 +36,8 @@ export default class Bullet extends GameObject {
     this.player = weapon.tank.player;
     this.map = this.player.game!.map;
     this.weapon = weapon;
-    this.speed = Settings.BulletSpeed;
-    this.timeout = Settings.BulletTimeout * 1000;
+    this.speed = this.weapon.tank.game.settings.BulletSpeed;
+    this.timeout = this.weapon.tank.game.settings.BulletTimeout * 1000;
   }
 
   /**
@@ -65,7 +64,7 @@ export default class Bullet extends GameObject {
    * Timestepping: translation, aging, collision.
    */
   step(): void {
-    this.age += Settings.GameFrequency;
+    this.age += this.weapon.tank.game.settings.GameFrequency;
     if (this.age > this.timeout) {
       this.explode();
       this.delete();
@@ -77,11 +76,11 @@ export default class Bullet extends GameObject {
 
     const oldx = this.x;
     const oldy = this.y;
-    this.x -= (this.speed * Math.sin(-this.angle) * Settings.GameFrequency) / 1000;
-    this.y -= (this.speed * Math.cos(-this.angle) * Settings.GameFrequency) / 1000;
+    this.x -= (this.speed * Math.sin(-this.angle) * this.weapon.tank.game.settings.GameFrequency) / 1000;
+    this.y -= (this.speed * Math.cos(-this.angle) * this.weapon.tank.game.settings.GameFrequency) / 1000;
 
     this.checkCollision(oldx, oldy);
-    if (Settings.BulletsCanCollide) {
+    if (this.weapon.tank.game.settings.BulletsCanCollide) {
       this.checkBulletCollision();
     }
   }
@@ -153,7 +152,9 @@ export default class Bullet extends GameObject {
    * Leave a trace of smoke.
    */
   leaveTrace(): void {
-    this.player.game?.addObject(new Smoke(this.x, this.y, 300, this.radius, 1));
+    if (this.player.game) {
+      this.player.game.addObject(new Smoke(this.player.game, this.x, this.y, 300, this.radius, 1));
+    }
   }
 
   /**

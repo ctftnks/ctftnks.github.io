@@ -14,6 +14,7 @@ describe("Player Class", () => {
 
   const mockGame = {
     map: mockMap,
+    settings: Settings,
     addObject: vi.fn(),
     nPlayersAlive: 0,
     timeouts: [] as number[],

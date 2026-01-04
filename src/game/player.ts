@@ -1,7 +1,6 @@
 import Tank from "@/entities/tank";
 import { Key } from "@/game/key";
 import { generateCloud } from "@/entities/smoke";
-import { Settings } from "@/stores/settings";
 import type Game from "./game";
 import type { Base } from "@/entities/ctf";
 import type Team from "./team";
@@ -83,7 +82,7 @@ export default class Player {
       }, 10),
     );
     // spawn shield
-    tank.timers.spawnshield = game.t + Settings.SpawnShieldTime * 1000;
+    tank.timers.spawnshield = game.t + game.settings.SpawnShieldTime * 1000;
   }
 
   /**
@@ -102,7 +101,7 @@ export default class Player {
     this.game.timeouts.push(
       window.setTimeout(() => {
         this.spawn(game);
-      }, Settings.RespawnTime * 1000),
+      }, game.settings.RespawnTime * 1000),
     );
   }
 

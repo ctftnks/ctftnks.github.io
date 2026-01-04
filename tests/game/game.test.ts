@@ -69,7 +69,7 @@ describe("Game Class", () => {
     vi.useFakeTimers();
 
     // Create game instance
-    game = new Game(mockCanvas);
+    game = new Game(mockCanvas, Settings);
   });
 
   afterEach(() => {
@@ -87,8 +87,8 @@ describe("Game Class", () => {
   });
 
   it("should initialize with provided map", () => {
-    const customMap = new GameMap(mockCanvas);
-    const customGame = new Game(mockCanvas, customMap);
+    const customMap = new GameMap(mockCanvas, Settings);
+    const customGame = new Game(mockCanvas, Settings, customMap);
     expect(customGame.map).toBe(customMap);
   });
 
@@ -239,7 +239,7 @@ describe("Game Class", () => {
 
       const statsSpy = vi.spyOn(player, "resetStats");
 
-      const g = createGame(mockCanvas, [player]);
+      const g = createGame(mockCanvas, [player], Settings);
 
       expect(g).toBeInstanceOf(Game);
       expect(g.players[0].id).toBe(player.id);

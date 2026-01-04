@@ -3,6 +3,7 @@ import { Base, Flag, Hill } from "@/entities/ctf";
 import Tank from "@/entities/tank";
 import Player from "@/game/player";
 import { TEAMS } from "@/game/team";
+import { Settings } from "@/stores/settings";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -30,6 +31,7 @@ describe("CTF Entities", () => {
       mode: {
         giveScore: vi.fn(),
       },
+      settings: Settings,
       t: 1000,
       objs: [],
     };

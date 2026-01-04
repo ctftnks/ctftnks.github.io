@@ -82,7 +82,7 @@ class GameStore {
     }
     this.GameID++;
     if (this.canvas) {
-      this.game = markRaw(createGame(this.canvas, this.players, map));
+      this.game = markRaw(createGame(this.canvas, this.players, Settings, map));
     }
   }
 

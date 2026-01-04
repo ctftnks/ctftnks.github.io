@@ -1,5 +1,4 @@
 import GameObject from "./gameobject";
-import { Settings } from "@/stores/settings";
 import type GameMap from "@/game/gamemap";
 import Tank from "./tank";
 import Coord from "./coord";
@@ -109,7 +108,7 @@ export default class Trajectory extends GameObject {
       }
     }
 
-    this.timeout -= Settings.GameFrequency;
+    this.timeout -= this.map.settings.GameFrequency;
     if (this.timeout < 0) {
       this.delete();
     }
