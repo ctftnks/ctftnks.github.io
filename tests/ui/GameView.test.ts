@@ -13,16 +13,6 @@ vi.mock("@/game/canvas", () => {
   };
 });
 
-// Mock Game
-vi.mock("@/game/game", () => ({
-  newGame: vi.fn().mockReturnValue({
-    paused: false,
-    stop: vi.fn(),
-    resize: vi.fn(),
-    pause: vi.fn(),
-  }),
-}));
-
 // Mock Store
 vi.mock("@/stores/gamestore", () => ({
   store: {
@@ -31,6 +21,7 @@ vi.mock("@/stores/gamestore", () => ({
     players: [],
     createPlayer: vi.fn().mockReturnValue({ team: { color: "red" } }),
     initDefaultPlayers: vi.fn(),
+    startNewGame: vi.fn(),
   },
 }));
 
@@ -57,6 +48,7 @@ describe("GameView.vue", () => {
     expect(store.canvas).toBeDefined();
     // Verify players are created if empty
     expect(store.initDefaultPlayers).toHaveBeenCalled();
+    expect(store.startNewGame).toHaveBeenCalled();
   });
 
   it("cleans up on unmount", () => {

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import Game, { newGame } from "@/game/game";
+import Game, { createGame } from "@/game/game";
 import GameMap from "@/game/gamemap";
 import Player from "@/game/player";
 import { store } from "@/stores/gamestore";
@@ -231,31 +231,19 @@ describe("Game Class", () => {
     expect(game.map.resize).toHaveBeenCalled();
   });
 
-  describe("newGame function", () => {
+  describe("createGame function", () => {
     it("should create and start a new game", () => {
       const player = new Player(0, "P1", TEAMS[0], []);
-      store.players = [player];
       Settings.GameMode = "DM";
       Settings.ResetStatsEachGame = true;
 
       const statsSpy = vi.spyOn(player, "resetStats");
 
-      const g = newGame();
+      const g = createGame(mockCanvas, [player]);
 
       expect(g).toBeInstanceOf(Game);
-      expect(store.game).toBe(g);
       expect(g.players[0].id).toBe(player.id);
       expect(statsSpy).toHaveBeenCalled();
-    });
-
-    it("should stop previous game if it exists", () => {
-      const oldGame = new Game(mockCanvas);
-      store.game = oldGame;
-      const stopSpy = vi.spyOn(oldGame, "stop");
-
-      newGame();
-
-      expect(stopSpy).toHaveBeenCalled();
     });
   });
 });

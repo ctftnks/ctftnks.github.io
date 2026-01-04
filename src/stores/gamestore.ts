@@ -1,9 +1,12 @@
 import type Canvas from "@/game/canvas";
 import type Game from "@/game/game";
+import { createGame } from "@/game/game";
+import type GameMap from "@/game/gamemap";
 import Player from "@/game/player";
 import Bot from "@/game/bot";
 import { Settings } from "./settings";
 import { TEAMS } from "@/game/team";
+import { reactive, markRaw } from "vue";
 
 /**
  * Data Structure for the global state of the website.
@@ -70,6 +73,20 @@ class GameStore {
   }
 
   /**
+   * Starts a new game round.
+   * @param map - Optional map to use.
+   */
+  startNewGame(map: GameMap | null = null): void {
+    if (this.game) {
+      this.game.stop();
+    }
+    this.GameID++;
+    if (this.canvas) {
+      this.game = markRaw(createGame(this.canvas, this.players, map));
+    }
+  }
+
+  /**
    * Saves current settings to localStorage.
    */
   saveSettings(): void {
@@ -98,5 +115,4 @@ class GameStore {
 }
 
 // Export a singleton instance
-import { reactive } from "vue";
 export const store = reactive(new GameStore()) as GameStore;

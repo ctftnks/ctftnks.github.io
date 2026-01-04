@@ -71,7 +71,6 @@ import { ref, onMounted, onUnmounted } from "vue";
 import { store } from "@/stores/gamestore";
 import { Settings } from "@/stores/settings";
 import { openPage } from "@/stores/ui";
-import { newGame } from "@/game/game";
 import { TEAMS } from "@/game/team";
 
 const editingMapID = ref<number | null>(null);
@@ -79,7 +78,7 @@ const editingKeyID = ref<number | null>(null);
 
 function closeMenu() {
   if (!store.game) {
-    newGame();
+    store.startNewGame();
   } else {
     store.game.paused = false;
   }
@@ -88,7 +87,7 @@ function closeMenu() {
 }
 
 function startGame() {
-  newGame();
+  store.startNewGame();
   openPage("game");
   window.dispatchEvent(new Event("resize"));
 }

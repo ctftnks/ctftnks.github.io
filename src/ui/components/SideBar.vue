@@ -28,7 +28,6 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 import { store } from "@/stores/gamestore";
 import { gameEvents, EVENTS } from "@/game/events";
 import { openPage } from "@/stores/ui";
-import { newGame } from "@/game/game";
 
 const timerDisplay = ref("00:00");
 const botSpeed = ref<number | undefined>(undefined);
@@ -59,7 +58,7 @@ function resetTime() {
 }
 
 function nextMap() {
-  newGame();
+  store.startNewGame();
 }
 
 onMounted(() => {
