@@ -7,7 +7,7 @@
       <div v-for="p in sortedPlayers" :key="p.id" class="entry">
         <span class="name" :style="{ color: p.team.color }">{{ p.name }}</span>
         <span class="score">
-          <span v-if="p.spree > 1" class="spree">{{ ">+" + p.spree }}</span>
+          <span v-if="p.spree > 1" class="spree">+{{ p.spree }}</span>
           {{ p.score }}
         </span>
       </div>
