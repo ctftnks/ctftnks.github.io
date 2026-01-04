@@ -1,4 +1,4 @@
-# CTF-TNKS: Capture-the-flag Tank game
+# ![Icon](./public/favicon-32x32.png) CTFTNKS: Capture-The-Flag Tank Game
 
 [![CI](https://github.com/ctftnks/ctftnks.github.io/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ctftnks/ctftnks.github.io/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/github/ctftnks/ctftnks.github.io/graph/badge.svg?token=6HZPJ7I9C1)](https://codecov.io/github/ctftnks/ctftnks.github.io)
