@@ -2,12 +2,11 @@ import { mount } from "@vue/test-utils";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import MenuPage from "@/ui/components/MenuPage.vue";
 import { store } from "@/stores/gamestore";
-import { Settings } from "@/stores/settings";
 import { TEAMS } from "@/game/team";
 import { openPage } from "@/stores/ui";
 
 // Mock dependencies
-vi.mock("@/stores/store", () => ({
+vi.mock("@/stores/gamestore", () => ({
   store: {
     players: [],
     keymaps: [[], [], [], []],

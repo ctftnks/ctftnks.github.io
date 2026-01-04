@@ -6,7 +6,7 @@ import { openPage } from "@/stores/ui";
 import { Settings } from "@/stores/settings";
 
 // Mock dependencies
-vi.mock("@/stores/store", () => ({
+vi.mock("@/stores/gamestore", () => ({
   store: {
     saveSettings: vi.fn(),
   },

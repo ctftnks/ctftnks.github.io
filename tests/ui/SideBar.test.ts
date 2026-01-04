@@ -7,7 +7,7 @@ import { openPage } from "@/stores/ui";
 import { newGame } from "@/game/game";
 
 // Mock dependencies
-vi.mock("@/stores/store", () => ({
+vi.mock("@/stores/gamestore", () => ({
   store: {
     players: [],
     game: {
@@ -68,7 +68,7 @@ describe("SideBar.vue", () => {
     expect(timeBtn).toBeDefined();
     await timeBtn!.trigger("click");
 
-    expect(store.game.resetTime).toHaveBeenCalled();
+    expect(store.game?.resetTime).toHaveBeenCalled();
   });
 
   it("starts next map when Next Map is clicked", async () => {
