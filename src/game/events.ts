@@ -7,6 +7,7 @@ type Listener<T> = (data: T) => void;
  * A simple event emitter for decoupling game logic from the UI.
  */
 class EventEmitter {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private listeners: { [key: string]: Listener<any>[] } = {};
 
   /**

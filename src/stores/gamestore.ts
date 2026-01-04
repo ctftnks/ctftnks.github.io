@@ -74,6 +74,7 @@ class GameStore {
         const parsed = JSON.parse(saved);
         for (const key in parsed) {
           if (key in Settings) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (Settings as any)[key] = parsed[key];
           }
         }
