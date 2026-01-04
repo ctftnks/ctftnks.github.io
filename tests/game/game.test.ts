@@ -168,10 +168,10 @@ describe("Game Class", () => {
   it("should generate powerups in step", () => {
     Settings.PowerUpRate = 0.01; // Every 10ms
     game.t = 0;
-    
+
     game.step();
-    
-    const powerups = game.objs.filter(o => o instanceof PowerUp);
+
+    const powerups = game.objs.filter((o) => o instanceof PowerUp);
     expect(powerups.length).toBeGreaterThan(0);
   });
 
@@ -180,11 +180,11 @@ describe("Game Class", () => {
     game.t = 990;
     Settings.RoundTime = 5;
     Settings.GameFrequency = 10;
-    
+
     // game.step increments t by GameFrequency (10)
     // t becomes 1000, 1000 % 1000 = 0 < 10 -> should trigger
     game.step();
-    
+
     expect(emitSpy).toHaveBeenCalledWith(EVENTS.TIME_UPDATED, expect.any(Number));
   });
 
@@ -204,7 +204,7 @@ describe("Game Class", () => {
     const tank = new Tank(player, game);
     game.addObject(tank);
     game.addObject({} as any); // Some other object
-    
+
     const tanks = game.getTanks();
     expect(tanks).toContain(tank);
     expect(tanks.length).toBe(1);
@@ -216,9 +216,9 @@ describe("Game Class", () => {
     game.addObject(tank);
     tank.timers.invincible = 1000;
     tank.timers.spawnshield = 1000;
-    
+
     game.resetTime();
-    
+
     expect(game.t).toBe(0);
     expect(tank.timers.invincible).toBe(0);
     expect(tank.timers.spawnshield).toBe(0);
@@ -230,11 +230,11 @@ describe("Game Class", () => {
       store.players = [player];
       Settings.GameMode = "DM";
       Settings.ResetStatsEachGame = true;
-      
+
       const statsSpy = vi.spyOn(player, "resetStats");
-      
+
       const g = newGame();
-      
+
       expect(g).toBeInstanceOf(Game);
       expect(store.game).toBe(g);
       expect(g.players).toContain(player);
@@ -245,11 +245,10 @@ describe("Game Class", () => {
       const oldGame = new Game(mockCanvas);
       store.game = oldGame;
       const stopSpy = vi.spyOn(oldGame, "stop");
-      
+
       newGame();
-      
+
       expect(stopSpy).toHaveBeenCalled();
     });
   });
 });
-

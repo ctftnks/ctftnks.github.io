@@ -70,10 +70,10 @@ describe("Tank Class", () => {
     const tank = new Tank(mockPlayer, mockGame);
     tank.x = 50;
     tank.y = 50;
-    
+
     // First call returns no collision, second call (inside move) returns collision
     mockTile.getWalls.mockReturnValueOnce([false]).mockReturnValueOnce([true]);
-    
+
     const initialX = tank.x;
     tank.move(1);
     expect(tank.x).toBe(initialX);
@@ -83,10 +83,10 @@ describe("Tank Class", () => {
     const tank = new Tank(mockPlayer, mockGame);
     tank.x = 50;
     tank.y = 50;
-    
+
     const initialAngle = tank.angle;
     mockTile.getWalls.mockReturnValueOnce([true]); // Immediate collision on turn
-    
+
     tank.turn(1);
     expect(tank.angle).toBe(initialAngle);
   });
@@ -187,7 +187,7 @@ describe("Tank Class", () => {
       const tank = new Tank(mockPlayer, mockGame);
       tank.x = 50;
       tank.y = 50;
-      
+
       const mockBullet = {
         x: 50,
         y: 50,
@@ -198,9 +198,9 @@ describe("Tank Class", () => {
         delete: vi.fn(),
       };
       Object.setPrototypeOf(mockBullet, Bullet.prototype);
-      
+
       mockTile.objs.push(mockBullet);
-      
+
       Settings.FriendlyFire = false;
       (tank as any).checkBulletCollision();
       expect(mockBullet.explode).not.toHaveBeenCalled();
@@ -218,7 +218,7 @@ describe("Tank Class", () => {
       tank.y = 50;
       tank.timers.invincible = 1000;
       mockGame.t = 500;
-      
+
       const mockBullet = {
         x: 50,
         y: 50,
@@ -229,14 +229,13 @@ describe("Tank Class", () => {
         delete: vi.fn(),
       };
       Object.setPrototypeOf(mockBullet, Bullet.prototype);
-      
+
       mockTile.objs.push(mockBullet);
-      
+
       (tank as any).checkBulletCollision();
-      
+
       expect(mockBullet.explode).not.toHaveBeenCalled();
       expect(tank.deleted).toBe(false);
     });
   });
 });
-

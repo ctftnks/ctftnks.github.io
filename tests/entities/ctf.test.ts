@@ -80,7 +80,7 @@ describe("CTF Entities", () => {
       const friendlyTank = new Tank(player, mockGame);
       friendlyTank.x = 50;
       friendlyTank.y = 50;
-      
+
       const enemyBase = new Base(mockGame, { team: TEAMS[2] } as any, 500, 500);
       const enemyFlag = new Flag(mockGame, enemyBase);
       friendlyTank.carriedFlag = enemyFlag;
@@ -167,7 +167,7 @@ describe("CTF Entities", () => {
       const flag = new Flag(mockGame, base);
       flag.drop(200, 200);
       flag.inBase = false;
-      
+
       // Ensure base says it doesn't have the flag
       base.flag = flag;
 
@@ -189,7 +189,7 @@ describe("CTF Entities", () => {
       flag.drop(200, 200);
       flag.inBase = false;
       flag.picked = false;
-      
+
       // Set timer to the past
       flag.resetTimer = 500;
       mockGame.t = 1000;
