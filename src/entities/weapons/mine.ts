@@ -3,7 +3,7 @@ import type Tank from "../tank";
 import Bullet from "../bullet";
 import { IMAGES, SOUNDS } from "@/game/assets";
 import { playSound } from "@/game/effects";
-import { Settings } from "@/stores/settings";
+import { createShrapnelExplosion } from "./utils";
 
 /**
  * A mine.
@@ -43,18 +43,9 @@ export class Mine extends Weapon {
       if (!e.exploded) {
         e.exploded = true;
         playSound(SOUNDS.grenade);
-        for (let i = 0; i < this.nshrapnels; i++) {
-          const shrapnel = new Bullet(this as Weapon);
-          shrapnel.x = e.x;
-          shrapnel.y = e.y;
-          shrapnel.radius = 2;
-          shrapnel.age = 0;
-          shrapnel.speed = 2 * Settings.BulletSpeed * (0.8 + 0.4 * Math.random());
-          shrapnel.angle = 2 * Math.PI * Math.random();
-          shrapnel.timeout = 600;
-          shrapnel.extrahitbox = -3;
-          this.tank.player.game!.addObject(shrapnel);
-        }
+        createShrapnelExplosion(this, e.x, e.y, this.nshrapnels, {
+          timeout: 600,
+        });
         this.bullet = null;
       }
     };
