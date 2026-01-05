@@ -187,7 +187,7 @@ export class TeamDeathmatch extends Gamemode {
             if (stile === null) {
               continue;
             }
-            const path = (tile as Tile).pathTo((destination) => {
+            const path = tile.pathTo((destination) => {
               return destination.id === stile.id;
             });
             if (path !== null) {
@@ -309,7 +309,7 @@ export class CaptureTheFlag extends Gamemode {
             if (stile === null) {
               continue;
             }
-            const path = (tile as Tile).pathTo((destination) => {
+            const path = tile.pathTo((destination) => {
               return destination.id === stile.id;
             });
             if (path !== null) {
@@ -448,7 +448,7 @@ export class KingOfTheHill extends Gamemode {
           if (stile === null) {
             continue;
           }
-          const path = (tile as Tile).pathTo((destination) => {
+          const path = tile.pathTo((destination) => {
             return destination.id === stile.id;
           });
           if (path !== null) {
