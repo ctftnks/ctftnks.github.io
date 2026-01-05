@@ -77,20 +77,8 @@ export class Guided extends Weapon {
         playSound(SOUNDS.guided);
         // get current tile and path
         const tile = e.map.getTileByPos(oldx, oldy)!;
-        /**
-         * Pathfinding logic for guided missile.
-         * @param destination - The destination tile.
-         * @returns Whether the tile contains an enemy tank.
-         */
-        const path = tile.pathTo((destination) => {
-          for (let i = 0; i < destination.objs.length; i++) {
-            const obj = destination.objs[i];
-            if (obj instanceof Tank && obj.player.team !== e.player.team) {
-              return true;
-            }
-          }
-          return false;
-        });
+        // Pathfinding logic for guided missile.
+        const path = tile.pathTo((destination) => destination.objs.some((obj) => obj instanceof Tank && obj.player.team !== e.player.team));
         // set next path tile as goto point
         if (path && path.length > 1) {
           gotoTarget = path[1];

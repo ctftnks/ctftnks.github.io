@@ -198,10 +198,7 @@ export default class Tile implements Coord {
    * @param maxPathLength - Max path length.
    * @returns Path to object or null.
    */
-  xypathToObj(
-    condition: (obj: GameObject) => boolean,
-    maxPathLength: number | null = null,
-  ): Array<{ x: number; y: number } | GameObject> | null {
+  xypathToObj(condition: (obj: GameObject) => boolean, maxPathLength: number | null = null): Coord[] | null {
     const tilepath = this.pathTo((dest) => dest.objs.some(condition), [], null, maxPathLength);
     if (!tilepath) {
       return null;
@@ -210,14 +207,11 @@ export default class Tile implements Coord {
       x: tile.x + tile.dx / 2,
       y: tile.y + tile.dy / 2,
     }));
-
-    const lasttile = tilepath[tilepath.length - 1];
-    const obj = lasttile.objs.find(condition);
-
-    if (!obj) {
+    const foundObj = tilepath[tilepath.length - 1].objs.find(condition);
+    if (!foundObj) {
       return null;
     }
-    xypath.push(obj);
+    xypath.push(foundObj);
     return xypath;
   }
 }
