@@ -4,6 +4,12 @@ import { Settings } from "@/stores/settings";
 import { TEAMS } from "@/game/team";
 import Bullet from "@/entities/bullet";
 
+// Mock dependencies
+vi.mock("@/game/effects", () => ({
+  playSound: vi.fn(),
+  generateCloud: vi.fn(),
+}));
+
 describe("Tank Class", () => {
   let mockPlayer: any;
   let mockGame: any;
@@ -182,60 +188,60 @@ describe("Tank Class", () => {
     expect(mockContext.fill).toHaveBeenCalled();
   });
 
-  describe("checkBulletCollision", () => {
-    it("should respect friendly fire settings", () => {
-      const tank = new Tank(mockPlayer, mockGame);
-      tank.x = 50;
-      tank.y = 50;
+  it("should respect friendly fire settings when colliding with bullet", () => {
+    const tank = new Tank(mockPlayer, mockGame);
+    tank.x = 50;
+    tank.y = 50;
 
-      const mockBullet = {
-        x: 50,
-        y: 50,
-        age: 10,
-        lethal: true,
-        player: { team: TEAMS[1], id: 999, stats: { kills: 0 } }, // Same team, different player
-        explode: vi.fn(),
-        delete: vi.fn(),
-      };
-      Object.setPrototypeOf(mockBullet, Bullet.prototype);
+    const mockBullet = {
+      x: 50,
+      y: 50,
+      age: 10,
+      lethal: true,
+      player: { team: TEAMS[1], id: 999, stats: { kills: 0 } }, // Same team, different player
+      explode: vi.fn(),
+      delete: vi.fn(),
+    };
+    Object.setPrototypeOf(mockBullet, Bullet.prototype);
 
-      mockTile.objs.push(mockBullet);
+    mockTile.objs.push(mockBullet);
 
-      Settings.FriendlyFire = false;
-      (tank as any).checkBulletCollision();
-      expect(mockBullet.explode).not.toHaveBeenCalled();
-      expect(tank.deleted).toBe(false);
+    // Friendly Fire OFF
+    Settings.FriendlyFire = false;
+    tank.step();
+    expect(mockBullet.explode).not.toHaveBeenCalled();
+    expect(tank.deleted).toBe(false);
 
-      Settings.FriendlyFire = true;
-      (tank as any).checkBulletCollision();
-      expect(mockBullet.explode).toHaveBeenCalled();
-      expect(tank.deleted).toBe(true);
-    });
+    // Friendly Fire ON
+    Settings.FriendlyFire = true;
+    tank.step();
+    expect(mockBullet.explode).toHaveBeenCalled();
+    expect(tank.deleted).toBe(true);
+  });
 
-    it("should not kill tank if invincible", () => {
-      const tank = new Tank(mockPlayer, mockGame);
-      tank.x = 50;
-      tank.y = 50;
-      tank.timers.invincible = 1000;
-      mockGame.t = 500;
+  it("should not be killed by bullet if invincible", () => {
+    const tank = new Tank(mockPlayer, mockGame);
+    tank.x = 50;
+    tank.y = 50;
+    tank.timers.invincible = 1000;
+    mockGame.t = 500;
 
-      const mockBullet = {
-        x: 50,
-        y: 50,
-        age: 10,
-        lethal: true,
-        player: { team: TEAMS[2], stats: { kills: 0 } },
-        explode: vi.fn(),
-        delete: vi.fn(),
-      };
-      Object.setPrototypeOf(mockBullet, Bullet.prototype);
+    const mockBullet = {
+      x: 50,
+      y: 50,
+      age: 10,
+      lethal: true,
+      player: { team: TEAMS[2], stats: { kills: 0 } }, // Enemy team
+      explode: vi.fn(),
+      delete: vi.fn(),
+    };
+    Object.setPrototypeOf(mockBullet, Bullet.prototype);
 
-      mockTile.objs.push(mockBullet);
+    mockTile.objs.push(mockBullet);
 
-      (tank as any).checkBulletCollision();
+    tank.step();
 
-      expect(mockBullet.explode).not.toHaveBeenCalled();
-      expect(tank.deleted).toBe(false);
-    });
+    expect(mockBullet.explode).not.toHaveBeenCalled();
+    expect(tank.deleted).toBe(false);
   });
 });
