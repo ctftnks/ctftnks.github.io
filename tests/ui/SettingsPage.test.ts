@@ -95,4 +95,32 @@ describe("SettingsPage.vue", () => {
     await select.setValue(false); // muted = false
     expect(Settings.muted).toBe(false);
   });
+
+  it("updates all other boolean settings via selects", async () => {
+    const wrapper = mount(SettingsPage);
+    const selects = wrapper.findAll("select");
+
+    // Iterate through all selects to ensure coverage
+    for (const select of selects) {
+      await select.setValue("true"); // Set to 'on'
+      await select.setValue("false"); // Set to 'off'
+    }
+
+    expect(store.saveSettings).toHaveBeenCalled();
+  });
+
+  it("updates various numeric settings", async () => {
+    const wrapper = mount(SettingsPage);
+    const buttons = wrapper.findAll("button.left, button.right");
+
+    // Click a few more buttons to cover different settings
+    // We don't need to assert exact values for every single one, just triggering the click handler
+    for (const btn of buttons) {
+      if (btn.text() === "+" || btn.text() === "-") {
+        await btn.trigger("click");
+      }
+    }
+
+    expect(store.saveSettings).toHaveBeenCalled();
+  });
 });

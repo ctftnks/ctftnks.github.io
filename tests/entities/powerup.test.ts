@@ -152,11 +152,32 @@ describe("PowerUp System", () => {
   });
 
   it("should apply InvincibleBonus", () => {
+    vi.useFakeTimers();
     const creator = PowerUps.find((p) => p.name === "Invincible")!;
     const bonus = creator.create();
+
+    // 1. First Apply
     bonus.apply(mockTank);
     expect(mockTank.timers.invincible).toBe(11000); // game.t + 10000
     expect(mockGame.timeouts.length).toBe(1);
+    // expect(playMusic).toHaveBeenCalledWith(SOUNDS.invincible); // Need to export playMusic from mock or check calls
+
+    // 2. Second Apply (Guard clause)
+    const initialTimersLength = mockGame.timeouts.length;
+    bonus.apply(mockTank);
+    expect(mockGame.timeouts.length).toBe(initialTimersLength); // No new timeout added
+
+    // 3. Timeout execution
+    const initialSpeed = mockTank.speed; // 100 * 1.14 from first apply
+    // Speed was multiplied by 1.14.
+    // Wait for timeout (10100ms)
+    vi.advanceTimersByTime(10100);
+
+    // Speed should be reset (divided by 1.14)
+    // 100 * 1.14 / 1.14 ~= 100.
+    expect(mockTank.speed).toBeCloseTo(100);
+
+    vi.useRealTimers();
   });
 
   it("should apply TerminatorBonus", () => {

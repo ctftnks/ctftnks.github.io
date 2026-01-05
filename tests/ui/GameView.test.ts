@@ -27,6 +27,13 @@ vi.mock("@/stores/gamestore", () => ({
   },
 }));
 
+// Mock UI Store
+vi.mock("@/stores/ui", () => ({
+  openPage: vi.fn(),
+}));
+
+import { openPage } from "@/stores/ui";
+
 describe("GameView.vue", () => {
   beforeEach(() => {
     store.canvas = undefined;
@@ -62,5 +69,29 @@ describe("GameView.vue", () => {
 
     expect(store.game).toBeUndefined();
     expect(store.canvas).toBeUndefined();
+  });
+
+  it("handles resize event", async () => {
+    mount(GameView);
+    store.game = { resize: vi.fn(), stop: vi.fn(), paused: false } as any;
+
+    window.dispatchEvent(new Event("resize"));
+
+    expect(store.game.resize).toHaveBeenCalled();
+  });
+
+  it("handles keydown event (Escape)", async () => {
+    mount(GameView);
+    store.game = {
+      resize: vi.fn(),
+      stop: vi.fn(),
+      pause: vi.fn(),
+      paused: false,
+    } as any;
+
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+
+    expect(store.game.pause).toHaveBeenCalled();
+    expect(openPage).toHaveBeenCalledWith("menu");
   });
 });

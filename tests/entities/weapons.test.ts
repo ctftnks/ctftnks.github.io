@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { Gun, MG, Grenade, Laser, Mine, Guided, WreckingBall, Slingshot } from "@/entities/weapons";
 import { TEAMS } from "@/game/team";
 import { Settings } from "@/stores/settings";
+import Tank from "@/entities/tank";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -10,7 +11,9 @@ vi.mock("@/game/effects", () => ({
 }));
 
 vi.mock("@/entities/smoke", () => ({
-  Smoke: vi.fn().mockImplementation(() => ({})),
+  Smoke: class {
+    constructor() {}
+  },
   generateCloud: vi.fn(),
 }));
 
@@ -222,17 +225,54 @@ describe("Weapon System", () => {
       const bullet = guided.newBullet();
       expect(bullet.speed).toBeGreaterThan(0);
 
-      // Trigger pathfinding logic in step
-      bullet.age = 2000;
+      const targetTile = { x: 100, y: 100, dx: 0, dy: 0, objs: [] };
+      const pathToMock = vi.fn().mockReturnValue([{ id: 1, objs: [] }, targetTile]);
+
       mockGame.map.getTileByPos.mockReturnValue({
-        pathTo: vi.fn().mockReturnValue([
-          { id: 1, objs: [] },
-          { id: 2, x: 0, y: 0, dx: 1, dy: 1, objs: [{}] },
-        ]),
+        pathTo: pathToMock,
+        objs: [],
       });
 
+      // 1. Initial Step - triggering pathfinding
+      bullet.age = 2000;
       (bullet as any).step();
+
       expect(mockGame.map.getTileByPos).toHaveBeenCalled();
+      expect(pathToMock).toHaveBeenCalled();
+
+      // Verify callback logic (manually call the callback passed to pathTo if possible,
+      // or rely on the mock setup if we want to test the callback function itself)
+      // To test the callback provided BY the bullet, we need to capture it.
+      const callback = pathToMock.mock.calls[0][0];
+
+      const enemyTank = Object.create(Tank.prototype);
+      enemyTank.player = { team: TEAMS[1] };
+
+      const friendlyTank = Object.create(Tank.prototype);
+      friendlyTank.player = { team: TEAMS[0] };
+
+      // Callback should return true for enemy tank
+      expect(callback({ objs: [enemyTank] })).toBe(true);
+      // Callback should return false for friendly tank
+      expect(callback({ objs: [friendlyTank] })).toBe(false);
+      // Callback should return false for empty tile
+      expect(callback({ objs: [] })).toBe(false);
+
+      // 2. Second Step - Guided Movement
+      // Now gotoTarget should be set to targetTile
+      // Initial position 0,0. Target 100,100.
+      const oldX = bullet.x;
+      const oldY = bullet.y;
+
+      // Speed is ~200 (1.1 * 200). dt = 10. distance ~2.
+      // Direction 1,1.
+      (bullet as any).step();
+
+      // Should have moved towards 100,100 (positive change)
+      // Normal movement (angle 0) would be y decreasing.
+      // Guided movement towards 100,100 should be x increasing, y increasing.
+      expect(bullet.x).toBeGreaterThan(oldX);
+      expect(bullet.y).toBeGreaterThan(oldY);
     });
   });
 
@@ -251,6 +291,27 @@ describe("Weapon System", () => {
       (bullet as any).checkCollision(0, 0);
 
       expect(mockTile.addWall).toHaveBeenCalled();
+    });
+
+    it("should bounce off outer walls", () => {
+      const ball = new WreckingBall(mockTank);
+      const bullet = ball.newBullet();
+      const mockTile = {
+        getWalls: vi.fn().mockReturnValue([true, false, false, false]), // Top wall
+        neighbors: [undefined, {}, {}, {}], // Top neighbor is missing (outer wall)
+        addWall: vi.fn(),
+      };
+      mockGame.map.getTileByPos.mockReturnValue(mockTile);
+
+      bullet.angle = 0; // Moving up
+      bullet.y = 10;
+      const oldY = 12;
+
+      (bullet as any).checkCollision(10, oldY);
+
+      expect(mockTile.addWall).not.toHaveBeenCalled();
+      // Should bounce: angle = PI - angle
+      expect(bullet.angle).toBeCloseTo(Math.PI);
     });
   });
 
