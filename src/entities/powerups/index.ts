@@ -1,30 +1,20 @@
 import { reactive } from "vue";
 import { playSound } from "@/game/effects";
-import { SOUNDS } from "@/game/assets";
+import { SOUNDS, IMAGES } from "@/game/assets";
 
 import { PowerUp } from "./powerup";
-import { LaserBonus } from "./laserBonus";
-import { MGBonus } from "./mgBonus";
-import { GrenadeBonus } from "./grenadeBonus";
-import { MineBonus } from "./mineBonus";
-import { GuidedBonus } from "./guidedBonus";
-import { WreckingBallBonus } from "./wreckingBallBonus";
+import { WeaponBonus } from "./weaponBonus";
 import { MultiBonus } from "./multiBonus";
-import { SlingshotBonus } from "./slingshotBonus";
 import { InvincibleBonus } from "./invincibleBonus";
 import { TerminatorBonus } from "./terminatorBonus";
 import { FogBonus } from "./fogBonus";
 import { SpeedBonus } from "./speedBonus";
 
+import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot } from "../weapons";
+
 export * from "./powerup";
-export * from "./laserBonus";
-export * from "./mgBonus";
-export * from "./grenadeBonus";
-export * from "./mineBonus";
-export * from "./guidedBonus";
-export * from "./wreckingBallBonus";
+export * from "./weaponBonus";
 export * from "./multiBonus";
-export * from "./slingshotBonus";
 export * from "./invincibleBonus";
 export * from "./terminatorBonus";
 export * from "./fogBonus";
@@ -32,32 +22,32 @@ export * from "./speedBonus";
 
 export const PowerUps = reactive([
   {
-    create: () => new LaserBonus(),
+    create: () => new WeaponBonus(IMAGES.laser, Laser, true),
     name: "Laser",
     weight: 1,
   },
   {
-    create: () => new MGBonus(),
+    create: () => new WeaponBonus(IMAGES.mg, MG, true),
     name: "MG",
     weight: 1,
   },
   {
-    create: () => new GrenadeBonus(),
+    create: () => new WeaponBonus(IMAGES.grenade, Grenade, false),
     name: "Grenade",
     weight: 1,
   },
   {
-    create: () => new MineBonus(),
+    create: () => new WeaponBonus(IMAGES.mine, Mine, false),
     name: "Mine",
     weight: 1,
   },
   {
-    create: () => new GuidedBonus(),
+    create: () => new WeaponBonus(IMAGES.guided, Guided, true),
     name: "Guided",
     weight: 1,
   },
   {
-    create: () => new WreckingBallBonus(),
+    create: () => new WeaponBonus(IMAGES.wreckingBall, WreckingBall, false),
     name: "WreckingBall",
     weight: 0.5,
   },
@@ -67,7 +57,7 @@ export const PowerUps = reactive([
     weight: 1,
   },
   {
-    create: () => new SlingshotBonus(),
+    create: () => new WeaponBonus(IMAGES.slingshot, Slingshot, true),
     name: "Slingshot",
     weight: 1,
   },
