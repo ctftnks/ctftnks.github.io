@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import GameView from "@/ui/components/GameView.vue";
 import { store } from "@/stores/gamestore";
 import Canvas from "@/game/canvas";
+import { openPage } from "@/stores/ui";
 
 enableAutoUnmount(afterEach);
 
@@ -31,8 +32,6 @@ vi.mock("@/stores/gamestore", () => ({
 vi.mock("@/stores/ui", () => ({
   openPage: vi.fn(),
 }));
-
-import { openPage } from "@/stores/ui";
 
 describe("GameView.vue", () => {
   beforeEach(() => {
@@ -77,7 +76,7 @@ describe("GameView.vue", () => {
 
     window.dispatchEvent(new Event("resize"));
 
-    expect(store.game.resize).toHaveBeenCalled();
+    expect(store.game!.resize).toHaveBeenCalled();
   });
 
   it("handles keydown event (Escape)", async () => {
@@ -91,7 +90,7 @@ describe("GameView.vue", () => {
 
     window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
 
-    expect(store.game.pause).toHaveBeenCalled();
+    expect(store.game!.pause).toHaveBeenCalled();
     expect(openPage).toHaveBeenCalledWith("menu");
   });
 });

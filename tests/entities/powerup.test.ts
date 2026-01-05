@@ -168,7 +168,6 @@ describe("PowerUp System", () => {
     expect(mockGame.timeouts.length).toBe(initialTimersLength); // No new timeout added
 
     // 3. Timeout execution
-    const initialSpeed = mockTank.speed; // 100 * 1.14 from first apply
     // Speed was multiplied by 1.14.
     // Wait for timeout (10100ms)
     vi.advanceTimersByTime(10100);
