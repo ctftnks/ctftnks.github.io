@@ -64,6 +64,7 @@ describe("Gamemode Classes", () => {
       t: 0,
       map: {
         spawnPoint: vi.fn().mockReturnValue({ x: 0, y: 0 }),
+        getFurthestSpawnPoint: vi.fn().mockReturnValue({ x: 100, y: 100 }),
         getTileByPos: vi.fn().mockReturnValue({
           id: 1,
           x: 0,

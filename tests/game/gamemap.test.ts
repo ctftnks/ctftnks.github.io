@@ -58,6 +58,24 @@ describe("Map Class", () => {
     expect(map.getTileByPos(50, -dy * 2)).toBe(null);
     expect(map.getTileByPos(50, dy * 15)).toBe(null);
   });
+
+  it("should find the furthest spawn point", () => {
+    const map = new GameMap(mockCanvas, 5, 5); // 5x5 grid
+    // Center is 2,2. Corners are 0,0; 4,0; 0,4; 4,4.
+
+    // Avoid 0,0
+    const avoid = [{ x: 0, y: 0 }];
+    const furthest = map.getFurthestSpawnPoint(avoid);
+
+    // Furthest from 0,0 in a 5x5 grid should be 4,4
+    // Pixel coords: tile.x + dx/2.
+    // tile 4,4: x=4*dx, y=4*dy.
+    const expectedX = 4 * map.dx + map.dx / 2;
+    const expectedY = 4 * map.dy + map.dy / 2;
+
+    expect(furthest.x).toBe(expectedX);
+    expect(furthest.y).toBe(expectedY);
+  });
 });
 
 describe("Tile Class", () => {

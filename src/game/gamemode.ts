@@ -5,17 +5,19 @@ import Hill from "@/entities/hill";
 import { playSound } from "./effects";
 import { SOUNDS } from "@/game/assets";
 import type Game from "./game";
-import Tile from "./tile";
 import type Team from "./team";
 import { Settings } from "@/stores/settings";
 import { store } from "@/stores/gamestore";
+import type Coord from "@/entities/coord";
 
 /**
  * Base class for game modes.
  */
 export abstract class Gamemode {
   name: string = "defaultmode";
+  /** Corresponding Game instance. */
   game: Game;
+  /** Distance from base center to player spawn point (used in Player.spawn). */
   BaseSpawnDistance: number = 2;
 
   /**
@@ -23,13 +25,14 @@ export abstract class Gamemode {
    * @param game - The game instance.
    */
   constructor(game: Game) {
-    /** Corresponding Game instance. */
     this.game = game;
   }
+
   /**
    * Called every game step.
    */
   step(): void {}
+
   /**
    * Initializes the game mode.
    */
@@ -43,49 +46,115 @@ export abstract class Gamemode {
   abstract newKill(player1: Player, player2: Player): void;
 
   /**
-   * Updates player score (Default implementation)
-   * @param player
-   * @param val
+   * Updates player score.
+   * @param player - The player.
+   * @param val - The score value.
    */
   abstract giveScore(player: Player, val: number): void;
-}
 
-/**
- * Deathmatch game mode.
- * @augments Gamemode
- */
-export class Deathmatch extends Gamemode {
   /**
-   * Creates a new Deathmatch mode.
-   * @param game - The game instance.
+   * Adapts bot speed based on team balance.
+   * @param team - The team to adjust for (usually the leading team gets harder bots?).
+   * @param val - The adaptation intensity.
    */
-  constructor(game: Game) {
-    super(game);
-    this.name = "Deathmatch";
+  protected adaptBotSpeed(team: Team | null, val: number = 0.1): void {
+    if (!Settings.AdaptiveBotSpeed || !team) {
+      return;
+    }
+
+    const teamData = new Map<Team, { botCount: number }>();
+    for (const player of store.players) {
+      const data = teamData.get(player.team) ?? { botCount: 0 };
+      if (player.isBot()) {
+        data.botCount++;
+      }
+      teamData.set(player.team, data);
+    }
+
+    const teams = Array.from(teamData.keys());
+    if (teams.length === 0) {
+      return;
+    }
+
+    const avgBots = Array.from(teamData.values()).reduce((sum, d) => sum + d.botCount, 0) / teams.length;
+    const currentTeamBots = teamData.get(team)?.botCount ?? 0;
+
+    // Adjust global bot speed based on team composition balance
+    Settings.BotSpeed += (avgBots - currentTeamBots) * val;
   }
 
   /**
-   * Updates player score.
-   * @param player - The player to give score to.
-   * @param val - The score value.
-   * @override
+   * Initializes bases for each team.
+   * Ensures one base per team, placed far from each other.
+   * @param onBaseCreated - Callback for additional base setup (e.g., adding flags).
    */
-  override giveScore(player: Player, val: number = 1): void {
-    player.score += val;
+  protected initTeamBases(onBaseCreated?: (base: Base) => void): void {
+    const game = this.game;
+    if (!game.map) {
+      return;
+    }
+
+    const bases: Base[] = [];
+    const teamMap = new Map<Team, Base>();
+
+    // identify unique teams
+    const teams = new Set<Team>();
+    for (const player of game.players) {
+      if (player.team) {
+        teams.add(player.team);
+      }
+    }
+
+    // create base for each team
+    for (const team of teams) {
+      const avoidPoints: Coord[] = bases.map((b) => ({ x: b.x, y: b.y }));
+      const pos = game.map.getFurthestSpawnPoint(avoidPoints);
+
+      // We need a player owner for the base constructor, pick the first one from the team
+      const owner = game.players.find((p) => p.team === team) || null;
+
+      const base = new Base(game, owner, pos.x, pos.y);
+      bases.push(base);
+      teamMap.set(team, base);
+      game.addObject(base);
+
+      if (onBaseCreated) {
+        onBaseCreated(base);
+      }
+    }
+
+    // Assign bases to all players
+    for (const player of game.players) {
+      if (player.team && teamMap.has(player.team)) {
+        player.base = teamMap.get(player.team);
+      }
+    }
+  }
+
+  protected handleMultiKill(player: Player): void {
     player.spree += 1;
     if (player.spree >= 5 && player.spree % 5 === 0) {
       player.score += Math.floor(player.spree / 5);
       playSound(SOUNDS.killingspree);
     }
-    adaptBotSpeed(player.team);
+  }
+}
+
+/**
+ * Deathmatch game mode.
+ */
+export class Deathmatch extends Gamemode {
+  constructor(game: Game) {
+    super(game);
+    this.name = "Deathmatch";
   }
 
-  /**
-   * Handle a new kill event.
-   * @param player1 - The killer.
-   * @param player2 - The victim.
-   * @override
-   */
+  override giveScore(player: Player, val: number = 1): void {
+    player.score += val;
+    this.handleMultiKill(player);
+    this.adaptBotSpeed(player.team);
+  }
+
   override newKill(player1: Player, player2: Player): void {
     if (player1.team === player2.team) {
       this.giveScore(player1, -1);
@@ -100,41 +169,22 @@ export class Deathmatch extends Gamemode {
  * @augments Gamemode
  */
 export class TeamDeathmatch extends Gamemode {
-  /**
-   * Creates a new TeamDeathmatch mode.
-   * @param game - The game instance.
-   */
   constructor(game: Game) {
     super(game);
     this.name = "TeamDeathmatch";
   }
 
-  /**
-   * Updates team score.
-   * @param player - The player involved (to identify team).
-   * @param val - The score value.
-   * @override
-   */
   override giveScore(player: Player, val: number = 1): void {
-    for (let i = 0; i < this.game.players.length; i++) {
-      if (this.game.players[i].team === player.team) {
-        this.game.players[i].score += val;
+    // Give score to all team members
+    for (const p of this.game.players) {
+      if (p.team === player.team) {
+        p.score += val;
       }
     }
-    player.spree += 1;
-    if (player.spree >= 5 && player.spree % 5 === 0) {
-      player.score += Math.floor(player.spree / 5);
-      playSound(SOUNDS.killingspree);
-    }
-    adaptBotSpeed(player.team);
+    this.handleMultiKill(player);
+    this.adaptBotSpeed(player.team);
   }
 
-  /**
-   * Handle a new kill event.
-   * @param player1 - The killer.
-   * @param player2 - The victim.
-   * @override
-   */
   override newKill(player1: Player, player2: Player): void {
     if (player1.team === player2.team) {
       this.giveScore(player1, -1);
@@ -143,80 +193,8 @@ export class TeamDeathmatch extends Gamemode {
     }
   }
 
-  /**
-   * Initialize bases and spawn players.
-   * @override
-   */
   override init(): void {
-    const bases: Base[] = [];
-    const game = this.game;
-    if (!game.map) {
-      return;
-    }
-
-    // create single base for each team
-    for (let i = 0; i < game.players.length; i++) {
-      let baseExists = false;
-      const player = game.players[i];
-      for (const base of bases) {
-        if (player.team === base.team) {
-          baseExists = true;
-          player.base = base;
-        }
-      }
-      if (!baseExists) {
-        // find spawnPoint that is far away from existing bases
-        let maxLength = 0;
-        let maxPos = game.map.spawnPoint();
-        for (let k = 0; k < 100; k++) {
-          const pos = game.map.spawnPoint();
-          const tile = game.map.getTileByPos(pos.x, pos.y);
-          if (tile === null) {
-            continue;
-          }
-          let length = 0;
-          let initfirst = false;
-          if (bases.length === 0) {
-            // Using spawnPoint directly as base placeholder for dist calc
-            const sp = game.map.spawnPoint();
-            bases.push(new Base(game, player, sp.x, sp.y));
-            initfirst = true;
-          }
-          for (let j = 0; j < bases.length; j++) {
-            const stile = this.game.map.getTileByPos(bases[j].x, bases[j].y);
-            if (stile === null) {
-              continue;
-            }
-            const path = tile.pathTo((destination) => {
-              return destination.id === stile.id;
-            });
-            if (path !== null) {
-              length += path.length * path.length;
-            }
-          }
-          if (initfirst) {
-            bases.pop();
-          }
-          for (let j = 0; j < bases.length; j++) {
-            if (bases[j].x === pos.x && bases[j].y === pos.y) {
-              length = -1;
-            }
-          }
-          if (length > maxLength) {
-            maxLength = length;
-            maxPos = pos;
-          }
-        }
-        const b = new Base(game, player, maxPos.x, maxPos.y);
-        bases.push(b);
-        game.addObject(b);
-        let spawnPoint: Tile = b.tile!;
-        while (spawnPoint.id === b.tile!.id) {
-          spawnPoint = spawnPoint.randomWalk(this.game.mode.BaseSpawnDistance + Math.round(Math.random()));
-        }
-        player.base = b;
-      }
-    }
+    this.initTeamBases();
   }
 }
 
@@ -225,122 +203,32 @@ export class TeamDeathmatch extends Gamemode {
  * @augments Gamemode
  */
 export class CaptureTheFlag extends Gamemode {
-  /**
-   * Creates a new CaptureTheFlag mode.
-   * @param game - The game instance.
-   */
   constructor(game: Game) {
     super(game);
     this.name = "CaptureTheFlag";
     this.BaseSpawnDistance = 7;
   }
 
-  /**
-   * Updates team score.
-   * @param player - The player involved.
-   * @param val - The score value.
-   * @override
-   */
   override giveScore(player: Player, val: number = 1): void {
-    for (let i = 0; i < this.game.players.length; i++) {
-      if (this.game.players[i].team === player.team) {
-        this.game.players[i].score += val;
+    for (const p of this.game.players) {
+      if (p.team === player.team) {
+        p.score += val;
       }
     }
-    adaptBotSpeed(player.team);
+    this.adaptBotSpeed(player.team);
   }
 
-  /**
-   * Handle a new kill event.
-   * @param player1 - The killer.
-   * @param player2 - The victim.
-   * @override
-   */
   override newKill(player1: Player, player2: Player): void {
-    if (player1.team != player2.team) {
-      player1.spree += 1;
-      if (player1.spree >= 5 && player1.spree % 5 === 0) {
-        // player1.score += Math.floor(player1.spree / 5)
-        playSound(SOUNDS.killingspree);
-      }
+    if (player1.team !== player2.team) {
+      this.handleMultiKill(player1);
     }
   }
 
-  /**
-   * Initialize bases and spawn players.
-   * @override
-   */
   override init(): void {
-    const bases: Base[] = [];
-    const game = this.game;
-    if (!game.map) {
-      return;
-    }
-
-    // create single base for each team
-    for (let i = 0; i < game.players.length; i++) {
-      let baseExists = false;
-      const player = game.players[i];
-      for (let j = 0; j < bases.length; j++) {
-        if (player.team === bases[j].team) {
-          baseExists = true;
-          player.base = bases[j];
-        }
-      }
-      if (!baseExists) {
-        // find spawnPoint that is far away from existing bases
-        let maxLength = -1;
-        let maxPos = game.map.spawnPoint();
-        for (let k = 0; k < 100; k++) {
-          const pos = game.map.spawnPoint();
-          const tile = game.map.getTileByPos(pos.x, pos.y);
-          if (tile === null) {
-            continue;
-          }
-          let length = 0;
-          let initfirst = false;
-          if (bases.length === 0) {
-            const sp = game.map.spawnPoint();
-            bases.push(new Base(game, player, sp.x, sp.y));
-            initfirst = true;
-          }
-          for (let j = 0; j < bases.length; j++) {
-            const stile = this.game.map.getTileByPos(bases[j].x, bases[j].y);
-            if (stile === null) {
-              continue;
-            }
-            const path = tile.pathTo((destination) => {
-              return destination.id === stile.id;
-            });
-            if (path !== null) {
-              length += path.length * path.length;
-            }
-          }
-          if (initfirst) {
-            bases.pop();
-          }
-          for (let j = 0; j < bases.length; j++) {
-            if (bases[j].x === pos.x && bases[j].y === pos.y) {
-              length = -1;
-            }
-          }
-          if (length > maxLength) {
-            maxLength = length;
-            maxPos = pos;
-          }
-        }
-        const b = new Base(game, player, maxPos.x, maxPos.y);
-        b.flag = new Flag(game, b);
-        b.flag.drop(maxPos.x, maxPos.y);
-        bases.push(b);
-        game.addObject(b);
-        let spawnPoint: Tile = b.tile!;
-        while (spawnPoint.id === b.tile!.id) {
-          spawnPoint = spawnPoint.randomWalk(this.game.mode.BaseSpawnDistance + Math.round(Math.random()));
-        }
-        player.base = b;
-      }
-    }
+    this.initTeamBases((base) => {
+      base.flag = new Flag(this.game, base);
+      base.flag.drop(base.x, base.y);
+    });
   }
 }
 
@@ -350,156 +238,61 @@ export class CaptureTheFlag extends Gamemode {
  */
 export class KingOfTheHill extends Gamemode {
   bases: Hill[] = [];
+  private readonly SCORE_INTERVAL = 2000;
 
-  /**
-   * Creates a new KingOfTheHill mode.
-   * @param game - The game instance.
-   */
   constructor(game: Game) {
     super(game);
     this.name = "KingOfTheHill";
   }
 
-  /**
-   * Updates player score.
-   * @param player - The player.
-   * @param val - Score value.
-   * @override
-   */
   override giveScore(player: Player, val: number = 1): void {
     player.score += val;
   }
 
-  /**
-   * Handle a new kill event.
-   * @param player1 - The killer.
-   * @param player2 - The victim.
-   * @override
-   */
   override newKill(player1: Player, player2: Player): void {
     if (player1.team !== player2.team) {
-      player1.spree += 1;
-      if (player1.spree >= 5 && player1.spree % 5 === 0) {
-        // player1.score += Math.floor(player1.spree / 5)
-        playSound(SOUNDS.killingspree);
-      }
+      this.handleMultiKill(player1);
     }
   }
 
-  /**
-   * Updates game state, checking hill control.
-   * @override
-   */
   override step(): void {
-    // if all bases same color: score in intervals for team
-    const scoreevery = 2000;
-    let equal = true;
-    if (this.bases.length > 0) {
-      for (let i = 0; i < this.bases.length; i++) {
-        if (this.bases[i].team !== this.bases[0].team) {
-          equal = false;
-          break;
-        }
-      }
+    // Score periodically if one team controls all hills (or just the active hill?)
+    if (this.bases.length === 0) {
+      return;
+    }
+    const firstTeam = this.bases[0].team;
+    if (!firstTeam) {
+      return;
+    }
+    const allSameTeam = this.bases.every((b) => b.team === firstTeam);
 
-      const team = this.bases[0].team;
-      if (equal && team !== null && this.game.t % scoreevery === 0) {
-        for (let i = 0; i < this.game.players.length; i++) {
-          if (this.game.players[i].team === team) {
-            this.giveScore(this.game.players[i], 1);
-          }
+    if (allSameTeam && this.game.t % this.SCORE_INTERVAL === 0) {
+      for (const p of this.game.players) {
+        if (p.team === firstTeam) {
+          this.giveScore(p, 1);
         }
-        adaptBotSpeed(team, 0.02);
       }
+      this.adaptBotSpeed(firstTeam, 0.02);
     }
   }
 
-  /**
-   * Initializes hills and spawn points.
-   * @override
-   */
   override init(): void {
-    const bases: Hill[] = [];
     const game = this.game;
     if (!game.map) {
       return;
     }
 
-    // create players.length-1 bases
-    for (let ni = 0; ni < game.players.length - 1; ni++) {
-      // find spawnPoint that is far away from existing bases
-      let maxLength = 0;
-      let maxPos = game.map.spawnPoint();
-      for (let k = 0; k < 100; k++) {
-        const pos = game.map.spawnPoint();
-        const tile = game.map.getTileByPos(pos.x, pos.y);
-        if (tile === null) {
-          continue;
-        }
-        let length = 0;
-        let initfirst = false;
-        if (bases.length === 0) {
-          const sp = game.map.spawnPoint();
-          bases.push(new Base(game, null, sp.x, sp.y));
-          initfirst = true;
-        }
-        for (let j = 0; j < bases.length; j++) {
-          const stile = this.game.map.getTileByPos(bases[j].x, bases[j].y);
-          if (stile === null) {
-            continue;
-          }
-          const path = tile.pathTo((destination) => {
-            return destination.id === stile.id;
-          });
-          if (path !== null) {
-            length += path.length * path.length;
-          }
-        }
-        if (initfirst) {
-          bases.pop();
-        }
-        for (let j = 0; j < bases.length; j++) {
-          if (bases[j].x === pos.x && bases[j].y === pos.y) {
-            length = -1;
-          }
-        }
-        if (length > maxLength) {
-          maxLength = length;
-          maxPos = pos;
-        }
-      }
-      const b = new Hill(game, maxPos.x, maxPos.y);
-      bases.push(b);
-      game.addObject(b);
+    this.bases = [];
+    // Create players.length - 1 hills
+    const numHills = Math.max(1, game.players.length - 1);
+
+    for (let i = 0; i < numHills; i++) {
+      const avoidPoints: Coord[] = this.bases.map((b) => ({ x: b.x, y: b.y }));
+      const pos = game.map.getFurthestSpawnPoint(avoidPoints);
+
+      const hill = new Hill(game, pos.x, pos.y);
+      this.bases.push(hill);
+      game.addObject(hill);
     }
-    this.bases = bases;
   }
-}
-
-/**
- * Adapts bot speed based on team balance.
- * @param team - The players team.
- * @param val - The adaptation value.
- * @returns The new bot speed.
- */
-function adaptBotSpeed(team: Team, val: number = 0.1): number | undefined {
-  if (!Settings.AdaptiveBotSpeed) {
-    return;
-  }
-
-  const teamData = new Map<Team, { botCount: number }>();
-  for (const player of store.players) {
-    const data = teamData.get(player.team) ?? { botCount: 0 };
-    if (player.isBot()) {
-      data.botCount++;
-    }
-    teamData.set(player.team, data);
-  }
-
-  const teams = Array.from(teamData.keys());
-  const avgbots = Array.from(teamData.values()).reduce((sum, d) => sum + d.botCount, 0) / teams.length;
-  const currentTeamBots = teamData.get(team)?.botCount ?? 0;
-  Settings.BotSpeed += (avgbots - currentTeamBots) * val;
-
-  return Settings.BotSpeed;
 }

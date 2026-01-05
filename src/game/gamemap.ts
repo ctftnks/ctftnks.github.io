@@ -126,6 +126,71 @@ export default class GameMap {
   }
 
   /**
+   * Finds a spawn point that maximizes the distance to the nearest point in the avoid list.
+   * Uses BFS flood fill for distance calculation (Dijkstra map).
+   * @param avoidPoints - List of coordinates to avoid (e.g. existing bases).
+   * @returns The best spawn point.
+   */
+  getFurthestSpawnPoint(avoidPoints: Coord[]): Coord {
+    // 1. Initialize distances
+    const distances = new Float32Array(this.tiles.length).fill(Infinity);
+    const queue: Tile[] = [];
+
+    // 2. Seed queue with avoidPoints
+    // If no points to avoid, just pick a random one
+    if (avoidPoints.length === 0) {
+      return this.spawnPoint();
+    }
+
+    for (const p of avoidPoints) {
+      const tile = this.getTileByPos(p.x, p.y);
+      if (tile) {
+        distances[tile.id] = 0;
+        queue.push(tile);
+      }
+    }
+
+    // 3. BFS Flood Fill
+    let frontier = queue;
+    while (frontier.length > 0) {
+      const nextFrontier: Tile[] = [];
+      for (const u of frontier) {
+        const dist = distances[u.id];
+        for (let d = 0; d < 4; d++) {
+          // Check if wall exists in this direction
+          if (!u.walls[d]) {
+            const v = u.neighbors[d];
+            if (v && distances[v.id] === Infinity) {
+              distances[v.id] = dist + 1;
+              nextFrontier.push(v);
+            }
+          }
+        }
+      }
+      frontier = nextFrontier;
+    }
+
+    // 4. Find max distance
+    let maxDist = -1;
+    let bestTile: Tile | null = null;
+
+    for (const tile of this.tiles) {
+      // Ensure the tile is reachable (not Infinity) and beats the current max
+      if (distances[tile.id] !== Infinity && distances[tile.id] > maxDist) {
+        maxDist = distances[tile.id];
+        bestTile = tile;
+      }
+    }
+
+    if (bestTile) {
+      return { x: bestTile.x + this.dx / 2, y: bestTile.y + this.dy / 2 };
+    }
+
+    // Fallback
+    return this.spawnPoint();
+  }
+
+  /**
    * Draws the map.
    * @param context - The context.
    */
