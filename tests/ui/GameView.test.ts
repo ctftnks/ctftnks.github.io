@@ -1,8 +1,10 @@
-import { mount } from "@vue/test-utils";
+import { mount, enableAutoUnmount } from "@vue/test-utils";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import GameView from "@/ui/components/GameView.vue";
 import { store } from "@/stores/gamestore";
 import Canvas from "@/game/canvas";
+
+enableAutoUnmount(afterEach);
 
 // Mock Canvas
 vi.mock("@/game/canvas", () => {

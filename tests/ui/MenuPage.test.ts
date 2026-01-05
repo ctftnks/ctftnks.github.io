@@ -1,11 +1,13 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { mount, enableAutoUnmount } from "@vue/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { reactive } from "vue";
 import MenuPage from "@/ui/components/MenuPage.vue";
 import { store } from "@/stores/gamestore";
 import { Settings } from "@/stores/settings";
 import { TEAMS } from "@/game/team";
 import { openPage } from "@/stores/ui";
+
+enableAutoUnmount(afterEach);
 
 // Mock dependencies
 vi.mock("@/stores/gamestore", () => ({

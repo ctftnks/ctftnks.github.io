@@ -1,9 +1,11 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect, vi } from "vitest";
+import { mount, enableAutoUnmount } from "@vue/test-utils";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import SettingsPage from "@/ui/components/SettingsPage.vue";
 import { store } from "@/stores/gamestore";
 import { openPage } from "@/stores/ui";
 import { Settings } from "@/stores/settings";
+
+enableAutoUnmount(afterEach);
 
 // Mock dependencies
 vi.mock("@/stores/gamestore", () => ({
