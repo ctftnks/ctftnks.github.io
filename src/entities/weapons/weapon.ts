@@ -78,15 +78,13 @@ export class Weapon {
     }
     this.isActive = false;
     const delay = this.tank.rapidfire ? 500 : 1800;
-    this.tank.player.game!.timeouts.push(
-      window.setTimeout(() => {
-        if (this.tank.rapidfire) {
-          this.activate();
-        } else {
-          this.delete();
-        }
-      }, delay),
-    );
+    this.tank.player.game!.addTimeout(() => {
+      if (this.tank.rapidfire) {
+        this.activate();
+      } else {
+        this.delete();
+      }
+    }, delay);
   }
 
   /**

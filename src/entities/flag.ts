@@ -68,7 +68,6 @@ export default class Flag extends GameObject {
    * @param y - Y coordinate.
    */
   drop(x: number, y: number): void {
-    this.deleted = false;
     this.x = x;
     this.y = y;
     this.resetTimer = this.game.t + 30000;
@@ -96,7 +95,7 @@ export default class Flag extends GameObject {
             this.reset();
             playSound(SOUNDS.resetFlag);
           }
-        } else if (tank.carriedFlag === null && !this.picked && !tank.deleted) {
+        } else if (tank.carriedFlag === null && !this.picked && !tank.isDeleted()) {
           // pick up flag
           this.pickup(tank as Tank);
           playSound(SOUNDS.coin);

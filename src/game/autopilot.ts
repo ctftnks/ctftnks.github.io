@@ -409,7 +409,7 @@ export default class Autopilot {
     const isTargetBot = target instanceof Tank && target.player?.isBot();
 
     if (isTargetBot) {
-      window.setTimeout(() => tank.shoot(), 180 * Math.random());
+      game.addTimeout(() => tank.shoot(), 180 * Math.random());
     } else {
       tank.shoot();
     }

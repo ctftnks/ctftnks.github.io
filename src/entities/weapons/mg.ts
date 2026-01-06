@@ -52,7 +52,7 @@ export class MG extends Weapon {
     }
 
     if (this.nshots === 20) {
-      this.tank.player.game!.timeouts.push(window.setTimeout(() => this.deactivate(), 3000));
+      this.tank.player.game!.addTimeout(() => this.deactivate(), 3000);
     }
 
     if (this.tank.player.isBot() && this.nshots > 15) {

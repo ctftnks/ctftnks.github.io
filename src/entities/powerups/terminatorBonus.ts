@@ -29,10 +29,8 @@ export class TerminatorBonus extends PowerUp {
     this.applied = true;
     tank.rapidfire = true;
     playSound(SOUNDS.terminator);
-    tank.player.game!.timeouts.push(
-      window.setTimeout(() => {
-        tank.rapidfire = false;
-      }, 120000),
-    );
+    tank.player.game!.addTimeout(() => {
+      tank.rapidfire = false;
+    }, 120000);
   }
 }

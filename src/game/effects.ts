@@ -97,7 +97,6 @@ export function fogOfWar(game: Game): number {
     time += frequency;
   }, frequency);
 
-  game.intvls.push(intvl);
   window.setTimeout(() => {
     window.clearInterval(intvl);
     ctx.clearRect(0, 0, 2 * canvas.width, 2 * canvas.height);

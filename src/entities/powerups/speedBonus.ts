@@ -22,10 +22,8 @@ export class SpeedBonus extends PowerUp {
    */
   apply(tank: Tank): void {
     tank.speed *= 1.3;
-    tank.player.game!.timeouts.push(
-      window.setTimeout(() => {
-        tank.speed /= 1.3;
-      }, 8000),
-    );
+    tank.player.game!.addTimeout(() => {
+      tank.speed /= 1.3;
+    }, 8000);
   }
 }

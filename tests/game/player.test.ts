@@ -16,11 +16,15 @@ describe("Player Class", () => {
     map: mockMap,
     addObject: vi.fn(),
     nPlayersAlive: 0,
-    timeouts: [] as number[],
+    timeouts: [] as any[],
     t: 0,
     canvas: { shake: vi.fn() },
     nkills: 0,
     mode: { BaseSpawnDistance: 2 },
+    addTimeout: vi.fn((cb, time) => {
+      mockGame.timeouts.push({ callback: cb, triggerTime: mockGame.t + time });
+      setTimeout(cb, time);
+    }),
   };
 
   beforeEach(() => {

@@ -6,10 +6,11 @@ import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import Canvas from "./canvas";
 import Player from "./player";
-import GameObject from "@/entities/gameobject";
+import GameObject, { VirtualGameObject } from "@/entities/gameobject";
 import { Gamemode, Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import { openPage } from "@/stores/ui";
 import Tank from "@/entities/tank";
+import GameTimeout from "./timeout";
 
 /**
  * Manages the game state, loop, and objects.
@@ -33,16 +34,12 @@ export default class Game {
   loop?: number;
   /** Number of players alive. */
   nPlayersAlive: number = 0;
-  /** Game time counter. */
+  /** Game time counter in ms. */
   t: number = 0;
   /** Timestamp of the last frame. */
   lastTime: number = 0;
   /** Accumulated time for fixed-step updates. */
   accumulator: number = 0;
-  /** List of interval IDs to clear on stop. */
-  intvls: number[] = [];
-  /** List of timeout IDs to clear on stop. */
-  timeouts: number[] = [];
   /** Total kills in the game. */
   nkills: number = 0;
   /** The current game mode. */
@@ -131,7 +128,8 @@ export default class Game {
       this.accumulator = Math.min(this.accumulator, 200);
 
       while (this.accumulator >= Settings.GameFrequency) {
-        this.step();
+        const dt = Settings.GameFrequency;
+        this.step(dt);
         this.accumulator -= Settings.GameFrequency;
       }
     }
@@ -143,26 +141,32 @@ export default class Game {
 
   /**
    * A single step of the game loop.
+   * @param dt - the temporal delta of the time step
    */
-  step(): void {
-    this.t += Settings.GameFrequency;
+  step(dt: number): void {
+    this.t += dt;
     if (!this.map) {
       return;
     }
-    // remove deleted objects and
-    // initiate spatial sorting of objects within the map class
+    // remove deleted objects and redo the spatial sorting of objects within the map class
     this.map.clearObjectLists();
-    this.objs = this.objs.filter((obj) => {
-      if (!obj.deleted) {
-        this.map.addObject(obj);
-        return true;
+    const currentObjs = this.objs;
+    this.objs = [];
+    for (const obj of currentObjs) {
+      if (obj.isDeleted()) {
+        obj.onDeleted(); // Call onDeleted hook
+        continue;
       }
-      return false;
-    });
+      if (!(obj instanceof VirtualGameObject)) {
+        this.map.addObject(obj);
+      }
+      this.objs.push(obj);
+    }
 
     // call step() function for every object in order for it to move/etc.
     for (const obj of this.objs) {
       obj.step();
+      obj.age += dt;
     }
 
     // do gamemode calculations
@@ -171,12 +175,10 @@ export default class Game {
     // add random PowerUp
     if (this.isTrueEvery(1000 * Settings.PowerUpRate)) {
       const p = getRandomPowerUp();
-      const pos = this.map.spawnPoint();
-      p.x = pos.x;
-      p.y = pos.y;
+      p.setPosition(this.map.spawnPoint());
       this.addObject(p);
-      this.timeouts.push(window.setTimeout(() => p.delete(), 1000 * Settings.PowerUpRate * Settings.MaxPowerUps));
     }
+
     // end the game when the round time is over
     if (this.t > Settings.RoundTime * 60000) {
       this.end();
@@ -208,11 +210,6 @@ export default class Game {
       cancelAnimationFrame(this.loop);
       this.loop = undefined;
     }
-    this.intvls.forEach((id) => window.clearInterval(id));
-    this.timeouts.forEach((id) => window.clearTimeout(id));
-    this.intvls = [];
-    this.timeouts = [];
-
     clearEffects();
     stopMusic();
     this.players.forEach((player) => (player.base = undefined));
@@ -225,6 +222,18 @@ export default class Game {
     this.paused = true;
     openPage("leaderboard");
     this.stop();
+  }
+
+  /**
+   * Registers a callback to be executed after a delay in game time.
+   * @param callback - The function to call.
+   * @param delay - The delay in milliseconds.
+   * @returns The timeout object.
+   */
+  addTimeout(callback: () => void, delay: number): GameTimeout {
+    const timeout = new GameTimeout(delay, callback);
+    this.objs.push(timeout);
+    return timeout;
   }
 
   /**

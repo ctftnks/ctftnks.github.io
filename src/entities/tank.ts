@@ -373,6 +373,6 @@ export default class Tank extends GameObject {
     // delete the weapon
     this.weapon.delete();
     // mark the tank as deleted
-    this.deleted = true;
+    super.delete();
   }
 }
