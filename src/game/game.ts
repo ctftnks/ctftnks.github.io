@@ -150,16 +150,18 @@ export default class Game {
     }
     // remove deleted objects and redo the spatial sorting of objects within the map class
     this.map.clearObjectLists();
-    this.objs = this.objs.filter((obj) => {
+    const currentObjs = this.objs;
+    this.objs = [];
+    for (const obj of currentObjs) {
       if (obj.isDeleted()) {
         obj.onDeleted(); // Call onDeleted hook
-        return false;
+        continue;
       }
       if (!(obj instanceof VirtualGameObject)) {
         this.map.addObject(obj);
       }
-      return true;
-    });
+      this.objs.push(obj);
+    }
 
     // call step() function for every object in order for it to move/etc.
     for (const obj of this.objs) {

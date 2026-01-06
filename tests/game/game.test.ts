@@ -149,6 +149,7 @@ describe("Game Class", () => {
       step: vi.fn(),
       delete: vi.fn(),
       isDeleted: vi.fn(),
+      onDeleted: vi.fn(),
     } as any;
 
     game.addObject(mockObj);
@@ -159,9 +160,51 @@ describe("Game Class", () => {
     expect(mockObj.step).toHaveBeenCalled();
 
     // Mark as deleted
-    mockObj.deleted = true;
+    mockObj.isDeleted.mockReturnValue(true);
     game.step(Settings.GameFrequency);
     expect(game.objs).not.toContain(mockObj);
+  });
+
+  it("should handle object addition during onDeleted hook", () => {
+    // This test reproduces the bug where objects spawned during onDeleted were lost
+
+    // 1. Create a mock object that spawns another object when deleted
+    let spawnedObj: any = null;
+    const spawnerObj = {
+      x: 0,
+      y: 0,
+      age: 0,
+      maxAge: 0, // Should die immediately
+      step: vi.fn(),
+      draw: vi.fn(),
+      delete: vi.fn(),
+      isDeleted: () => true, // Always deleted
+      onDeleted: () => {
+        spawnedObj = {
+          x: 0,
+          y: 0,
+          age: 0,
+          step: vi.fn(),
+          draw: vi.fn(),
+          isDeleted: () => false,
+          onDeleted: vi.fn(),
+        };
+        game.addObject(spawnedObj);
+      },
+    } as any;
+
+    game.addObject(spawnerObj);
+    expect(game.objs).toContain(spawnerObj);
+
+    // 2. Run step
+    game.step(Settings.GameFrequency);
+
+    // 3. Assert spawner is gone, spawned is present
+    expect(game.objs).not.toContain(spawnerObj);
+    expect(game.objs).toContain(spawnedObj);
+
+    // 4. Assert spawned object was stepped
+    expect(spawnedObj.step).toHaveBeenCalled();
   });
 
   it("should generate powerups in step", () => {
