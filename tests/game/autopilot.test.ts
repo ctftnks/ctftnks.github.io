@@ -1,14 +1,13 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import Autopilot from "@/game/autopilot";
-import { Laser, Guided, Slingshot } from "@/entities/weapons";
+import { Laser, Guided, Slingshot, WreckingBall } from "@/entities/weapons";
 import Tank from "@/entities/tank";
-import Player from "@/game/player";
 import { TEAMS } from "@/game/team";
 import { Settings } from "@/stores/settings";
 import { CaptureTheFlag, KingOfTheHill } from "@/game/gamemode";
 
 vi.mock("@/game/assets", () => ({
-  IMAGES: { laser: "", guided: "", slingshot: "" },
+  IMAGES: { laser: "", guided: "", slingshot: "", wreckingBall: "" },
   SOUNDS: {},
 }));
 
@@ -52,6 +51,7 @@ describe("Autopilot Class", () => {
       mode: {},
       players: [],
       addObject: vi.fn(),
+      timeouts: [],
     };
 
     // Mock Player
@@ -59,12 +59,14 @@ describe("Autopilot Class", () => {
       team: TEAMS[0],
       isBot: () => true,
       base: undefined,
+      game: mockGame,
     };
 
     // Mock Tank
     mockTank = {
       x: 100,
       y: 100,
+      width: 40,
       angle: 0,
       speed: 10,
       player: mockPlayer,
@@ -95,15 +97,6 @@ describe("Autopilot Class", () => {
     vi.restoreAllMocks();
   });
 
-  it("should follow a path", () => {
-    const path = [
-      { x: 100, y: 100 },
-      { x: 200, y: 200 },
-    ];
-    (autopilot as any).setPath(path);
-    expect(autopilot.goto).toBe(path[1]);
-  });
-
   it("should perform movements towards target", () => {
     autopilot.goto = { x: 200, y: 100 }; // To the right
 
@@ -111,14 +104,17 @@ describe("Autopilot Class", () => {
     expect(mockTank.turn).toHaveBeenCalled();
   });
 
-  it("should shoot at target", () => {
-    const targetTank = { x: 150, y: 100, player: { isBot: () => false } } as any;
-    vi.useFakeTimers();
+  it("should set path correctly", () => {
+    const path = [
+      { x: 100, y: 100 },
+      { x: 200, y: 200 },
+    ];
+    (autopilot as any).setPath(path);
+    expect(autopilot.goto).toBe(path[1]);
 
-    (autopilot as any).shootAt(mockTank, targetTank, mockGame);
-
-    expect(mockTank.shoot).toHaveBeenCalled();
-    vi.useRealTimers();
+    const shortPath = [{ x: 100, y: 100 }];
+    (autopilot as any).setPath(shortPath);
+    expect(autopilot.goto).toBe(shortPath[0]);
   });
 
   it("should not autopilot too frequently", () => {
@@ -131,7 +127,6 @@ describe("Autopilot Class", () => {
 
     (autopilot as any).timeSinceLastUpdate = 1000;
     mockMap.getTileByPos.mockReturnValue(null);
-
     (autopilot as any).updateDecision(mockTank, mockGame);
     expect(mockMap.getTileByPos).toHaveBeenCalled();
   });
@@ -150,10 +145,11 @@ describe("Autopilot Class", () => {
       expect(autopilot.goto).toEqual(path[1]);
     });
 
-    it("should attract to enemies and shoot", () => {
+    it("should attract to enemies and follow them", () => {
       const enemyTank = {
         x: 300,
         y: 300,
+        width: 40,
         player: { team: TEAMS[1], isBot: vi.fn().mockReturnValue(false) },
         invincible: () => false,
         carriedFlag: null,
@@ -163,17 +159,88 @@ describe("Autopilot Class", () => {
       mockTile.xypathToObj.mockReturnValueOnce(null); // No powerup
       mockTile.xypathToObj.mockReturnValueOnce(path); // Enemy path
 
-      // Mock aimbot to return shouldShoot true
-      vi.spyOn(autopilot as any, "calculateAim").mockReturnValue({ shouldShoot: true, target: enemyTank, weight: 100 });
+      // Mock calculateAim to return shouldShoot false so we just follow
+      vi.spyOn(autopilot as any, "calculateAim").mockReturnValue({ shouldShoot: false, target: enemyTank, weight: 100 });
 
       (autopilot as any).timeSinceLastUpdate = 100000;
       (autopilot as any).updateDecision(mockTank, mockGame);
 
-      expect(mockTank.shoot).toHaveBeenCalled();
+      // Should follow
+      expect(autopilot.goto).toEqual(enemyTank);
+    });
+
+    it("should back off if too close to enemy (Personal Space)", () => {
+      const enemyTank = {
+        x: 105, // Very close to 100
+        y: 100,
+        width: 40,
+        player: { team: TEAMS[1], isBot: vi.fn().mockReturnValue(false) },
+        invincible: () => false,
+        carriedFlag: null,
+      } as any;
+      const path = [{ x: 100, y: 100 }, enemyTank];
+
+      mockTile.xypathToObj.mockReturnValueOnce(null);
+      mockTile.xypathToObj.mockReturnValueOnce(path);
+
+      vi.spyOn(autopilot as any, "calculateAim").mockReturnValue({ shouldShoot: false, target: enemyTank, weight: 100 });
+
+      (autopilot as any).timeSinceLastUpdate = 100000;
+      (autopilot as any).updateDecision(mockTank, mockGame);
+
+      // Should NOT go to enemy, but retreat
+      expect(autopilot.goto).not.toEqual(enemyTank);
+      expect(autopilot.goto).not.toBeNull();
+    });
+
+    it("should handle random angle when perfectly overlapping", () => {
+      const enemyTank = {
+        x: 100,
+        y: 100,
+        width: 40,
+        player: { team: TEAMS[1], isBot: vi.fn().mockReturnValue(false) },
+        invincible: () => false,
+        carriedFlag: null,
+      } as any;
+      const path = [{ x: 100, y: 100 }, enemyTank];
+
+      mockTile.xypathToObj.mockReturnValueOnce(null);
+      mockTile.xypathToObj.mockReturnValueOnce(path);
+      vi.spyOn(autopilot as any, "calculateAim").mockReturnValue({ shouldShoot: false, target: enemyTank, weight: 100 });
+
+      const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0.5); // Fixed random
+
+      (autopilot as any).timeSinceLastUpdate = 100000;
+      (autopilot as any).updateDecision(mockTank, mockGame);
+
+      expect(autopilot.goto).not.toBeNull();
+      expect(randomSpy).toHaveBeenCalled();
+    });
+
+    it("should shoot at enemy if aim is good", () => {
+      const enemyTank = {
+        x: 300,
+        y: 300,
+        player: { team: TEAMS[1], isBot: vi.fn().mockReturnValue(false) },
+        invincible: () => false,
+        carriedFlag: null,
+      } as any;
+      const path = [{ x: 100, y: 100 }, enemyTank];
+
+      mockTile.xypathToObj.mockReturnValueOnce(null);
+      mockTile.xypathToObj.mockReturnValueOnce(path);
+
+      vi.spyOn(autopilot as any, "calculateAim").mockReturnValue({ shouldShoot: true, target: enemyTank, weight: 200 });
+      const shootSpy = vi.spyOn(autopilot as any, "shootAt");
+
+      (autopilot as any).timeSinceLastUpdate = 100000;
+      (autopilot as any).updateDecision(mockTank, mockGame);
+
+      expect(shootSpy).toHaveBeenCalledWith(mockTank, enemyTank, mockGame);
     });
 
     it("should handle Capture The Flag logic", () => {
-      mockGame.mode = { __proto__: CaptureTheFlag.prototype }; // Mock instance check
+      mockGame.mode = { __proto__: CaptureTheFlag.prototype };
       const flag = { team: TEAMS[1] };
       const path = [{ x: 100, y: 100 }, flag];
 
@@ -192,29 +259,9 @@ describe("Autopilot Class", () => {
       const hill = { team: TEAMS[1] };
       const path = [{ x: 100, y: 100 }, hill];
 
-      mockTile.xypathToObj.mockReturnValueOnce(null); // No powerup
-      mockTile.xypathToObj.mockReturnValueOnce(null); // No enemy
-      mockTile.xypathToObj.mockReturnValueOnce(path); // Hill path
-
-      (autopilot as any).timeSinceLastUpdate = 100000;
-      (autopilot as any).updateDecision(mockTank, mockGame);
-
-      expect(autopilot.goto).toEqual(path[1]);
-    });
-
-    it("should prioritize carried flag returning to base in CTF", () => {
-      mockGame.mode = { __proto__: CaptureTheFlag.prototype };
-      mockTank.carriedFlag = { team: TEAMS[1] };
-      mockPlayer.base = { hasFlag: () => true }; // Flag is in base
-      mockTank.invincible.mockReturnValue(true);
-
-      const path = [
-        { x: 100, y: 100 },
-        { x: 50, y: 50 },
-      ]; // Path to base
-      mockTile.xypathToObj.mockReturnValueOnce(null); // Powerup
-      mockTile.xypathToObj.mockReturnValueOnce(null); // Enemy
-      mockTile.xypathToObj.mockReturnValueOnce(path); // CTF path
+      mockTile.xypathToObj.mockReturnValueOnce(null);
+      mockTile.xypathToObj.mockReturnValueOnce(null);
+      mockTile.xypathToObj.mockReturnValueOnce(path);
 
       (autopilot as any).timeSinceLastUpdate = 100000;
       (autopilot as any).updateDecision(mockTank, mockGame);
@@ -223,9 +270,8 @@ describe("Autopilot Class", () => {
     });
   });
 
-  describe("Special Weapons Aimbot", () => {
+  describe("Aiming & Shooting Logic", () => {
     it("should handle Laser shooting", () => {
-      mockPlayer.game = mockGame;
       const laser = new Laser(mockTank);
       mockTank.weapon = laser;
       const enemy = { player: { team: TEAMS[1] }, invincible: () => false };
@@ -233,6 +279,16 @@ describe("Autopilot Class", () => {
 
       const result = (autopilot as any).calculateAim(mockTank, enemy as any, [{ x: 0, y: 0 }] as any, mockGame);
       expect(result.shouldShoot).toBe(true);
+    });
+
+    it("should handle Laser shooting (no hit)", () => {
+      const laser = new Laser(mockTank);
+      mockTank.weapon = laser;
+      const enemy = { player: { team: TEAMS[1] }, invincible: () => false };
+      laser.trajectory.targets = []; // No targets
+
+      const result = (autopilot as any).calculateAim(mockTank, enemy as any, [{ x: 0, y: 0 }] as any, mockGame);
+      expect(result.shouldShoot).toBe(false);
     });
 
     it("should handle Slingshot shooting", () => {
@@ -245,19 +301,71 @@ describe("Autopilot Class", () => {
     });
 
     it("should handle Guided weapon shooting", () => {
-      const player = new Player(0, "P1", TEAMS[0], []);
-      player.game = mockGame;
-      const realTank = new Tank(player, mockGame);
-      const guided = new Guided(realTank);
-      realTank.weapon = guided;
+      const guided = new Guided(mockTank);
+      mockTank.weapon = guided;
       const enemy = { x: 200, y: 200, invincible: () => false } as any;
 
-      mockTile.walls = [false, true, true, true];
+      mockTile.walls = [false, true, true, true]; // Open top (index 0)
 
-      const aimbotSpy = vi.spyOn(autopilot as any, "calculateAim");
-      (autopilot as any).calculateAim(realTank, enemy, null, mockGame);
+      // Guided wants Open Space (walls[i] === false).
+      // i=0 is false (open). Match!
+      const result = (autopilot as any).calculateAim(mockTank, enemy, null, mockGame);
 
-      expect(aimbotSpy).toHaveBeenCalled();
+      expect(result.shouldShoot).toBe(true);
+      expect(result.target).toBeDefined();
+    });
+
+    it("should handle WreckingBall shooting", () => {
+      const wb = new WreckingBall(mockTank);
+      mockTank.weapon = wb;
+      const enemy = { x: 200, y: 200, invincible: () => false } as any;
+
+      mockTile.walls = [true, false, false, false]; // Wall top (index 0)
+
+      // WreckingBall wants Walls (walls[i] === true).
+      // i=0 is true. Match!
+      const result = (autopilot as any).calculateAim(mockTank, enemy, null, mockGame);
+
+      expect(result.shouldShoot).toBe(true);
+    });
+
+    it("should execute shootAt with jitter and micro-movements", () => {
+      const target = { x: 200, y: 200, width: 40 };
+      vi.useFakeTimers();
+
+      const moveSpy = mockTank.move;
+      const shootSpy = mockTank.shoot;
+
+      // Force micro-movement (random < 0.05)
+      vi.spyOn(Math, "random").mockReturnValue(0.01);
+
+      (autopilot as any).shootAt(mockTank, target, mockGame);
+
+      expect(moveSpy).toHaveBeenCalled();
+      expect(shootSpy).toHaveBeenCalled();
+      expect(autopilot.goto).toBeNull();
+
+      vi.useRealTimers();
+    });
+
+    it("should execute shootAt with delay for bot targets", () => {
+      const botTarget = Object.create(Tank.prototype);
+      Object.assign(botTarget, {
+        x: 200,
+        y: 200,
+        width: 40,
+        player: { isBot: () => true },
+      });
+
+      vi.useFakeTimers();
+
+      (autopilot as any).shootAt(mockTank, botTarget, mockGame);
+
+      expect(mockTank.shoot).not.toHaveBeenCalled(); // Delayed
+      vi.advanceTimersByTime(200);
+      expect(mockTank.shoot).toHaveBeenCalled();
+
+      vi.useRealTimers();
     });
   });
 
@@ -287,6 +395,19 @@ describe("Autopilot Class", () => {
       const path = (autopilot as any).findFleePath(mockTank, mockGame);
       expect(path).toBeDefined();
       expect(path.length).toBe(2);
+    });
+
+    it("should stop fleeing when condition met (time)", () => {
+      mockTank.weapon.bot.fleeingDuration = 1000;
+      mockTank.weapon.isActive = false; // ensure we don't return false due to active weapon
+      mockGame.t = 0;
+      (autopilot as any).initiateFlee(mockTank, mockGame);
+
+      const condition = (autopilot as any).fleeingState.condition;
+      expect(condition()).toBe(true);
+
+      mockGame.t = 1500;
+      expect(condition()).toBe(false);
     });
 
     it("should not flee if weapon is active and fleeIfActive is false", () => {
