@@ -4,6 +4,7 @@ import type Bullet from "../bullet";
 import { Smoke } from "../smoke";
 import { IMAGES } from "@/game/assets";
 import { Settings } from "@/stores/settings";
+import { createBaseBullet } from "./utils";
 
 /**
  * Throws over walls.
@@ -30,7 +31,7 @@ export class Slingshot extends Weapon {
    * @override
    */
   override newBullet(): Bullet {
-    const bullet = super.newBullet();
+    const bullet = createBaseBullet(this);
     bullet.radius = 6;
     bullet.color = "#333";
     bullet.speed = 2 * Settings.BulletSpeed;

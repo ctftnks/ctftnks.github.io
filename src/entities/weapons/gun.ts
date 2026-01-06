@@ -2,6 +2,7 @@ import { Weapon } from "./weapon";
 import type Tank from "../tank";
 import type Bullet from "../bullet";
 import { IMAGES } from "@/game/assets";
+import { createBaseBullet } from "./utils";
 
 /**
  * The normal, default gun.
@@ -26,7 +27,7 @@ export class Gun extends Weapon {
    * @override
    */
   override newBullet(): Bullet {
-    const bullet = super.newBullet();
+    const bullet = createBaseBullet(this);
     // bullet explosion leads to weapon reactivation
     bullet.explode = () => {
       if (!this.tank.rapidfire) {

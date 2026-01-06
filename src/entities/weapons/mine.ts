@@ -2,8 +2,8 @@ import { Weapon } from "./weapon";
 import type Tank from "../tank";
 import Bullet from "../bullet";
 import { IMAGES, SOUNDS } from "@/game/assets";
-import { playSound } from "@/game/effects";
-import { createShrapnelExplosion } from "./utils";
+import { playSound } from "@/game/sounds";
+import { createShrapnelExplosion, createBaseBullet } from "./utils";
 
 /**
  * A mine.
@@ -28,7 +28,7 @@ export class Mine extends Weapon {
    * @override
    */
   override newBullet(): Bullet {
-    const e = super.newBullet();
+    const e = createBaseBullet(this);
     e.image = new Image();
     e.image.src = IMAGES.mine;
     e.radius = 6;
