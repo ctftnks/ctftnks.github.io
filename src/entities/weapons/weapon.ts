@@ -61,11 +61,13 @@ export class Weapon {
     bullet.x = (corners[0].x + corners[1].x) / 2;
     bullet.y = (corners[0].y + corners[1].y) / 2;
     bullet.lethal = false;
-    window.setTimeout(() => (bullet.lethal = true), 100);
-    bullet.angle = this.tank.angle;
-    bullet.player = this.tank.player;
-    bullet.color = this.tank.player.team.color;
-    this.tank.player.game!.addObject(bullet);
+    if (this.tank.player.game) {
+      this.tank.player.game.addTimeout(() => (bullet.lethal = true), 100);
+      bullet.angle = this.tank.angle;
+      bullet.player = this.tank.player;
+      bullet.color = this.tank.player.team.color;
+      this.tank.player.game.addObject(bullet);
+    }
     return bullet;
   }
 
@@ -78,15 +80,17 @@ export class Weapon {
     }
     this.isActive = false;
     const delay = this.tank.rapidfire ? 500 : 1800;
-    this.tank.player.game!.timeouts.push(
-      window.setTimeout(() => {
+
+    // Safety check
+    if (this.tank.player.game) {
+      this.tank.player.game.addTimeout(() => {
         if (this.tank.rapidfire) {
           this.activate();
         } else {
           this.delete();
         }
-      }, delay),
-    );
+      }, delay);
+    }
   }
 
   /**

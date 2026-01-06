@@ -50,11 +50,11 @@ export class Mine extends Weapon {
       }
     };
 
-    e.player.game!.timeouts.push(
-      window.setTimeout(() => {
+    if (e.player.game) {
+      e.player.game.addTimeout(() => {
         e.speed = 0;
-      }, 600),
-    );
+      }, 600);
+    }
 
     return e;
   }

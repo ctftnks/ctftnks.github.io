@@ -23,7 +23,7 @@ export class FogBonus extends PowerUp {
   apply(tank: Tank): void {
     if (!this.used) {
       const game = tank.player.game!;
-      game.intvls.push(fogOfWar(game));
+      fogOfWar(game);
     }
   }
 }

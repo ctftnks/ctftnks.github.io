@@ -77,11 +77,9 @@ export default class Player {
     tank.y = spos.y;
     game.addObject(tank);
     game.nPlayersAlive += 1;
-    game.timeouts.push(
-      window.setTimeout(() => {
-        generateCloud(game, tank.x, tank.y, 4, 20, 2);
-      }, 10),
-    );
+    game.addTimeout(() => {
+      generateCloud(game, tank.x, tank.y, 4, 20, 2);
+    }, 10);
     // spawn shield
     tank.timers.spawnshield = game.t + Settings.SpawnShieldTime * 1000;
   }
@@ -99,11 +97,9 @@ export default class Player {
     this.game.canvas.shake();
     this.spree = 0;
     this.stats.deaths += 1;
-    this.game.timeouts.push(
-      window.setTimeout(() => {
-        this.spawn(game);
-      }, Settings.RespawnTime * 1000),
-    );
+    this.game.addTimeout(() => {
+      this.spawn(game);
+    }, Settings.RespawnTime * 1000);
   }
 
   /**
