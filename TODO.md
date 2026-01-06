@@ -10,7 +10,6 @@
 
 ## Bots reimplementation
 
-- Bots can get stuck onto each other
 - Guided Missile spins randomly when there is no target
 - improve Bot's laser aiming
 

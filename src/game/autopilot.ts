@@ -171,7 +171,25 @@ export default class Autopilot {
 
     // Default action: Follow the enemy
     let bestAction: AutopilotAction = {
-      execute: () => this.setPath(path),
+      execute: () => {
+        const dist = Math.hypot(tank.x - enemy.x, tank.y - enemy.y);
+        // Prevent stacking: Maintain a minimum distance
+        if (dist < tank.width * 1.2) {
+          // Too close: Back off slightly instead of moving forward
+          let angle = Math.atan2(tank.y - enemy.y, tank.x - enemy.x);
+          // Handle perfect overlap
+          if (dist < 1) {
+            angle = Math.random() * 2 * Math.PI;
+          }
+          const retreatDist = tank.width * 2;
+          this.goto = {
+            x: enemy.x + Math.cos(angle) * retreatDist,
+            y: enemy.y + Math.sin(angle) * retreatDist,
+          };
+        } else {
+          this.setPath(path);
+        }
+      },
       weight: CONFIG.Weights.Enemy.Follow,
     };
 
@@ -370,7 +388,22 @@ export default class Autopilot {
     // Calculate aim angle
     const distx = target.x - tank.x;
     const disty = target.y - tank.y;
-    tank.angle = Math.atan2(-distx, disty) + Math.PI;
+    const distance = Math.hypot(distx, disty);
+    const baseAngle = Math.atan2(-distx, disty) + Math.PI;
+
+    // 1. Aim Jitter: Don't always shoot at the exact center to avoid bullet collision stalemates
+    // Calculate max offset that still hits the target (assuming target width ~40px)
+    const targetWidth = target instanceof Tank ? target.width : 40;
+    // Use a safety factor (e.g., 3.0) to ensure we aim within the central 2/3rds of the target
+    const maxOffset = Math.atan2(targetWidth / 3.0, distance);
+    const randomOffset = (Math.random() - 0.5) * 2 * maxOffset;
+
+    tank.angle = baseAngle + randomOffset;
+
+    // 2. Micro-Movement: Occasionally move slightly to break rhythm
+    if (Math.random() < 0.05) {
+      tank.move(Math.random() < 0.5 ? 1 : -1);
+    }
 
     // Add reaction delay if target is another bot
     const isTargetBot = target instanceof Tank && target.player?.isBot();
