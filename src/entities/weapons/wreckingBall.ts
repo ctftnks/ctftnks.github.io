@@ -36,7 +36,7 @@ export class WreckingBall extends Weapon {
     bullet.radius = 10;
     bullet.color = "#000";
     bullet.speed = Settings.TankSpeed * 1.1;
-    bullet.timeout = 1000;
+    bullet.maxAge = 1000;
     /**
      * Custom collision logic for wrecking ball.
      * @param x - Old x position.

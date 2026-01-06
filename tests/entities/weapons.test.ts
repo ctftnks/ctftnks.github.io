@@ -50,17 +50,23 @@ vi.mock("@/entities/bullet", () => {
       map = {};
       color = "#000";
       lethal = false;
-      timeout = 1000;
+      maxAge = 1000;
       age = 0;
       deleted = false;
-      explode = vi.fn();
+      onDeleted = vi.fn();
       delete = vi.fn();
       checkCollision = vi.fn();
       checkBulletCollision = vi.fn();
       leaveTrace = vi.fn();
       constructor(weapon: any) {
-        this.player = weapon.tank.player;
-        this.map = weapon.tank.player.game.map;
+        if (weapon && weapon.tank) {
+          this.player = weapon.tank.player;
+          this.map = weapon.tank.player.game.map;
+        } else {
+          // Fallback for tests where weapon might be incompletely mocked or constructed
+          this.player = {};
+          this.map = {};
+        }
       }
     },
   };
@@ -98,6 +104,7 @@ describe("Weapon System", () => {
     mockGame = {
       addObject: vi.fn(),
       timeouts: [],
+      addTimeout: vi.fn(() => ({ triggerTime: 0, callback: vi.fn() })),
       map: {
         getTileByPos: vi.fn().mockReturnValue({
           getWalls: vi.fn().mockReturnValue([true, false, false, false]),
@@ -151,13 +158,15 @@ describe("Weapon System", () => {
     it("should reactivate if rapidfire is on", () => {
       mockTank.rapidfire = true;
       const gun = new Gun(mockTank);
-      vi.useFakeTimers();
+
       gun.deactivate();
 
-      vi.advanceTimersByTime(500);
+      expect(mockGame.addTimeout).toHaveBeenCalled();
+      // Capture the callback passed to addTimeout
+      const callback = mockGame.addTimeout.mock.calls[0][0];
+      callback();
 
       expect(gun.isActive).toBe(true);
-      vi.useRealTimers();
     });
   });
 
@@ -189,9 +198,9 @@ describe("Weapon System", () => {
     it("should create bullet that explodes into shrapnels", () => {
       const grenade = new Grenade(mockTank);
       const bullet = grenade.newBullet();
-      expect(bullet.timeout).toBe(10000);
+      expect(bullet.maxAge).toBe(10000);
 
-      (bullet as any).explode();
+      (bullet as any).onDeleted();
       expect(mockGame.addObject).toHaveBeenCalledTimes(31); // 1 for grenade + 30 shrapnels
     });
 
@@ -199,7 +208,7 @@ describe("Weapon System", () => {
       const grenade = new Grenade(mockTank);
       const bullet = grenade.newBullet();
       const explodeSpy = vi.fn();
-      bullet.explode = explodeSpy;
+      bullet.onDeleted = explodeSpy;
       grenade.bullet = bullet as any;
       bullet.age = 400;
 
@@ -212,9 +221,9 @@ describe("Weapon System", () => {
     it("should create mine that stays in place", () => {
       const mine = new Mine(mockTank);
       const bullet = mine.newBullet();
-      expect(bullet.timeout).toBeGreaterThan(100000);
+      expect(bullet.maxAge).toBeGreaterThan(100000);
 
-      (bullet as any).explode();
+      bullet.onDeleted();
       expect(mockGame.addObject).toHaveBeenCalled();
     });
   });

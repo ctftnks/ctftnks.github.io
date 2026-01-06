@@ -1,4 +1,5 @@
 import { PowerUp } from "./powerup";
+import { store } from "@/stores/gamestore";
 import { IMAGES } from "@/game/assets";
 import { Settings } from "@/stores/settings";
 
@@ -26,10 +27,12 @@ export class MultiBonus extends PowerUp {
       Settings.PowerUpRate /= 2.5;
       Settings.PowerUpRate = Math.round(1000 * Settings.PowerUpRate) / 1000;
       Settings.MaxPowerUps *= 2.5;
-      window.setTimeout(() => {
-        Settings.PowerUpRate *= 2.5;
-        Settings.MaxPowerUps /= 2.5;
-      }, 8000);
+      if (store.game) {
+        store.game.addTimeout(() => {
+          Settings.PowerUpRate *= 2.5;
+          Settings.MaxPowerUps /= 2.5;
+        }, 8000);
+      }
     }
   }
 }

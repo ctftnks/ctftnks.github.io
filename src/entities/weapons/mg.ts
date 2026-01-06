@@ -37,7 +37,7 @@ export class MG extends Weapon {
     bullet.bounceSound = "";
     bullet.extrahitbox = -3;
     bullet.angle = this.tank.angle + 0.2 * (0.5 - Math.random());
-    bullet.timeout = 4000 + 1000 * (0.5 - Math.random());
+    bullet.maxAge = 4000 + 1000 * (0.5 - Math.random());
     bullet.color = "#000";
     return bullet;
   }
@@ -52,11 +52,11 @@ export class MG extends Weapon {
     }
 
     if (this.nshots === 20) {
-      this.tank.player.game!.timeouts.push(window.setTimeout(() => this.deactivate(), 3000));
+      this.tank.player.game!.addTimeout(() => this.deactivate(), 3000);
     }
 
     if (this.tank.player.isBot() && this.nshots > 15) {
-      window.setTimeout(() => this.shoot(), Settings.GameFrequency);
+      this.tank.player.game!.addTimeout(() => this.shoot(), Settings.GameFrequency);
     }
 
     this.every -= Settings.GameFrequency;

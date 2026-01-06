@@ -38,18 +38,18 @@ export class Grenade extends Weapon {
     e.image.src = IMAGES.grenade;
     e.radius = 6;
     e.color = "#000";
-    e.timeout = 10000;
+    e.maxAge = 10000;
     e.exploded = false;
 
     /**
      * Explosion logic for grenade.
      */
-    e.explode = () => {
+    e.onDeleted = () => {
       if (!e.exploded) {
         e.exploded = true;
         playSound(SOUNDS.grenade);
         createShrapnelExplosion(this, e.x, e.y, this.nshrapnels, {
-          timeout: (360 * 280) / Settings.BulletSpeed,
+          maxAge: (360 * 280) / Settings.BulletSpeed,
           noCollision: true,
         });
         this.bullet = null;
@@ -76,7 +76,6 @@ export class Grenade extends Weapon {
       }
     } else if (this.bullet.age > 300) {
       const bullet = this.bullet;
-      bullet.explode();
       bullet.delete();
       this.deactivate();
       return;

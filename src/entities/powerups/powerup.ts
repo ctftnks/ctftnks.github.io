@@ -1,3 +1,4 @@
+import { Settings } from "@/stores/settings";
 import GameObject from "../gameobject";
 import type Tank from "../tank";
 
@@ -10,6 +11,8 @@ export abstract class PowerUp extends GameObject {
   radius: number = 40;
   /** Whether bots are attracted to it. */
   attractsBots: boolean = false;
+  /** optional image rendering the powerup */
+  image: HTMLImageElement;
 
   /**
    * Creates a new PowerUp.
@@ -17,6 +20,8 @@ export abstract class PowerUp extends GameObject {
   constructor() {
     super();
     this.width = 30;
+    this.image = new Image();
+    this.maxAge = 1000 * Settings.PowerUpRate * Settings.MaxPowerUps;
   }
 
   /**

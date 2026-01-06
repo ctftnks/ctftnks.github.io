@@ -28,7 +28,7 @@ export class Gun extends Weapon {
   override newBullet(): Bullet {
     const bullet = super.newBullet();
     // bullet explosion leads to weapon reactivation
-    bullet.explode = () => {
+    bullet.onDeleted = () => {
       if (!this.tank.rapidfire) {
         this.activate();
       }

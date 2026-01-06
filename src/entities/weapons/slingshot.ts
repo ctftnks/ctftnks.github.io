@@ -34,7 +34,7 @@ export class Slingshot extends Weapon {
     bullet.radius = 6;
     bullet.color = "#333";
     bullet.speed = 2 * Settings.BulletSpeed;
-    bullet.timeout = 2000;
+    bullet.maxAge = 2000;
     /**
      * Custom collision check for slingshot bullet.
      */

@@ -320,7 +320,6 @@ export default class Tank extends GameObject {
         continue;
       }
       // Hit!
-      bullet.explode();
       bullet.delete();
       // count stats
       if (bullet.player.team !== this.player.team) {
@@ -373,6 +372,6 @@ export default class Tank extends GameObject {
     // delete the weapon
     this.weapon.delete();
     // mark the tank as deleted
-    this.deleted = true;
+    super.delete();
   }
 }

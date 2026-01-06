@@ -45,9 +45,6 @@ export class Guided extends Weapon {
      */
     e.step = function (): void {
       e.age += Settings.GameFrequency;
-      if (e.age > e.timeout) {
-        e.delete();
-      }
       e.leaveTrace();
 
       const oldx = e.x;

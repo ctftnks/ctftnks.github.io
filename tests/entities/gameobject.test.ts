@@ -2,7 +2,9 @@ import { describe, it, expect, vi } from "vitest";
 import GameObject from "@/entities/gameobject";
 
 // Create a concrete class for testing the abstract GameObject
-class TestObject extends GameObject {}
+class TestObject extends GameObject {
+  draw(_ctx: CanvasRenderingContext2D) {}
+}
 
 describe("GameObject Class", () => {
   it("should initialize with default values", () => {
@@ -10,14 +12,13 @@ describe("GameObject Class", () => {
     expect(obj.x).toBe(0);
     expect(obj.y).toBe(0);
     expect(obj.width).toBe(0);
-    expect(obj.deleted).toBe(false);
-    expect(obj.image).toBeDefined();
+    expect(obj.isDeleted()).toBe(false);
   });
 
   it("should mark as deleted when delete() is called", () => {
     const obj = new TestObject();
     obj.delete();
-    expect(obj.deleted).toBe(true);
+    expect(obj.isDeleted()).toBe(true);
   });
 
   it("should have a default draw method that does nothing if no image src", () => {

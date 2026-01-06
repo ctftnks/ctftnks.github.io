@@ -64,7 +64,6 @@ export default class Player {
    */
   spawn(game: Game): void {
     const tank = new Tank(this, game);
-    tank.deleted = false;
     let spos = game.map.spawnPoint();
     if (this.base?.tile) {
       let spos2 = this.base.tile;
@@ -73,15 +72,12 @@ export default class Player {
       }
       spos = { x: spos2.x + spos2.dx / 2, y: spos2.y + spos2.dy / 2 };
     }
-    tank.x = spos.x;
-    tank.y = spos.y;
+    tank.setPosition(spos);
     game.addObject(tank);
     game.nPlayersAlive += 1;
-    game.timeouts.push(
-      window.setTimeout(() => {
-        generateCloud(game, tank.x, tank.y, 4, 20, 2);
-      }, 10),
-    );
+    game.addTimeout(() => {
+      generateCloud(game, tank.x, tank.y, 4, 20, 2);
+    }, 10);
     // spawn shield
     tank.timers.spawnshield = game.t + Settings.SpawnShieldTime * 1000;
   }
@@ -99,11 +95,9 @@ export default class Player {
     this.game.canvas.shake();
     this.spree = 0;
     this.stats.deaths += 1;
-    this.game.timeouts.push(
-      window.setTimeout(() => {
-        this.spawn(game);
-      }, Settings.RespawnTime * 1000),
-    );
+    this.game.addTimeout(() => {
+      this.spawn(game);
+    }, Settings.RespawnTime * 1000);
   }
 
   /**

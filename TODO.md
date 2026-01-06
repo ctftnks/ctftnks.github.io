@@ -5,6 +5,11 @@
 - resolve all circular dependencies
 - single way to access the game variable? not distributed accross all classes
 - dependency analysis & improve loose coupling
+- GameTimeout could be integrated into GameObject list (and use their step method)
+- if step method has dt, GameTimeout could track their own time left, without relying on global time
+- GameObject could have a "lifetime" or something, they will be deleted when the lifetime is over (this simplifies powerups and timeouts)
+- check if player.invincible & player.spawnshield are well implemented
+- check if for loops can be written more efficiently
 
 ## Bugs
 
