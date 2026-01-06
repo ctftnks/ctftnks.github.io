@@ -6,7 +6,7 @@ import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import Canvas from "./canvas";
 import Player from "./player";
-import GameObject from "@/entities/gameobject";
+import GameObject, { VirtualGameObject } from "@/entities/gameobject";
 import { Gamemode, Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import { openPage } from "@/stores/ui";
 import Tank from "@/entities/tank";
@@ -40,8 +40,6 @@ export default class Game {
   lastTime: number = 0;
   /** Accumulated time for fixed-step updates. */
   accumulator: number = 0;
-  /** List of game-time based timeouts. */
-  timeouts: GameTimeout[] = [];
   /** Total kills in the game. */
   nkills: number = 0;
   /** The current game mode. */
@@ -130,7 +128,8 @@ export default class Game {
       this.accumulator = Math.min(this.accumulator, 200);
 
       while (this.accumulator >= Settings.GameFrequency) {
-        this.step();
+        const dt = Settings.GameFrequency;
+        this.step(dt);
         this.accumulator -= Settings.GameFrequency;
       }
     }
@@ -141,51 +140,31 @@ export default class Game {
   }
 
   /**
-   * Registers a callback to be executed after a delay in game time.
-   * @param callback - The function to call.
-   * @param delay - The delay in milliseconds.
-   * @returns The timeout object.
-   */
-  addTimeout(callback: () => void, delay: number): GameTimeout {
-    const timeout = new GameTimeout(this.t + delay, callback);
-    this.timeouts.push(timeout);
-    return timeout;
-  }
-
-  /**
    * A single step of the game loop.
+   * @param dt - the temporal delta of the time step
    */
-  step(): void {
-    this.t += Settings.GameFrequency;
-
-    // Process game timeouts
-    const pendingTimeouts: GameTimeout[] = [];
-    for (const timeout of this.timeouts) {
-      if (this.t >= timeout.triggerTime) {
-        timeout.callback();
-      } else {
-        pendingTimeouts.push(timeout);
-      }
-    }
-    this.timeouts = pendingTimeouts;
-
+  step(dt: number): void {
+    this.t += dt;
     if (!this.map) {
       return;
     }
-    // remove deleted objects and
-    // initiate spatial sorting of objects within the map class
+    // remove deleted objects and redo the spatial sorting of objects within the map class
     this.map.clearObjectLists();
     this.objs = this.objs.filter((obj) => {
-      if (!obj.deleted) {
-        this.map.addObject(obj);
-        return true;
+      if (obj.isDeleted()) {
+        obj.onDeleted(); // Call onDeleted hook
+        return false;
       }
-      return false;
+      if (!(obj instanceof VirtualGameObject)) {
+        this.map.addObject(obj);
+      }
+      return true;
     });
 
     // call step() function for every object in order for it to move/etc.
     for (const obj of this.objs) {
       obj.step();
+      obj.age += dt;
     }
 
     // do gamemode calculations
@@ -194,13 +173,10 @@ export default class Game {
     // add random PowerUp
     if (this.isTrueEvery(1000 * Settings.PowerUpRate)) {
       const p = getRandomPowerUp();
-      const pos = this.map.spawnPoint();
-      p.x = pos.x;
-      p.y = pos.y;
+      p.setPosition(this.map.spawnPoint());
       this.addObject(p);
-      // Use game timeout for powerup deletion
-      this.addTimeout(() => p.delete(), 1000 * Settings.PowerUpRate * Settings.MaxPowerUps);
     }
+
     // end the game when the round time is over
     if (this.t > Settings.RoundTime * 60000) {
       this.end();
@@ -232,8 +208,6 @@ export default class Game {
       cancelAnimationFrame(this.loop);
       this.loop = undefined;
     }
-    this.timeouts = [];
-
     clearEffects();
     stopMusic();
     this.players.forEach((player) => (player.base = undefined));
@@ -246,6 +220,18 @@ export default class Game {
     this.paused = true;
     openPage("leaderboard");
     this.stop();
+  }
+
+  /**
+   * Registers a callback to be executed after a delay in game time.
+   * @param callback - The function to call.
+   * @param delay - The delay in milliseconds.
+   * @returns The timeout object.
+   */
+  addTimeout(callback: () => void, delay: number): GameTimeout {
+    const timeout = new GameTimeout(delay, callback);
+    this.objs.push(timeout);
+    return timeout;
   }
 
   /**

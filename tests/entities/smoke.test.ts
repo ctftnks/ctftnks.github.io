@@ -36,7 +36,7 @@ describe("Smoke System", () => {
     smoke.step(); // -10 ms
 
     expect(smoke.timeout).toBeLessThan(0);
-    expect(smoke.deleted).toBe(true);
+    expect(smoke.isDeleted()).toBe(true);
   });
 
   it("should generate cloud of smoke", () => {

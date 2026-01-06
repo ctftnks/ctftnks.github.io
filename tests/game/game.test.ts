@@ -146,21 +146,21 @@ describe("Game Class", () => {
     const mockObj = {
       x: 0,
       y: 0,
-      deleted: false,
       step: vi.fn(),
       delete: vi.fn(),
+      isDeleted: vi.fn(),
     } as any;
 
     game.addObject(mockObj);
     expect(game.objs).toContain(mockObj);
 
     // Step
-    game.step();
+    game.step(Settings.GameFrequency);
     expect(mockObj.step).toHaveBeenCalled();
 
     // Mark as deleted
     mockObj.deleted = true;
-    game.step();
+    game.step(Settings.GameFrequency);
     expect(game.objs).not.toContain(mockObj);
   });
 
@@ -168,7 +168,7 @@ describe("Game Class", () => {
     Settings.PowerUpRate = 0.01; // Every 10ms
     game.t = 0;
 
-    game.step();
+    game.step(Settings.GameFrequency);
 
     const powerups = game.objs.filter((o) => o instanceof PowerUp);
     expect(powerups.length).toBeGreaterThan(0);
@@ -181,7 +181,7 @@ describe("Game Class", () => {
 
     // Fast forward past round time
     game.t = Settings.RoundTime * 60000 + 100;
-    game.step();
+    game.step(Settings.GameFrequency);
 
     expect(endSpy).toHaveBeenCalled();
   });

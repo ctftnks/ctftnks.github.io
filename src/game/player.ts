@@ -64,7 +64,6 @@ export default class Player {
    */
   spawn(game: Game): void {
     const tank = new Tank(this, game);
-    tank.deleted = false;
     let spos = game.map.spawnPoint();
     if (this.base?.tile) {
       let spos2 = this.base.tile;
@@ -73,8 +72,7 @@ export default class Player {
       }
       spos = { x: spos2.x + spos2.dx / 2, y: spos2.y + spos2.dy / 2 };
     }
-    tank.x = spos.x;
-    tank.y = spos.y;
+    tank.setPosition(spos);
     game.addObject(tank);
     game.nPlayersAlive += 1;
     game.addTimeout(() => {

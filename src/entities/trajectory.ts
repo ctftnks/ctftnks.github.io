@@ -1,5 +1,4 @@
 import GameObject from "./gameobject";
-import { Settings } from "@/stores/settings";
 import type GameMap from "@/game/gamemap";
 import Tank from "./tank";
 import Coord from "./coord";
@@ -22,7 +21,7 @@ export default class Trajectory extends GameObject {
   points: TrajectoryPoint[] = [];
   map: GameMap;
   drawevery: number = 1;
-  timeout: number = 100;
+  maxAge: number = 100;
   targets: Tank[] = [];
 
   /**
@@ -107,11 +106,6 @@ export default class Trajectory extends GameObject {
           this.targets.push(obj);
         }
       }
-    }
-
-    this.timeout -= Settings.GameFrequency;
-    if (this.timeout < 0) {
-      this.delete();
     }
   }
 }

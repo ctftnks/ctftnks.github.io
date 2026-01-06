@@ -7,7 +7,7 @@ import { Settings } from "@/stores/settings";
  */
 export interface ShrapnelOptions {
   /** Duration of shrapnel in ms. */
-  timeout: number;
+  maxAge: number;
   /** Whether shrapnel ignores wall collisions. */
   noCollision?: boolean;
 }
@@ -29,7 +29,7 @@ export function createShrapnelExplosion(weapon: Weapon, x: number, y: number, co
     shrapnel.age = 0;
     shrapnel.speed = 2 * Settings.BulletSpeed * (0.8 + 0.4 * Math.random());
     shrapnel.angle = 2 * Math.PI * Math.random();
-    shrapnel.timeout = options.timeout;
+    shrapnel.maxAge = options.maxAge;
     shrapnel.extrahitbox = -3;
 
     if (options.noCollision) {

@@ -37,7 +37,7 @@ export class MG extends Weapon {
     bullet.bounceSound = "";
     bullet.extrahitbox = -3;
     bullet.angle = this.tank.angle + 0.2 * (0.5 - Math.random());
-    bullet.timeout = 4000 + 1000 * (0.5 - Math.random());
+    bullet.maxAge = 4000 + 1000 * (0.5 - Math.random());
     bullet.color = "#000";
     return bullet;
   }

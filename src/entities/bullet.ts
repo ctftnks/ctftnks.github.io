@@ -19,14 +19,13 @@ export default class Bullet extends GameObject {
   radius: number = 4;
   speed: number;
   color: string = "#000";
-  timeout: number;
-  age: number = 0;
   trace: boolean = false;
   bounceSound: string = SOUNDS.bounce;
   lethal: boolean = true;
   extrahitbox: number = 0; // size of additional hitbox used for bullet-bullet collisions
   exploded: boolean = false; // used only for some powerups
   smokeColor: string | null = null; // used only for some powerups
+  image?: HTMLImageElement; // optional image for rendering the bullet
 
   /**
    * Creates a new Bullet.
@@ -38,7 +37,7 @@ export default class Bullet extends GameObject {
     this.map = this.player.game!.map;
     this.weapon = weapon;
     this.speed = Settings.BulletSpeed;
-    this.timeout = Settings.BulletTimeout * 1000;
+    this.maxAge = Settings.BulletTimeout * 1000;
   }
 
   /**
@@ -46,18 +45,18 @@ export default class Bullet extends GameObject {
    * @param context - The 2D context.
    */
   draw(context: CanvasRenderingContext2D): void {
-    if (!this.image.src) {
-      context.beginPath();
-      context.fillStyle = this.color;
-      context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
-      context.closePath();
-      context.fill();
-    } else {
+    if (this.image) {
       context.save();
       context.translate(this.x, this.y);
       context.rotate(this.angle);
       context.drawImage(this.image, (-this.radius * 5) / 2, (-this.radius * 5) / 2, this.radius * 5, this.radius * 5);
       context.restore();
+    } else {
+      context.beginPath();
+      context.fillStyle = this.color;
+      context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
+      context.closePath();
+      context.fill();
     }
   }
 
@@ -65,12 +64,6 @@ export default class Bullet extends GameObject {
    * Timestepping: translation, aging, collision.
    */
   step(): void {
-    this.age += Settings.GameFrequency;
-    if (this.age > this.timeout) {
-      this.explode();
-      this.delete();
-    }
-
     if (this.trace) {
       this.leaveTrace();
     }
@@ -137,8 +130,6 @@ export default class Bullet extends GameObject {
           if (!obj.lethal) {
             return;
           }
-          obj.explode();
-          this.explode();
           obj.delete();
           this.delete();
           generateCloud(this.player.game!, this.x, this.y, 1);
@@ -155,16 +146,4 @@ export default class Bullet extends GameObject {
   leaveTrace(): void {
     this.player.game?.addObject(new Smoke(this.x, this.y, 300, this.radius, 1));
   }
-
-  /**
-   * Delete bullet from map.
-   */
-  delete(): void {
-    this.deleted = true;
-  }
-
-  /**
-   * Called when the bullet explodes.
-   */
-  explode(): void {}
 }

@@ -34,17 +34,17 @@ export class Mine extends Weapon {
     e.radius = 6;
     e.exploded = false;
     e.color = "#000";
-    e.timeout = 120000 + 20 * Math.random();
+    e.maxAge = 120000 + 20 * Math.random();
 
     /**
      * Explosion logic for mine.
      */
-    e.explode = () => {
+    e.onDeleted = () => {
       if (!e.exploded) {
         e.exploded = true;
         playSound(SOUNDS.grenade);
         createShrapnelExplosion(this, e.x, e.y, this.nshrapnels, {
-          timeout: 600,
+          maxAge: 600,
         });
         this.bullet = null;
       }
