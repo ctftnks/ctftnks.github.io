@@ -10,6 +10,7 @@ import GameObject from "@/entities/gameobject";
 import { Gamemode, Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import { openPage } from "@/stores/ui";
 import Tank from "@/entities/tank";
+import GameTimeout from "./timeout";
 
 /**
  * Manages the game state, loop, and objects.
@@ -33,16 +34,14 @@ export default class Game {
   loop?: number;
   /** Number of players alive. */
   nPlayersAlive: number = 0;
-  /** Game time counter. */
+  /** Game time counter in ms. */
   t: number = 0;
   /** Timestamp of the last frame. */
   lastTime: number = 0;
   /** Accumulated time for fixed-step updates. */
   accumulator: number = 0;
-  /** List of interval IDs to clear on stop. */
-  intvls: number[] = [];
-  /** List of timeout IDs to clear on stop. */
-  timeouts: number[] = [];
+  /** List of game-time based timeouts. */
+  timeouts: GameTimeout[] = [];
   /** Total kills in the game. */
   nkills: number = 0;
   /** The current game mode. */
@@ -142,10 +141,34 @@ export default class Game {
   }
 
   /**
+   * Registers a callback to be executed after a delay in game time.
+   * @param callback - The function to call.
+   * @param delay - The delay in milliseconds.
+   * @returns The timeout object.
+   */
+  addTimeout(callback: () => void, delay: number): GameTimeout {
+    const timeout = new GameTimeout(this.t + delay, callback);
+    this.timeouts.push(timeout);
+    return timeout;
+  }
+
+  /**
    * A single step of the game loop.
    */
   step(): void {
     this.t += Settings.GameFrequency;
+
+    // Process game timeouts
+    const pendingTimeouts: GameTimeout[] = [];
+    for (const timeout of this.timeouts) {
+      if (this.t >= timeout.triggerTime) {
+        timeout.callback();
+      } else {
+        pendingTimeouts.push(timeout);
+      }
+    }
+    this.timeouts = pendingTimeouts;
+
     if (!this.map) {
       return;
     }
@@ -175,7 +198,8 @@ export default class Game {
       p.x = pos.x;
       p.y = pos.y;
       this.addObject(p);
-      this.timeouts.push(window.setTimeout(() => p.delete(), 1000 * Settings.PowerUpRate * Settings.MaxPowerUps));
+      // Use game timeout for powerup deletion
+      this.addTimeout(() => p.delete(), 1000 * Settings.PowerUpRate * Settings.MaxPowerUps);
     }
     // end the game when the round time is over
     if (this.t > Settings.RoundTime * 60000) {
@@ -208,9 +232,6 @@ export default class Game {
       cancelAnimationFrame(this.loop);
       this.loop = undefined;
     }
-    this.intvls.forEach((id) => window.clearInterval(id));
-    this.timeouts.forEach((id) => window.clearTimeout(id));
-    this.intvls = [];
     this.timeouts = [];
 
     clearEffects();

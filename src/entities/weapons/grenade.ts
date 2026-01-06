@@ -2,9 +2,9 @@ import { Weapon } from "./weapon";
 import type Tank from "../tank";
 import Bullet from "../bullet";
 import { IMAGES, SOUNDS } from "@/game/assets";
-import { playSound } from "@/game/effects";
+import { playSound } from "@/game/sounds";
 import { Settings } from "@/stores/settings";
-import { createShrapnelExplosion } from "./utils";
+import { createShrapnelExplosion, createBaseBullet } from "./utils";
 
 /**
  * A grenade that can be remotely detonated.
@@ -33,7 +33,7 @@ export class Grenade extends Weapon {
    * @override
    */
   override newBullet(): Bullet {
-    const e = super.newBullet();
+    const e = createBaseBullet(this);
     e.image = new Image();
     e.image.src = IMAGES.grenade;
     e.radius = 6;

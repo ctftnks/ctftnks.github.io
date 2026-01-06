@@ -59,8 +59,14 @@ vi.mock("@/entities/bullet", () => {
       checkBulletCollision = vi.fn();
       leaveTrace = vi.fn();
       constructor(weapon: any) {
-        this.player = weapon.tank.player;
-        this.map = weapon.tank.player.game.map;
+        if (weapon && weapon.tank) {
+          this.player = weapon.tank.player;
+          this.map = weapon.tank.player.game.map;
+        } else {
+          // Fallback for tests where weapon might be incompletely mocked or constructed
+          this.player = {};
+          this.map = {};
+        }
       }
     },
   };
@@ -98,6 +104,7 @@ describe("Weapon System", () => {
     mockGame = {
       addObject: vi.fn(),
       timeouts: [],
+      addTimeout: vi.fn(() => ({ triggerTime: 0, callback: vi.fn() })),
       map: {
         getTileByPos: vi.fn().mockReturnValue({
           getWalls: vi.fn().mockReturnValue([true, false, false, false]),
@@ -151,13 +158,15 @@ describe("Weapon System", () => {
     it("should reactivate if rapidfire is on", () => {
       mockTank.rapidfire = true;
       const gun = new Gun(mockTank);
-      vi.useFakeTimers();
+
       gun.deactivate();
 
-      vi.advanceTimersByTime(500);
+      expect(mockGame.addTimeout).toHaveBeenCalled();
+      // Capture the callback passed to addTimeout
+      const callback = mockGame.addTimeout.mock.calls[0][0];
+      callback();
 
       expect(gun.isActive).toBe(true);
-      vi.useRealTimers();
     });
   });
 

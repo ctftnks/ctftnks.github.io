@@ -2,8 +2,9 @@ import { Weapon } from "./weapon";
 import type Tank from "../tank";
 import type Bullet from "../bullet";
 import { IMAGES, SOUNDS } from "@/game/assets";
-import { playSound } from "@/game/effects";
+import { playSound } from "@/game/sounds";
 import { Settings } from "@/stores/settings";
+import { createBaseBullet } from "./utils";
 
 /**
  * A rapid-firing machine gun.
@@ -32,7 +33,7 @@ export class MG extends Weapon {
    * @override
    */
   override newBullet(): Bullet {
-    const bullet = super.newBullet();
+    const bullet = createBaseBullet(this);
     bullet.radius = 2;
     bullet.bounceSound = "";
     bullet.extrahitbox = -3;
@@ -52,11 +53,11 @@ export class MG extends Weapon {
     }
 
     if (this.nshots === 20) {
-      this.tank.player.game!.timeouts.push(window.setTimeout(() => this.deactivate(), 3000));
+      this.tank.player.game!.addTimeout(() => this.deactivate(), 3000);
     }
 
     if (this.tank.player.isBot() && this.nshots > 15) {
-      window.setTimeout(() => this.shoot(), Settings.GameFrequency);
+      this.tank.player.game!.addTimeout(() => this.shoot(), Settings.GameFrequency);
     }
 
     this.every -= Settings.GameFrequency;

@@ -88,8 +88,7 @@ describe("Effects Module", () => {
         intvls: [],
       };
 
-      const intvl = fogOfWar(mockGame as any);
-      expect(intvl).toBeDefined();
+      fogOfWar(mockGame as any);
 
       // Fast forward to trigger interval
       vi.advanceTimersByTime(30);

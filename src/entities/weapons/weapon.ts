@@ -1,19 +1,25 @@
-import Bullet from "../bullet";
+import type Bullet from "../bullet";
 import type Tank from "../tank";
 import type Trajectory from "../trajectory";
-import { playSound } from "@/game/effects";
+import { playSound } from "@/game/sounds";
 import { SOUNDS } from "@/game/assets";
+
+export interface BotAI {
+  shootingRange: number;
+  fleeingDuration: number;
+  fleeIfActive: boolean;
+}
 
 /**
  * Base class for all weapons.
  */
-export class Weapon {
-  name: string = "Weapon";
-  tank: Tank;
+export abstract class Weapon {
+  abstract name: string;
+  readonly tank: Tank;
   image: HTMLImageElement;
   isActive: boolean = true;
   isDeleted: boolean = false;
-  bot: { shootingRange: number; fleeingDuration: number; fleeIfActive: boolean };
+  bot: BotAI;
   trajectory?: Trajectory;
   bullet: Bullet | null = null;
   nshots?: number;
@@ -27,7 +33,6 @@ export class Weapon {
   constructor(tank: Tank) {
     this.tank = tank;
     this.image = new Image();
-    this.image.src = "";
     this.bot = {
       shootingRange: 2, // distance at which bots fire the weapon
       fleeingDuration: 800, // how long should a bot flee after firing this weapon?
@@ -51,23 +56,11 @@ export class Weapon {
   }
 
   /**
-   * Creates a new bullet with all the typical properties.
-   * Handles tank corner positioning and initial lethality delay.
+   * Creates a new bullet.
+   * must be implemented by subclasses.
    * @returns The created bullet.
    */
-  newBullet(): Bullet {
-    const bullet = new Bullet(this);
-    const corners = this.tank.corners();
-    bullet.x = (corners[0].x + corners[1].x) / 2;
-    bullet.y = (corners[0].y + corners[1].y) / 2;
-    bullet.lethal = false;
-    window.setTimeout(() => (bullet.lethal = true), 100);
-    bullet.angle = this.tank.angle;
-    bullet.player = this.tank.player;
-    bullet.color = this.tank.player.team.color;
-    this.tank.player.game!.addObject(bullet);
-    return bullet;
-  }
+  abstract newBullet(): Bullet;
 
   /**
    * Deactivates the weapon (cannot shoot temporarily or until deleted).
@@ -78,15 +71,17 @@ export class Weapon {
     }
     this.isActive = false;
     const delay = this.tank.rapidfire ? 500 : 1800;
-    this.tank.player.game!.timeouts.push(
-      window.setTimeout(() => {
+
+    // Safety check
+    if (this.tank.player.game) {
+      this.tank.player.game.addTimeout(() => {
         if (this.tank.rapidfire) {
           this.activate();
         } else {
           this.delete();
         }
-      }, delay),
-    );
+      }, delay);
+    }
   }
 
   /**
@@ -107,5 +102,6 @@ export class Weapon {
   /**
    * Draw crosshair or trajectory preview.
    */
+
   crosshair(): void {}
 }

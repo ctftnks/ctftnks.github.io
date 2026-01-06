@@ -1,5 +1,5 @@
 import Bullet from "../bullet";
-import type { Weapon } from "./weapon";
+import { Weapon } from "./weapon";
 import { Settings } from "@/stores/settings";
 
 /**
@@ -10,6 +10,26 @@ export interface ShrapnelOptions {
   timeout: number;
   /** Whether shrapnel ignores wall collisions. */
   noCollision?: boolean;
+}
+
+/**
+ * Creates a base bullet with standard properties.
+ * @param weapon - The weapon firing the bullet.
+ * @returns The configured bullet.
+ */
+export function createBaseBullet(weapon: Weapon): Bullet {
+  const bullet = new Bullet(weapon);
+  const corners = weapon.tank.corners();
+  bullet.x = (corners[0].x + corners[1].x) / 2;
+  bullet.y = (corners[0].y + corners[1].y) / 2;
+  bullet.lethal = false;
+  if (weapon.tank.player.game) {
+    weapon.tank.player.game.addObject(bullet);
+    // TODO: better timer
+    weapon.tank.player.game.addTimeout(() => (bullet.lethal = true), 100);
+  }
+
+  return bullet;
 }
 
 /**
