@@ -12,7 +12,7 @@ import { createShrapnelExplosion } from "./utils";
  */
 export class Grenade extends Weapon {
   override name: string = "Grenade";
-  override nshots: number = 30; // repurposed for nshrapnels if needed, but original used nshrapnels
+  override nshots: number = 30;
 
   private nshrapnels: number = 30;
 
