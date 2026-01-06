@@ -3,7 +3,6 @@ import { playSound } from "@/game/effects";
 import { SOUNDS } from "@/game/assets";
 import type Game from "@/game/game";
 import Tank from "./tank";
-import type Player from "@/game/player";
 import type Tile from "@/game/tile";
 import type Team from "@/game/team";
 import type Flag from "./flag";
@@ -14,7 +13,7 @@ import type Flag from "./flag";
  */
 export default class Base extends GameObject {
   /** Team identifier. */
-  team: Team | null;
+  team?: Team;
   /** Base color. */
   color: string;
   /** Game instance. */
@@ -29,23 +28,21 @@ export default class Base extends GameObject {
   /**
    * Creates a new Base.
    * @param game - The game instance.
-   * @param player - The player/team owning the base.
    * @param x - X coordinate.
    * @param y - Y coordinate.
+   * @param team - The team owning the base.
    */
-  constructor(game: Game, player: Player | null, x: number, y: number) {
+  constructor(game: Game, x: number, y: number, team?: Team) {
     super();
-    if (player === null) {
-      this.team = null;
-      this.color = "#555";
-    } else {
-      this.team = player.team;
-      this.color = this.team.color;
-    }
     this.game = game;
     this.x = x;
     this.y = y;
     this.tile = this.game.map?.getTileByPos(this.x, this.y) ?? null;
+    this.color = "#555";
+    if (team) {
+      this.team = team;
+      this.color = team.color;
+    }
   }
 
   /**

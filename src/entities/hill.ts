@@ -15,7 +15,7 @@ export default class Hill extends Base {
    * @param y - Y coordinate.
    */
   constructor(game: Game, x: number, y: number) {
-    super(game, null, x, y);
+    super(game, x, y, undefined); // Base with undefined team
   }
 
   /**

@@ -86,49 +86,28 @@ export abstract class Gamemode {
   /**
    * Initializes bases for each team.
    * Ensures one base per team, placed far from each other.
-   * @param onBaseCreated - Callback for additional base setup (e.g., adding flags).
    */
-  protected initTeamBases(onBaseCreated?: (base: Base) => void): void {
+  protected initTeamBases(): Base[] {
     const game = this.game;
-    if (!game.map) {
-      return;
-    }
-
     const bases: Base[] = [];
-    const teamMap = new Map<Team, Base>();
-
-    // identify unique teams
-    const teams = new Set<Team>();
-    for (const player of game.players) {
-      if (player.team) {
-        teams.add(player.team);
-      }
+    if (!game.map) {
+      return bases;
     }
-
+    // get set of unique teams
+    const teams: Set<Team> = new Set(game.players.map((p) => p.team));
     // create base for each team
     for (const team of teams) {
-      const avoidPoints: Coord[] = bases.map((b) => ({ x: b.x, y: b.y }));
+      const avoidPoints: Coord[] = bases.length > 0 ? bases.slice() : [game.map.getFurthestSpawnPoint([])];
       const pos = game.map.getFurthestSpawnPoint(avoidPoints);
-
-      // We need a player owner for the base constructor, pick the first one from the team
-      const owner = game.players.find((p) => p.team === team) || null;
-
-      const base = new Base(game, owner, pos.x, pos.y);
+      const base = new Base(game, pos.x, pos.y, team);
       bases.push(base);
-      teamMap.set(team, base);
       game.addObject(base);
-
-      if (onBaseCreated) {
-        onBaseCreated(base);
+      // Assign base to all players of the corresponding team
+      for (const player of game.players.filter((p) => p.team === team)) {
+        player.base = base;
       }
     }
-
-    // Assign bases to all players
-    for (const player of game.players) {
-      if (player.team && teamMap.has(player.team)) {
-        player.base = teamMap.get(player.team);
-      }
-    }
+    return bases;
   }
 
   protected handleMultiKill(player: Player): void {
@@ -225,10 +204,12 @@ export class CaptureTheFlag extends Gamemode {
   }
 
   override init(): void {
-    this.initTeamBases((base) => {
+    const bases = this.initTeamBases();
+    // Add flags to bases
+    for (const base of bases) {
       base.flag = new Flag(this.game, base);
       base.flag.drop(base.x, base.y);
-    });
+    }
   }
 }
 

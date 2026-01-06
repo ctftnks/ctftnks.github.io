@@ -12,7 +12,6 @@ vi.mock("@/game/effects", () => ({
 
 describe("Base Class", () => {
   let mockGame: any;
-  let mockPlayer: any;
   let mockTile: any;
 
   beforeEach(() => {
@@ -34,10 +33,6 @@ describe("Base Class", () => {
       t: 1000,
       objs: [],
     };
-
-    mockPlayer = {
-      team: TEAMS[1],
-    };
   });
 
   afterEach(() => {
@@ -45,21 +40,21 @@ describe("Base Class", () => {
   });
 
   it("should initialize correctly", () => {
-    const base = new Base(mockGame, mockPlayer, 50, 50);
-    expect(base.team).toBe(mockPlayer.team);
-    expect(base.color).toBe(mockPlayer.team.color);
+    const base = new Base(mockGame, 50, 50, TEAMS[1]);
+    expect(base.team).toBe(TEAMS[1]);
+    expect(base.color).toBe(TEAMS[1].color);
     expect(base.x).toBe(50);
     expect(base.y).toBe(50);
   });
 
-  it("should initialize as neutral when no player provided", () => {
-    const base = new Base(mockGame, null, 50, 50);
-    expect(base.team).toBeNull();
+  it("should initialize as neutral when no team provided", () => {
+    const base = new Base(mockGame, 50, 50);
+    expect(base.team).toBeUndefined();
     expect(base.color).toBe("#555");
   });
 
   it("should detect if it has flag", () => {
-    const base = new Base(mockGame, mockPlayer, 50, 50);
+    const base = new Base(mockGame, 50, 50, TEAMS[1]);
     expect(base.hasFlag()).toBe(false);
 
     const flag = new Flag(mockGame, base);
@@ -71,7 +66,7 @@ describe("Base Class", () => {
   });
 
   it("should score when friendly tank returns flag", () => {
-    const base = new Base(mockGame, mockPlayer, 50, 50);
+    const base = new Base(mockGame, 50, 50, TEAMS[1]);
     const flag = new Flag(mockGame, base);
     base.flag = flag;
     flag.inBase = true;
@@ -81,7 +76,7 @@ describe("Base Class", () => {
     friendlyTank.x = 50;
     friendlyTank.y = 50;
 
-    const enemyBase = new Base(mockGame, { team: TEAMS[2] } as any, 500, 500);
+    const enemyBase = new Base(mockGame, 500, 500, TEAMS[2]);
     const enemyFlag = new Flag(mockGame, enemyBase);
     friendlyTank.carriedFlag = enemyFlag;
 
@@ -93,7 +88,7 @@ describe("Base Class", () => {
   });
 
   it("should draw itself", () => {
-    const base = new Base(mockGame, mockPlayer, 50, 50);
+    const base = new Base(mockGame, 50, 50, TEAMS[1]);
     const mockContext = {
       save: vi.fn(),
       beginPath: vi.fn(),

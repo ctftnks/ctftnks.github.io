@@ -40,7 +40,7 @@ describe("Hill Class", () => {
 
   it("should change team on capture", () => {
     const hill = new Hill(mockGame, 200, 200);
-    expect(hill.team).toBeNull();
+    expect(hill.team).toBeUndefined();
 
     const enemyPlayer = new Player(1, "E1", TEAMS[2], []);
     const enemyTank = new Tank(enemyPlayer, mockGame);
@@ -57,6 +57,6 @@ describe("Hill Class", () => {
     const hill = new Hill(mockGame, 200, 200);
     hill.tile = null;
     hill.step(); // Should not throw
-    expect(hill.team).toBeNull();
+    expect(hill.team).toBeUndefined();
   });
 });

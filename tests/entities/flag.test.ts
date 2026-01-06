@@ -45,7 +45,7 @@ describe("Flag Class", () => {
   });
 
   it("should initialize and link to base", () => {
-    const base = new Base(mockGame, mockPlayer, 100, 100);
+    const base = new Base(mockGame, 100, 100, mockPlayer.team);
     const flag = new Flag(mockGame, base);
 
     expect(flag.base).toBe(base);
@@ -54,7 +54,7 @@ describe("Flag Class", () => {
   });
 
   it("should be picked up", () => {
-    const base = new Base(mockGame, mockPlayer, 100, 100);
+    const base = new Base(mockGame, 100, 100, mockPlayer.team);
     const flag = new Flag(mockGame, base);
     const tank = { carriedFlag: null } as any;
 
@@ -67,7 +67,7 @@ describe("Flag Class", () => {
   });
 
   it("should reset to base", () => {
-    const base = new Base(mockGame, mockPlayer, 100, 100);
+    const base = new Base(mockGame, 100, 100, mockPlayer.team);
     const flag = new Flag(mockGame, base);
     flag.x = 500;
     flag.y = 500;
@@ -81,7 +81,7 @@ describe("Flag Class", () => {
   });
 
   it("should be picked up by enemy tank in step", () => {
-    const base = new Base(mockGame, mockPlayer, 100, 100);
+    const base = new Base(mockGame, 100, 100, mockPlayer.team);
     const flag = new Flag(mockGame, base);
     flag.drop(100, 100);
     flag.inBase = false;
@@ -99,7 +99,7 @@ describe("Flag Class", () => {
   });
 
   it("should be reset by friendly tank in step if not in base", () => {
-    const base = new Base(mockGame, mockPlayer, 100, 100);
+    const base = new Base(mockGame, 100, 100, mockPlayer.team);
     const flag = new Flag(mockGame, base);
     flag.drop(200, 200);
     flag.inBase = false;
@@ -120,7 +120,7 @@ describe("Flag Class", () => {
   });
 
   it("should reset automatically after timeout", () => {
-    const base = new Base(mockGame, mockPlayer, 100, 100);
+    const base = new Base(mockGame, 100, 100, mockPlayer.team);
     const flag = new Flag(mockGame, base);
     flag.drop(200, 200);
     flag.inBase = false;
@@ -136,7 +136,7 @@ describe("Flag Class", () => {
   });
 
   it("should draw itself", () => {
-    const base = new Base(mockGame, mockPlayer, 100, 100);
+    const base = new Base(mockGame, 100, 100, mockPlayer.team);
     const flag = new Flag(mockGame, base);
     const mockContext = {
       save: vi.fn(),
