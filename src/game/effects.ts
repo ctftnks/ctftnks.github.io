@@ -68,18 +68,20 @@ class FogEffect extends Updatable {
     this.canvas.height = game.canvas.canvas.clientHeight;
     this.canvas.width = game.canvas.canvas.clientWidth;
     this.ctx = this.canvas.getContext("2d")!;
-    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-    this.ctx.scale(game.canvas.scale, game.canvas.scale);
     this.maxAge = this.duration;
   }
 
   override step(): void {
+    // Reset transform to clear the entire canvas
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
     if (this.isDeleted()) {
-      this.ctx.clearRect(0, 0, 2 * this.canvas.width, 2 * this.canvas.height);
       return;
     }
 
-    this.ctx.clearRect(0, 0, 2 * this.canvas.width, 2 * this.canvas.height);
+    // Apply game scale for drawing logic
+    this.ctx.scale(this.game.canvas.scale, this.game.canvas.scale);
 
     // Calculate ambient light based on age
     if (this.age < 300) {
@@ -93,15 +95,15 @@ class FogEffect extends Updatable {
     this.ctx.fillStyle = "rgba(0,0,0," + (1 - this.ambientLight) + ")";
     this.ctx.fillRect(0, 0, this.game.map.Nx * this.game.map.dx, this.game.map.Ny * this.game.map.dy);
 
+    // Punch holes for tanks
+    this.ctx.globalCompositeOperation = "destination-out";
+    this.ctx.fillStyle = "rgba(0,0,0,1)"; // Color doesn't matter for destination-out, only alpha
     for (const tank of this.game.getTanks()) {
-      this.ctx.save();
       this.ctx.beginPath();
       this.ctx.arc(tank.x, tank.y, 100, 0, Math.PI * 2, true);
-      this.ctx.clip();
-      this.ctx.clearRect(tank.x - 100, tank.y - 100, 200, 200);
-      this.ctx.closePath();
-      this.ctx.restore();
+      this.ctx.fill();
     }
+    this.ctx.globalCompositeOperation = "source-over";
   }
 }
 
@@ -115,10 +117,17 @@ export function fogOfWar(game: Game): void {
   if (!canvas || !canvas.getContext("2d")) {
     return;
   }
+
+  // Remove existing FogEffect to avoid stacking
+  const existingIndex = game.updatables.findIndex((u) => u instanceof FogEffect);
+  if (existingIndex !== -1) {
+    game.updatables[existingIndex].delete();
+    game.updatables.splice(existingIndex, 1);
+  }
+
   const effect = new FogEffect(game);
   game.updatables.push(effect);
 }
-
 /**
  * Clears all visual effects from the overlay canvas.
  */
