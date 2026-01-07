@@ -80,19 +80,19 @@ class FogEffect extends Updatable {
     }
 
     this.ctx.clearRect(0, 0, 2 * this.canvas.width, 2 * this.canvas.height);
-    
+
     // Calculate ambient light based on age
     if (this.age < 300) {
-        this.ambientLight = 1 - this.age / 300;
+      this.ambientLight = 1 - this.age / 300;
     } else if (this.duration - this.age < 300) {
-        this.ambientLight = 1 - (this.duration - this.age) / 300;
+      this.ambientLight = 1 - (this.duration - this.age) / 300;
     } else {
-        this.ambientLight = 0;
+      this.ambientLight = 0;
     }
 
     this.ctx.fillStyle = "rgba(0,0,0," + (1 - this.ambientLight) + ")";
     this.ctx.fillRect(0, 0, this.game.map.Nx * this.game.map.dx, this.game.map.Ny * this.game.map.dy);
-    
+
     for (const tank of this.game.getTanks()) {
       this.ctx.save();
       this.ctx.beginPath();

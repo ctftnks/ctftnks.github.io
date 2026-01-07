@@ -66,6 +66,7 @@ describe("Effects Module", () => {
         beginPath: vi.fn(),
         arc: vi.fn(),
         clip: vi.fn(),
+        fill: vi.fn(),
         closePath: vi.fn(),
         restore: vi.fn(),
       };
