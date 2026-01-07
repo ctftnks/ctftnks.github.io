@@ -59,7 +59,6 @@ export default class Flag extends GameObject {
     tank.carriedFlag = this;
     this.picked = true;
     this.inBase = false;
-    this.delete();
   }
 
   /**
@@ -68,8 +67,7 @@ export default class Flag extends GameObject {
    * @param y - Y coordinate.
    */
   drop(x: number, y: number): void {
-    this.x = x;
-    this.y = y;
+    this.setPosition({ x, y });
     this.resetTimer = this.game.t + 30000;
     this.picked = false;
     this.game.objs.push(this);
@@ -116,6 +114,9 @@ export default class Flag extends GameObject {
    * @param context - The context.
    */
   draw(context: CanvasRenderingContext2D): void {
+    if (this.picked) {
+      return;
+    }
     context.save();
     context.translate(this.x, this.y);
     context.beginPath();
