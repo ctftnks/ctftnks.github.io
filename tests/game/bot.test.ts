@@ -58,6 +58,6 @@ describe("Bot Class", () => {
 
     bot.steer(mockTank as any, 10);
 
-    expect(stepSpy).toHaveBeenCalledWith(mockTank, mockGame);
+    expect(stepSpy).toHaveBeenCalledWith(mockTank, mockGame, 10);
   });
 });
