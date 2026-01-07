@@ -1,5 +1,4 @@
 import GameObject from "./gameobject";
-import { Settings } from "@/stores/settings";
 import type Game from "@/game/game";
 
 /**
@@ -10,7 +9,6 @@ export class Smoke extends GameObject {
   radius: number;
   color: string = "rgba(40, 40, 40, 0.3)";
   rspeed: number;
-  timeout: number;
 
   /**
    * Creates a new Smoke particle.
@@ -29,7 +27,7 @@ export class Smoke extends GameObject {
     this.radius = radius;
     this.rspeed = rspeed;
     // lifetime of the smoke in [ms]
-    this.timeout = timeout;
+    this.maxAge = timeout;
   }
 
   /**
@@ -39,24 +37,13 @@ export class Smoke extends GameObject {
   override draw(context: CanvasRenderingContext2D): void {
     context.beginPath();
     context.fillStyle = this.color;
-    context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
+    let perc = 1 - this.age / this.maxAge!;
+    if (perc < 0.3) {
+      perc = 0;
+    }
+    context.arc(this.x, this.y, this.radius * perc, 0, Math.PI * 2, true);
     context.closePath();
     context.fill();
-  }
-
-  /**
-   * Updates the smoke particle.
-   */
-  override step(): void {
-    // is bullet timed out?
-    this.timeout -= Settings.GameFrequency;
-    if (this.timeout < 0) {
-      this.delete();
-    }
-    this.radius -= (this.rspeed * Settings.GameFrequency) / 40;
-    if (this.radius < 0) {
-      this.radius = 0;
-    }
   }
 }
 
