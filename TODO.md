@@ -6,7 +6,6 @@
 - single way to access the game variable? not distributed accross all classes
 - dependency analysis & improve loose coupling
 - check if player.invincible & player.spawnshield are well implemented
-- check if for loops can be written more efficiently
 
 ## Bugs
 

@@ -68,19 +68,18 @@ export default class Base extends GameObject {
     if (this.tile === null) {
       return;
     }
-    for (let i = 0; i < this.tile.objs.length; i++) {
-      const tank: GameObject = this.tile.objs[i];
+    for (const obj of this.tile.objs) {
       if (
-        tank instanceof Tank &&
-        tank.player.team === this.team &&
-        Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)
+        obj instanceof Tank &&
+        obj.player.team === this.team &&
+        Math.pow(this.x - obj.x, 2) + Math.pow(this.y - obj.y, 2) < Math.pow(2 * this.size, 2)
       ) {
-        if (tank.carriedFlag !== null && this.hasFlag()) {
+        if (obj.carriedFlag !== null && this.hasFlag()) {
           // score!
-          this.game.mode.giveScore(tank.player, 1);
+          this.game.mode.giveScore(obj.player, 1);
           playSound(SOUNDS.fanfare);
-          tank.carriedFlag.reset();
-          tank.carriedFlag = null;
+          obj.carriedFlag.reset();
+          obj.carriedFlag = null;
         }
       }
     }
@@ -120,14 +119,13 @@ export class Hill extends Base {
     if (this.tile === null) {
       return;
     }
-    for (let i = 0; i < this.tile.objs.length; i++) {
-      const tank: GameObject = this.tile.objs[i];
+    for (const obj of this.tile.objs) {
       if (
-        tank instanceof Tank &&
-        tank.player.team !== this.team &&
-        Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)
+        obj instanceof Tank &&
+        obj.player.team !== this.team &&
+        Math.pow(this.x - obj.x, 2) + Math.pow(this.y - obj.y, 2) < Math.pow(2 * this.size, 2)
       ) {
-        this.team = tank.player.team;
+        this.team = obj.player.team;
         this.color = this.team.color;
       }
     }
