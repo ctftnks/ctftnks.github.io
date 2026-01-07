@@ -154,34 +154,22 @@ export default class Game {
 
     // remove deleted objects and redo the spatial sorting of objects within the map class
     this.map.clearObjectLists();
-    let write = 0;
-    for (let read = 0; read < this.objs.length; read++) {
-      const obj = this.objs[read];
-      if (!obj.isDeleted()) {
-        this.objs[write++] = obj; // write only objects that are not deleted to this.objs
-        this.map.addObject(obj); // add to the map (for spatial sorting in tiles)
-      }
-    }
-    this.objs.length = write; // slice off all deleted objects
-
-    // remove deleted updatables
-    write = 0;
-    for (let read = 0; read < this.updatables.length; read++) {
-      const obj = this.updatables[read];
-      if (!obj.isDeleted()) {
-        this.updatables[write++] = obj;
-      }
-    }
-    this.updatables.length = write; // slice off all deleted objects
+    this.compactList(this.objs, (obj) => this.map.addObject(obj));
+    this.compactList(this.updatables);
 
     // call step() function for every object in order for it to move/etc.
-    for (const obj of this.objs) {
+    // iterate using index to avoid issues if new objects are added during the loop
+    const objCount = this.objs.length;
+    for (let i = 0; i < objCount; i++) {
+      const obj = this.objs[i];
       obj.age += dt;
       obj.step();
     }
 
     // call step() function for every updatable in the game
-    for (const obj of this.updatables) {
+    const updatableCount = this.updatables.length;
+    for (let i = 0; i < updatableCount; i++) {
+      const obj = this.updatables[i];
       obj.age += dt;
       obj.step();
     }
@@ -200,6 +188,25 @@ export default class Game {
     if (this.t > Settings.RoundTime * 60000) {
       this.end();
     }
+  }
+
+  /**
+   * Compacts a list by removing deleted objects in-place.
+   * @param list - The list to compact.
+   * @param onKeep - Optional callback for kept objects.
+   */
+  private compactList<T extends Updatable>(list: T[], onKeep?: (obj: T) => void): void {
+    let write = 0;
+    for (let read = 0; read < list.length; read++) {
+      const obj = list[read];
+      if (!obj.isDeleted()) {
+        list[write++] = obj;
+        if (onKeep) {
+          onKeep(obj);
+        }
+      }
+    }
+    list.length = write;
   }
 
   /**
