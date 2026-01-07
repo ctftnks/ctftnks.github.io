@@ -61,8 +61,9 @@ describe("Trajectory Class", () => {
   });
 
   it("should delete itself after timeout", () => {
-    traj.timeout = 5;
+    traj.maxAge = 5;
+    traj.age = 6;
     traj.step();
-    expect(traj.deleted).toBe(true);
+    expect(traj.isDeleted()).toBe(true);
   });
 });

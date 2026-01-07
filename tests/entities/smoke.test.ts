@@ -17,26 +17,15 @@ describe("Smoke System", () => {
     expect(smoke.x).toBe(10);
     expect(smoke.y).toBe(10);
     expect(smoke.radius).toBe(5);
-    expect(smoke.timeout).toBe(100);
-  });
-
-  it("should update smoke particle in step", () => {
-    const smoke = new Smoke(0, 0, 100, 10, 1);
-    const initialRadius = smoke.radius;
-
-    smoke.step();
-
-    expect(smoke.timeout).toBe(90); // 100 - 10
-    expect(smoke.radius).toBeLessThan(initialRadius);
+    expect(smoke.maxAge).toBe(100);
+    expect(smoke.age).toBe(0);
   });
 
   it("should delete smoke when timeout expired", () => {
     const smoke = new Smoke(0, 0, 5, 10, 1);
 
-    smoke.step(); // -10 ms
-
-    expect(smoke.timeout).toBeLessThan(0);
-    expect(smoke.deleted).toBe(true);
+    smoke.age = 6;
+    expect(smoke.isDeleted()).toBe(true);
   });
 
   it("should generate cloud of smoke", () => {

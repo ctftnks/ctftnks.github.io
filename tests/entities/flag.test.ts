@@ -63,7 +63,7 @@ describe("Flag Class", () => {
     expect(flag.picked).toBe(true);
     expect(flag.inBase).toBe(false);
     expect(tank.carriedFlag).toBe(flag);
-    expect(flag.deleted).toBe(true);
+    expect(flag.isDeleted()).toBe(true);
   });
 
   it("should reset to base", () => {

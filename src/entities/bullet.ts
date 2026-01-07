@@ -19,8 +19,6 @@ export default class Bullet extends GameObject {
   radius: number = 4;
   speed: number;
   color: string = "#000";
-  timeout: number;
-  age: number = 0;
   trace: boolean = false;
   bounceSound: string = SOUNDS.bounce;
   lethal: boolean = true;
@@ -39,7 +37,7 @@ export default class Bullet extends GameObject {
     this.map = this.player.game!.map;
     this.weapon = weapon;
     this.speed = Settings.BulletSpeed;
-    this.timeout = Settings.BulletTimeout * 1000;
+    this.maxAge = Settings.BulletTimeout * 1000;
   }
 
   /**
@@ -66,7 +64,7 @@ export default class Bullet extends GameObject {
    * Timestepping: translation, aging, collision.
    */
   step(): void {
-    if (this.age > this.timeout) {
+    if (this.maxAge && this.age > this.maxAge) {
       this.explode();
       this.delete();
     }

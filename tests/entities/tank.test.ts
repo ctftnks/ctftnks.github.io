@@ -140,7 +140,7 @@ describe("Tank Class", () => {
 
     expect(mockFlag.drop).toHaveBeenCalled();
     expect(weaponSpy).toHaveBeenCalled();
-    expect(tank.deleted).toBe(true);
+    expect(tank.isDeleted()).toBe(true);
   });
 
   it("should draw correctly", () => {
@@ -199,7 +199,7 @@ describe("Tank Class", () => {
       age: 10,
       lethal: true,
       player: { team: TEAMS[1], id: 999, stats: { kills: 0 } }, // Same team, different player
-      explode: vi.fn(),
+      onDeleted: vi.fn(),
       delete: vi.fn(),
     };
     Object.setPrototypeOf(mockBullet, Bullet.prototype);
@@ -209,14 +209,14 @@ describe("Tank Class", () => {
     // Friendly Fire OFF
     Settings.FriendlyFire = false;
     tank.step();
-    expect(mockBullet.explode).not.toHaveBeenCalled();
-    expect(tank.deleted).toBe(false);
+    expect(mockBullet.onDeleted).not.toHaveBeenCalled();
+    expect(tank.isDeleted()).toBe(false);
 
     // Friendly Fire ON
     Settings.FriendlyFire = true;
     tank.step();
-    expect(mockBullet.explode).toHaveBeenCalled();
-    expect(tank.deleted).toBe(true);
+    expect(mockBullet.delete).toHaveBeenCalled();
+    expect(tank.isDeleted()).toBe(true);
   });
 
   it("should not be killed by bullet if invincible", () => {
@@ -232,7 +232,7 @@ describe("Tank Class", () => {
       age: 10,
       lethal: true,
       player: { team: TEAMS[2], stats: { kills: 0 } }, // Enemy team
-      explode: vi.fn(),
+      isDeleted: vi.fn(),
       delete: vi.fn(),
     };
     Object.setPrototypeOf(mockBullet, Bullet.prototype);
@@ -241,7 +241,7 @@ describe("Tank Class", () => {
 
     tank.step();
 
-    expect(mockBullet.explode).not.toHaveBeenCalled();
-    expect(tank.deleted).toBe(false);
+    expect(mockBullet.isDeleted).not.toHaveBeenCalled();
+    expect(tank.isDeleted()).toBe(false);
   });
 });

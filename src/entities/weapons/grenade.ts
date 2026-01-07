@@ -38,7 +38,7 @@ export class Grenade extends Weapon {
     e.image.src = IMAGES.grenade;
     e.radius = 6;
     e.color = "#000";
-    e.timeout = 10000;
+    e.maxAge = 10000;
     e.exploded = false;
 
     /**

@@ -34,7 +34,7 @@ export class Mine extends Weapon {
     e.radius = 6;
     e.exploded = false;
     e.color = "#000";
-    e.timeout = 120000 + 20 * Math.random();
+    e.maxAge = 120000 + 20 * Math.random();
 
     /**
      * Explosion logic for mine.

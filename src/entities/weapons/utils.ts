@@ -27,7 +27,7 @@ export function createShrapnelExplosion(weapon: Weapon, x: number, y: number, co
     shrapnel.radius = 2;
     shrapnel.speed = 2 * Settings.BulletSpeed * (0.8 + 0.4 * Math.random());
     shrapnel.angle = 2 * Math.PI * Math.random();
-    shrapnel.timeout = options.timeout;
+    shrapnel.maxAge = options.timeout;
     shrapnel.extrahitbox = -3;
 
     if (options.noCollision) {

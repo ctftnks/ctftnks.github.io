@@ -22,7 +22,6 @@ export default class Trajectory extends GameObject {
   points: TrajectoryPoint[] = [];
   map: GameMap;
   drawevery: number = 1;
-  timeout: number = 100;
   targets: Tank[] = [];
 
   /**
@@ -37,6 +36,7 @@ export default class Trajectory extends GameObject {
     this.map = map;
     this.setPosition({ x, y });
     this.angle = angle;
+    this.maxAge = 100;
   }
 
   /**
@@ -62,6 +62,11 @@ export default class Trajectory extends GameObject {
    * Calculates the trajectory.
    */
   step(): void {
+    if (this.maxAge && this.age > this.maxAge) {
+      this.delete();
+      return;
+    }
+
     // update points list
     this.targets = [];
     let point: TrajectoryPoint = { x: this.x, y: this.y, angle: this.angle };
@@ -106,11 +111,6 @@ export default class Trajectory extends GameObject {
           this.targets.push(obj);
         }
       }
-    }
-
-    this.timeout -= Settings.GameFrequency;
-    if (this.timeout < 0) {
-      this.delete();
     }
   }
 }

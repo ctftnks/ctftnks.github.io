@@ -48,7 +48,7 @@ export class Laser extends Weapon {
       bullet.angle = p.angle;
       bullet.radius = 2;
       bullet.extrahitbox = -100;
-      bullet.timeout = 150;
+      bullet.maxAge = 150;
       bullet.speed = 0;
       bullet.color = this.tank.player.team.color;
       bullet.bounceSound = "";
@@ -68,7 +68,7 @@ export class Laser extends Weapon {
   override crosshair(): void {
     this.trajectory.setPosition(this.tank);
     this.trajectory.angle = this.tank.angle;
-    this.trajectory.timeout = 100;
+    this.trajectory.age = 0;
     this.trajectory.length = this.isActive ? 620 : 0;
   }
 

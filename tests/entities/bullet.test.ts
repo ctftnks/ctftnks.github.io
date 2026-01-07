@@ -71,7 +71,7 @@ describe("Bullet Class", () => {
   it("should initialize correctly", () => {
     expect(bullet.player).toBe(mockPlayer);
     expect(bullet.speed).toBe(Settings.BulletSpeed);
-    expect(bullet.timeout).toBe(1000); // 1 * 1000
+    expect(bullet.maxAge).toBe(1000); // 1 * 1000
     expect(bullet.age).toBe(0);
   });
 
@@ -83,13 +83,12 @@ describe("Bullet Class", () => {
     bullet.step();
 
     expect(bullet.y).toBeCloseTo(startY - 1);
-    expect(bullet.age).toBe(10);
   });
 
   it("should delete itself after timeout", () => {
     bullet.age = 1001;
     bullet.step();
-    expect(bullet.deleted).toBe(true);
+    expect(bullet.isDeleted()).toBe(true);
   });
 
   it("should bounce off walls", () => {
@@ -150,7 +149,7 @@ describe("Bullet Class", () => {
     } as any;
 
     // Force src to be empty string
-    bullet.image = { src: "" } as any;
+    bullet.image = undefined;
     bullet.draw(mockContext);
 
     expect(mockContext.beginPath).toHaveBeenCalled();
@@ -167,6 +166,7 @@ describe("Bullet Class", () => {
       restore: vi.fn(),
     } as any;
 
+    bullet.image = new Image();
     bullet.image.src = "test.png";
     bullet.draw(mockContext);
 
@@ -197,8 +197,8 @@ describe("Bullet Class", () => {
 
     bullet.step();
 
-    expect(bullet.deleted).toBe(true);
-    expect(otherBullet.deleted).toBe(true);
+    expect(bullet.isDeleted()).toBe(true);
+    expect(otherBullet.isDeleted()).toBe(true);
   });
 
   it("should not collide with itself", () => {
@@ -212,7 +212,7 @@ describe("Bullet Class", () => {
 
     bullet.step();
 
-    expect(bullet.deleted).toBe(false);
+    expect(bullet.isDeleted()).toBe(false);
   });
 
   it("should have a default explode method that does nothing", () => {

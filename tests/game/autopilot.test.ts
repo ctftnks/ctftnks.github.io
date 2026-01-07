@@ -51,6 +51,9 @@ describe("Autopilot Class", () => {
       mode: {},
       players: [],
       addObject: vi.fn(),
+      addTimeout: vi.fn((cb, time) => {
+        setTimeout(cb, time); // Simulate for test
+      }),
       timeouts: [],
     };
 

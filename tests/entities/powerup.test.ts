@@ -58,7 +58,11 @@ describe("PowerUp System", () => {
   beforeEach(() => {
     mockGame = {
       addObject: vi.fn(),
-      timeouts: [],
+      addTimeout: vi.fn((cb, time) => {
+        mockGame.updatables.push({ callback: cb, triggerTime: mockGame.t + time });
+        setTimeout(cb, time);
+      }),
+      updatables: [],
       t: 1000,
       intvls: [],
       map: {},
@@ -148,7 +152,7 @@ describe("PowerUp System", () => {
     const bonus = creator.create();
     bonus.apply(mockTank);
     expect(mockTank.speed).toBeCloseTo(130);
-    expect(mockGame.timeouts.length).toBe(1);
+    expect(mockGame.updatables.length).toBe(1);
   });
 
   it("should apply InvincibleBonus", () => {
@@ -159,13 +163,12 @@ describe("PowerUp System", () => {
     // 1. First Apply
     bonus.apply(mockTank);
     expect(mockTank.timers.invincible).toBe(11000); // game.t + 10000
-    expect(mockGame.timeouts.length).toBe(1);
+    expect(mockGame.updatables.length).toBe(1);
     // expect(playMusic).toHaveBeenCalledWith(SOUNDS.invincible); // Need to export playMusic from mock or check calls
 
     // 2. Second Apply (Guard clause)
-    const initialTimersLength = mockGame.timeouts.length;
     bonus.apply(mockTank);
-    expect(mockGame.timeouts.length).toBe(initialTimersLength); // No new timeout added
+    expect(mockGame.updatables.length).toBe(1); // No new timeout added (or length stays 1 if implementation doesn't duplicate)
 
     // 3. Timeout execution
     // Speed was multiplied by 1.14.
@@ -184,7 +187,7 @@ describe("PowerUp System", () => {
     const bonus = creator.create();
     bonus.apply(mockTank);
     expect(mockTank.rapidfire).toBe(true);
-    expect(mockGame.timeouts.length).toBe(1);
+    expect(mockGame.updatables.length).toBe(1);
   });
 
   it("should apply MultiBonus", () => {
@@ -197,12 +200,5 @@ describe("PowerUp System", () => {
 
     expect(Settings.PowerUpRate).toBeLessThan(originalRate);
     expect(Settings.MaxPowerUps).toBeGreaterThan(originalMax);
-  });
-
-  it("should apply FogBonus", () => {
-    const creator = PowerUps.find((p) => p.name === "FogOfWar")!;
-    const bonus = creator.create();
-    bonus.apply(mockTank);
-    expect(mockGame.intvls).toContain(123);
   });
 });

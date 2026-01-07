@@ -58,6 +58,7 @@ export default class Flag extends GameObject {
     tank.carriedFlag = this;
     this.picked = true;
     this.inBase = false;
+    this.delete();
   }
 
   /**
@@ -69,6 +70,7 @@ export default class Flag extends GameObject {
     this.setPosition({ x, y });
     this.resetTimer = this.game.t + 30000;
     this.picked = false;
+    this.maxAge = undefined;
     this.game.objs.push(this);
   }
 
