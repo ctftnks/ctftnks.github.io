@@ -31,12 +31,13 @@ export default class Bot extends Player {
 
   /**
    * Updates the bot's state.
-   * @param tank - the tank to be steered
+   * @param tank - the tank to be steered by the player
+   * @param dt - the time elapsed since the last frame in milliseconds
    */
-  steer(tank: Tank): void {
+  steer(tank: Tank, dt: number): void {
     if (!this.game) {
       return;
     }
-    this.autopilot.step(tank, this.game);
+    this.autopilot.step(tank, this.game, dt);
   }
 }

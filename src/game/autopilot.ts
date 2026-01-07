@@ -389,7 +389,20 @@ export default class Autopilot {
     this.goto = null; // Stop moving to aim
 
     // Calculate aim angle
-// ...
+    const distx = target.x - tank.x;
+    const disty = target.y - tank.y;
+    const distance = Math.hypot(distx, disty);
+    const baseAngle = Math.atan2(-distx, disty) + Math.PI;
+
+    // 1. Aim Jitter: Don't always shoot at the exact center to avoid bullet collision stalemates
+    // Calculate max offset that still hits the target (assuming target width ~40px)
+    const targetWidth = target instanceof Tank ? target.width : 40;
+    // Use a safety factor (e.g., 3.0) to ensure we aim within the central 2/3rds of the target
+    const maxOffset = Math.atan2(targetWidth / 3.0, distance);
+    const randomOffset = (Math.random() - 0.5) * 2 * maxOffset;
+
+    tank.angle = baseAngle + randomOffset;
+
     // 2. Micro-Movement: Occasionally move slightly to break rhythm
     if (Math.random() < 0.05) {
       tank.move(Math.random() < 0.5 ? 1 : -1, dt);
