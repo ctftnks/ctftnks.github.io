@@ -8,7 +8,7 @@ vi.mock("@/game/effects", () => ({
   playMusic: vi.fn(),
   stopMusic: vi.fn(),
   hexToRgbA: vi.fn().mockReturnValue("rgba(0,0,0,0.4)"),
-  fogOfWar: vi.fn().mockReturnValue(123), // Return a mock interval ID
+  fogOfWar: vi.fn(),
 }));
 
 vi.mock("@/entities/trajectory", () => {

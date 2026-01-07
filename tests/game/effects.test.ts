@@ -85,13 +85,17 @@ describe("Effects Module", () => {
         },
         map: { Nx: 10, Ny: 10, dx: 32, dy: 32 },
         getTanks: vi.fn().mockReturnValue([{ x: 100, y: 100 }]),
-        intvls: [],
+        updatables: [],
       };
 
       fogOfWar(mockGame as any);
 
-      // Fast forward to trigger interval
-      vi.advanceTimersByTime(30);
+      expect(mockGame.updatables.length).toBe(1);
+      const effect = mockGame.updatables[0] as any;
+
+      // Simulate a step
+      effect.step();
+
       expect(mockCtx.clearRect).toHaveBeenCalled();
       expect(mockCtx.fillRect).toHaveBeenCalled();
       expect(mockGame.getTanks).toHaveBeenCalled();

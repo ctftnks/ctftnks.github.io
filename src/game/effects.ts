@@ -1,6 +1,7 @@
 import { store } from "@/stores/gamestore";
 import { Settings } from "@/stores/settings";
 import Game from "./game";
+import Updatable from "@/entities/updatable";
 
 /**
  * Plays a sound file if audio is not muted.
@@ -51,57 +52,71 @@ export function stopMusic(): void {
 }
 
 /**
+ * Fog of War Effect.
+ */
+class FogEffect extends Updatable {
+  game: Game;
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+  duration: number = 10000;
+  ambientLight: number = 1;
+
+  constructor(game: Game) {
+    super();
+    this.game = game;
+    this.canvas = game.canvas.effectsCanvas;
+    this.canvas.height = game.canvas.canvas.clientHeight;
+    this.canvas.width = game.canvas.canvas.clientWidth;
+    this.ctx = this.canvas.getContext("2d")!;
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    this.ctx.scale(game.canvas.scale, game.canvas.scale);
+    this.maxAge = this.duration;
+  }
+
+  override step(): void {
+    if (this.isDeleted()) {
+      this.ctx.clearRect(0, 0, 2 * this.canvas.width, 2 * this.canvas.height);
+      return;
+    }
+
+    this.ctx.clearRect(0, 0, 2 * this.canvas.width, 2 * this.canvas.height);
+    
+    // Calculate ambient light based on age
+    if (this.age < 300) {
+        this.ambientLight = 1 - this.age / 300;
+    } else if (this.duration - this.age < 300) {
+        this.ambientLight = 1 - (this.duration - this.age) / 300;
+    } else {
+        this.ambientLight = 0;
+    }
+
+    this.ctx.fillStyle = "rgba(0,0,0," + (1 - this.ambientLight) + ")";
+    this.ctx.fillRect(0, 0, this.game.map.Nx * this.game.map.dx, this.game.map.Ny * this.game.map.dy);
+    
+    for (const tank of this.game.getTanks()) {
+      this.ctx.save();
+      this.ctx.beginPath();
+      this.ctx.arc(tank.x, tank.y, 100, 0, Math.PI * 2, true);
+      this.ctx.clip();
+      this.ctx.clearRect(tank.x - 100, tank.y - 100, 200, 200);
+      this.ctx.closePath();
+      this.ctx.restore();
+    }
+  }
+}
+
+/**
  * Initiates a Fog of War effect.
  * Dims the map and reveals area around tanks.
  * @param game - The game instance.
- * @returns The interval ID of the effect loop.
  */
-export function fogOfWar(game: Game): number {
+export function fogOfWar(game: Game): void {
   const canvas = game.canvas.effectsCanvas;
-  if (!canvas) {
-    return -1;
+  if (!canvas || !canvas.getContext("2d")) {
+    return;
   }
-  canvas.height = game.canvas.canvas.clientHeight;
-  canvas.width = game.canvas.canvas.clientWidth;
-
-  const duration = 10000;
-  const frequency = 30;
-  let time = 0;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    return -1;
-  }
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.scale(game.canvas.scale, game.canvas.scale);
-  let ambientLight = 1;
-
-  const intvl: number = window.setInterval(() => {
-    ctx.clearRect(0, 0, 2 * canvas.width, 2 * canvas.height);
-    if (time < 300) {
-      ambientLight -= frequency / 300;
-    }
-    if (duration - time < 300) {
-      ambientLight += frequency / 300;
-    }
-    ctx.fillStyle = "rgba(0,0,0," + (1 - ambientLight) + ")";
-    ctx.fillRect(0, 0, game.map.Nx * game.map.dx, game.map.Ny * game.map.dy);
-    for (const tank of game.getTanks()) {
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(tank.x, tank.y, 100, 0, Math.PI * 2, true);
-      ctx.clip();
-      ctx.clearRect(tank.x - 100, tank.y - 100, 200, 200);
-      ctx.closePath();
-      ctx.restore();
-    }
-    time += frequency;
-  }, frequency);
-
-  window.setTimeout(() => {
-    window.clearInterval(intvl);
-    ctx.clearRect(0, 0, 2 * canvas.width, 2 * canvas.height);
-  }, duration);
-  return intvl;
+  const effect = new FogEffect(game);
+  game.updatables.push(effect);
 }
 
 /**
