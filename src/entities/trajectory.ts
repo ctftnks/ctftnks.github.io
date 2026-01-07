@@ -35,8 +35,7 @@ export default class Trajectory extends GameObject {
   constructor(map: GameMap, x: number, y: number, angle: number) {
     super();
     this.map = map;
-    this.x = x;
-    this.y = y;
+    this.setPosition({ x, y });
     this.angle = angle;
   }
 

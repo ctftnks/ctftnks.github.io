@@ -44,8 +44,7 @@ export class Laser extends Weapon {
 
     for (const p of this.trajectory.points.slice(15)) {
       const bullet = new Bullet(this);
-      bullet.x = p.x;
-      bullet.y = p.y;
+      bullet.setPosition(p);
       bullet.angle = p.angle;
       bullet.radius = 2;
       bullet.extrahitbox = -100;
@@ -53,7 +52,6 @@ export class Laser extends Weapon {
       bullet.speed = 0;
       bullet.color = this.tank.player.team.color;
       bullet.bounceSound = "";
-      bullet.age = 0;
       /**
        * Custom collision check for laser bullet.
        */
@@ -68,8 +66,7 @@ export class Laser extends Weapon {
    * @override
    */
   override crosshair(): void {
-    this.trajectory.x = this.tank.x;
-    this.trajectory.y = this.tank.y;
+    this.trajectory.setPosition(this.tank);
     this.trajectory.angle = this.tank.angle;
     this.trajectory.timeout = 100;
     this.trajectory.length = this.isActive ? 620 : 0;

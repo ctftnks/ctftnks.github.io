@@ -131,8 +131,7 @@ export default class Tank extends GameObject {
    */
   move(direction: number): void {
     this.player.stats.miles += 1;
-    const oldx = this.x;
-    const oldy = this.y;
+    const oldPosition = { x: this.x, y: this.y };
     const speed = this.spawnshield() ? 0 : this.speed;
 
     this.x -= (direction * speed * Math.sin(-this.angle) * Settings.GameFrequency) / 1000;
@@ -140,8 +139,7 @@ export default class Tank extends GameObject {
 
     const collidingCorner = this.checkWallCollision();
     if (collidingCorner !== -1) {
-      this.x = oldx;
-      this.y = oldy;
+      this.setPosition(oldPosition);
       const oldangle = this.angle;
       this.angle -= 0.1 * ((collidingCorner % 2) - 0.5) * direction;
       if (this.checkWallCollision() !== -1) {
@@ -161,8 +159,7 @@ export default class Tank extends GameObject {
     const collidingCorner = this.checkWallCollision();
     if (collidingCorner !== -1) {
       this.angle = oldangle;
-      const oldx = this.x;
-      const oldy = this.y;
+      const oldPosition = { x: this.x, y: this.y };
       const sign = (collidingCorner - 2) * direction * 0.1;
       this.x += sign * Math.cos(-this.angle);
       this.y += -sign * Math.sin(-this.angle);
@@ -170,8 +167,7 @@ export default class Tank extends GameObject {
         this.x -= 2 * sign * Math.cos(-this.angle);
         this.y -= -2 * sign * Math.sin(-this.angle);
         if (this.checkWallCollision() !== -1) {
-          this.x = oldx;
-          this.y = oldy;
+          this.setPosition(oldPosition);
         }
       }
     }

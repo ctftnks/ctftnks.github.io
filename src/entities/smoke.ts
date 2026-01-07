@@ -22,8 +22,7 @@ export class Smoke extends GameObject {
     // inherit from GameObject class
     super();
     // to be initialized
-    this.x = x;
-    this.y = y;
+    this.setPosition({x, y})
     this.radius = radius;
     this.rspeed = rspeed;
     // lifetime of the smoke in [ms]

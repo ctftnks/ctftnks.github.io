@@ -23,10 +23,8 @@ export interface ShrapnelOptions {
 export function createShrapnelExplosion(weapon: Weapon, x: number, y: number, count: number, options: ShrapnelOptions): void {
   for (let i = 0; i < count; i++) {
     const shrapnel = new Bullet(weapon);
-    shrapnel.x = x;
-    shrapnel.y = y;
+    shrapnel.setPosition({ x, y });
     shrapnel.radius = 2;
-    shrapnel.age = 0;
     shrapnel.speed = 2 * Settings.BulletSpeed * (0.8 + 0.4 * Math.random());
     shrapnel.angle = 2 * Math.PI * Math.random();
     shrapnel.timeout = options.timeout;

@@ -39,8 +39,7 @@ export default class Flag extends GameObject {
     this.base = base;
     this.team = base.team!;
     this.color = base.color;
-    this.x = base.x;
-    this.y = base.y;
+    this.setPosition(base);
   }
 
   /**
@@ -104,8 +103,7 @@ export default class Flag extends GameObject {
       this.reset();
     }
     if (this.inBase) {
-      this.x = this.base.x;
-      this.y = this.base.y;
+      this.setPosition(this.base);
     }
   }
 
