@@ -39,15 +39,12 @@ export class Guided extends Weapon {
     e.speed = 1.1 * Settings.TankSpeed;
     let gotoTarget: { x: number; y: number; dx: number; dy: number } | null = null;
     e.extrahitbox = 10;
+    e.maxAge = undefined;
 
     /**
      * Guided bullet logic.
      */
     e.step = function (): void {
-      e.age += Settings.GameFrequency;
-      if (e.age > e.timeout) {
-        e.delete();
-      }
       e.leaveTrace();
 
       const oldx = e.x;

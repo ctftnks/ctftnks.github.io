@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import GameObject from "@/entities/gameobject";
 
 // Create a concrete class for testing the abstract GameObject
