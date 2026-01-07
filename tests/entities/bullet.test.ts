@@ -80,7 +80,7 @@ describe("Bullet Class", () => {
     // Angle 0 -> cos(0) = 1 -> moves up (y decreases)
     // dy = speed * cos(angle) * dt / 1000 = 100 * 1 * 10 / 1000 = 1
 
-    bullet.step(0);
+    bullet.step(10);
 
     expect(bullet.y).toBeCloseTo(startY - 1);
   });

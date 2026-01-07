@@ -44,9 +44,10 @@ export class MG extends Weapon {
 
   /**
    * Fires the MG burst.
+   * @param dt - The time elapsed since the last frame in milliseconds.
    * @override
    */
-  override shoot(): void {
+  override shoot(dt: number = Settings.GameFrequency): void {
     if (!this.isActive) {
       return;
     }
@@ -56,10 +57,10 @@ export class MG extends Weapon {
     }
 
     if (this.tank.player.isBot() && this.nshots > 15) {
-      window.setTimeout(() => this.shoot(), Settings.GameFrequency);
+      window.setTimeout(() => this.shoot(dt), dt);
     }
 
-    this.every -= Settings.GameFrequency;
+    this.every -= dt;
     if (this.nshots > 0 && this.every < 0 && this.isActive) {
       this.every = 50;
       playSound(SOUNDS.mg);

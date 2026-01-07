@@ -122,15 +122,12 @@ describe("Autopilot Class", () => {
 
   it("should not autopilot too frequently", () => {
     (autopilot as any).timeSinceLastUpdate = 0;
-    Settings.GameFrequency = 10;
-    mockTank.speed = 200;
 
-    (autopilot as any).updateDecision(mockTank, mockGame);
+    (autopilot as any).updateDecision(mockTank, mockGame, 10);
     expect(mockMap.getTileByPos).not.toHaveBeenCalled();
 
-    (autopilot as any).timeSinceLastUpdate = 1000;
-    mockMap.getTileByPos.mockReturnValue(null);
-    (autopilot as any).updateDecision(mockTank, mockGame);
+    (autopilot as any).timeSinceLastUpdate = 8000;
+    (autopilot as any).updateDecision(mockTank, mockGame, 10);
     expect(mockMap.getTileByPos).toHaveBeenCalled();
   });
 
@@ -237,9 +234,9 @@ describe("Autopilot Class", () => {
       const shootSpy = vi.spyOn(autopilot as any, "shootAt");
 
       (autopilot as any).timeSinceLastUpdate = 100000;
-      (autopilot as any).updateDecision(mockTank, mockGame);
+      (autopilot as any).updateDecision(mockTank, mockGame, 10);
 
-      expect(shootSpy).toHaveBeenCalledWith(mockTank, enemyTank, mockGame);
+      expect(shootSpy).toHaveBeenCalledWith(mockTank, enemyTank, mockGame, 10);
     });
 
     it("should handle Capture The Flag logic", () => {
@@ -342,7 +339,7 @@ describe("Autopilot Class", () => {
       // Force micro-movement (random < 0.05)
       vi.spyOn(Math, "random").mockReturnValue(0.01);
 
-      (autopilot as any).shootAt(mockTank, target, mockGame);
+      (autopilot as any).shootAt(mockTank, target, mockGame, 10);
 
       expect(moveSpy).toHaveBeenCalled();
       expect(shootSpy).toHaveBeenCalled();
@@ -362,7 +359,7 @@ describe("Autopilot Class", () => {
 
       vi.useFakeTimers();
 
-      (autopilot as any).shootAt(mockTank, botTarget, mockGame);
+      (autopilot as any).shootAt(mockTank, botTarget, mockGame, 10);
 
       expect(mockTank.shoot).not.toHaveBeenCalled(); // Delayed
       vi.advanceTimersByTime(200);

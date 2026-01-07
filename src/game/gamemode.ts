@@ -29,8 +29,9 @@ export abstract class Gamemode {
 
   /**
    * Called every game step.
+   * @param _dt - The time elapsed since the last frame in milliseconds.
    */
-  step(): void {}
+  step(_dt: number): void {}
 
   /**
    * Initializes the game mode.
@@ -235,7 +236,7 @@ export class KingOfTheHill extends Gamemode {
     }
   }
 
-  override step(): void {
+  override step(_dt: number): void {
     // Score periodically if one team controls all hills (or just the active hill?)
     if (this.bases.length === 0) {
       return;

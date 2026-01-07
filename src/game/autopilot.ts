@@ -69,19 +69,21 @@ export default class Autopilot {
    * Decides and performs the next action for the bot.
    * @param tank - The tank to be steered.
    * @param game - The game in which the tank lives.
+   * @param dt - The time elapsed since the last frame in milliseconds.
    */
-  step(tank: Tank, game: Game): void {
-    this.updateDecision(tank, game);
-    this.performMovements(tank);
+  step(tank: Tank, game: Game, dt: number): void {
+    this.updateDecision(tank, game, dt);
+    this.performMovements(tank, dt);
   }
 
   /**
    * Decides the next action for the bot.
    * @param tank The tank to be steered by the bot
    * @param game The game in which the tank lives
+   * @param dt The time elapsed since the last frame in milliseconds
    */
-  private updateDecision(tank: Tank, game: Game): void {
-    this.timeSinceLastUpdate += Settings.GameFrequency;
+  private updateDecision(tank: Tank, game: Game, dt: number): void {
+    this.timeSinceLastUpdate += dt;
 
     // Limit update frequency based on tank speed (faster tanks "think" faster?)
     if (this.timeSinceLastUpdate < CONFIG.UpdateIntervalBase / tank.speed) {
@@ -103,7 +105,7 @@ export default class Autopilot {
     }
 
     // 2. Consider Enemies (Fighting)
-    const enemyAction = this.evaluateEnemies(tile, tank, game);
+    const enemyAction = this.evaluateEnemies(tile, tank, game, dt);
     if (enemyAction) {
       options.push(enemyAction);
     }
@@ -157,8 +159,9 @@ export default class Autopilot {
    * @param tile
    * @param tank
    * @param game
+   * @param dt
    */
-  private evaluateEnemies(tile: Tile, tank: Tank, game: Game): AutopilotAction | null {
+  private evaluateEnemies(tile: Tile, tank: Tank, game: Game, dt: number): AutopilotAction | null {
     const bot = tank.player;
     const path = tile.xypathToObj((obj) => obj instanceof Tank && obj.player.team !== bot.team);
 
@@ -203,7 +206,7 @@ export default class Autopilot {
       if (aimResult.shouldShoot) {
         // Shooting usually takes priority over just following
         const shootAction = {
-          execute: () => this.shootAt(tank, aimResult.target, game),
+          execute: () => this.shootAt(tank, aimResult.target, game, dt),
           weight: aimResult.weight,
         };
 
@@ -380,28 +383,16 @@ export default class Autopilot {
    * @param tank
    * @param target
    * @param game
+   * @param dt
    */
-  private shootAt(tank: Tank, target: Coord, game: Game): void {
+  private shootAt(tank: Tank, target: Coord, game: Game, dt: number): void {
     this.goto = null; // Stop moving to aim
 
     // Calculate aim angle
-    const distx = target.x - tank.x;
-    const disty = target.y - tank.y;
-    const distance = Math.hypot(distx, disty);
-    const baseAngle = Math.atan2(-distx, disty) + Math.PI;
-
-    // 1. Aim Jitter: Don't always shoot at the exact center to avoid bullet collision stalemates
-    // Calculate max offset that still hits the target (assuming target width ~40px)
-    const targetWidth = target instanceof Tank ? target.width : 40;
-    // Use a safety factor (e.g., 3.0) to ensure we aim within the central 2/3rds of the target
-    const maxOffset = Math.atan2(targetWidth / 3.0, distance);
-    const randomOffset = (Math.random() - 0.5) * 2 * maxOffset;
-
-    tank.angle = baseAngle + randomOffset;
-
+// ...
     // 2. Micro-Movement: Occasionally move slightly to break rhythm
     if (Math.random() < 0.05) {
-      tank.move(Math.random() < 0.5 ? 1 : -1);
+      tank.move(Math.random() < 0.5 ? 1 : -1, dt);
     }
 
     // Add reaction delay if target is another bot
@@ -502,8 +493,9 @@ export default class Autopilot {
   /**
    * Performs movements towards the goto target.
    * @param tank
+   * @param dt
    */
-  private performMovements(tank: Tank): void {
+  private performMovements(tank: Tank, dt: number): void {
     if (!this.goto) {
       return;
     }
@@ -523,7 +515,7 @@ export default class Autopilot {
 
     // Move forward if angle is roughly correct
     if (diff < 0.6 || Math.abs(diff - Math.PI * 2) < 0.6) {
-      tank.move(Settings.BotSpeed);
+      tank.move(Settings.BotSpeed, dt);
     }
 
     // Turn towards target
@@ -531,9 +523,9 @@ export default class Autopilot {
       tank.angle = targetAngle;
     } else if (tank.angle < targetAngle) {
       // Determine shortest turn direction
-      tank.turn(diff < Math.PI ? 2 * Settings.BotSpeed : -2 * Settings.BotSpeed);
+      tank.turn(diff < Math.PI ? 2 * Settings.BotSpeed : -2 * Settings.BotSpeed, dt);
     } else {
-      tank.turn(diff < Math.PI ? -2 * Settings.BotSpeed : 2 * Settings.BotSpeed);
+      tank.turn(diff < Math.PI ? -2 * Settings.BotSpeed : 2 * Settings.BotSpeed, dt);
     }
   }
 }

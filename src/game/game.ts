@@ -175,10 +175,10 @@ export default class Game {
     }
 
     // do gamemode calculations
-    this.mode.step();
+    this.mode.step(dt);
 
     // add random PowerUp
-    if (this.isTrueEvery(1000 * Settings.PowerUpRate)) {
+    if (this.isTrueEvery(1000 * Settings.PowerUpRate, dt)) {
       const p = getRandomPowerUp();
       p.setPosition(this.map.spawnPoint());
       this.addObject(p);
@@ -212,9 +212,10 @@ export default class Game {
   /**
    * This method returns true every X milliseconds, otherwise false
    * @param ms the distance between 'true' signals in milliseconds
+   * @param dt the time elapsed since the last frame
    */
-  private isTrueEvery(ms: number): boolean {
-    return this.t % ms < Settings.GameFrequency;
+  private isTrueEvery(ms: number, dt: number): boolean {
+    return Math.floor(this.t / ms) > Math.floor((this.t - dt) / ms);
   }
 
   /**

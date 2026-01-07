@@ -75,8 +75,8 @@ export default class Bullet extends GameObject {
 
     const oldx = this.x;
     const oldy = this.y;
-    this.x -= (this.speed * Math.sin(-this.angle) * Settings.GameFrequency) / 1000;
-    this.y -= (this.speed * Math.cos(-this.angle) * Settings.GameFrequency) / 1000;
+    this.x -= (this.speed * Math.sin(-this.angle) * _dt) / 1000;
+    this.y -= (this.speed * Math.cos(-this.angle) * _dt) / 1000;
 
     this.checkCollision(oldx, oldy);
     if (Settings.BulletsCanCollide) {

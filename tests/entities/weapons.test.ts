@@ -252,7 +252,7 @@ describe("Weapon System", () => {
 
       // 1. Initial Step - triggering pathfinding
       bullet.age = 2000;
-      (bullet as any).step();
+      (bullet as any).step(10);
 
       expect(mockGame.map.getTileByPos).toHaveBeenCalled();
       expect(pathToMock).toHaveBeenCalled();
@@ -283,7 +283,7 @@ describe("Weapon System", () => {
 
       // Speed is ~200 (1.1 * 200). dt = 10. distance ~2.
       // Direction 1,1.
-      (bullet as any).step();
+      (bullet as any).step(10);
 
       // Should have moved towards 100,100 (positive change)
       // Normal movement (angle 0) would be y decreasing.

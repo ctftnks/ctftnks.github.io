@@ -39,22 +39,23 @@ export default class Player {
   /**
    * Steer a tank: check if keys pressed and act accordingly.
    * @param tank - the tank to be steered by the player
+   * @param dt - the time elapsed since the last frame in milliseconds
    */
-  steer(tank: Tank): void {
+  steer(tank: Tank, dt: number): void {
     if (Key.isDown(this.keys[0])) {
-      tank.move(1);
+      tank.move(1, dt);
     }
     if (Key.isDown(this.keys[1])) {
-      tank.turn(-1);
+      tank.turn(-1, dt);
     }
     if (Key.isDown(this.keys[2])) {
-      tank.move(-0.7);
+      tank.move(-0.7, dt);
     }
     if (Key.isDown(this.keys[3])) {
-      tank.turn(1);
+      tank.turn(1, dt);
     }
     if (Key.isDown(this.keys[4])) {
-      tank.shoot();
+      tank.shoot(dt);
     }
   }
 

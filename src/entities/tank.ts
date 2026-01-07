@@ -121,7 +121,7 @@ export default class Tank extends GameObject {
     if (this.invincibleDuration > 0) {
       this.invincibleDuration -= dt;
     }
-    this.player.steer(this);
+    this.player.steer(this, dt);
     if (this.weapon.isDeleted) {
       this.defaultWeapon();
     }
@@ -132,14 +132,15 @@ export default class Tank extends GameObject {
   /**
    * Move the tank forward/backwards.
    * @param direction - 1 for forward, -1 for backward.
+   * @param dt - The time elapsed since the last frame in milliseconds.
    */
-  move(direction: number): void {
+  move(direction: number, dt: number): void {
     this.player.stats.miles += 1;
     const oldPosition = { x: this.x, y: this.y };
     const speed = this.spawnshield() ? 0 : this.speed;
 
-    this.x -= (direction * speed * Math.sin(-this.angle) * Settings.GameFrequency) / 1000;
-    this.y -= (direction * speed * Math.cos(-this.angle) * Settings.GameFrequency) / 1000;
+    this.x -= (direction * speed * Math.sin(-this.angle) * dt) / 1000;
+    this.y -= (direction * speed * Math.cos(-this.angle) * dt) / 1000;
 
     const collidingCorner = this.checkWallCollision();
     if (collidingCorner !== -1) {
@@ -155,10 +156,11 @@ export default class Tank extends GameObject {
   /**
    * Rotate the tank.
    * @param direction - 1 for right, -1 for left.
+   * @param dt - The time elapsed since the last frame in milliseconds.
    */
-  turn(direction: number): void {
+  turn(direction: number, dt: number): void {
     const oldangle = this.angle;
-    this.angle += (((direction * Settings.TankTurnSpeed * Settings.GameFrequency) / 1000) * Settings.TankSpeed) / 180;
+    this.angle += (((direction * Settings.TankTurnSpeed * dt) / 1000) * Settings.TankSpeed) / 180;
 
     const collidingCorner = this.checkWallCollision();
     if (collidingCorner !== -1) {
@@ -179,12 +181,13 @@ export default class Tank extends GameObject {
 
   /**
    * Use the weapon.
+   * @param dt - The time elapsed since the last frame in milliseconds.
    */
-  shoot(): void {
+  shoot(dt?: number): void {
     if (this.spawnshield()) {
       return;
     }
-    this.weapon.shoot();
+    this.weapon.shoot(dt);
     if (this.weapon.isActive && this.weapon.name !== "MG") {
       this.player.stats.shots += 1;
     }

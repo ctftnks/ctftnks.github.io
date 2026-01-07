@@ -44,23 +44,23 @@ export class Guided extends Weapon {
     /**
      * Guided bullet logic.
      */
-    e.step = function (): void {
+    e.step = function (dt: number): void {
       e.leaveTrace();
 
       const oldx = e.x;
       const oldy = e.y;
       // normal translation
       if (gotoTarget === null) {
-        e.x -= (e.speed * Math.sin(-e.angle) * Settings.GameFrequency) / 1000;
-        e.y -= (e.speed * Math.cos(-e.angle) * Settings.GameFrequency) / 1000;
+        e.x -= (e.speed * Math.sin(-e.angle) * dt) / 1000;
+        e.y -= (e.speed * Math.cos(-e.angle) * dt) / 1000;
       } else {
         // guided translation:
         // if egoto has point data stored go into it's direction
         const distx = gotoTarget.x + gotoTarget.dx / 2 - e.x;
         const disty = gotoTarget.y + gotoTarget.dy / 2 - e.y;
         const len = Math.sqrt(distx * distx + disty * disty);
-        e.x += (e.speed * (distx / len) * Settings.GameFrequency) / 1000;
-        e.y += (e.speed * (disty / len) * Settings.GameFrequency) / 1000;
+        e.x += (e.speed * (distx / len) * dt) / 1000;
+        e.y += (e.speed * (disty / len) * dt) / 1000;
         this.angle = Math.atan2(-distx, disty) + Math.PI;
       }
       // check for wall collisions

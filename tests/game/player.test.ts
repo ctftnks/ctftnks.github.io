@@ -71,8 +71,8 @@ describe("Player Class", () => {
 
       vi.spyOn(Key, "isDown").mockImplementation((code) => code === "KeyW");
 
-      player.steer(tank);
-      expect(moveSpy).toHaveBeenCalledWith(1);
+      player.steer(tank, 10);
+      expect(moveSpy).toHaveBeenCalledWith(1, 10);
     });
 
     it("should turn tank left when second key is pressed", () => {
@@ -84,8 +84,8 @@ describe("Player Class", () => {
 
       vi.spyOn(Key, "isDown").mockImplementation((code) => code === "KeyA");
 
-      player.steer(tank);
-      expect(turnSpy).toHaveBeenCalledWith(-1);
+      player.steer(tank, 10);
+      expect(turnSpy).toHaveBeenCalledWith(-1, 10);
     });
 
     it("should move tank backward when third key is pressed", () => {
@@ -97,8 +97,8 @@ describe("Player Class", () => {
 
       vi.spyOn(Key, "isDown").mockImplementation((code) => code === "KeyS");
 
-      player.steer(tank);
-      expect(moveSpy).toHaveBeenCalledWith(-0.7);
+      player.steer(tank, 10);
+      expect(moveSpy).toHaveBeenCalledWith(-0.7, 10);
     });
 
     it("should turn tank right when fourth key is pressed", () => {
@@ -110,8 +110,8 @@ describe("Player Class", () => {
 
       vi.spyOn(Key, "isDown").mockImplementation((code) => code === "KeyD");
 
-      player.steer(tank);
-      expect(turnSpy).toHaveBeenCalledWith(1);
+      player.steer(tank, 10);
+      expect(turnSpy).toHaveBeenCalledWith(1, 10);
     });
 
     it("should shoot when fifth key is pressed", () => {
@@ -123,7 +123,7 @@ describe("Player Class", () => {
 
       vi.spyOn(Key, "isDown").mockImplementation((code) => code === "Space");
 
-      player.steer(tank);
+      player.steer(tank, 10);
       expect(shootSpy).toHaveBeenCalled();
     });
   });
