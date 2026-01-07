@@ -29,6 +29,7 @@ export default abstract class Updatable {
   /**
    * Update method called every frame.
    * @param dt - The time elapsed since the last frame in milliseconds.
+   * @param _dt
    */
   step(_dt: number): void {}
 }

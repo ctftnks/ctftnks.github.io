@@ -172,7 +172,7 @@ describe("Gamemode Classes", () => {
     it("should award points when hills are controlled by one team", () => {
       mode.bases = [{ team: redTeam } as any, { team: redTeam } as any];
       mockGame.t = 2000;
-      mode.step();
+      mode.step(10);
       expect(player1.score).toBe(1);
       expect(player3.score).toBe(1);
       expect(player2.score).toBe(0);
@@ -181,7 +181,7 @@ describe("Gamemode Classes", () => {
     it("should not award points if hills are mixed", () => {
       mode.bases = [{ team: redTeam } as any, { team: blueTeam } as any];
       mockGame.t = 2000;
-      mode.step();
+      mode.step(10);
       expect(player1.score).toBe(0);
       expect(player2.score).toBe(0);
     });

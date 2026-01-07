@@ -26,6 +26,7 @@ export default class GameTimeout extends Updatable {
 
   /**
    * Check if the timeout exceeds its finish time and if so, call the callback
+   * @param _dt
    */
   step(_dt: number): void {
     if (this.age >= this.delay) {

@@ -43,6 +43,7 @@ export class Guided extends Weapon {
 
     /**
      * Guided bullet logic.
+     * @param dt
      */
     e.step = function (dt: number): void {
       e.leaveTrace();

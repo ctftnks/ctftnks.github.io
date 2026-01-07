@@ -62,8 +62,9 @@ export default class Bullet extends GameObject {
 
   /**
    * Timestepping: translation, aging, collision.
+   * @param dt
    */
-  step(_dt: number): void {
+  step(dt: number): void {
     if (this.maxAge && this.age > this.maxAge) {
       this.explode();
       this.delete();
@@ -75,8 +76,8 @@ export default class Bullet extends GameObject {
 
     const oldx = this.x;
     const oldy = this.y;
-    this.x -= (this.speed * Math.sin(-this.angle) * _dt) / 1000;
-    this.y -= (this.speed * Math.cos(-this.angle) * _dt) / 1000;
+    this.x -= (this.speed * Math.sin(-this.angle) * dt) / 1000;
+    this.y -= (this.speed * Math.cos(-this.angle) * dt) / 1000;
 
     this.checkCollision(oldx, oldy);
     if (Settings.BulletsCanCollide) {

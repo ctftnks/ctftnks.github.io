@@ -56,7 +56,7 @@ describe("Bot Class", () => {
   it("should delegate steer to autopilot", () => {
     const stepSpy = vi.spyOn((bot as any).autopilot, "step");
 
-    bot.steer(mockTank as any);
+    bot.steer(mockTank as any, 10);
 
     expect(stepSpy).toHaveBeenCalledWith(mockTank, mockGame);
   });

@@ -59,6 +59,7 @@ export default class Trajectory extends GameObject {
 
   /**
    * Calculates the trajectory.
+   * @param _dt
    */
   step(_dt: number): void {
     // update points list

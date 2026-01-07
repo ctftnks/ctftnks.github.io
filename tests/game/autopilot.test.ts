@@ -3,7 +3,6 @@ import Autopilot from "@/game/autopilot";
 import { Laser, Guided, Slingshot, WreckingBall } from "@/entities/weapons";
 import Tank from "@/entities/tank";
 import { TEAMS } from "@/game/team";
-import { Settings } from "@/stores/settings";
 import { CaptureTheFlag, KingOfTheHill } from "@/game/gamemode";
 
 vi.mock("@/game/assets", () => ({

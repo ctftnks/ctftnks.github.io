@@ -68,7 +68,7 @@ describe("Tank Class", () => {
   it("should update stats when moving", () => {
     const tank = new Tank(mockPlayer, mockGame);
     const initialMiles = mockPlayer.stats.miles;
-    tank.move(1);
+    tank.move(1, 10);
     expect(mockPlayer.stats.miles).toBeGreaterThan(initialMiles);
   });
 
@@ -81,7 +81,7 @@ describe("Tank Class", () => {
     mockTile.getWalls.mockReturnValueOnce([false]).mockReturnValueOnce([true]);
 
     const initialX = tank.x;
-    tank.move(1);
+    tank.move(1, 10);
     expect(tank.x).toBe(initialX);
   });
 
@@ -93,7 +93,7 @@ describe("Tank Class", () => {
     const initialAngle = tank.angle;
     mockTile.getWalls.mockReturnValueOnce([true]); // Immediate collision on turn
 
-    tank.turn(1);
+    tank.turn(1, 10);
     expect(tank.angle).toBe(initialAngle);
   });
 

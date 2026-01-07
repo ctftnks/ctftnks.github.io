@@ -32,6 +32,7 @@ export abstract class PowerUp extends GameObject {
 
   /**
    * Update step.
+   * @param _dt
    */
   step(_dt: number): void {}
 

@@ -77,7 +77,7 @@ export default class Tank extends GameObject {
     }
     if (this.spawnshield()) {
       context.fillStyle = "#555";
-      context.globalAlpha = 0.7 * this.age / (Settings.SpawnShieldTime * 1000);
+      context.globalAlpha = (0.7 * this.age) / (Settings.SpawnShieldTime * 1000);
     }
 
     context.fill();
