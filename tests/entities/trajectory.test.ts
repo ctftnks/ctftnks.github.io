@@ -66,4 +66,70 @@ describe("Trajectory Class", () => {
     traj.step();
     expect(traj.isDeleted()).toBe(true);
   });
+
+  it("should bounce off walls", () => {
+    // 1. Bounce 180 degrees (corner)
+    mockTile.getWalls.mockReturnValueOnce([true, true, false, false]);
+    traj.angle = 0;
+    traj.step();
+    // It's a loop, so checking exact points is tricky, but we can check if angle changed in the points
+    const points = traj.points;
+    const bounced = points.some((p) => Math.abs(p.angle - Math.PI) < 0.1);
+    expect(bounced).toBe(true);
+  });
+
+  it("should bounce off side walls", () => {
+    mockTile.getWalls.mockReturnValue([false, true, false, false]); // Right wall
+    traj.angle = Math.PI / 4;
+    traj.step();
+    // Angle should flip sign: PI/4 -> -PI/4
+    const points = traj.points;
+    const bounced = points.some((p) => Math.abs(p.angle + Math.PI / 4) < 0.1);
+    expect(bounced).toBe(true);
+  });
+
+  it("should bounce off top/bottom walls", () => {
+    mockTile.getWalls.mockReturnValue([true, false, false, false]); // Top wall
+    traj.angle = Math.PI / 4;
+    traj.step();
+    // Angle should flip around X axis: PI/4 -> 3PI/4 (PI - angle)
+    const points = traj.points;
+    const bounced = points.some((p) => Math.abs(p.angle - (Math.PI - Math.PI / 4)) < 0.1);
+    expect(bounced).toBe(true);
+  });
+
+  it("should stop if tile is missing", () => {
+    mockMap.getTileByPos.mockReturnValue(null);
+    traj.step();
+    // Only start point
+    expect(traj.points.length).toBe(1);
+  });
+
+  it("should not draw if hidden", () => {
+    const mockContext = {
+      save: vi.fn(),
+      restore: vi.fn(),
+    } as any;
+    traj.hidden = true;
+    traj.draw(mockContext);
+    expect(mockContext.save).not.toHaveBeenCalled();
+  });
+
+  it("should draw correctly", () => {
+    const mockContext = {
+      save: vi.fn(),
+      translate: vi.fn(),
+      rotate: vi.fn(),
+      fillRect: vi.fn(),
+      restore: vi.fn(),
+    } as any;
+
+    traj.points = [
+      { x: 0, y: 0, angle: 0 },
+      { x: 10, y: 10, angle: 0 },
+    ];
+    traj.draw(mockContext);
+
+    expect(mockContext.fillRect).toHaveBeenCalled();
+  });
 });

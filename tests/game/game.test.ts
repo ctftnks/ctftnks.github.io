@@ -164,6 +164,27 @@ describe("Game Class", () => {
     expect(game.objs).not.toContain(mockObj);
   });
 
+  it("should handle updatables management in step", () => {
+    const callback = vi.fn();
+    const timeout = game.addTimeout(callback, 50);
+
+    expect(game.updatables).toContain(timeout);
+
+    // Step forward but not enough to trigger
+    game.step(40);
+    expect(callback).not.toHaveBeenCalled();
+    expect(game.updatables).toContain(timeout);
+
+    // Step forward to trigger
+    game.step(20);
+    expect(callback).toHaveBeenCalled();
+    expect(timeout.isDeleted()).toBe(true);
+
+    // Step forward to clean up
+    game.step(10);
+    expect(game.updatables).not.toContain(timeout);
+  });
+
   it("should generate powerups in step", () => {
     Settings.PowerUpRate = 0.01; // Every 10ms
     game.t = 0;
