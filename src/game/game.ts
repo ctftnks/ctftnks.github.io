@@ -6,11 +6,12 @@ import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import Canvas from "./canvas";
 import Player from "./player";
-import GameObject, { VirtualGameObject } from "@/entities/gameobject";
+import GameObject from "@/entities/gameobject";
 import { Gamemode, Deathmatch, TeamDeathmatch, CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import { openPage } from "@/stores/ui";
 import Tank from "@/entities/tank";
 import GameTimeout from "./timeout";
+import Updatable from "@/entities/updatable";
 
 /**
  * Manages the game state, loop, and objects.
@@ -28,6 +29,8 @@ export default class Game {
   players: Player[] = [];
   /** List of game objects. */
   objs: GameObject[] = [];
+  /** List of updatables in the game. */
+  updatables: Updatable[] = [];
   /** Whether the game is paused. */
   paused: boolean = false;
   /** Interval ID for the game loop. */
@@ -148,25 +151,39 @@ export default class Game {
     if (!this.map) {
       return;
     }
+
     // remove deleted objects and redo the spatial sorting of objects within the map class
     this.map.clearObjectLists();
-    const currentObjs = this.objs;
-    this.objs = [];
-    for (const obj of currentObjs) {
-      if (obj.isDeleted()) {
-        obj.onDeleted(); // Call onDeleted hook
-        continue;
+    let write = 0;
+    for (let read = 0; read < this.objs.length; read++) {
+      const obj = this.objs[read];
+      if (!obj.isDeleted()) {
+        this.objs[write++] = obj; // write only objects that are not deleted to this.objs
+        this.map.addObject(obj); // add to the map (for spatial sorting in tiles)
       }
-      if (!(obj instanceof VirtualGameObject)) {
-        this.map.addObject(obj);
-      }
-      this.objs.push(obj);
     }
+    this.objs.length = write; // slice off all deleted objects
+
+    // remove deleted updatables
+    write = 0;
+    for (let read = 0; read < this.updatables.length; read++) {
+      const obj = this.updatables[read];
+      if (!obj.isDeleted()) {
+        this.updatables[write++] = obj;
+      }
+    }
+    this.updatables.length = write; // slice off all deleted objects
 
     // call step() function for every object in order for it to move/etc.
     for (const obj of this.objs) {
-      obj.step();
       obj.age += dt;
+      obj.step();
+    }
+
+    // call step() function for every updatable in the game
+    for (const obj of this.updatables) {
+      obj.age += dt;
+      obj.step();
     }
 
     // do gamemode calculations
@@ -232,7 +249,7 @@ export default class Game {
    */
   addTimeout(callback: () => void, delay: number): GameTimeout {
     const timeout = new GameTimeout(delay, callback);
-    this.objs.push(timeout);
+    this.updatables.push(timeout);
     return timeout;
   }
 
