@@ -34,7 +34,7 @@ export class InvincibleBonus extends PowerUp {
       playMusic(SOUNDS.invincible);
     }
     tank.speed *= 1.14;
-    tank.timers.invincible = tank.player.game!.t + 10000;
+    tank.invincibleDuration = 10000;
     tank.player.game!.addTimeout(() => {
       tank.speed /= 1.14;
       if (Settings.bgmusic) {

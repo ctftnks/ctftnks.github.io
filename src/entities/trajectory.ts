@@ -60,12 +60,7 @@ export default class Trajectory extends GameObject {
   /**
    * Calculates the trajectory.
    */
-  step(): void {
-    if (this.maxAge && this.age > this.maxAge) {
-      this.delete();
-      return;
-    }
-
+  step(_dt: number): void {
     // update points list
     this.targets = [];
     let point: TrajectoryPoint = { x: this.x, y: this.y, angle: this.angle };

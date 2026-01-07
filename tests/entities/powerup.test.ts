@@ -162,7 +162,7 @@ describe("PowerUp System", () => {
 
     // 1. First Apply
     bonus.apply(mockTank);
-    expect(mockTank.timers.invincible).toBe(11000); // game.t + 10000
+    expect(mockTank.invincibleDuration).toBe(10000);
     expect(mockGame.updatables.length).toBe(1);
     // expect(playMusic).toHaveBeenCalledWith(SOUNDS.invincible); // Need to export playMusic from mock or check calls
 

@@ -48,7 +48,7 @@ describe("Hill Class", () => {
     enemyTank.y = 200;
 
     mockTile.objs.push(enemyTank);
-    hill.step();
+    hill.step(0);
 
     expect(hill.team).toBe(TEAMS[2]);
   });
@@ -56,7 +56,7 @@ describe("Hill Class", () => {
   it("should do nothing in step if no tile", () => {
     const hill = new Hill(mockGame, 200, 200);
     hill.tile = null;
-    hill.step(); // Should not throw
+    hill.step(0); // Should not throw
     expect(hill.team).toBeUndefined();
   });
 });

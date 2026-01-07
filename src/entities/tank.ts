@@ -37,8 +37,8 @@ export default class Tank extends GameObject {
   weapon: Weapon;
   /** Movement speed. */
   speed: number = Settings.TankSpeed;
-  /** Timers for effects. */
-  timers: { spawnshield: number; invincible: number } = { spawnshield: 0, invincible: 0 };
+  /** Duration of invincibility in ms. */
+  invincibleDuration: number = 0;
   /** The flag currently carried, or null if none. */
   carriedFlag: Flag | null = null;
   /** Inventory of weapons (unused?). */
@@ -71,13 +71,13 @@ export default class Tank extends GameObject {
     context.rect(-this.width / 2, -this.height / 2, this.width, this.height);
     context.fillStyle = this.player.team.color;
 
-    if (this.timers.invincible > this.game.t) {
-      const dt = (this.timers.invincible - this.game.t) / 600;
+    if (this.invincibleDuration > 0) {
+      const dt = this.invincibleDuration / 600;
       context.fillStyle = `hsl(${Math.floor(360 * dt)},100%,40%)`;
     }
     if (this.spawnshield()) {
       context.fillStyle = "#555";
-      context.globalAlpha = 0.7 * (1 - (this.timers.spawnshield - this.game.t) / (Settings.SpawnShieldTime * 1000));
+      context.globalAlpha = 0.7 * (1 - this.age / (Settings.SpawnShieldTime * 1000));
     }
 
     context.fill();
@@ -115,8 +115,12 @@ export default class Tank extends GameObject {
   /**
    * Let player class check for key presses and move tank.
    * Check for collisions and handle them.
+   * @param dt - The time elapsed since the last frame in milliseconds.
    */
-  step(): void {
+  override step(dt: number): void {
+    if (this.invincibleDuration > 0) {
+      this.invincibleDuration -= dt;
+    }
     this.player.steer(this);
     if (this.weapon.isDeleted) {
       this.defaultWeapon();
@@ -347,7 +351,7 @@ export default class Tank extends GameObject {
    * @returns True if spawnshield active.
    */
   spawnshield(): boolean {
-    return this.timers.spawnshield > this.game.t;
+    return this.age < Settings.SpawnShieldTime * 1000;
   }
 
   /**
@@ -355,7 +359,7 @@ export default class Tank extends GameObject {
    * @returns True if invincible.
    */
   invincible(): boolean {
-    return this.timers.spawnshield > this.game.t || this.timers.invincible > this.game.t;
+    return this.spawnshield() || this.invincibleDuration > 0;
   }
 
   /**

@@ -13,22 +13,20 @@ describe("GameTimeout Class", () => {
     const callback = vi.fn();
     const timeout = new GameTimeout(100, callback);
 
-    timeout.age = 99;
-    timeout.step();
-
-    expect(callback).not.toHaveBeenCalled();
-    expect(timeout.isDeleted()).toBe(false);
+        timeout.age = 99;
+        timeout.step(0);
+        
+        expect(callback).not.toHaveBeenCalled();    expect(timeout.isDeleted()).toBe(false);
   });
 
   it("should execute callback and delete itself after delay", () => {
     const callback = vi.fn();
     const timeout = new GameTimeout(100, callback);
 
-    timeout.age = 100;
-    timeout.step();
-
-    expect(callback).toHaveBeenCalled();
-    expect(timeout.isDeleted()).toBe(true);
+        timeout.age = 100;
+        timeout.step(0);
+        
+        expect(callback).toHaveBeenCalled();    expect(timeout.isDeleted()).toBe(true);
   });
 
   it("should handle interval mode (periodic execution)", () => {
@@ -37,14 +35,14 @@ describe("GameTimeout Class", () => {
 
     // First execution
     timeout.age = 100;
-    timeout.step();
+    timeout.step(0);
     expect(callback).toHaveBeenCalledTimes(1);
     expect(timeout.isDeleted()).toBe(false);
     expect(timeout.age).toBe(0); // Should reset age
 
     // Second execution
     timeout.age = 100;
-    timeout.step();
+    timeout.step(0);
     expect(callback).toHaveBeenCalledTimes(2);
     expect(timeout.isDeleted()).toBe(false);
   });

@@ -63,7 +63,7 @@ export default class Bullet extends GameObject {
   /**
    * Timestepping: translation, aging, collision.
    */
-  step(): void {
+  step(_dt: number): void {
     if (this.maxAge && this.age > this.maxAge) {
       this.explode();
       this.delete();

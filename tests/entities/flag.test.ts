@@ -92,7 +92,7 @@ describe("Flag Class", () => {
     enemyTank.y = 100;
     mockTile.objs.push(enemyTank);
 
-    flag.step();
+    flag.step(0);
 
     expect(flag.picked).toBe(true);
     expect(enemyTank.carriedFlag).toBe(flag);
@@ -113,7 +113,7 @@ describe("Flag Class", () => {
     friendlyTank.y = 200;
     mockTile.objs.push(friendlyTank);
 
-    flag.step();
+    flag.step(0);
 
     expect(flag.inBase).toBe(true);
     expect(flag.x).toBe(base.x);
@@ -127,10 +127,10 @@ describe("Flag Class", () => {
     flag.picked = false;
 
     // Set timer to the past
-    flag.resetTimer = 500;
-    mockGame.t = 1000;
+    flag.resetTimer = 100;
+    mockGame.t = 200;
 
-    flag.step();
+    flag.step(0);
 
     expect(flag.inBase).toBe(true);
   });

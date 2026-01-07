@@ -77,7 +77,7 @@ export default class Flag extends GameObject {
   /**
    * Updates the flag state.
    */
-  step(): void {
+  step(_dt: number): void {
     if (!this.game.map) {
       return;
     }

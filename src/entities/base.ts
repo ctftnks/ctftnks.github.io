@@ -64,7 +64,7 @@ export default class Base extends GameObject {
   /**
    * Updates the base state, checking for flag captures.
    */
-  step(): void {
+  step(_dt: number): void {
     if (this.tile === null) {
       return;
     }
@@ -115,7 +115,7 @@ export class Hill extends Base {
   /**
    * Updates the hill state, checking for capture.
    */
-  step(): void {
+  step(_dt: number): void {
     if (this.tile === null) {
       return;
     }

@@ -163,7 +163,7 @@ export default class Game {
     for (let i = 0; i < objCount; i++) {
       const obj = this.objs[i];
       obj.age += dt;
-      obj.step();
+      obj.step(dt);
     }
 
     // call step() function for every updatable in the game
@@ -171,7 +171,7 @@ export default class Game {
     for (let i = 0; i < updatableCount; i++) {
       const obj = this.updatables[i];
       obj.age += dt;
-      obj.step();
+      obj.step(dt);
     }
 
     // do gamemode calculations
@@ -266,8 +266,7 @@ export default class Game {
   resetTime(): void {
     this.t = 0;
     for (const tank of this.getTanks()) {
-      tank.timers.invincible = 0;
-      tank.timers.spawnshield = 0;
+      tank.invincibleDuration = 0;
     }
   }
 

@@ -78,8 +78,6 @@ export default class Player {
     game.addTimeout(() => {
       generateCloud(game, tank.x, tank.y, 4, 20, 2);
     }, 10);
-    // spawn shield
-    tank.timers.spawnshield = game.t + Settings.SpawnShieldTime * 1000;
   }
 
   /**

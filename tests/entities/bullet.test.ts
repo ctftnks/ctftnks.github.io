@@ -80,14 +80,14 @@ describe("Bullet Class", () => {
     // Angle 0 -> cos(0) = 1 -> moves up (y decreases)
     // dy = speed * cos(angle) * dt / 1000 = 100 * 1 * 10 / 1000 = 1
 
-    bullet.step();
+    bullet.step(0);
 
     expect(bullet.y).toBeCloseTo(startY - 1);
   });
 
   it("should delete itself after timeout", () => {
     bullet.age = 1001;
-    bullet.step();
+    bullet.step(0);
     expect(bullet.isDeleted()).toBe(true);
   });
 
@@ -100,7 +100,7 @@ describe("Bullet Class", () => {
     bullet.angle = 0; // Moving up
 
     // Call step to trigger movement and collision check
-    bullet.step();
+    bullet.step(0);
 
     // Should bounce off top wall: angle = PI - angle = PI - 0 = PI
     expect(bullet.angle).toBeCloseTo(Math.PI);
@@ -116,7 +116,7 @@ describe("Bullet Class", () => {
     bullet.x = 100;
     bullet.y = 100;
 
-    bullet.step();
+    bullet.step(0);
 
     // Should bounce off side wall: angle = -angle = -PI/4
     expect(bullet.angle).toBeCloseTo(-Math.PI / 4);
@@ -131,7 +131,7 @@ describe("Bullet Class", () => {
     bullet.x = 100;
     bullet.y = 100;
 
-    bullet.step();
+    bullet.step(0);
 
     expect(bullet.angle).toBeCloseTo(Math.PI);
     // x/y are harder to predict exactly because step moves them before collision reset,
@@ -176,7 +176,7 @@ describe("Bullet Class", () => {
 
   it("should leave trace when enabled", () => {
     bullet.trace = true;
-    bullet.step();
+    bullet.step(0);
     expect(mockGame.addObject).toHaveBeenCalled();
   });
 
@@ -195,7 +195,7 @@ describe("Bullet Class", () => {
     Settings.BulletsCanCollide = true;
     bullet.age = 10;
 
-    bullet.step();
+    bullet.step(0);
 
     expect(bullet.isDeleted()).toBe(true);
     expect(otherBullet.isDeleted()).toBe(true);
@@ -210,7 +210,7 @@ describe("Bullet Class", () => {
     Settings.BulletsCanCollide = true;
     bullet.age = 10;
 
-    bullet.step();
+    bullet.step(0);
 
     expect(bullet.isDeleted()).toBe(false);
   });

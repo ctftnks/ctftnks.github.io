@@ -40,7 +40,7 @@ export class Laser extends Weapon {
     playSound(SOUNDS.laser);
     this.trajectory.length = 1300;
     this.trajectory.delta = 2;
-    this.trajectory.step();
+    this.trajectory.step(0);
 
     for (const p of this.trajectory.points.slice(15)) {
       const bullet = new Bullet(this);

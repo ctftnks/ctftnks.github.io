@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { TEAMS } from "@/game/team";
 import { store } from "@/stores/gamestore";
 import { Key } from "@/game/key";
-import { Settings } from "@/stores/settings";
 import Player from "@/game/player";
 import Tank from "@/entities/tank";
 
@@ -144,7 +143,7 @@ describe("Player Class", () => {
       expect(tank.y).toBe(300);
       expect(mockGame.addObject).toHaveBeenCalledWith(tank);
       expect(mockGame.nPlayersAlive).toBe(1);
-      expect(tank.timers.spawnshield).toBe(mockGame.t + Settings.SpawnShieldTime * 1000);
+      expect(tank.spawnshield()).toBe(true);
     });
 
     it("should spawn near base if base is set", () => {

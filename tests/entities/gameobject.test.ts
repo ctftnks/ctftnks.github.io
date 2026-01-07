@@ -23,6 +23,6 @@ describe("GameObject Class", () => {
 
   it("should have a default step method that does nothing", () => {
     const obj = new TestObject();
-    expect(() => obj.step()).not.toThrow();
+    expect(() => obj.step(0)).not.toThrow();
   });
 });

@@ -71,7 +71,7 @@ class FogEffect extends Updatable {
     this.maxAge = this.duration;
   }
 
-  override step(): void {
+  override step(_dt: number): void {
     // Reset transform to clear the entire canvas
     this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);

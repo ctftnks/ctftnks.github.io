@@ -33,7 +33,7 @@ export abstract class PowerUp extends GameObject {
   /**
    * Update step.
    */
-  step(): void {}
+  step(_dt: number): void {}
 
   /**
    * Draws the powerup.

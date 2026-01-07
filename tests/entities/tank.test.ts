@@ -99,17 +99,13 @@ describe("Tank Class", () => {
 
   it("should be invincible when spawnshield is active", () => {
     const tank = new Tank(mockPlayer, mockGame);
-    tank.timers.spawnshield = 1000;
-    mockPlayer.game.t = 500;
-
+    // age starts at 0, Settings.SpawnShieldTime is usually > 0
     expect(tank.spawnshield()).toBe(true);
     expect(tank.invincible()).toBe(true);
   });
 
   it("should not shoot when spawnshield is active", () => {
     const tank = new Tank(mockPlayer, mockGame);
-    tank.timers.spawnshield = 1000;
-    mockPlayer.game.t = 500;
     const shootSpy = vi.spyOn(tank.weapon, "shoot");
 
     tank.shoot();
@@ -118,8 +114,7 @@ describe("Tank Class", () => {
 
   it("should shoot and update stats when not invincible", () => {
     const tank = new Tank(mockPlayer, mockGame);
-    tank.timers.spawnshield = 0;
-    mockGame.t = 500;
+    tank.age = 100000; // Force spawnshield expiration
     const shootSpy = vi.spyOn(tank.weapon, "shoot").mockImplementation(() => {
       tank.weapon.isActive = true;
     });
@@ -160,8 +155,7 @@ describe("Tank Class", () => {
     } as any;
 
     Settings.ShowTankLabels = true;
-    tank.timers.invincible = 1000;
-    mockGame.t = 500;
+    tank.invincibleDuration = 1000;
 
     tank.draw(mockContext);
 
@@ -192,6 +186,7 @@ describe("Tank Class", () => {
     const tank = new Tank(mockPlayer, mockGame);
     tank.x = 50;
     tank.y = 50;
+    tank.age = 100000; // Expire spawnshield
 
     const mockBullet = {
       x: 50,
@@ -208,13 +203,13 @@ describe("Tank Class", () => {
 
     // Friendly Fire OFF
     Settings.FriendlyFire = false;
-    tank.step();
-    expect(mockBullet.onDeleted).not.toHaveBeenCalled();
+    tank.step(10);
+    expect(mockBullet.delete).not.toHaveBeenCalled();
     expect(tank.isDeleted()).toBe(false);
 
     // Friendly Fire ON
     Settings.FriendlyFire = true;
-    tank.step();
+    tank.step(10);
     expect(mockBullet.delete).toHaveBeenCalled();
     expect(tank.isDeleted()).toBe(true);
   });
@@ -223,8 +218,7 @@ describe("Tank Class", () => {
     const tank = new Tank(mockPlayer, mockGame);
     tank.x = 50;
     tank.y = 50;
-    tank.timers.invincible = 1000;
-    mockGame.t = 500;
+    tank.invincibleDuration = 1000;
 
     const mockBullet = {
       x: 50,
@@ -239,9 +233,9 @@ describe("Tank Class", () => {
 
     mockTile.objs.push(mockBullet);
 
-    tank.step();
+    tank.step(10);
 
-    expect(mockBullet.isDeleted).not.toHaveBeenCalled();
+    expect(mockBullet.delete).not.toHaveBeenCalled();
     expect(tank.isDeleted()).toBe(false);
   });
 });

@@ -222,14 +222,12 @@ describe("Game Class", () => {
     const player = new Player(0, "P1", TEAMS[0], []);
     const tank = new Tank(player, game);
     game.addObject(tank);
-    tank.timers.invincible = 1000;
-    tank.timers.spawnshield = 1000;
+    tank.invincibleDuration = 1000;
 
     game.resetTime();
 
     expect(game.t).toBe(0);
-    expect(tank.timers.invincible).toBe(0);
-    expect(tank.timers.spawnshield).toBe(0);
+    expect(tank.invincibleDuration).toBe(0);
   });
 
   it("should handle resize", () => {
