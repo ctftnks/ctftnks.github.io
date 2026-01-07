@@ -35,8 +35,7 @@ export default class Base extends GameObject {
   constructor(game: Game, x: number, y: number, team?: Team) {
     super();
     this.game = game;
-    this.x = x;
-    this.y = y;
+    this.setPosition({ x, y });
     this.tile = this.game.map?.getTileByPos(this.x, this.y) ?? null;
     this.color = "#555";
     if (team) {
