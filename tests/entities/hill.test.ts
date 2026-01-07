@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import Hill from "@/entities/hill";
+import { Hill } from "@/entities/base";
 import Tank from "@/entities/tank";
 import Player from "@/game/player";
 import { TEAMS } from "@/game/team";

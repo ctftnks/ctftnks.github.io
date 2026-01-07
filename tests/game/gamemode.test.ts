@@ -16,13 +16,18 @@ vi.mock("@/game/bot", () => ({
 }));
 
 vi.mock("@/entities/base", () => ({
-  default: vi.fn().mockImplementation(function (this: any, game, player, x, y) {
+  default: vi.fn().mockImplementation(function (this: any, game, x, y, team) {
     this.game = game;
-    this.player = player;
     this.x = x;
     this.y = y;
-    this.team = player?.team;
+    this.team = team;
     this.tile = { id: 1, randomWalk: vi.fn().mockReturnValue({ id: 2, x: 10, y: 10, dx: 1, dy: 1 }) };
+  }),
+  Hill: vi.fn().mockImplementation(function (this: any, game, x, y) {
+    this.game = game;
+    this.x = x;
+    this.y = y;
+    this.team = null;
   }),
 }));
 
@@ -31,15 +36,6 @@ vi.mock("@/entities/flag", () => ({
     this.game = game;
     this.base = base;
     this.drop = vi.fn();
-  }),
-}));
-
-vi.mock("@/entities/hill", () => ({
-  default: vi.fn().mockImplementation(function (this: any, game, x, y) {
-    this.game = game;
-    this.x = x;
-    this.y = y;
-    this.team = null;
   }),
 }));
 
