@@ -66,7 +66,7 @@ export class Weapon {
     bullet.angle = this.tank.angle;
     bullet.player = this.tank.player;
     bullet.color = this.tank.player.team.color;
-    this.tank.player.game!.addObject(bullet);
+    this.tank.game.addObject(bullet);
     return bullet;
   }
 
@@ -79,7 +79,7 @@ export class Weapon {
     }
     this.isActive = false;
     const delay = this.tank.rapidfire ? 500 : 1800;
-    this.tank.player.game!.addTimeout(() => {
+    this.tank.game.addTimeout(() => {
       if (this.tank.rapidfire) {
         this.activate();
       } else {

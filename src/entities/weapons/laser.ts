@@ -21,11 +21,11 @@ export class Laser extends Weapon {
   constructor(tank: Tank) {
     super(tank);
     this.image.src = IMAGES.laser;
-    this.trajectory = new Trajectory(this.tank.player.game!.map, this.tank.x, this.tank.y, this.tank.angle);
+    this.trajectory = new Trajectory(this.tank.game, this.tank.x, this.tank.y, this.tank.angle);
     this.trajectory.length = 620;
     this.trajectory.drawevery = 3;
     this.trajectory.color = hexToRgbA(this.tank.player.team.color, 0.4);
-    this.tank.player.game!.addObject(this.trajectory);
+    this.tank.game.addObject(this.trajectory);
     this.bot.fleeingDuration = 0;
   }
 
@@ -56,7 +56,7 @@ export class Laser extends Weapon {
        * Custom collision check for laser bullet.
        */
       bullet.checkCollision = function (): void {};
-      this.tank.player.game!.addObject(bullet);
+      this.tank.game.addObject(bullet);
     }
     this.deactivate();
   }

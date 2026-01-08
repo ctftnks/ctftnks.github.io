@@ -3,9 +3,8 @@
 ## Refactoring
 
 - resolve all circular dependencies
-- single way to access the game variable? not distributed accross all classes
 - dependency analysis & improve loose coupling
-- check if player.invincible & player.spawnshield are well implemented
+- use simpler definition of member variables via "public" in constructor
 
 ## Bugs
 

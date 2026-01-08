@@ -71,6 +71,7 @@ describe("Autopilot Class", () => {
       width: 40,
       angle: 0,
       speed: 10,
+      game: mockGame,
       player: mockPlayer,
       weapon: {
         isActive: true,

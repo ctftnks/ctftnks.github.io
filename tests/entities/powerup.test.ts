@@ -76,6 +76,7 @@ describe("PowerUp System", () => {
       y: 0,
       angle: 0,
       speed: 100,
+      game: mockGame,
       player: {
         game: mockGame,
         team: { color: "#ff0000" },
@@ -96,63 +97,63 @@ describe("PowerUp System", () => {
   });
 
   it("should get a random powerup", () => {
-    const p = getRandomPowerUp();
+    const p = getRandomPowerUp(mockGame);
     expect(p).toBeDefined();
     expect(p.image.src).toBeDefined();
   });
 
   it("should apply LaserBonus", () => {
     const creator = PowerUps.find((p) => p.name === "Laser")!;
-    const bonus = creator.create();
+    const bonus = creator.create(mockGame);
     bonus.apply(mockTank);
     expect(mockTank.weapon.name).toBe("Laser");
   });
 
   it("should apply MGBonus", () => {
     const creator = PowerUps.find((p) => p.name === "MG")!;
-    const bonus = creator.create();
+    const bonus = creator.create(mockGame);
     bonus.apply(mockTank);
     expect(mockTank.weapon.name).toBe("MG");
   });
 
   it("should apply GrenadeBonus", () => {
     const creator = PowerUps.find((p) => p.name === "Grenade")!;
-    const bonus = creator.create();
+    const bonus = creator.create(mockGame);
     bonus.apply(mockTank);
     expect(mockTank.weapon.name).toBe("Grenade");
   });
 
   it("should apply MineBonus", () => {
     const creator = PowerUps.find((p) => p.name === "Mine")!;
-    const bonus = creator.create();
+    const bonus = creator.create(mockGame);
     bonus.apply(mockTank);
     expect(mockTank.weapon.name).toBe("Mine");
   });
 
   it("should apply GuidedBonus", () => {
     const creator = PowerUps.find((p) => p.name === "Guided")!;
-    const bonus = creator.create();
+    const bonus = creator.create(mockGame);
     bonus.apply(mockTank);
     expect(mockTank.weapon.name).toBe("Guided");
   });
 
   it("should apply WreckingBallBonus", () => {
     const creator = PowerUps.find((p) => p.name === "WreckingBall")!;
-    const bonus = creator.create();
+    const bonus = creator.create(mockGame);
     bonus.apply(mockTank);
     expect(mockTank.weapon.name).toBe("WreckingBall");
   });
 
   it("should apply SlingshotBonus", () => {
     const creator = PowerUps.find((p) => p.name === "Slingshot")!;
-    const bonus = creator.create();
+    const bonus = creator.create(mockGame);
     bonus.apply(mockTank);
     expect(mockTank.weapon.name).toBe("Slingshot");
   });
 
   it("should apply SpeedBonus", () => {
     const creator = PowerUps.find((p) => p.name === "SpeedBoost")!;
-    const bonus = creator.create();
+    const bonus = creator.create(mockGame);
     bonus.apply(mockTank);
     expect(mockTank.speed).toBeCloseTo(130);
     expect(mockGame.updatables.length).toBe(1);
@@ -161,7 +162,7 @@ describe("PowerUp System", () => {
   it("should apply InvincibleBonus", () => {
     vi.useFakeTimers();
     const creator = PowerUps.find((p) => p.name === "Invincible")!;
-    const bonus = creator.create();
+    const bonus = creator.create(mockGame);
 
     // 1. First Apply
     bonus.apply(mockTank);
@@ -187,7 +188,7 @@ describe("PowerUp System", () => {
 
   it("should apply TerminatorBonus", () => {
     const creator = PowerUps.find((p) => p.name === "Terminator")!;
-    const bonus = creator.create();
+    const bonus = creator.create(mockGame);
     bonus.apply(mockTank);
     expect(mockTank.rapidfire).toBe(true);
     expect(mockGame.updatables.length).toBe(1);
@@ -195,7 +196,7 @@ describe("PowerUp System", () => {
 
   it("should apply MultiBonus", () => {
     const creator = PowerUps.find((p) => p.name === "Multiplier")!;
-    const bonus = creator.create();
+    const bonus = creator.create(mockGame);
 
     (bonus as any).apply();
 
@@ -205,7 +206,7 @@ describe("PowerUp System", () => {
   it("should apply FogBonus", () => {
     // Find FogBonus creator
     const creator = PowerUps.find((p) => p.name === "FogOfWar")!;
-    const bonus = creator.create();
+    const bonus = creator.create(mockGame);
 
     // Apply bonus
     bonus.apply(mockTank);

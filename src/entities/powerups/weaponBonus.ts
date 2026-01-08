@@ -3,6 +3,7 @@ import type Tank from "../tank";
 import type { Weapon } from "../weapons/weapon";
 import { playSound } from "@/game/effects";
 import { SOUNDS } from "@/game/assets";
+import type Game from "@/game/game";
 
 /**
  * Base class for weapon powerups to reduce duplication.
@@ -13,12 +14,13 @@ export class WeaponBonus extends PowerUp {
 
   /**
    * Creates a new WeaponBonus.
+   * @param game - The game instance.
    * @param imageSrc - The source of the image.
    * @param weaponClass - The class of the weapon to grant.
    * @param attractsBots - Whether bots are attracted to this powerup.
    */
-  constructor(imageSrc: string, weaponClass: new (tank: Tank) => Weapon, attractsBots: boolean = false) {
-    super();
+  constructor(game: Game, imageSrc: string, weaponClass: new (tank: Tank) => Weapon, attractsBots: boolean = false) {
+    super(game);
     this.image.src = imageSrc;
     this.attractsBots = attractsBots;
     this.weaponClass = weaponClass;

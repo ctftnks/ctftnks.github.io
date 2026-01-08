@@ -12,15 +12,16 @@ export class Smoke extends GameObject {
 
   /**
    * Creates a new Smoke particle.
+   * @param game - The game instance.
    * @param x - X coordinate.
    * @param y - Y coordinate.
    * @param timeout - Lifetime in ms.
    * @param radius - Initial radius.
    * @param rspeed - Radius shrinking speed.
    */
-  constructor(x: number, y: number, timeout: number = 300, radius: number = 10, rspeed: number = 1) {
+  constructor(game: Game, x: number, y: number, timeout: number = 300, radius: number = 10, rspeed: number = 1) {
     // inherit from GameObject class
-    super();
+    super(game);
     // to be initialized
     this.setPosition({ x, y });
     this.radius = radius;
@@ -68,7 +69,7 @@ export function generateCloud(
   for (let i = 0; i < n; i++) {
     const rx = x + radius * 2 * (Math.random() - 0.5);
     const ry = y + radius * 2 * (Math.random() - 0.5);
-    const smoke = new Smoke(rx, ry, 2000, radius, rspeed);
+    const smoke = new Smoke(game, rx, ry, 2000, radius, rspeed);
     if (color !== "") {
       smoke.color = color;
     }

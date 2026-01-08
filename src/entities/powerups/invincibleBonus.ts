@@ -3,6 +3,7 @@ import type Tank from "../tank";
 import { IMAGES, SOUNDS } from "@/game/assets";
 import { stopMusic, playMusic } from "@/game/effects";
 import { Settings } from "@/stores/settings";
+import type Game from "@/game/game";
 
 /**
  * Invincibility powerup.
@@ -13,9 +14,10 @@ export class InvincibleBonus extends PowerUp {
 
   /**
    * Creates a new InvincibleBonus.
+   * @param game - The game instance.
    */
-  constructor() {
-    super();
+  constructor(game: Game) {
+    super(game);
     this.attractsBots = true;
     this.image.src = IMAGES.invincible;
   }
@@ -35,7 +37,7 @@ export class InvincibleBonus extends PowerUp {
     }
     tank.speed *= 1.14;
     tank.invincibleDuration = 10000;
-    tank.player.game!.addTimeout(() => {
+    this.game.addTimeout(() => {
       tank.speed /= 1.14;
       if (Settings.bgmusic) {
         // playMusic(SOUNDS.bgmusic); // Assuming we might want to add bgmusic later.

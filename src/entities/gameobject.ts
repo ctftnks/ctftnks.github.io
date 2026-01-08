@@ -1,3 +1,4 @@
+import type Game from "@/game/game";
 import Coord from "./coord";
 import Updatable from "./updatable";
 
@@ -12,8 +13,9 @@ export default abstract class GameObject extends Updatable implements Coord {
 
   /**
    * Creates a new GameObject.
+   * @param game - The game instance.
    */
-  constructor() {
+  constructor(public game: Game) {
     super();
   }
 

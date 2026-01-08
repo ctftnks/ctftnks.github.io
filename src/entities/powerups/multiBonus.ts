@@ -1,6 +1,6 @@
 import { PowerUp } from "./powerup";
-import { store } from "@/stores/gamestore";
 import { IMAGES } from "@/game/assets";
+import type Game from "@/game/game";
 
 /**
  * Multiplier powerup (Spawn rate increase).
@@ -11,9 +11,10 @@ export class MultiBonus extends PowerUp {
 
   /**
    * Creates a new MultiBonus.
+   * @param game - The game instance.
    */
-  constructor() {
-    super();
+  constructor(game: Game) {
+    super(game);
     this.image.src = IMAGES.multi;
   }
 
@@ -23,9 +24,7 @@ export class MultiBonus extends PowerUp {
   apply(): void {
     if (!this.used) {
       this.used = true;
-      if (store.game) {
-        store.game.modifyPowerUpSpawnRate(8000);
-      }
+      this.game.modifyPowerUpSpawnRate(8000);
     }
   }
 }

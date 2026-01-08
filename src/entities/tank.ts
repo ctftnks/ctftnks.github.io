@@ -23,8 +23,6 @@ import type Game from "@/game/game";
 export default class Tank extends GameObject {
   /** The player steering the tank. */
   player: Player;
-  /** The game in which the tank lives. */
-  game: Game;
   /** Tank color. */
   color: string;
   /** Rotation angle. */
@@ -52,9 +50,8 @@ export default class Tank extends GameObject {
    * @param game - The game in which the tank lives.
    */
   constructor(player: Player, game: Game) {
-    super();
+    super(game);
     this.player = player;
-    this.game = game;
     this.color = this.player.team.color;
     this.weapon = new Gun(this);
   }

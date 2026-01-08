@@ -187,7 +187,7 @@ export default class Game {
     const powerUpInterval = 1000 * Settings.PowerUpRate;
     if (this.powerUpSpawnAccumulator >= powerUpInterval) {
       this.powerUpSpawnAccumulator -= powerUpInterval;
-      const p = getRandomPowerUp();
+      const p = getRandomPowerUp(this);
       p.setPosition(this.map.spawnPoint());
       this.addObject(p);
     }

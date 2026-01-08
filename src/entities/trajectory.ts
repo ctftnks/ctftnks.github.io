@@ -2,6 +2,7 @@ import GameObject from "./gameobject";
 import type GameMap from "@/game/gamemap";
 import Tank from "./tank";
 import Coord from "./coord";
+import type Game from "@/game/game";
 
 declare interface TrajectoryPoint extends Coord {
   angle: number;
@@ -25,14 +26,14 @@ export default class Trajectory extends GameObject {
 
   /**
    * Creates a new Trajectory.
-   * @param map - The map to trace on.
+   * @param game - The game instance.
    * @param x - X coordinate
    * @param y - Y coordinate
    * @param angle - starting angle of the trajectory
    */
-  constructor(map: GameMap, x: number, y: number, angle: number) {
-    super();
-    this.map = map;
+  constructor(game: Game, x: number, y: number, angle: number) {
+    super(game);
+    this.map = game.map;
     this.setPosition({ x, y });
     this.angle = angle;
     this.maxAge = 100;

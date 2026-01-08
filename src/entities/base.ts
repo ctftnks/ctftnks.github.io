@@ -16,8 +16,6 @@ export default class Base extends GameObject {
   team?: Team;
   /** Base color. */
   color: string;
-  /** Game instance. */
-  game: Game;
   /** The flag belonging to this base. */
   flag?: Flag;
   /** Base size. */
@@ -33,8 +31,7 @@ export default class Base extends GameObject {
    * @param team - The team owning the base.
    */
   constructor(game: Game, x: number, y: number, team?: Team) {
-    super();
-    this.game = game;
+    super(game);
     this.setPosition({ x, y });
     this.tile = this.game.map?.getTileByPos(this.x, this.y) ?? null;
     this.color = "#555";

@@ -43,7 +43,7 @@ export class WreckingBall extends Weapon {
      * @param y - Old y position.
      */
     bullet.checkCollision = function (x: number, y: number): void {
-      const tile = bullet.map.getTileByPos(x, y);
+      const tile = bullet.game.map.getTileByPos(x, y);
       if (tile === null) {
         return;
       }
@@ -67,7 +67,7 @@ export class WreckingBall extends Weapon {
         } else {
           // hit a wall: remove it!
           playSound(SOUNDS.grenade);
-          generateCloud(this.player.game!, bullet.x, bullet.y, 3);
+          generateCloud(this.game, bullet.x, bullet.y, 3);
           bullet.delete();
           tile.addWall(wall, true);
         }
@@ -80,9 +80,9 @@ export class WreckingBall extends Weapon {
      */
     bullet.leaveTrace = function (): void {
       if (Math.random() > 0.96) {
-        const smoke = new Smoke(this.x, this.y, 800, bullet.radius, 0.6);
+        const smoke = new Smoke(bullet.game, this.x, this.y, 800, bullet.radius, 0.6);
         smoke.color = "rgba(0,0,0,0.3)";
-        bullet.player.game!.addObject(smoke);
+        bullet.game.addObject(smoke);
       }
     };
 

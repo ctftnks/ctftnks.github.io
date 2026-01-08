@@ -5,6 +5,7 @@ import Tank from "@/entities/tank";
 
 describe("Trajectory Class", () => {
   let mockMap: any;
+  let mockGame: any;
   let mockTile: any;
   let traj: Trajectory;
 
@@ -18,7 +19,11 @@ describe("Trajectory Class", () => {
       getTileByPos: vi.fn().mockReturnValue(mockTile),
     };
 
-    traj = new Trajectory(mockMap, 0, 0, 0);
+    mockGame = {
+      map: mockMap,
+    };
+
+    traj = new Trajectory(mockGame, 0, 0, 0);
 
     Settings.GameFrequency = 10;
   });

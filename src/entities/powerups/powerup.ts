@@ -1,6 +1,7 @@
 import { Settings } from "@/stores/settings";
 import GameObject from "../gameobject";
 import type Tank from "../tank";
+import type Game from "@/game/game";
 
 /**
  * Base class for all PowerUps.
@@ -16,9 +17,10 @@ export abstract class PowerUp extends GameObject {
 
   /**
    * Creates a new PowerUp.
+   * @param game - The game instance.
    */
-  constructor() {
-    super();
+  constructor(game: Game) {
+    super(game);
     this.width = 30;
     this.image = new Image();
     this.maxAge = 1000 * Settings.PowerUpRate * Settings.MaxPowerUps;

@@ -2,6 +2,7 @@ import { PowerUp } from "./powerup";
 import type Tank from "../tank";
 import { IMAGES, SOUNDS } from "@/game/assets";
 import { playSound } from "@/game/effects";
+import type Game from "@/game/game";
 
 /**
  * Terminator powerup (Rapid Fire).
@@ -12,9 +13,10 @@ export class TerminatorBonus extends PowerUp {
 
   /**
    * Creates a new TerminatorBonus.
+   * @param game - The game instance.
    */
-  constructor() {
-    super();
+  constructor(game: Game) {
+    super(game);
     this.attractsBots = true;
     this.image.src = IMAGES.terminator;
   }
@@ -29,7 +31,7 @@ export class TerminatorBonus extends PowerUp {
     this.applied = true;
     tank.rapidfire = true;
     playSound(SOUNDS.terminator);
-    tank.player.game!.addTimeout(() => {
+    this.game.addTimeout(() => {
       tank.rapidfire = false;
     }, 120000);
   }

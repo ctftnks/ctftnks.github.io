@@ -11,6 +11,7 @@ import { FogBonus } from "./fogBonus";
 import { SpeedBonus } from "./speedBonus";
 
 import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot } from "../weapons";
+import type Game from "@/game/game";
 
 export * from "./powerup";
 export * from "./weaponBonus";
@@ -22,62 +23,62 @@ export * from "./speedBonus";
 
 export const PowerUps = reactive([
   {
-    create: () => new WeaponBonus(IMAGES.laser, Laser, true),
+    create: (game: Game) => new WeaponBonus(game, IMAGES.laser, Laser, true),
     name: "Laser",
     weight: 1,
   },
   {
-    create: () => new WeaponBonus(IMAGES.mg, MG, true),
+    create: (game: Game) => new WeaponBonus(game, IMAGES.mg, MG, true),
     name: "MG",
     weight: 1,
   },
   {
-    create: () => new WeaponBonus(IMAGES.grenade, Grenade, false),
+    create: (game: Game) => new WeaponBonus(game, IMAGES.grenade, Grenade, false),
     name: "Grenade",
     weight: 1,
   },
   {
-    create: () => new WeaponBonus(IMAGES.mine, Mine, false),
+    create: (game: Game) => new WeaponBonus(game, IMAGES.mine, Mine, false),
     name: "Mine",
     weight: 1,
   },
   {
-    create: () => new WeaponBonus(IMAGES.guided, Guided, true),
+    create: (game: Game) => new WeaponBonus(game, IMAGES.guided, Guided, true),
     name: "Guided",
     weight: 1,
   },
   {
-    create: () => new WeaponBonus(IMAGES.wreckingBall, WreckingBall, false),
+    create: (game: Game) => new WeaponBonus(game, IMAGES.wreckingBall, WreckingBall, false),
     name: "WreckingBall",
     weight: 0.5,
   },
   {
-    create: () => new MultiBonus(),
+    create: (game: Game) => new MultiBonus(game),
     name: "Multiplier",
     weight: 1,
   },
   {
-    create: () => new WeaponBonus(IMAGES.slingshot, Slingshot, true),
+    create: (game: Game) => new WeaponBonus(game, IMAGES.slingshot, Slingshot, true),
     name: "Slingshot",
     weight: 1,
   },
   {
-    create: () => new InvincibleBonus(),
+    create: (game: Game) => new InvincibleBonus(game),
     name: "Invincible",
     weight: 1,
   },
   {
-    create: () => new TerminatorBonus(),
+    create: (game: Game) => new TerminatorBonus(game),
     name: "Terminator",
     weight: 1,
   },
   {
-    create: () => new FogBonus(),
+    create: (game: Game) => new FogBonus(game),
     name: "FogOfWar",
     weight: 0,
   },
   {
-    create: () => new SpeedBonus(),
+    create: (game: Game) => new SpeedBonus(game),
     name: "SpeedBoost",
     weight: 1,
   },
@@ -85,9 +86,10 @@ export const PowerUps = reactive([
 
 /**
  * Returns a random powerup based on weights.
+ * @param game - The game instance.
  * @returns A new PowerUp instance.
  */
-export function getRandomPowerUp(): PowerUp {
+export function getRandomPowerUp(game: Game): PowerUp {
   let totalWeights = 0;
   for (let i = 0; i < PowerUps.length; i++) {
     totalWeights += PowerUps[i].weight;
@@ -100,5 +102,5 @@ export function getRandomPowerUp(): PowerUp {
   }
 
   playSound(SOUNDS.origPowerup);
-  return PowerUps[h - 1].create();
+  return PowerUps[h - 1].create(game);
 }

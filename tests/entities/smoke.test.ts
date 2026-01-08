@@ -13,7 +13,7 @@ describe("Smoke System", () => {
   });
 
   it("should initialize Smoke particle", () => {
-    const smoke = new Smoke(10, 10, 100, 5, 1);
+    const smoke = new Smoke(mockGame, 10, 10, 100, 5, 1);
     expect(smoke.x).toBe(10);
     expect(smoke.y).toBe(10);
     expect(smoke.radius).toBe(5);
@@ -22,7 +22,7 @@ describe("Smoke System", () => {
   });
 
   it("should delete smoke when timeout expired", () => {
-    const smoke = new Smoke(0, 0, 5, 10, 1);
+    const smoke = new Smoke(mockGame, 0, 0, 5, 10, 1);
 
     smoke.age = 6;
     expect(smoke.isDeleted()).toBe(true);
@@ -42,7 +42,7 @@ describe("Smoke System", () => {
   });
 
   it("should draw smoke particle", () => {
-    const smoke = new Smoke(10, 10, 100, 5, 1);
+    const smoke = new Smoke(mockGame, 10, 10, 100, 5, 1);
     const mockCtx = {
       beginPath: vi.fn(),
       fillStyle: "",

@@ -2,6 +2,7 @@ import { PowerUp } from "./powerup";
 import type Tank from "../tank";
 import { IMAGES } from "@/game/assets";
 import { fogOfWar } from "@/game/effects";
+import type Game from "@/game/game";
 
 /**
  * Fog of War powerup.
@@ -11,9 +12,10 @@ export class FogBonus extends PowerUp {
   private used: boolean = false;
   /**
    * Creates a new FogBonus.
+   * @param game - The game instance.
    */
-  constructor() {
-    super();
+  constructor(game: Game) {
+    super(game);
     this.image.src = IMAGES.fog;
   }
   /**
@@ -22,8 +24,7 @@ export class FogBonus extends PowerUp {
    */
   apply(tank: Tank): void {
     if (!this.used) {
-      const game = tank.player.game!;
-      fogOfWar(game);
+      fogOfWar(this.game);
       this.used = true;
     }
   }

@@ -45,6 +45,7 @@ describe("Bullet Class", () => {
     // Mock Tank
     mockTank = {
       player: mockPlayer,
+      game: mockGame,
     };
 
     // Mock Weapon

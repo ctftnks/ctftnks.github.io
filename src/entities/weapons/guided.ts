@@ -5,6 +5,8 @@ import { Smoke } from "../smoke";
 import { IMAGES, SOUNDS } from "@/game/assets";
 import { playSound } from "@/game/effects";
 import { Settings } from "@/stores/settings";
+import type Tile from "@/game/tile";
+import type GameObject from "../gameobject";
 
 /**
  * A guided missile.
@@ -77,9 +79,11 @@ export class Guided extends Weapon {
         e.age -= 250;
         playSound(SOUNDS.guided);
         // get current tile and path
-        const tile = e.map.getTileByPos(oldx, oldy)!;
+        const tile = e.game.map.getTileByPos(oldx, oldy)!;
         // Pathfinding logic for guided missile.
-        const path = tile.pathTo((destination) => destination.objs.some((obj) => obj instanceof Tank && obj.player.team !== e.player.team));
+        const path = tile.pathTo((destination: Tile) =>
+          destination.objs.some((obj: GameObject) => obj instanceof Tank && obj.player.team !== e.player.team),
+        );
         // set next path tile as goto point
         if (path && path.length > 1) {
           gotoTarget = path[1];
@@ -104,9 +108,9 @@ export class Guided extends Weapon {
        */
       e.leaveTrace = function (): void {
         if (Math.random() > 0.8) {
-          const smoke = new Smoke(this.x, this.y, 400, this.radius / 1.4, 0.6);
+          const smoke = new Smoke(e.game, this.x, this.y, 400, this.radius / 1.4, 0.6);
           smoke.color = e.smokeColor!;
-          e.player.game!.addObject(smoke);
+          e.game.addObject(smoke);
         }
       };
     };

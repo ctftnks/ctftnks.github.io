@@ -46,9 +46,9 @@ export class Slingshot extends Weapon {
     bullet.leaveTrace = function (): void {
       if (Math.random() > 0.96) {
         bullet.speed *= 0.92;
-        const smoke = new Smoke(this.x, this.y, 800, bullet.radius, 0.6);
+        const smoke = new Smoke(bullet.game, this.x, this.y, 800, bullet.radius, 0.6);
         smoke.color = "rgba(0,0,0,0.3)";
-        bullet.player.game!.addObject(smoke);
+        bullet.game.addObject(smoke);
       }
     };
 

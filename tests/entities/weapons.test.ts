@@ -48,6 +48,7 @@ vi.mock("@/entities/bullet", () => {
       speed = 10;
       player = {};
       map = {};
+      game = {};
       color = "#000";
       lethal = false;
       maxAge = 1000;
@@ -65,11 +66,13 @@ vi.mock("@/entities/bullet", () => {
       constructor(weapon: any) {
         if (weapon && weapon.tank) {
           this.player = weapon.tank.player;
-          this.map = weapon.tank.player.game.map;
+          this.game = weapon.tank.game;
+          this.map = weapon.tank.game.map;
         } else {
           // Fallback for tests where weapon might be incompletely mocked or constructed
           this.player = {};
           this.map = {};
+          this.game = { map: {} };
         }
       }
     },
@@ -125,6 +128,7 @@ describe("Weapon System", () => {
     };
 
     mockTank = {
+      game: mockGame,
       player: {
         game: mockGame,
         team: TEAMS[0],

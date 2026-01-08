@@ -4,7 +4,6 @@ import { playSound } from "@/game/effects";
 import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import type Player from "@/game/player";
-import type GameMap from "@/game/gamemap";
 import { Weapon } from "./weapons";
 
 /**
@@ -13,7 +12,6 @@ import { Weapon } from "./weapons";
  */
 export default class Bullet extends GameObject {
   player: Player;
-  map: GameMap;
   weapon: Weapon;
   angle: number = 0;
   radius: number = 4;
@@ -32,9 +30,8 @@ export default class Bullet extends GameObject {
    * @param weapon - The weapon that fired the bullet.
    */
   constructor(weapon: Weapon) {
-    super();
+    super(weapon.tank.game);
     this.player = weapon.tank.player;
-    this.map = this.player.game!.map;
     this.weapon = weapon;
     this.speed = Settings.BulletSpeed;
     this.maxAge = Settings.BulletTimeout * 1000;
@@ -91,7 +88,7 @@ export default class Bullet extends GameObject {
    * @param oldy - Previous Y position.
    */
   checkCollision(oldx: number, oldy: number): void {
-    const tile = this.map.getTileByPos(oldx, oldy);
+    const tile = this.game.map.getTileByPos(oldx, oldy);
     if (!tile) {
       return;
     }
@@ -122,7 +119,7 @@ export default class Bullet extends GameObject {
    * Checks for collision with other bullets.
    */
   checkBulletCollision(): void {
-    const tile = this.map.getTileByPos(this.x, this.y);
+    const tile = this.game.map.getTileByPos(this.x, this.y);
     if (!tile) {
       return;
     }
@@ -140,7 +137,7 @@ export default class Bullet extends GameObject {
           this.explode();
           obj.delete();
           this.delete();
-          generateCloud(this.player.game!, this.x, this.y, 1);
+          generateCloud(this.game, this.x, this.y, 1);
           playSound(SOUNDS.origGun);
           return;
         }
@@ -152,7 +149,7 @@ export default class Bullet extends GameObject {
    * Leave a trace of smoke.
    */
   leaveTrace(): void {
-    this.player.game?.addObject(new Smoke(this.x, this.y, 300, this.radius, 1));
+    this.game.addObject(new Smoke(this.game, this.x, this.y, 300, this.radius, 1));
   }
 
   /**

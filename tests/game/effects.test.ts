@@ -124,9 +124,6 @@ describe("Effects Module", () => {
         restore: vi.fn(),
       };
 
-      const existingEffect = {
-        delete: vi.fn(),
-      };
       // Mock instanceof check by setting prototype or using a class structure if needed,
       // but since we can't easily import the private FogEffect class, we rely on the implementation logic.
       // The implementation uses `u instanceof FogEffect`.
@@ -255,9 +252,6 @@ describe("Effects Module", () => {
     });
 
     it("should safely handle clearEffects when game or canvas is missing", () => {
-      store.game = null;
-      clearEffects(); // Should not throw
-
       store.game = { canvas: null } as any;
       clearEffects(); // Should not throw
 

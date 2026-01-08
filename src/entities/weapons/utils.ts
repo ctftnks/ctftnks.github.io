@@ -27,13 +27,13 @@ export function createShrapnelExplosion(weapon: Weapon, x: number, y: number, co
     shrapnel.radius = 2;
     shrapnel.speed = 2 * Settings.BulletSpeed * (0.8 + 0.4 * Math.random());
     shrapnel.angle = 2 * Math.PI * Math.random();
-    shrapnel.maxAge = options.timeout;
+    shrapnel.maxAge = options.timeout + Math.random() * 80;
     shrapnel.extrahitbox = -3;
 
     if (options.noCollision) {
       shrapnel.checkCollision = function (): void {};
     }
 
-    weapon.tank.player.game!.addObject(shrapnel);
+    weapon.tank.game.addObject(shrapnel);
   }
 }

@@ -7,8 +7,10 @@ class TestObject extends GameObject {
 }
 
 describe("GameObject Class", () => {
+  const mockGame = {} as any;
+
   it("should initialize with default values", () => {
-    const obj = new TestObject();
+    const obj = new TestObject(mockGame);
     expect(obj.x).toBe(0);
     expect(obj.y).toBe(0);
     expect(obj.width).toBe(0);
@@ -16,13 +18,13 @@ describe("GameObject Class", () => {
   });
 
   it("should mark as deleted when delete() is called", () => {
-    const obj = new TestObject();
+    const obj = new TestObject(mockGame);
     obj.delete();
     expect(obj.isDeleted()).toBe(true);
   });
 
   it("should have a default step method that does nothing", () => {
-    const obj = new TestObject();
+    const obj = new TestObject(mockGame);
     expect(() => obj.step(0)).not.toThrow();
   });
 });

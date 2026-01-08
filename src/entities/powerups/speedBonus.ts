@@ -1,6 +1,7 @@
 import { PowerUp } from "./powerup";
 import type Tank from "../tank";
 import { IMAGES } from "@/game/assets";
+import type Game from "@/game/game";
 
 /**
  * Speed Boost powerup.
@@ -9,9 +10,10 @@ import { IMAGES } from "@/game/assets";
 export class SpeedBonus extends PowerUp {
   /**
    * Creates a new SpeedBonus.
+   * @param game - The game instance.
    */
-  constructor() {
-    super();
+  constructor(game: Game) {
+    super(game);
     this.attractsBots = true;
     this.image.src = IMAGES.speed;
   }
@@ -22,7 +24,7 @@ export class SpeedBonus extends PowerUp {
    */
   apply(tank: Tank): void {
     tank.speed *= 1.3;
-    tank.player.game!.addTimeout(() => {
+    this.game.addTimeout(() => {
       tank.speed /= 1.3;
     }, 8000);
   }
