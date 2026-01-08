@@ -11,8 +11,6 @@ import type Base from "./base";
  * @augments GameObject
  */
 export default class Flag extends GameObject {
-  /** The home base of this flag. */
-  base: Base;
   /** The team this flag belongs to. */
   team: Team;
   /** The color of the flag. */
@@ -31,9 +29,11 @@ export default class Flag extends GameObject {
    * @param game - The game instance.
    * @param base - The base this flag belongs to.
    */
-  constructor(game: Game, base: Base) {
+  constructor(
+    game: Game,
+    public base: Base,
+  ) {
     super(game);
-    this.base = base;
     this.team = base.team!;
     this.color = base.color;
     this.setPosition(base);

@@ -12,8 +12,6 @@ import type Flag from "./flag";
  * @augments GameObject
  */
 export default class Base extends GameObject {
-  /** Team identifier. */
-  team?: Team;
   /** Base color. */
   color: string;
   /** The flag belonging to this base. */
@@ -30,13 +28,17 @@ export default class Base extends GameObject {
    * @param y - Y coordinate.
    * @param team - The team owning the base.
    */
-  constructor(game: Game, x: number, y: number, team?: Team) {
+  constructor(
+    game: Game,
+    x: number,
+    y: number,
+    public team?: Team,
+  ) {
     super(game);
     this.setPosition({ x, y });
     this.tile = this.game.map?.getTileByPos(this.x, this.y) ?? null;
     this.color = "#555";
     if (team) {
-      this.team = team;
       this.color = team.color;
     }
   }

@@ -10,8 +10,6 @@ import type Game from "@/game/game";
  * @augments PowerUp
  */
 export class WeaponBonus extends PowerUp {
-  private weaponClass: new (tank: Tank) => Weapon;
-
   /**
    * Creates a new WeaponBonus.
    * @param game - The game instance.
@@ -19,11 +17,15 @@ export class WeaponBonus extends PowerUp {
    * @param weaponClass - The class of the weapon to grant.
    * @param attractsBots - Whether bots are attracted to this powerup.
    */
-  constructor(game: Game, imageSrc: string, weaponClass: new (tank: Tank) => Weapon, attractsBots: boolean = false) {
+  constructor(
+    game: Game,
+    imageSrc: string,
+    private weaponClass: new (tank: Tank) => Weapon,
+    attractsBots: boolean = false,
+  ) {
     super(game);
     this.image.src = imageSrc;
     this.attractsBots = attractsBots;
-    this.weaponClass = weaponClass;
   }
 
   /**

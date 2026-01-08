@@ -12,14 +12,10 @@ import type Team from "./team";
  * and the tank to be controlled
  */
 export default class Player {
-  id: number;
-  name: string;
-  team: Team;
   game?: Game;
   base?: Base;
   score: number = 0;
   spree: number = 0;
-  keys: string[];
   stats: { deaths: number; kills: number; miles: number; shots: number } = { deaths: 0, kills: 0, miles: 0, shots: 0 };
 
   /**
@@ -29,12 +25,12 @@ export default class Player {
    * @param team - The team of the player
    * @param keys - The key mapping.
    */
-  constructor(id: number, name: string, team: Team, keys: string[]) {
-    this.id = id;
-    this.name = name;
-    this.team = team;
-    this.keys = keys;
-  }
+  constructor(
+    public id: number,
+    public name: string,
+    public team: Team,
+    public keys: string[],
+  ) {}
 
   /**
    * Steer a tank: check if keys pressed and act accordingly.

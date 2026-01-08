@@ -22,8 +22,6 @@ export default class GameMap {
   dy: number;
   /** List of tiles. */
   tiles: Tile[] = [];
-  /** The canvas. */
-  canvas: Canvas;
 
   /**
    * Creates a new GameMap.
@@ -31,8 +29,11 @@ export default class GameMap {
    * @param Nx - Number of tiles in X direction.
    * @param Ny - Number of tiles in Y direction.
    */
-  constructor(canvas: Canvas, Nx: number | null = null, Ny: number | null = null) {
-    this.canvas = canvas;
+  constructor(
+    public canvas: Canvas,
+    Nx: number | null = null,
+    Ny: number | null = null,
+  ) {
     this.Nx = Nx ?? Math.floor(Settings.MapNxMin + (Settings.MapNxMax - Settings.MapNxMin) * Math.random());
     this.Ny = Ny ?? Math.floor(((0.25 * Math.random() + 0.75) * this.Nx * canvas.height) / canvas.width);
     this.dy = this.dx;

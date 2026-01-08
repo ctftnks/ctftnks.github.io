@@ -9,7 +9,6 @@ import { SOUNDS } from "@/game/assets";
  */
 export class Weapon {
   name: string = "Weapon";
-  tank: Tank;
   image: HTMLImageElement;
   isActive: boolean = true;
   isDeleted: boolean = false;
@@ -24,8 +23,7 @@ export class Weapon {
    * Creates a new Weapon.
    * @param tank - The tank owning this weapon.
    */
-  constructor(tank: Tank) {
-    this.tank = tank;
+  constructor(public tank: Tank) {
     this.image = new Image();
     this.image.src = "";
     this.bot = {

@@ -14,8 +14,6 @@ import type Coord from "@/entities/coord";
  */
 export abstract class Gamemode {
   name: string = "defaultmode";
-  /** Corresponding Game instance. */
-  game: Game;
   /** Distance from base center to player spawn point (used in Player.spawn). */
   BaseSpawnDistance: number = 2;
 
@@ -23,9 +21,7 @@ export abstract class Gamemode {
    * Creates a new Gamemode.
    * @param game - The game instance.
    */
-  constructor(game: Game) {
-    this.game = game;
-  }
+  constructor(public game: Game) {}
 
   /**
    * Called every game step.

@@ -4,11 +4,6 @@ import Updatable from "@/entities/updatable";
  * A timeout that executes a callback after a specific game time delay.
  */
 export default class GameTimeout extends Updatable {
-  /** the time delay [ms] after which the callback should be run */
-  private delay: number;
-  /** The callback to execute. */
-  private callback: () => void;
-  /** Should the timeout run periodically? */
   private isInterval: boolean;
 
   /**
@@ -17,10 +12,12 @@ export default class GameTimeout extends Updatable {
    * @param callback - The callback to execute.
    * @param isInterval - should the timeout restart after it is finished (i.e. should it run periodically?).
    */
-  constructor(delay: number, callback: () => void, isInterval?: boolean) {
+  constructor(
+    private delay: number,
+    private callback: () => void,
+    isInterval?: boolean,
+  ) {
     super();
-    this.delay = delay;
-    this.callback = callback;
     this.isInterval = isInterval ? true : false;
   }
 

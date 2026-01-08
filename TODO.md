@@ -4,7 +4,7 @@
 
 - resolve all circular dependencies
 - dependency analysis & improve loose coupling
-- use simpler definition of member variables via "public" in constructor
+- replace fogOfWar method with FogEffect class
 
 ## Bugs
 
