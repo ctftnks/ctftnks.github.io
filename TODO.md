@@ -11,7 +11,6 @@
 
 ## Bots reimplementation
 
-- Guided Missile spins randomly when there is no target
 - improve Bot's laser aiming
 
 ## Minor features
