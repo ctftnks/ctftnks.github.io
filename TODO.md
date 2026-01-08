@@ -4,7 +4,6 @@
 
 - resolve all circular dependencies
 - dependency analysis & improve loose coupling
-- replace fogOfWar method with FogEffect class
 
 ## Bugs
 
@@ -21,7 +20,6 @@
 - Weapon queue
 - different tank types (visually): write a class for that?
 - music, especially when holding flag
-- update README.md
 - let bots pick up powerups on intention
 
 ## Long term issues

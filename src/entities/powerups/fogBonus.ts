@@ -1,7 +1,7 @@
 import { PowerUp } from "./powerup";
 import type Tank from "../tank";
 import { IMAGES } from "@/game/assets";
-import { fogOfWar } from "@/game/effects";
+import { FogEffect } from "@/game/effects";
 import type Game from "@/game/game";
 
 /**
@@ -24,7 +24,22 @@ export class FogBonus extends PowerUp {
    */
   apply(tank: Tank): void {
     if (!this.used) {
-      fogOfWar(tank.game);
+      const game = tank.game;
+      const canvas = game.canvas.effectsCanvas;
+      if (!canvas || !canvas.getContext("2d")) {
+        return;
+      }
+      const effect = new FogEffect(game);
+
+      // Remove existing FogEffect to avoid stacking
+      const existingIndex = game.updatables.findIndex((u) => u instanceof FogEffect);
+      if (existingIndex !== -1) {
+        game.updatables[existingIndex].delete();
+        game.updatables.splice(existingIndex, 1);
+        effect.age = 300; // set higher initial age to prevent duplicate fade-in effect
+      }
+
+      game.updatables.push(effect);
       this.used = true;
     }
   }

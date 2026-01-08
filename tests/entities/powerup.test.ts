@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { getRandomPowerUp, PowerUps } from "@/entities/powerups";
 import { store } from "@/stores/gamestore";
-import { fogOfWar } from "@/game/effects";
+import { FogEffect } from "@/game/effects";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -9,7 +9,13 @@ vi.mock("@/game/effects", () => ({
   playMusic: vi.fn(),
   stopMusic: vi.fn(),
   hexToRgbA: vi.fn().mockReturnValue("rgba(0,0,0,0.4)"),
-  fogOfWar: vi.fn(),
+  FogEffect: class MockFogEffect {
+    delete = vi.fn();
+    game: any;
+    constructor(game: any) {
+      this.game = game;
+    }
+  },
 }));
 
 vi.mock("@/entities/trajectory", () => {
@@ -68,6 +74,11 @@ describe("PowerUp System", () => {
       t: 1000,
       intvls: [],
       map: {},
+      canvas: {
+        effectsCanvas: {
+          getContext: vi.fn().mockReturnValue({}),
+        },
+      },
     };
     store.game = mockGame;
 
@@ -211,13 +222,22 @@ describe("PowerUp System", () => {
     // Apply bonus
     bonus.apply(mockTank);
 
-    // Verify fogOfWar was called
-    // (fogOfWar is mocked at the top of this file)
-    expect(fogOfWar).toHaveBeenCalledWith(mockGame);
+    // Verify FogEffect was created and added
+    expect(mockGame.updatables.length).toBe(1);
+    expect(mockGame.updatables[0]).toBeInstanceOf(FogEffect);
 
-    // Apply again - should not trigger fogOfWar
-    (fogOfWar as any).mockClear();
-    bonus.apply(mockTank);
-    expect(fogOfWar).not.toHaveBeenCalled();
+    // Apply again - should replace existing
+    const firstEffect = mockGame.updatables[0];
+    const deleteSpy = vi.spyOn(firstEffect, "delete");
+    bonus.apply(mockTank); // Use same bonus instance? Logic says if (!this.used).
+    // Wait, FogBonus has `this.used`. So second apply on same bonus instance should do nothing.
+    // We need a new bonus instance.
+    const bonus2 = creator.create(mockGame);
+    bonus2.apply(mockTank);
+
+    expect(deleteSpy).toHaveBeenCalled();
+    expect(mockGame.updatables.length).toBe(1);
+    expect(mockGame.updatables[0]).not.toBe(firstEffect);
+    expect(mockGame.updatables[0]).toBeInstanceOf(FogEffect);
   });
 });

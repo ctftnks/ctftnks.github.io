@@ -54,7 +54,7 @@ export function stopMusic(): void {
 /**
  * Fog of War Effect.
  */
-class FogEffect extends Updatable {
+export class FogEffect extends Updatable {
   game: Game;
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
@@ -107,27 +107,6 @@ class FogEffect extends Updatable {
   }
 }
 
-/**
- * Initiates a Fog of War effect.
- * Dims the map and reveals area around tanks.
- * @param game - The game instance.
- */
-export function fogOfWar(game: Game): void {
-  const canvas = game.canvas.effectsCanvas;
-  if (!canvas || !canvas.getContext("2d")) {
-    return;
-  }
-
-  // Remove existing FogEffect to avoid stacking
-  const existingIndex = game.updatables.findIndex((u) => u instanceof FogEffect);
-  if (existingIndex !== -1) {
-    game.updatables[existingIndex].delete();
-    game.updatables.splice(existingIndex, 1);
-  }
-
-  const effect = new FogEffect(game);
-  game.updatables.push(effect);
-}
 /**
  * Clears all visual effects from the overlay canvas.
  */

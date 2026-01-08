@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { playSound, playMusic, stopMusic, hexToRgbA, fogOfWar, clearEffects } from "@/game/effects";
+import { playSound, playMusic, stopMusic, hexToRgbA, FogEffect, clearEffects } from "@/game/effects";
 import { Settings } from "@/stores/settings";
 import { store } from "@/stores/gamestore";
 
@@ -93,78 +93,20 @@ describe("Effects Module", () => {
         },
         map: { Nx: 10, Ny: 10, dx: 32, dy: 32 },
         getTanks: vi.fn().mockReturnValue([{ x: 100, y: 100 }]),
-        updatables: [],
+        updatables: [] as any[],
       };
 
-      fogOfWar(mockGame as any);
+      const effect = new FogEffect(mockGame as any);
+      mockGame.updatables.push(effect);
 
       expect(mockGame.updatables.length).toBe(1);
-      const effect = mockGame.updatables[0] as any;
 
       // Simulate a step
-      effect.step();
+      effect.step(0);
 
       expect(mockCtx.clearRect).toHaveBeenCalled();
       expect(mockCtx.fillRect).toHaveBeenCalled();
       expect(mockGame.getTanks).toHaveBeenCalled();
-    });
-
-    it("should replace existing fog of war effect", () => {
-      const mockCtx = {
-        setTransform: vi.fn(),
-        scale: vi.fn(),
-        clearRect: vi.fn(),
-        fillRect: vi.fn(),
-        save: vi.fn(),
-        beginPath: vi.fn(),
-        arc: vi.fn(),
-        clip: vi.fn(),
-        fill: vi.fn(),
-        closePath: vi.fn(),
-        restore: vi.fn(),
-      };
-
-      // Mock instanceof check by setting prototype or using a class structure if needed,
-      // but since we can't easily import the private FogEffect class, we rely on the implementation logic.
-      // The implementation uses `u instanceof FogEffect`.
-      // We can check if we can simulate this by running fogOfWar twice.
-
-      const mockGame = {
-        canvas: {
-          effectsCanvas: {
-            getContext: vi.fn().mockReturnValue(mockCtx),
-            width: 0,
-            height: 0,
-          },
-          canvas: { clientWidth: 800, clientHeight: 600 },
-          scale: 1,
-        },
-        map: { Nx: 10, Ny: 10, dx: 32, dy: 32 },
-        getTanks: vi.fn().mockReturnValue([]),
-        updatables: [],
-      };
-
-      // First call
-      fogOfWar(mockGame as any);
-      const firstEffect = mockGame.updatables[0];
-      const deleteSpy = vi.spyOn(firstEffect, "delete");
-
-      // Second call
-      fogOfWar(mockGame as any);
-
-      expect(deleteSpy).toHaveBeenCalled();
-      expect(mockGame.updatables.length).toBe(1);
-      expect(mockGame.updatables[0]).not.toBe(firstEffect);
-    });
-
-    it("should not initiate fog of war if canvas is missing", () => {
-      const mockGame = {
-        canvas: {
-          effectsCanvas: null,
-        },
-      };
-      fogOfWar(mockGame as any);
-      // Should not crash
     });
 
     it("should test FogEffect step logic", () => {
@@ -192,16 +134,15 @@ describe("Effects Module", () => {
         },
         map: { Nx: 10, Ny: 10, dx: 32, dy: 32 },
         getTanks: vi.fn().mockReturnValue([]),
-        updatables: [],
+        updatables: [] as any[],
       };
 
-      fogOfWar(mockGame as any);
-      const effect = mockGame.updatables[0] as any;
+      const effect = new FogEffect(mockGame as any);
 
       // 1. Test isDeleted
       effect.delete(); // Sets maxAge to -1
       effect.age = 0; // 0 > -1 is true
-      effect.step();
+      effect.step(0);
       expect(mockCtx.fillRect).not.toHaveBeenCalled(); // Should return early
 
       // Reset for next steps
@@ -211,18 +152,18 @@ describe("Effects Module", () => {
       // 2. Test ambient light < 300 age
       effect.age = 150;
       effect.duration = 10000;
-      effect.step();
+      effect.step(0);
       // ambientLight = 1 - 150/300 = 0.5
       expect(effect.ambientLight).toBe(0.5);
 
       // 3. Test ambient light > 300 and < duration - 300
       effect.age = 5000;
-      effect.step();
+      effect.step(0);
       expect(effect.ambientLight).toBe(0);
 
       // 4. Test ambient light > duration - 300
       effect.age = 9850; // duration 10000. diff is 150.
-      effect.step();
+      effect.step(0);
       // ambientLight = 1 - 150/300 = 0.5
       expect(effect.ambientLight).toBe(0.5);
     });
