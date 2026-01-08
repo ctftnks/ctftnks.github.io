@@ -48,6 +48,11 @@ export default class Game {
   /** The current game mode. */
   mode: Gamemode;
 
+  /** Accumulator for powerup spawning. */
+  powerUpSpawnAccumulator: number = 0;
+  /** Multiplier for powerup spawn rate. */
+  powerUpSpawnRateMultiplier: number = 1;
+
   /**
    * Creates a new Game instance.
    * @param canvas - The canvas manager.
@@ -178,7 +183,10 @@ export default class Game {
     this.mode.step(dt);
 
     // add random PowerUp
-    if (this.isTrueEvery(1000 * Settings.PowerUpRate, dt)) {
+    this.powerUpSpawnAccumulator += dt * this.powerUpSpawnRateMultiplier;
+    const powerUpInterval = 1000 * Settings.PowerUpRate;
+    if (this.powerUpSpawnAccumulator >= powerUpInterval) {
+      this.powerUpSpawnAccumulator -= powerUpInterval;
       const p = getRandomPowerUp();
       p.setPosition(this.map.spawnPoint());
       this.addObject(p);
@@ -210,12 +218,15 @@ export default class Game {
   }
 
   /**
-   * This method returns true every X milliseconds, otherwise false
-   * @param ms the distance between 'true' signals in milliseconds
-   * @param dt the time elapsed since the last frame
+   * Modifies the powerup spawn rate for a duration.
+   * @param factor - The factor to multiply the spawn rate by.
+   * @param duration - The duration of the effect in milliseconds.
    */
-  private isTrueEvery(ms: number, dt: number): boolean {
-    return Math.floor(this.t / ms) > Math.floor((this.t - dt) / ms);
+  modifyPowerUpSpawnRate(duration: number): void {
+    this.powerUpSpawnRateMultiplier += 1;
+    this.addTimeout(() => {
+      this.powerUpSpawnRateMultiplier -= 1;
+    }, duration);
   }
 
   /**

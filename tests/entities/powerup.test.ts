@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { getRandomPowerUp, PowerUps } from "@/entities/powerups";
-import { Settings } from "@/stores/settings";
+import { store } from "@/stores/gamestore";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -62,11 +62,13 @@ describe("PowerUp System", () => {
         mockGame.updatables.push({ callback: cb, triggerTime: mockGame.t + time });
         setTimeout(cb, time);
       }),
+      modifyPowerUpSpawnRate: vi.fn(),
       updatables: [],
       t: 1000,
       intvls: [],
       map: {},
     };
+    store.game = mockGame;
 
     mockTank = {
       x: 0,
@@ -193,12 +195,9 @@ describe("PowerUp System", () => {
   it("should apply MultiBonus", () => {
     const creator = PowerUps.find((p) => p.name === "Multiplier")!;
     const bonus = creator.create();
-    const originalRate = Settings.PowerUpRate;
-    const originalMax = Settings.MaxPowerUps;
 
     (bonus as any).apply();
 
-    expect(Settings.PowerUpRate).toBeLessThan(originalRate);
-    expect(Settings.MaxPowerUps).toBeGreaterThan(originalMax);
+    expect(mockGame.modifyPowerUpSpawnRate).toHaveBeenCalledWith(8000);
   });
 });
