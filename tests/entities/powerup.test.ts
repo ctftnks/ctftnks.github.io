@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { getRandomPowerUp, PowerUps } from "@/entities/powerups";
 import { store } from "@/stores/gamestore";
+import { fogOfWar } from "@/game/effects";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -199,5 +200,23 @@ describe("PowerUp System", () => {
     (bonus as any).apply();
 
     expect(mockGame.modifyPowerUpSpawnRate).toHaveBeenCalledWith(8000);
+  });
+
+  it("should apply FogBonus", () => {
+    // Find FogBonus creator
+    const creator = PowerUps.find((p) => p.name === "FogOfWar")!;
+    const bonus = creator.create();
+
+    // Apply bonus
+    bonus.apply(mockTank);
+
+    // Verify fogOfWar was called
+    // (fogOfWar is mocked at the top of this file)
+    expect(fogOfWar).toHaveBeenCalledWith(mockGame);
+
+    // Apply again - should not trigger fogOfWar
+    (fogOfWar as any).mockClear();
+    bonus.apply(mockTank);
+    expect(fogOfWar).not.toHaveBeenCalled();
   });
 });
