@@ -79,7 +79,7 @@ export class Guided extends Weapon {
         e.age -= 250;
         playSound(SOUNDS.guided);
         // get current tile and path
-        const tile = e.game.map.getTileByPos(oldx, oldy)!;
+        const tile = e.tile!;
         // Pathfinding logic for guided missile.
         const path = tile.pathTo((destination: Tile) =>
           destination.objs.some((obj: GameObject) => obj instanceof Tank && obj.player.team !== e.player.team),

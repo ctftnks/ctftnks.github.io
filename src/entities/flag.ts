@@ -76,15 +76,10 @@ export default class Flag extends GameObject {
    * @param _dt
    */
   step(_dt: number): void {
-    if (!this.game.map) {
+    if (!this.game.map || !this.tile) {
       return;
     }
-    const tile = this.game.map.getTileByPos(this.x, this.y);
-    if (tile === null) {
-      return;
-    }
-    for (let i = 0; i < tile.objs.length; i++) {
-      const tank: GameObject = tile.objs[i];
+    for (const tank of this.tile.objs) {
       if (tank instanceof Tank && Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)) {
         if (tank.player.team === this.team) {
           if (!this.base.hasFlag()) {

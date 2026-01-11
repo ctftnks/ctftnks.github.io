@@ -88,12 +88,11 @@ export default class Bullet extends GameObject {
    * @param oldy - Previous Y position.
    */
   checkCollision(oldx: number, oldy: number): void {
-    const tile = this.game.map.getTileByPos(oldx, oldy);
-    if (!tile) {
+    if (!this.tile) {
       return;
     }
 
-    const walls = tile.getWalls(this.x, this.y);
+    const walls = this.tile.getWalls(this.x, this.y);
     const nwalls = walls.filter((w) => w).length;
 
     if (nwalls === 0) {
@@ -119,12 +118,10 @@ export default class Bullet extends GameObject {
    * Checks for collision with other bullets.
    */
   checkBulletCollision(): void {
-    const tile = this.game.map.getTileByPos(this.x, this.y);
-    if (!tile) {
+    if (!this.tile) {
       return;
     }
-
-    for (const obj of tile.objs) {
+    for (const obj of this.tile.objs) {
       if (obj instanceof Bullet && obj.age > 0 && obj !== this) {
         const rad = 0.65 * this.radius + 0.65 * obj.radius + this.extrahitbox;
         const dx = obj.x - this.x;

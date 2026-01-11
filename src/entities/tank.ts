@@ -250,19 +250,18 @@ export default class Tank extends GameObject {
    * @returns Index of colliding corner or -1.
    */
   private checkWallCollision(): number {
-    const tile = this.game.map.getTileByPos(this.x, this.y);
-    if (!tile) {
+    if (!this.tile) {
       return -1;
     }
     const corners = this.corners();
     const neighborTiles = new Set<Tile>();
     for (let i = 0; i < corners.length; i++) {
       const corner = corners[i];
-      if (tile.getWalls(corner.x, corner.y).some((w) => w)) {
+      if (this.tile.getWalls(corner.x, corner.y).some((w) => w)) {
         return i;
       }
       const tileAtCorner = this.game.map.getTileByPos(corner.x, corner.y);
-      if (tileAtCorner && tileAtCorner !== tile) {
+      if (tileAtCorner && tileAtCorner !== this.tile) {
         neighborTiles.add(tileAtCorner);
       }
     }

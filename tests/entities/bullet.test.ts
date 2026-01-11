@@ -93,10 +93,11 @@ describe("Bullet Class", () => {
   });
 
   it("should bounce off walls", () => {
-    // Mock collision with wall
-    mockMap.getTileByPos.mockReturnValue({
+    const tile = {
       getWalls: vi.fn().mockReturnValue([true, false, false, false]), // Top wall
-    });
+    };
+    mockMap.getTileByPos.mockReturnValue(tile);
+    bullet.tile = tile as any;
 
     bullet.angle = 0; // Moving up
 
@@ -108,9 +109,11 @@ describe("Bullet Class", () => {
   });
 
   it("should bounce off side walls", () => {
-    mockMap.getTileByPos.mockReturnValue({
+    const tile = {
       getWalls: vi.fn().mockReturnValue([false, true, false, false]), // Left wall
-    });
+    };
+    mockMap.getTileByPos.mockReturnValue(tile);
+    bullet.tile = tile as any;
 
     bullet.angle = Math.PI / 4; // Moving up-left
     // Reset position to center for clean calculation, though step moves it slightly
@@ -124,9 +127,11 @@ describe("Bullet Class", () => {
   });
 
   it("should bounce 180 degrees when hitting a corner (2 walls)", () => {
-    mockMap.getTileByPos.mockReturnValue({
+    const tile = {
       getWalls: vi.fn().mockReturnValue([true, true, false, false]), // Top-left corner
-    });
+    };
+    mockMap.getTileByPos.mockReturnValue(tile);
+    bullet.tile = tile as any;
 
     bullet.angle = 0;
     bullet.x = 100;
@@ -188,10 +193,12 @@ describe("Bullet Class", () => {
     otherBullet.age = 10;
     otherBullet.lethal = true;
 
-    mockMap.getTileByPos.mockReturnValue({
+    const tile = {
       objs: [bullet, otherBullet],
       getWalls: vi.fn().mockReturnValue([false, false, false, false]),
-    });
+    };
+    mockMap.getTileByPos.mockReturnValue(tile);
+    bullet.tile = tile as any;
 
     Settings.BulletsCanCollide = true;
     bullet.age = 10;

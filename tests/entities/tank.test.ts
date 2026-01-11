@@ -79,6 +79,7 @@ describe("Tank Class", () => {
 
     // First call returns no collision, second call (inside move) returns collision
     mockTile.getWalls.mockReturnValueOnce([false]).mockReturnValueOnce([true]);
+    tank.tile = mockTile;
 
     const initialX = tank.x;
     tank.move(1, 10);
@@ -92,6 +93,7 @@ describe("Tank Class", () => {
 
     const initialAngle = tank.angle;
     mockTile.getWalls.mockReturnValueOnce([true]); // Immediate collision on turn
+    tank.tile = mockTile;
 
     tank.turn(1, 10);
     expect(tank.angle).toBe(initialAngle);

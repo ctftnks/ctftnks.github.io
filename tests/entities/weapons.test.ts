@@ -256,9 +256,12 @@ describe("Weapon System", () => {
 
       // 1. Initial Step - triggering pathfinding
       bullet.age = 2000;
+      (bullet as any).tile = {
+        pathTo: pathToMock,
+      };
+
       (bullet as any).step(10);
 
-      expect(mockGame.map.getTileByPos).toHaveBeenCalled();
       expect(pathToMock).toHaveBeenCalled();
 
       // Verify callback logic (manually call the callback passed to pathTo if possible,
@@ -308,6 +311,7 @@ describe("Weapon System", () => {
         addWall: vi.fn(),
       };
       mockGame.map.getTileByPos.mockReturnValue(mockTile);
+      (bullet as any).tile = mockTile;
 
       (bullet as any).checkCollision(0, 0);
 
@@ -323,6 +327,7 @@ describe("Weapon System", () => {
         addWall: vi.fn(),
       };
       mockGame.map.getTileByPos.mockReturnValue(mockTile);
+      (bullet as any).tile = mockTile;
 
       bullet.angle = 0; // Moving up
       bullet.y = 10;

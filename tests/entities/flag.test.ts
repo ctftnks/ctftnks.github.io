@@ -92,6 +92,7 @@ describe("Flag Class", () => {
     enemyTank.y = 100;
     mockTile.objs.push(enemyTank);
 
+    flag.tile = mockTile;
     flag.step(0);
 
     expect(flag.picked).toBe(true);
@@ -113,6 +114,7 @@ describe("Flag Class", () => {
     friendlyTank.y = 200;
     mockTile.objs.push(friendlyTank);
 
+    flag.tile = mockTile;
     flag.step(0);
 
     expect(flag.inBase).toBe(true);
@@ -130,6 +132,7 @@ describe("Flag Class", () => {
     flag.resetTimer = 100;
     mockGame.t = 200;
 
+    flag.tile = mockTile;
     flag.step(0);
 
     expect(flag.inBase).toBe(true);

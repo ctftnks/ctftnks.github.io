@@ -3,7 +3,6 @@ import { playSound } from "@/game/effects";
 import { SOUNDS } from "@/game/assets";
 import type Game from "@/game/game";
 import Tank from "./tank";
-import type Tile from "@/game/tile";
 import type Team from "@/game/team";
 import type Flag from "./flag";
 
@@ -18,8 +17,6 @@ export default class Base extends GameObject {
   flag?: Flag;
   /** Base size. */
   size: number = 80;
-  /** The tile the base is on. */
-  tile: Tile | null;
 
   /**
    * Creates a new Base.
@@ -36,7 +33,6 @@ export default class Base extends GameObject {
   ) {
     super(game);
     this.setPosition({ x, y });
-    this.tile = this.game.map?.getTileByPos(this.x, this.y) ?? null;
     this.color = "#555";
     if (team) {
       this.color = team.color;
@@ -65,7 +61,7 @@ export default class Base extends GameObject {
    * @param _dt
    */
   step(_dt: number): void {
-    if (this.tile === null) {
+    if (!this.tile) {
       return;
     }
     for (const obj of this.tile.objs) {
@@ -117,7 +113,7 @@ export class Hill extends Base {
    * @param _dt
    */
   step(_dt: number): void {
-    if (this.tile === null) {
+    if (!this.tile) {
       return;
     }
     for (const obj of this.tile.objs) {

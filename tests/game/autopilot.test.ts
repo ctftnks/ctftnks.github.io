@@ -91,6 +91,7 @@ describe("Autopilot Class", () => {
       carriedFlag: null,
       timers: { spawnshield: 0, invincible: 0 },
       spawnshield: vi.fn().mockReturnValue(false),
+      tile: mockTile,
     };
 
     autopilot = new Autopilot();
@@ -128,7 +129,11 @@ describe("Autopilot Class", () => {
 
     (autopilot as any).timeSinceLastUpdate = 8000;
     (autopilot as any).updateDecision(mockTank, mockGame, 10);
-    expect(mockMap.getTileByPos).toHaveBeenCalled();
+    // Logic runs, so it should access the tile's pathfinding or similar
+    // We can check if it tried to find a path to a powerup (default priority)
+    // or just that it didn't return early.
+    // The default behavior attempts to find a path.
+    expect(mockTile.xypathToObj).toHaveBeenCalled();
   });
 
   describe("Decision Logic", () => {
@@ -392,6 +397,7 @@ describe("Autopilot Class", () => {
       mockTank.weapon.bot.fleeIfActive = true;
       mockTank.weapon.isActive = true;
       mockMap.getTileByPos.mockReturnValue(tile1);
+      mockTank.tile = tile1;
 
       const path = (autopilot as any).findFleePath(mockTank, mockGame);
       expect(path).toBeDefined();

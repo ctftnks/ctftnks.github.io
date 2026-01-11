@@ -81,6 +81,7 @@ describe("Base Class", () => {
     friendlyTank.carriedFlag = enemyFlag;
 
     mockTile.objs.push(friendlyTank);
+    base.tile = mockTile;
     base.step(0);
 
     expect(mockGame.mode.giveScore).toHaveBeenCalledWith(player, 1);

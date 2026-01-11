@@ -43,14 +43,13 @@ export class WreckingBall extends Weapon {
      * @param y - Old y position.
      */
     bullet.checkCollision = function (x: number, y: number): void {
-      const tile = bullet.game.map.getTileByPos(x, y);
-      if (tile === null) {
+      if (!this.tile) {
         return;
       }
-      const walls = tile.getWalls(this.x, this.y);
+      const walls = this.tile.getWalls(this.x, this.y);
       const wall = walls.indexOf(true);
       if (wall !== -1) {
-        if (typeof tile.neighbors[wall] === "undefined" || tile.neighbors[wall] === null) {
+        if (typeof this.tile.neighbors[wall] === "undefined" || this.tile.neighbors[wall] === null) {
           // is the wall an outer wall?
           playSound(this.bounceSound);
           // outer wall: bounce
@@ -69,7 +68,7 @@ export class WreckingBall extends Weapon {
           playSound(SOUNDS.grenade);
           generateCloud(this.game, bullet.x, bullet.y, 3);
           bullet.delete();
-          tile.addWall(wall, true);
+          this.tile.addWall(wall, true);
         }
       }
     };

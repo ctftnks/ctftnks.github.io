@@ -1,6 +1,7 @@
 import type Game from "@/game/game";
 import Coord from "./coord";
 import Updatable from "./updatable";
+import type Tile from "@/game/tile";
 
 /**
  * Parent class for all objects in the game.
@@ -10,6 +11,7 @@ export default abstract class GameObject extends Updatable implements Coord {
   x: number = 0;
   y: number = 0;
   width: number = 0;
+  tile?: Tile;
 
   /**
    * Creates a new GameObject.

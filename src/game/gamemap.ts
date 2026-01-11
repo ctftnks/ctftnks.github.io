@@ -49,19 +49,6 @@ export default class GameMap {
   }
 
   /**
-   * Gets a tile by its grid index.
-   * @param i - X index.
-   * @param j - Y index.
-   * @returns The tile or null if out of bounds.
-   */
-  getTileByIndex(i: number, j: number): Tile | null {
-    if (i >= 0 && i < this.Nx && j >= 0 && j < this.Ny) {
-      return this.tiles[i * this.Ny + j];
-    }
-    return null;
-  }
-
-  /**
    * Links neighboring tiles.
    */
   private linkNeighbors(): void {
@@ -78,15 +65,31 @@ export default class GameMap {
   }
 
   /**
+   * Gets a tile by its grid index.
+   * @param i - X index.
+   * @param j - Y index.
+   * @returns The tile or null if out of bounds.
+   */
+  getTileByIndex(i: number, j: number): Tile | null {
+    if (i >= 0 && i < this.Nx && j >= 0 && j < this.Ny) {
+      return this.tiles[i * this.Ny + j];
+    }
+    return null;
+  }
+
+  /**
    * Gets a tile by its world position.
    * @param x - X coordinate.
    * @param y - Y coordinate.
    * @returns The tile or null.
    */
   getTileByPos(x: number, y: number): Tile | null {
-    const i = Math.floor(x / this.dx);
-    const j = Math.floor(y / this.dy);
-    return this.getTileByIndex(i, j);
+    const i = (x / this.dx) | 0;
+    const j = (y / this.dy) | 0;
+    if (i >= 0 && i < this.Nx && j >= 0 && j < this.Ny) {
+      return this.tiles[i * this.Ny + j];
+    }
+    return null;
   }
 
   /**
@@ -106,7 +109,9 @@ export default class GameMap {
     const tile = this.getTileByPos(obj.x, obj.y);
     if (!tile) {
       obj.delete();
+      obj.tile = undefined;
     } else {
+      obj.tile = tile;
       tile.objs.push(obj);
     }
   }

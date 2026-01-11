@@ -91,7 +91,7 @@ export default class Autopilot {
     }
     this.timeSinceLastUpdate = 0;
 
-    const tile = game.map.getTileByPos(tank.x, tank.y);
+    const tile = tank.tile;
     if (!tile) {
       return;
     }
@@ -124,7 +124,7 @@ export default class Autopilot {
     }
 
     // 4. Consider Fleeing
-    const fleeAction = this.evaluateFleeing(tank, game);
+    const fleeAction = this.evaluateFleeing(tank);
     if (fleeAction) {
       options.push(fleeAction);
     }
@@ -197,7 +197,7 @@ export default class Autopilot {
 
     // If weapon is ready, check if we should shoot
     if (tank.weapon.isActive) {
-      const aimResult = this.calculateAim(tank, enemy, path, game);
+      const aimResult = this.calculateAim(tank, enemy, path);
 
       if (enemy.carriedFlag) {
         aimResult.weight *= CONFIG.Weights.Enemy.CarryingFlagMultiplier;
@@ -310,8 +310,8 @@ export default class Autopilot {
    * @param tank
    * @param game
    */
-  private evaluateFleeing(tank: Tank, game: Game): AutopilotAction | null {
-    const fleePath = this.findFleePath(tank, game);
+  private evaluateFleeing(tank: Tank): AutopilotAction | null {
+    const fleePath = this.findFleePath(tank);
     if (fleePath) {
       const weight = tank.invincible() ? CONFIG.Weights.Flee.Invincible : CONFIG.Weights.Flee.Normal;
       return {
@@ -339,7 +339,7 @@ export default class Autopilot {
    * @param path
    * @param game
    */
-  private calculateAim(tank: Tank, enemy: Tank, path: Coord[] | null, game: Game): AimResult {
+  private calculateAim(tank: Tank, enemy: Tank, path: Coord[] | null): AimResult {
     const weapon = tank.weapon;
     const result: AimResult = { shouldShoot: false, target: enemy, weight: CONFIG.Weights.Enemy.Shoot };
 
@@ -359,11 +359,10 @@ export default class Autopilot {
       // These weapons need wall proximity to be effective or need smart placement
       result.shouldShoot = false;
       result.weight = 200; // Lower priority
-      const tile = game.map.getTileByPos(tank.x, tank.y);
-      if (tile) {
+      if (tank.tile) {
         // Try to fire in a cardinal direction that has no wall (or has wall for WreckingBall)
         for (let i = 0; i < 4; i++) {
-          const hasWall = tile.walls[i];
+          const hasWall = tank.tile.walls[i];
           if (hasWall !== weapon instanceof Guided) {
             result.shouldShoot = true;
             const angle = (-Math.PI / 2) * i;
@@ -430,7 +429,7 @@ export default class Autopilot {
    * @param tank
    * @param game
    */
-  private findFleePath(tank: Tank, game: Game): Coord[] | null {
+  private findFleePath(tank: Tank): Coord[] | null {
     if (!this.fleeingState.from || !this.fleeingState.condition || !this.fleeingState.condition()) {
       return null;
     }
@@ -439,7 +438,7 @@ export default class Autopilot {
       return null;
     }
 
-    const tile = game.map?.getTileByPos(tank.x, tank.y);
+    const tile = tank.tile;
     if (!tile) {
       return null;
     }
@@ -476,7 +475,7 @@ export default class Autopilot {
     if (weapon.bot.fleeingDuration <= 0 || !game.map) {
       return;
     }
-    const tile = game.map.getTileByPos(tank.x, tank.y);
+    const tile = tank.tile;
     if (!tile) {
       return;
     }
