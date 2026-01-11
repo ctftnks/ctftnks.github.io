@@ -185,7 +185,7 @@ describe("Weapon System", () => {
   describe("Machine Gun (MG)", () => {
     it("should fire burst of bullets when shooting", () => {
       const mg = new MG(mockTank);
-      mg.shoot(); // First shoot starts timeout and fires first bullet
+      mg.shoot(10); // First shoot starts timeout and fires first bullet
       expect(mg.nshots).toBe(19);
       expect(mockGame.addObject).toHaveBeenCalled();
     });

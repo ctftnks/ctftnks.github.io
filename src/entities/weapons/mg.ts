@@ -3,7 +3,6 @@ import type Tank from "../tank";
 import type Bullet from "../bullet";
 import { IMAGES, SOUNDS } from "@/game/assets";
 import { playSound } from "@/game/effects";
-import { Settings } from "@/stores/settings";
 
 /**
  * A rapid-firing machine gun.
@@ -47,7 +46,7 @@ export class MG extends Weapon {
    * @param dt - The time elapsed since the last frame in milliseconds.
    * @override
    */
-  override shoot(dt: number = Settings.GameFrequency): void {
+  override shoot(dt: number): void {
     if (!this.isActive) {
       return;
     }
