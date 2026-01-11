@@ -104,23 +104,71 @@ export default class Tile implements Coord {
    * @returns List of walls encountered.
    */
   getWalls(x: number, y: number): boolean[] {
-    const distx = this.x - x;
-    const disty = this.y - y;
-    const walls = [false, false, false, false];
-    // walls to walls
-    if (disty > 0 && this.walls[0]) {
-      walls[0] = true;
+    const { x: tx, y: ty, dx, dy, walls, neighbors } = this;
+    const distx = tx - x;
+    const disty = ty - y;
+    const collisionFlags = [false, false, false, false];
+
+    // Determine relative position
+    const isLeft = distx > 0;
+    const isRight = distx < -dx;
+    const isTop = disty > 0;
+    const isBottom = disty < -dy;
+
+    // Check direct walls
+    if (isTop && walls[0]) {
+      collisionFlags[0] = true;
     }
-    if (distx > 0 && this.walls[1]) {
-      walls[1] = true;
+    if (isLeft && walls[1]) {
+      collisionFlags[1] = true;
     }
-    if (disty < -this.dy && this.walls[2]) {
-      walls[2] = true;
+    if (isBottom && walls[2]) {
+      collisionFlags[2] = true;
     }
-    if (distx < -this.dx && this.walls[3]) {
-      walls[3] = true;
+    if (isRight && walls[3]) {
+      collisionFlags[3] = true;
     }
-    return walls;
+
+    // Check corner cases (diagonal neighbors)
+    if (isTop) {
+      if (isLeft) {
+        // Top-Left Corner
+        if (neighbors[1]?.walls[0]) {
+          collisionFlags[0] = true;
+        }
+        if (neighbors[0]?.walls[1]) {
+          collisionFlags[1] = true;
+        }
+      } else if (isRight) {
+        // Top-Right Corner
+        if (neighbors[3]?.walls[0]) {
+          collisionFlags[0] = true;
+        }
+        if (neighbors[0]?.walls[3]) {
+          collisionFlags[3] = true;
+        }
+      }
+    } else if (isBottom) {
+      if (isLeft) {
+        // Bottom-Left Corner
+        if (neighbors[1]?.walls[2]) {
+          collisionFlags[2] = true;
+        }
+        if (neighbors[2]?.walls[1]) {
+          collisionFlags[1] = true;
+        }
+      } else if (isRight) {
+        // Bottom-Right Corner
+        if (neighbors[3]?.walls[2]) {
+          collisionFlags[2] = true;
+        }
+        if (neighbors[2]?.walls[3]) {
+          collisionFlags[3] = true;
+        }
+      }
+    }
+
+    return collisionFlags;
   }
 
   /**
