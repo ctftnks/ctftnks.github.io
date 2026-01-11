@@ -12,6 +12,7 @@ import { openPage } from "@/stores/ui";
 import Tank from "@/entities/tank";
 import GameTimeout from "./timeout";
 import Updatable from "@/entities/updatable";
+import { PerformanceMonitor } from "./performanceMonitor";
 
 /**
  * Manages the game state, loop, and objects.
@@ -45,6 +46,8 @@ export default class Game {
   nkills: number = 0;
   /** The current game mode. */
   mode: Gamemode;
+  /** Performance Monitor instance */
+  monitor: PerformanceMonitor = PerformanceMonitor.getInstance();
 
   /** Accumulator for powerup spawning. */
   powerUpSpawnAccumulator: number = 0;
@@ -125,10 +128,13 @@ export default class Game {
       return;
     }
 
+    this.monitor.startFrame();
+
     const deltaTime = timestamp - this.lastTime;
     this.lastTime = timestamp;
 
     if (!this.paused) {
+      this.monitor.startMeasure("logic");
       this.accumulator += deltaTime;
       // Cap accumulator to avoid spiral of death (max 200ms)
       this.accumulator = Math.min(this.accumulator, 200);
@@ -137,9 +143,12 @@ export default class Game {
         this.step(Settings.DT);
         this.accumulator -= Settings.DT;
       }
+      this.monitor.endMeasure("logic");
     }
 
+    this.monitor.startMeasure("render");
     this.canvas.draw(this);
+    this.monitor.endMeasure("render");
 
     this.loop = requestAnimationFrame((t) => this.gameLoop(t));
   }
@@ -155,29 +164,37 @@ export default class Game {
     }
 
     // remove deleted objects and redo the spatial sorting of objects within the map class
+    this.monitor.startMeasure("step_map_maintenance");
     this.map.clearObjectLists();
     this.compactList(this.objs, (obj) => this.map.addObject(obj));
     this.compactList(this.updatables);
+    this.monitor.endMeasure("step_map_maintenance");
 
     // call step() function for every object in order for it to move/etc.
     // iterate using index to avoid issues if new objects are added during the loop
+    this.monitor.startMeasure("step_objects");
     const objCount = this.objs.length;
     for (let i = 0; i < objCount; i++) {
       const obj = this.objs[i];
       obj.age += dt;
       obj.step(dt);
     }
+    this.monitor.endMeasure("step_objects");
 
     // call step() function for every updatable in the game
+    this.monitor.startMeasure("step_updatables");
     const updatableCount = this.updatables.length;
     for (let i = 0; i < updatableCount; i++) {
       const obj = this.updatables[i];
       obj.age += dt;
       obj.step(dt);
     }
+    this.monitor.endMeasure("step_updatables");
 
     // do gamemode calculations
+    this.monitor.startMeasure("step_gamemode");
     this.mode.step(dt);
+    this.monitor.endMeasure("step_gamemode");
 
     // add random PowerUp
     this.powerUpSpawnAccumulator += dt * this.powerUpSpawnRateMultiplier;

@@ -24,6 +24,7 @@ export const DEFAULT_SETTINGS = {
   DT: 20,
   TankWidth: 34,
   TankHeight: 50,
+  PerformanceStats: false,
 };
 
 // We export a mutable singleton object for settings to be compatible with existing code structure

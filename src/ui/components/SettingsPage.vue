@@ -62,6 +62,14 @@
           </select>
         </div>
         <br />
+        <div class="option">
+          <span class="left">Performance Stats</span>
+          <select v-model="Settings.PerformanceStats" class="right" @change="save">
+            <option :value="true">on</option>
+            <option :value="false">off</option>
+          </select>
+        </div>
+        <br />
       </div>
       <div class="rightCol">
         <div class="option">
