@@ -271,17 +271,7 @@ export default class Tank extends GameObject {
       for (let i = 0; i < tileCorners.length; i++) {
         const corner = tileCorners[i];
         if (corner.w && this.intersects(corner.x, corner.y)) {
-          // Find the closest tank corner to the colliding wall corner
-          let closestDist = Infinity;
-          let closestIndex = -1;
-          for (let j = 0; j < corners.length; j++) {
-            const dist = (corners[j].x - corner.x) ** 2 + (corners[j].y - corner.y) ** 2;
-            if (dist < closestDist) {
-              closestDist = dist;
-              closestIndex = j;
-            }
-          }
-          return closestIndex;
+          return i;
         }
       }
     }
