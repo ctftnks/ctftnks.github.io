@@ -51,18 +51,10 @@ describe("Trajectory Class", () => {
   });
 
   it("should detect targets", () => {
-    // We need to trick the 'instanceof Tank' check or use a class that extends it?
-    // Vitest 'instanceof' checks rely on prototype chain.
-    // Best to construct a real Tank but mocking its deps might be hard.
-    // Or we can just trust that 'instanceof' works and mock the map returning an object that IS a tank.
-    // For now, let's skip the explicit target detection test if we can't easily mock 'instanceof Tank'.
-    // Actually, we can just assign the prototype.
     const tankObj = Object.create(Tank.prototype);
     mockTile.objs = [tankObj];
-
-    traj.step(0);
-
-    expect(traj.targets).toContain(tankObj);
+    traj.step(10);
+    expect(traj.possibleTargets).toContain(tankObj);
   });
 
   it("should delete itself after timeout", () => {

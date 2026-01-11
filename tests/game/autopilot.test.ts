@@ -274,10 +274,11 @@ describe("Autopilot Class", () => {
     it("should handle Laser shooting", () => {
       const laser = new Laser(mockTank);
       mockTank.weapon = laser;
-      const enemy = { player: { team: TEAMS[1] }, invincible: () => false };
-      laser.trajectory.targets = [enemy as any];
-
-      const result = (autopilot as any).calculateAim(mockTank, enemy as any, [{ x: 0, y: 0 }] as any, mockGame);
+      const mockEnemyTank = Object.create(Tank.prototype);
+      mockEnemyTank.player = { team: TEAMS[1] };
+      mockEnemyTank.invincible = () => false;
+      laser.trajectory.possibleTargets = [mockEnemyTank];
+      const result = (autopilot as any).calculateAim(mockTank, mockEnemyTank, [{ x: 0, y: 0 }] as any, mockGame);
       expect(result.shouldShoot).toBe(true);
     });
 
@@ -285,7 +286,7 @@ describe("Autopilot Class", () => {
       const laser = new Laser(mockTank);
       mockTank.weapon = laser;
       const enemy = { player: { team: TEAMS[1] }, invincible: () => false };
-      laser.trajectory.targets = []; // No targets
+      laser.trajectory.possibleTargets = []; // No targets
 
       const result = (autopilot as any).calculateAim(mockTank, enemy as any, [{ x: 0, y: 0 }] as any, mockGame);
       expect(result.shouldShoot).toBe(false);

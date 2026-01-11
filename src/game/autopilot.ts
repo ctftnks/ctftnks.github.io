@@ -350,7 +350,9 @@ export default class Autopilot {
     // Special Weapon Logic
     if (weapon instanceof Laser) {
       // Shoot if laser line hits an enemy
-      result.shouldShoot = weapon.trajectory.targets.some((t) => t.player.team !== tank.player.team && !enemy.invincible());
+      result.shouldShoot = weapon.trajectory.possibleTargets
+        .filter((t) => t instanceof Tank)
+        .some((t) => t.player.team !== tank.player.team && !enemy.invincible());
     } else if (weapon instanceof Guided || weapon instanceof WreckingBall) {
       // These weapons need wall proximity to be effective or need smart placement
       result.shouldShoot = false;

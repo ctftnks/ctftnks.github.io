@@ -1,6 +1,5 @@
 import GameObject from "./gameobject";
 import type GameMap from "@/game/gamemap";
-import Tank from "./tank";
 import Coord from "./coord";
 import type Game from "@/game/game";
 
@@ -22,7 +21,7 @@ export default class Trajectory extends GameObject {
   points: TrajectoryPoint[] = [];
   map: GameMap;
   drawevery: number = 1;
-  targets: Tank[] = [];
+  possibleTargets: GameObject[] = [];
 
   /**
    * Creates a new Trajectory.
@@ -64,7 +63,7 @@ export default class Trajectory extends GameObject {
    */
   step(_dt: number): void {
     // update points list
-    this.targets = [];
+    this.possibleTargets = [];
     let point: TrajectoryPoint = { x: this.x, y: this.y, angle: this.angle };
     let length = 0;
     this.points = [point];
@@ -100,12 +99,9 @@ export default class Trajectory extends GameObject {
       }
       length += this.delta;
       this.points.push(nextpoint);
-      // see if any tanks targeted
-      for (let i = 0; i < tile.objs.length; i++) {
-        const obj = tile.objs[i];
-        if (tile && obj instanceof Tank) {
-          this.targets.push(obj);
-        }
+      // see if any objects targeted
+      for (const obj of tile.objs) {
+        this.possibleTargets.push(obj);
       }
     }
   }
