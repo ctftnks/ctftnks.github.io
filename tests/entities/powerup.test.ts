@@ -207,7 +207,7 @@ describe("PowerUp System", () => {
     const creator = PowerUps.find((p) => p.name === "Multiplier")!;
     const bonus = creator.create(mockGame);
 
-    (bonus as any).apply();
+    bonus.apply(mockTank);
 
     expect(mockGame.modifyPowerUpSpawnRate).toHaveBeenCalledWith(8000);
   });
