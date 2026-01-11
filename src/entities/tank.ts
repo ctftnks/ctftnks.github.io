@@ -135,7 +135,7 @@ export default class Tank extends GameObject {
   move(direction: number, dt: number): void {
     this.player.stats.miles += 1;
     const oldPosition = { x: this.x, y: this.y };
-    const speed = this.spawnshield() ? 0 : this.speed;
+    const speed = this.spawnshield() && this.player.isBot() ? 0 : this.speed;
 
     this.x -= (direction * speed * Math.sin(-this.angle) * dt) / 1000;
     this.y -= (direction * speed * Math.cos(-this.angle) * dt) / 1000;
@@ -250,9 +250,6 @@ export default class Tank extends GameObject {
    * @returns Index of colliding corner or -1.
    */
   private checkWallCollision(): number {
-    if (this.player.isBot()) {
-      return -1;
-    }
     const tile = this.game.map.getTileByPos(this.x, this.y);
     if (!tile) {
       return -1;
