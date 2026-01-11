@@ -1,9 +1,13 @@
 # TODO
 
+- fix many sounds playing at the same time
+- add background music
+
 ## Refactoring
 
 - resolve all circular dependencies
 - dependency analysis & improve loose coupling
+- rename Settings.GameFrequency to Settings.DT
 
 ## Bugs
 

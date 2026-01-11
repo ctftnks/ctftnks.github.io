@@ -35,7 +35,6 @@ The codebase is a TypeScript-based game engine utilizing HTML5 Canvas for render
 
 **Introduce a Canonical `dt` API:**
 
-- Update `Game.step()` and `GameObject.step()` to accept `dt` (seconds).
 - Replace raw frequency increments with delta-time based updates.
 
 ### Phase 2: Decoupling & Maintainability (Medium Priority)
