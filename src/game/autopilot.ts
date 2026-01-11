@@ -240,7 +240,9 @@ export default class Autopilot {
     const path = tile.xypathToObj((obj) => {
       // 1. If carrying flag, go to own base (which has our flag)
       if (carriesFlag) {
-        return obj instanceof Base && obj.hasFlag() && obj.team === bot.team;
+        if (obj instanceof Base && obj.hasFlag() && obj.team === bot.team) {
+          return true;
+        }
       }
 
       // 2. If flag not in base, find it (dropped or carried by enemy or friendly)
