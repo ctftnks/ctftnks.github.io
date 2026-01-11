@@ -11,6 +11,9 @@
       <div v-if="Object.keys(stats.custom).length > 0" class="custom-stats">
         <div v-for="(val, key) in stats.custom" :key="key">{{ formatKey(key) }}: {{ val.toFixed(2) }}ms</div>
       </div>
+      <div v-if="Object.keys(stats.extraInfo).length > 0" class="custom-stats">
+        <div v-for="(val, key) in stats.extraInfo" :key="key">{{ formatKey(key) }}: {{ val }}</div>
+      </div>
     </div>
   </div>
 </template>

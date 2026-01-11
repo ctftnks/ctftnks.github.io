@@ -169,6 +169,7 @@ export default class Game {
     this.compactList(this.objs, (obj) => this.map.addObject(obj));
     this.compactList(this.updatables);
     this.monitor.endMeasure("step_map_maintenance");
+    this.monitor.extraInfo["#objects"] = this.objs.length;
 
     // call step() function for every object in order for it to move/etc.
     // iterate using index to avoid issues if new objects are added during the loop

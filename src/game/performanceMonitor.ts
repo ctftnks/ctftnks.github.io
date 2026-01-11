@@ -3,6 +3,7 @@ export interface PerformanceStats {
   logicTime: number;
   renderTime: number;
   custom: Record<string, number>;
+  extraInfo: Record<string, number>;
 }
 
 export class PerformanceMonitor {
@@ -19,6 +20,8 @@ export class PerformanceMonitor {
   private avgLogic: number = 0;
   private avgRender: number = 0;
   private avgCustom: Record<string, number> = {};
+
+  public extraInfo: Record<string, number> = {};
 
   private lastUpdate: number = 0;
   private readonly refreshRate: number = 500; // Update stats every 500ms
@@ -95,6 +98,7 @@ export class PerformanceMonitor {
       logicTime: this.avgLogic,
       renderTime: this.avgRender,
       custom: this.avgCustom,
+      extraInfo: this.extraInfo,
     };
   }
 
