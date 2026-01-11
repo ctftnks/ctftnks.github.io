@@ -108,7 +108,7 @@ describe("Tank Class", () => {
     const tank = new Tank(mockPlayer, mockGame);
     const shootSpy = vi.spyOn(tank.weapon, "shoot");
 
-    tank.shoot();
+    tank.shoot(10);
     expect(shootSpy).not.toHaveBeenCalled();
   });
 
@@ -120,7 +120,7 @@ describe("Tank Class", () => {
     });
     tank.weapon.isActive = true;
 
-    tank.shoot();
+    tank.shoot(10);
     expect(shootSpy).toHaveBeenCalled();
     expect(mockPlayer.stats.shots).toBe(1);
   });

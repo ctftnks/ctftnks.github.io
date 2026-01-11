@@ -181,7 +181,7 @@ export default class Tank extends GameObject {
    * Use the weapon.
    * @param dt - The time elapsed since the last frame in milliseconds.
    */
-  shoot(dt?: number): void {
+  shoot(dt: number): void {
     if (this.spawnshield()) {
       return;
     }

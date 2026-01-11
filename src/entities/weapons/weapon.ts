@@ -60,7 +60,7 @@ export default class Weapon {
     bullet.x = (corners[0].x + corners[1].x) / 2;
     bullet.y = (corners[0].y + corners[1].y) / 2;
     bullet.lethal = false;
-    window.setTimeout(() => (bullet.lethal = true), 100);
+    this.tank.game.addTimeout(() => (bullet.lethal = true), 100);
     bullet.angle = this.tank.angle;
     bullet.player = this.tank.player;
     bullet.color = this.tank.player.team.color;

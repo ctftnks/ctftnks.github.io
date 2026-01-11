@@ -414,9 +414,9 @@ export default class Autopilot {
     const isTargetBot = target instanceof Tank && target.player?.isBot();
 
     if (isTargetBot) {
-      game.addTimeout(() => tank.shoot(), 180 * Math.random());
+      game.addTimeout(() => tank.shoot(dt), 180 * Math.random());
     } else {
-      tank.shoot();
+      tank.shoot(dt);
     }
 
     // Trigger fleeing behavior after shooting
