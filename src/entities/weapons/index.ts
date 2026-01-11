@@ -1,4 +1,3 @@
-export * from "./weapon";
 export * from "./gun";
 export * from "./mg";
 export * from "./laser";

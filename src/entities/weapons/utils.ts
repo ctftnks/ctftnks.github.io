@@ -1,5 +1,5 @@
 import Bullet from "../bullet";
-import type { Weapon } from "./weapon";
+import type Weapon from "./weapon";
 import { Settings } from "@/stores/settings";
 
 /**

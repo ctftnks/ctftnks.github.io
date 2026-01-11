@@ -7,7 +7,7 @@ import type Game from "@/game/game";
  * Base class for all PowerUps.
  * @augments GameObject
  */
-export abstract class PowerUp extends GameObject {
+export default abstract class PowerUp extends GameObject {
   /** Collision radius. */
   radius: number = 40;
   /** Whether bots are attracted to it. */

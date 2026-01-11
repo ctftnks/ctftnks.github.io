@@ -2,7 +2,6 @@ import { reactive } from "vue";
 import { playSound } from "@/game/effects";
 import { SOUNDS, IMAGES } from "@/game/assets";
 
-import { PowerUp } from "./powerup";
 import { WeaponBonus } from "./weaponBonus";
 import { MultiBonus } from "./multiBonus";
 import { InvincibleBonus } from "./invincibleBonus";
@@ -12,6 +11,7 @@ import { SpeedBonus } from "./speedBonus";
 
 import { Laser, MG, Grenade, Mine, Guided, WreckingBall, Slingshot } from "../weapons";
 import type Game from "@/game/game";
+import PowerUp from "./powerup";
 
 export * from "./powerup";
 export * from "./weaponBonus";

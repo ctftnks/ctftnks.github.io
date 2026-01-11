@@ -1,4 +1,4 @@
-import { PowerUp } from "./powerup";
+import PowerUp from "./powerup";
 import type Tank from "../tank";
 import { IMAGES } from "@/game/assets";
 import type Game from "@/game/game";

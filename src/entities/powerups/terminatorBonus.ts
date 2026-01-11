@@ -1,4 +1,4 @@
-import { PowerUp } from "./powerup";
+import PowerUp from "./powerup";
 import type Tank from "../tank";
 import { IMAGES, SOUNDS } from "@/game/assets";
 import { playSound } from "@/game/effects";

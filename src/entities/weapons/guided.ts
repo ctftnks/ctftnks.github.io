@@ -1,4 +1,4 @@
-import { Weapon } from "./weapon";
+import Weapon from "./weapon";
 import Tank from "../tank";
 import Bullet from "../bullet";
 import { Smoke } from "../smoke";

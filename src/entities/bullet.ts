@@ -4,7 +4,7 @@ import { playSound } from "@/game/effects";
 import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import type Player from "@/game/player";
-import { Weapon } from "./weapons";
+import type Weapon from "./weapons/weapon";
 
 /**
  * Represents a bullet fired by a tank.

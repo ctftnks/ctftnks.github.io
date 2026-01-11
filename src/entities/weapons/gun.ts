@@ -1,4 +1,4 @@
-import { Weapon } from "./weapon";
+import Weapon from "./weapon";
 import type Tank from "../tank";
 import type Bullet from "../bullet";
 import { IMAGES } from "@/game/assets";
