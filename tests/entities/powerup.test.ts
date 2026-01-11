@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { getRandomPowerUp, PowerUps } from "@/entities/powerups";
 import { store } from "@/stores/gamestore";
-import { FogEffect } from "@/game/effects";
+import { FogEffect } from "@/entities/powerups/fogBonus";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -9,13 +9,6 @@ vi.mock("@/game/effects", () => ({
   playMusic: vi.fn(),
   stopMusic: vi.fn(),
   hexToRgbA: vi.fn().mockReturnValue("rgba(0,0,0,0.4)"),
-  FogEffect: class MockFogEffect {
-    delete = vi.fn();
-    game: any;
-    constructor(game: any) {
-      this.game = game;
-    }
-  },
 }));
 
 vi.mock("@/entities/trajectory", () => {
@@ -78,6 +71,11 @@ describe("PowerUp System", () => {
         effectsCanvas: {
           getContext: vi.fn().mockReturnValue({}),
         },
+        canvas: {
+          clientHeight: 600,
+          clientWidth: 800,
+        },
+        scale: 1,
       },
     };
     store.game = mockGame;
@@ -229,8 +227,8 @@ describe("PowerUp System", () => {
     // Apply again - should replace existing
     const firstEffect = mockGame.updatables[0];
     const deleteSpy = vi.spyOn(firstEffect, "delete");
-    bonus.apply(mockTank); // Use same bonus instance? Logic says if (!this.used).
-    // Wait, FogBonus has `this.used`. So second apply on same bonus instance should do nothing.
+    bonus.apply(mockTank);
+
     // We need a new bonus instance.
     const bonus2 = creator.create(mockGame);
     bonus2.apply(mockTank);
