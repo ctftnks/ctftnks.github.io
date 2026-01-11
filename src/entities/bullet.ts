@@ -99,7 +99,9 @@ export default class Bullet extends GameObject {
       return;
     }
 
-    playSound(this.bounceSound);
+    if (this.bounceSound) {
+      playSound(this.bounceSound);
+    }
 
     if (nwalls === 2) {
       this.angle += Math.PI;

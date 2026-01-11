@@ -29,6 +29,7 @@ export function createShrapnelExplosion(weapon: Weapon, x: number, y: number, co
     shrapnel.angle = 2 * Math.PI * Math.random();
     shrapnel.maxAge = options.timeout + Math.random() * 80;
     shrapnel.extrahitbox = -3;
+    shrapnel.bounceSound = "";
 
     if (options.noCollision) {
       shrapnel.checkCollision = function (): void {};
