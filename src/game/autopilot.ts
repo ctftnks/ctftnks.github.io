@@ -14,7 +14,7 @@ import type Game from "./game";
  */
 const CONFIG = {
   // Time in ms between decision updates (approximate, dependent on speed)
-  UpdateIntervalBase: 72000,
+  UpdateIntervalBase: 60000,
 
   // Weights for different behaviors (Higher = higher priority)
   Weights: {
@@ -536,7 +536,7 @@ export default class Autopilot {
     }
 
     // Turn towards target
-    if (diff < 0.1) {
+    if (diff < 0.2) {
       tank.angle = targetAngle;
     } else if (tank.angle < targetAngle) {
       // Determine shortest turn direction
