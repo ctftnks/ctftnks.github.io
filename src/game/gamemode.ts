@@ -6,7 +6,6 @@ import { SOUNDS } from "@/game/assets";
 import type Game from "./game";
 import type Team from "./team";
 import { Settings } from "@/stores/settings";
-import { store } from "@/stores/gamestore";
 import type Coord from "@/entities/coord";
 
 /**
@@ -50,16 +49,17 @@ export abstract class Gamemode {
 
   /**
    * Adapts bot speed based on team balance.
+   * @param players - The list of players including the bots of whom to adapt the speed
    * @param team - The team to adjust for (usually the leading team gets harder bots?).
    * @param val - The adaptation intensity.
    */
-  protected adaptBotSpeed(team: Team | null, val: number = 0.1): void {
+  protected adaptBotSpeed(players: Player[], team: Team | null, val: number = 0.1): void {
     if (!Settings.AdaptiveBotSpeed || !team) {
       return;
     }
 
     const teamData = new Map<Team, { botCount: number }>();
-    for (const player of store.players) {
+    for (const player of players) {
       const data = teamData.get(player.team) ?? { botCount: 0 };
       if (player.isBot()) {
         data.botCount++;
@@ -127,7 +127,7 @@ export class Deathmatch extends Gamemode {
   override giveScore(player: Player, val: number = 1): void {
     player.score += val;
     this.handleMultiKill(player);
-    this.adaptBotSpeed(player.team);
+    this.adaptBotSpeed(this.game.players, player.team);
   }
 
   override newKill(player1: Player, player2: Player): void {
@@ -157,7 +157,7 @@ export class TeamDeathmatch extends Gamemode {
       }
     }
     this.handleMultiKill(player);
-    this.adaptBotSpeed(player.team);
+    this.adaptBotSpeed(this.game.players, player.team);
   }
 
   override newKill(player1: Player, player2: Player): void {
@@ -190,7 +190,7 @@ export class CaptureTheFlag extends Gamemode {
         p.score += val;
       }
     }
-    this.adaptBotSpeed(player.team);
+    this.adaptBotSpeed(this.game.players, player.team);
   }
 
   override newKill(player1: Player, player2: Player): void {
@@ -249,7 +249,7 @@ export class KingOfTheHill extends Gamemode {
           this.giveScore(p, 1);
         }
       }
-      this.adaptBotSpeed(firstTeam, 0.02);
+      this.adaptBotSpeed(this.game.players, firstTeam, 0.02);
     }
   }
 
