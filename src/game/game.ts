@@ -133,10 +133,9 @@ export default class Game {
       // Cap accumulator to avoid spiral of death (max 200ms)
       this.accumulator = Math.min(this.accumulator, 200);
 
-      while (this.accumulator >= Settings.GameFrequency) {
-        const dt = Settings.GameFrequency;
-        this.step(dt);
-        this.accumulator -= Settings.GameFrequency;
+      while (this.accumulator >= Settings.DT) {
+        this.step(Settings.DT);
+        this.accumulator -= Settings.DT;
       }
     }
 

@@ -25,7 +25,7 @@ describe("Trajectory Class", () => {
 
     traj = new Trajectory(mockGame, 0, 0, 0);
 
-    Settings.GameFrequency = 10;
+    Settings.DT = 10;
   });
 
   afterEach(() => {

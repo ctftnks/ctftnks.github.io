@@ -21,7 +21,7 @@ export const DEFAULT_SETTINGS = {
   ShowTankLabels: true,
   MapNxMin: 9,
   MapNxMax: 15,
-  GameFrequency: 20,
+  DT: 20,
   TankWidth: 34,
   TankHeight: 50,
 };

@@ -5,8 +5,6 @@
 
 ## Refactoring
 
-- rename Settings.GameFrequency to Settings.DT
-
 ## Bugs
 
 ## Bots reimplementation

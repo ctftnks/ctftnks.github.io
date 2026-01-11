@@ -16,7 +16,7 @@ The codebase is a TypeScript-based game engine utilizing HTML5 Canvas for render
 
 ## 3. Code Quality & Standards
 
-- **Inconsistent Time Units:** `GameFrequency` and `FrameFrequency` are used inconsistently. The engine should normalize on seconds (floating point) for all internal calculations (`dt`).
+- **Inconsistent Time Units:** `DT` and `FrameFrequency` are used inconsistently. The engine should normalize on seconds (floating point) for all internal calculations (`dt`).
 
 ## 4. Correctness & Robustness
 

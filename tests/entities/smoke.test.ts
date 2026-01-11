@@ -9,7 +9,7 @@ describe("Smoke System", () => {
     mockGame = {
       addObject: vi.fn(),
     };
-    Settings.GameFrequency = 10;
+    Settings.DT = 10;
   });
 
   it("should initialize Smoke particle", () => {

@@ -56,7 +56,7 @@ describe("Bullet Class", () => {
     // Reset settings
     Settings.BulletSpeed = 100;
     Settings.BulletTimeout = 1;
-    Settings.GameFrequency = 10;
+    Settings.DT = 10;
     Settings.BulletsCanCollide = false;
 
     bullet = new Bullet(mockWeapon);

@@ -60,7 +60,7 @@ describe("Game Class", () => {
     // Use a fixed map size for predictability
     Settings.MapNxMin = 10;
     Settings.MapNxMax = 10;
-    Settings.GameFrequency = 10;
+    Settings.DT = 10;
     Settings.PowerUpRate = 1000; // High value to avoid random powerups in basic tests
     Settings.RoundTime = 5;
 
@@ -135,7 +135,7 @@ describe("Game Class", () => {
     const modeStepSpy = vi.spyOn(game.mode, "step");
 
     // Advance time enough to trigger frames and accumulation
-    vi.advanceTimersByTime(Settings.GameFrequency * 10);
+    vi.advanceTimersByTime(Settings.DT * 10);
 
     expect(game.t).toBeGreaterThan(0);
     expect(modeStepSpy).toHaveBeenCalled();
@@ -155,12 +155,12 @@ describe("Game Class", () => {
     expect(game.objs).toContain(mockObj);
 
     // Step
-    game.step(Settings.GameFrequency);
+    game.step(Settings.DT);
     expect(mockObj.step).toHaveBeenCalled();
 
     // Mark as deleted
     mockObj.isDeleted.mockReturnValue(true);
-    game.step(Settings.GameFrequency);
+    game.step(Settings.DT);
     expect(game.objs).not.toContain(mockObj);
   });
 
@@ -189,7 +189,7 @@ describe("Game Class", () => {
     Settings.PowerUpRate = 0.01; // Every 10ms
     game.t = 0;
 
-    game.step(Settings.GameFrequency);
+    game.step(Settings.DT);
 
     const powerups = game.objs.filter((o) => o instanceof PowerUp);
     expect(powerups.length).toBeGreaterThan(0);
@@ -202,7 +202,7 @@ describe("Game Class", () => {
 
     // Fast forward past round time
     game.t = Settings.RoundTime * 60000 + 100;
-    game.step(Settings.GameFrequency);
+    game.step(Settings.DT);
 
     expect(endSpy).toHaveBeenCalled();
   });
