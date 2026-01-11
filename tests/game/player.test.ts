@@ -14,7 +14,6 @@ describe("Player Class", () => {
   const mockGame = {
     map: mockMap,
     addObject: vi.fn(),
-    nPlayersAlive: 0,
     timeouts: [] as any[],
     t: 0,
     canvas: { shake: vi.fn() },
@@ -28,9 +27,7 @@ describe("Player Class", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    store.nplayers = 0;
     store.game = mockGame as any;
-    mockGame.nPlayersAlive = 0;
     mockGame.timeouts = [];
     mockGame.nkills = 0;
   });
@@ -142,7 +139,6 @@ describe("Player Class", () => {
       expect(tank.x).toBe(200);
       expect(tank.y).toBe(300);
       expect(mockGame.addObject).toHaveBeenCalledWith(tank);
-      expect(mockGame.nPlayersAlive).toBe(1);
       expect(tank.spawnshield()).toBe(true);
     });
 
@@ -175,12 +171,10 @@ describe("Player Class", () => {
       vi.useFakeTimers();
       const player = new Player(0, "P", TEAMS[0], []);
       player.game = mockGame as any;
-      mockGame.nPlayersAlive = 1;
       player.spree = 5;
 
       player.kill();
 
-      expect(mockGame.nPlayersAlive).toBe(0);
       expect(mockGame.nkills).toBe(1);
       expect(mockGame.canvas.shake).toHaveBeenCalled();
       expect(player.spree).toBe(0);
@@ -189,7 +183,6 @@ describe("Player Class", () => {
 
       vi.runAllTimers();
       // Should trigger spawn()
-      expect(mockGame.nPlayersAlive).toBe(1);
 
       vi.useRealTimers();
     });

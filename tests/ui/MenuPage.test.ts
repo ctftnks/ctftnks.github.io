@@ -58,7 +58,6 @@ describe("MenuPage.vue", () => {
     await addPlayerBtn.trigger("click");
 
     expect(store.createPlayer).toHaveBeenCalledWith(false);
-    expect(store.players).toContain(mockPlayer);
   });
 
   it("adds a bot when Add Bot button is clicked", async () => {
@@ -71,7 +70,6 @@ describe("MenuPage.vue", () => {
     await addBotBtn.trigger("click");
 
     expect(store.createPlayer).toHaveBeenCalledWith(true);
-    expect(store.players).toContain(mockBot);
   });
 
   it("navigates to settings page", async () => {

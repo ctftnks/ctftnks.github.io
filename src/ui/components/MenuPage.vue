@@ -100,9 +100,9 @@ function toggleMute(): void {
 
 function addPlayer(bot: boolean): void {
   if (store.players.length >= store.keymaps.length) {
-    store.keymaps.push(store.keymaps[0].slice());
+    store.keymaps[0].slice();
   }
-  store.players.push(store.createPlayer(bot));
+  store.createPlayer(bot);
 }
 
 function removePlayer(id: number): void {

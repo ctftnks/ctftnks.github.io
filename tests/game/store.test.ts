@@ -66,7 +66,6 @@ describe("Game Store", () => {
   });
 
   it("should create players with incrementing IDs", () => {
-    store.nplayers = 0;
     const p1 = store.createPlayer();
     const p2 = store.createPlayer();
     const b1 = store.createPlayer(true);
@@ -82,7 +81,6 @@ describe("Game Store", () => {
 
   it("should initialize default players", () => {
     store.players = [];
-    store.nplayers = 0;
 
     store.initDefaultPlayers();
 

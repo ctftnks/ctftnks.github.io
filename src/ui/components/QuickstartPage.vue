@@ -26,12 +26,10 @@ function close(): void {
 
 function quickPvP(nteams: number, teamsize: number): void {
   store.players = [];
-  store.nplayers = 0;
 
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
-      store.players.push(store.createPlayer(false));
-      const p = store.players[store.players.length - 1];
+      const p = store.createPlayer(false);
       if (j > 0) {
         p.team = store.players[store.players.length - 2].team;
       }
@@ -42,16 +40,10 @@ function quickPvP(nteams: number, teamsize: number): void {
 
 function quickPvB(nteams: number, teamsize: number): void {
   store.players = [];
-  store.nplayers = 0;
 
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
-      if (i < nteams / 2) {
-        store.players.push(store.createPlayer(false));
-      } else {
-        store.players.push(store.createPlayer(true));
-      }
-      const p = store.players[store.players.length - 1];
+      const p = i < nteams / 2 ? store.createPlayer(false) : store.createPlayer(true);
       if (j > 0) {
         p.team = store.players[store.players.length - 2].team;
       }
@@ -62,16 +54,10 @@ function quickPvB(nteams: number, teamsize: number): void {
 
 function quickMixed(nteams: number, teamsize: number): void {
   store.players = [];
-  store.nplayers = 0;
 
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
-      if (j < teamsize / 2) {
-        store.players.push(store.createPlayer(false));
-      } else {
-        store.players.push(store.createPlayer(true));
-      }
-      const p = store.players[store.players.length - 1];
+      const p = j < teamsize / 2 ? store.createPlayer(false) : store.createPlayer(true);
       if (j > 0) {
         p.team = store.players[store.players.length - 2].team;
       }
@@ -82,16 +68,10 @@ function quickMixed(nteams: number, teamsize: number): void {
 
 function quickUnevenMixed(nteams: number, teamsize: number): void {
   store.players = [];
-  store.nplayers = 0;
 
   for (let i = 0; i < nteams; i++) {
     for (let j = 0; j < teamsize; j++) {
-      if (j < teamsize / 2 && i === 0) {
-        store.players.push(store.createPlayer(false));
-      } else {
-        store.players.push(store.createPlayer(true));
-      }
-      const p = store.players[store.players.length - 1];
+      const p = j < teamsize / 2 && i === 0 ? store.createPlayer(false) : store.createPlayer(true);
       if (j > 0) {
         p.team = store.players[store.players.length - 2].team;
       }
@@ -100,7 +80,3 @@ function quickUnevenMixed(nteams: number, teamsize: number): void {
   close();
 }
 </script>
-
-<style scoped>
-/* No specific styles found for quickstart, likely uses global or menu styles */
-</style>

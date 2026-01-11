@@ -35,8 +35,6 @@ export default class Game {
   paused: boolean = false;
   /** Interval ID for the game loop. */
   loop?: number;
-  /** Number of players alive. */
-  nPlayersAlive: number = 0;
   /** Game time counter in ms. */
   t: number = 0;
   /** Timestamp of the last frame. */

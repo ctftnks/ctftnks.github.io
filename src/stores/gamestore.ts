@@ -16,7 +16,6 @@ class GameStore {
   game?: Game;
   canvas?: Canvas;
   players: Player[] = [];
-  nplayers: number = 0;
   editingKeymap: boolean = false;
   GameID: number = 0;
 
@@ -48,16 +47,13 @@ class GameStore {
    * @returns The newly created player.
    */
   createPlayer(isBot: boolean = false): Player {
-    const id = this.nplayers;
-    this.nplayers++;
+    const id = this.players.length;
     const name = (isBot ? "Bot " : "Player ") + (id + 1);
     const team = TEAMS[id % TEAMS.length];
     const keys = this.keymaps[id] || this.keymaps[0].slice();
-
-    if (isBot) {
-      return new Bot(id, name, team);
-    }
-    return new Player(id, name, team, keys);
+    const player = isBot ? new Bot(id, name, team) : new Player(id, name, team, keys);
+    this.players.push(player);
+    return player;
   }
 
   /**
@@ -67,9 +63,12 @@ class GameStore {
     if (this.players.length > 0) {
       return;
     }
-    this.players = [this.createPlayer(false), this.createPlayer(true), this.createPlayer(true), this.createPlayer(true)];
-    this.players[1].team = this.players[0].team;
-    this.players[3].team = this.players[2].team;
+    const p0 = this.createPlayer(false);
+    const p1 = this.createPlayer(true);
+    const p2 = this.createPlayer(true);
+    const p3 = this.createPlayer(true);
+    p1.team = p0.team;
+    p3.team = p2.team;
   }
 
   /**

@@ -71,7 +71,6 @@ export default class Player {
     }
     tank.setPosition(spos);
     game.addObject(tank);
-    game.nPlayersAlive += 1;
     game.addTimeout(() => {
       generateCloud(game, tank.x, tank.y, 4, 20, 2);
     }, 10);
@@ -85,7 +84,6 @@ export default class Player {
       return;
     }
     const game = this.game;
-    this.game.nPlayersAlive -= 1;
     this.game.nkills++;
     this.game.canvas.shake();
     this.spree = 0;

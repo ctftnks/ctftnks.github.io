@@ -20,7 +20,6 @@ describe("Bot Class", () => {
   beforeEach(() => {
     // Reset store
     store.GameID = 0;
-    store.nplayers = 0;
     store.keymaps = [[]];
 
     mockGame = {
