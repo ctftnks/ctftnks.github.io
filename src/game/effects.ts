@@ -1,4 +1,3 @@
-import { store } from "@/stores/gamestore";
 import { Settings } from "@/stores/settings";
 
 /**
@@ -47,24 +46,6 @@ export function stopMusic(): void {
 
   musicAudio = null;
   playingMusic = null;
-}
-
-/**
- * Clears all visual effects from the overlay canvas.
- */
-export function clearEffects(): void {
-  if (!store.game || !store.game.canvas) {
-    return;
-  }
-  const canv = store.game.canvas.effectsCanvas;
-  canv.height = store.game.canvas.canvas.clientHeight;
-  canv.width = store.game.canvas.canvas.clientWidth;
-
-  const ctx = canv.getContext("2d");
-  if (!ctx) {
-    return;
-  }
-  ctx.clearRect(0, 0, 2 * canv.width, 2 * canv.height);
 }
 
 /**

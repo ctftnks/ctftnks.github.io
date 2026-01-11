@@ -84,4 +84,17 @@ describe("Canvas Class", () => {
     expect(mockCanvas.classList.remove).toHaveBeenCalledWith("shake");
     expect(mockCanvas.classList.add).toHaveBeenCalledWith("shake");
   });
+
+  it("should clear effects", () => {
+    const canvasMgr = new Canvas(mockCanvas, mockEffectsCanvas);
+    const mockCtx = {
+      clearRect: vi.fn(),
+    };
+    mockEffectsCanvas.getContext = vi.fn().mockReturnValue(mockCtx);
+
+    canvasMgr.clearEffects();
+
+    expect(mockEffectsCanvas.getContext).toHaveBeenCalledWith("2d");
+    expect(mockCtx.clearRect).toHaveBeenCalledWith(0, 0, mockEffectsCanvas.width, mockEffectsCanvas.height);
+  });
 });

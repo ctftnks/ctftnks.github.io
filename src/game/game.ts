@@ -1,7 +1,7 @@
 import GameMap from "./gamemap";
 import MapGenerator from "./mapGenerator";
 import { getRandomPowerUp } from "@/entities/powerups";
-import { playSound, stopMusic, clearEffects } from "./effects";
+import { playSound, stopMusic } from "./effects";
 import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import Canvas from "./canvas";
@@ -244,7 +244,7 @@ export default class Game {
       cancelAnimationFrame(this.loop);
       this.loop = undefined;
     }
-    clearEffects();
+    this.canvas.clearEffects();
     stopMusic();
     this.players.forEach((player) => (player.base = undefined));
   }

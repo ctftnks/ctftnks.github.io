@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { playSound, playMusic, stopMusic, hexToRgbA, clearEffects } from "@/game/effects";
+import { playSound, playMusic, stopMusic, hexToRgbA } from "@/game/effects";
 import { Settings } from "@/stores/settings";
-import { store } from "@/stores/gamestore";
 
 describe("Effects Module", () => {
   let playSpy: any;
@@ -59,49 +58,6 @@ describe("Effects Module", () => {
 
     it("should throw error for invalid hex", () => {
       expect(() => hexToRgbA("invalid", 1)).toThrow("bad hex");
-    });
-  });
-
-  describe("Visual Effects", () => {
-    it("should clear effects", () => {
-      const mockCtx = {
-        clearRect: vi.fn(),
-      };
-
-      const mockGame = {
-        canvas: {
-          effectsCanvas: {
-            getContext: vi.fn().mockReturnValue(mockCtx),
-            width: 0,
-            height: 0,
-          },
-          canvas: {
-            clientWidth: 800,
-            clientHeight: 600,
-          },
-        },
-      };
-
-      store.game = mockGame as any;
-      clearEffects();
-      expect(mockCtx.clearRect).toHaveBeenCalled();
-    });
-
-    it("should safely handle clearEffects when game or canvas is missing", () => {
-      store.game = { canvas: null } as any;
-      clearEffects(); // Should not throw
-
-      store.game = {
-        canvas: {
-          effectsCanvas: {
-            getContext: () => null,
-            width: 0,
-            height: 0,
-          },
-          canvas: { clientWidth: 0, clientHeight: 0 },
-        },
-      } as any;
-      clearEffects(); // Should not throw
     });
   });
 });

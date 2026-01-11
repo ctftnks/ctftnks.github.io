@@ -13,7 +13,6 @@ import { PowerUp } from "@/entities/powerups";
 vi.mock("@/game/effects", () => ({
   playSound: vi.fn(),
   stopMusic: vi.fn(),
-  clearEffects: vi.fn(),
 }));
 
 vi.mock("@/ui/ui", () => ({
@@ -53,6 +52,7 @@ describe("Game Class", () => {
       draw: vi.fn(),
       shake: vi.fn(),
       resize: vi.fn(),
+      clearEffects: vi.fn(),
     } as unknown as Canvas;
 
     store.canvas = mockCanvas;

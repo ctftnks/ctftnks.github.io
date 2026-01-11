@@ -72,4 +72,12 @@ export default class Canvas {
     void this.canvas.offsetWidth;
     this.canvas.classList.add("shake");
   }
+
+  /**
+   * Clears all visual effects from the overlay canvas.
+   */
+  clearEffects(): void {
+    const c = this.effectsCanvas;
+    c?.getContext("2d")?.clearRect(0, 0, c.width, c.height);
+  }
 }
