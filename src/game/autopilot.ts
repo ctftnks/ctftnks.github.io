@@ -4,7 +4,7 @@ import PowerUp from "@/entities/powerups/powerup";
 import Tank from "@/entities/tank";
 import Base, { Hill } from "@/entities/base";
 import Flag from "@/entities/flag";
-import { type Coord } from "@/utils/geometry";
+import { type Coord } from "@/physics/geometry";
 import { Laser, Guided, WreckingBall, Slingshot } from "@/entities/weapons";
 import { CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import type Game from "./game";

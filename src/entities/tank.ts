@@ -10,7 +10,8 @@ import PowerUp from "./powerups/powerup";
 import Bullet from "./bullet";
 import Flag from "./flag";
 import type Game from "@/game/game";
-import { type Coord, getRotatedCorners, isPointInRectangle } from "@/utils/geometry";
+import { type Coord, getRotatedCorners, isPointInRectangle } from "@/physics/geometry";
+import { checkRectMapCollision } from "@/physics/grid";
 
 /**
  * Represents a Tank controlled by a player.
@@ -253,28 +254,7 @@ export default class Tank extends GameObject {
    * @returns Index of colliding corner or -1.
    */
   private checkWallCollision(): number {
-    const centerTile = this.game.map.getTileByPos(this.x, this.y);
-    if (!centerTile) {
-      return -1;
-    }
-    const tankCorners = this.corners();
-    // 1. Check if any tank corner crossed a wall
-    for (let k = 0; k < tankCorners.length; k++) {
-      const corner = tankCorners[k];
-      const walls = centerTile.getWalls(corner.x, corner.y);
-      if (walls[0] || walls[1] || walls[2] || walls[3]) {
-        return k;
-      }
-    }
-    // 2. Check if any wall corner is inside the tank
-    // Since the tank is smaller than a tile, we only need to check the 4 corners of the current tile.
-    const wallCorners = centerTile.corners();
-    for (const wc of wallCorners) {
-      if (wc.w && this.intersects(wc, tankCorners)) {
-        return 5;
-      }
-    }
-    return -1;
+    return checkRectMapCollision(this.game.map, this.corners(), { x: this.x, y: this.y });
   }
 
   /**

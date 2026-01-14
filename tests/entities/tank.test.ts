@@ -3,11 +3,18 @@ import Tank from "@/entities/tank";
 import { Settings } from "@/stores/settings";
 import { TEAMS } from "@/game/team";
 import Bullet from "@/entities/bullet";
+import { checkRectMapCollision } from "@/physics/grid";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
   playSound: vi.fn(),
   generateCloud: vi.fn(),
+}));
+
+// Mock Physics Grid
+vi.mock("@/physics/grid", () => ({
+  checkRectMapCollision: vi.fn(),
+  getWallsForTile: vi.fn(),
 }));
 
 describe("Tank Class", () => {
@@ -23,7 +30,6 @@ describe("Tank Class", () => {
       dy: 100,
       walls: [false, false, false, false],
       neighbors: [null, null, null, null],
-      getWalls: vi.fn(() => [false, false, false, false]),
       corners: vi.fn(() => [
         { x: 0, y: 0, w: false },
         { x: 0, y: 100, w: false },
@@ -59,6 +65,9 @@ describe("Tank Class", () => {
 
     Settings.TankSpeed = 200;
     Settings.FriendlyFire = false;
+
+    // Default: No collision
+    vi.mocked(checkRectMapCollision).mockReturnValue(-1);
   });
 
   afterEach(() => {
@@ -84,31 +93,17 @@ describe("Tank Class", () => {
     tank.x = 50;
     tank.y = 50;
 
-    // Sequence of getWalls calls:
+    // Sequence of checkRectMapCollision calls:
     // 1. move() -> checkWallCollision() -> Collision at Corner 0.
-    //    Calls getWalls for corner 0 -> Returns true.
-    //    Returns index 0.
+    vi.mocked(checkRectMapCollision).mockReturnValueOnce(0);
     // 2. move() -> Resolution Loop -> checkWallCollision() -> No Collision.
-    //    Calls getWalls for corners 0..3 -> All false.
-    //    Returns -1. Success!
-
-    mockTile.getWalls
-      // Collision Check (1 call - Corner 0 Hit)
-      .mockReturnValueOnce([true, false, false, false])
-      // Resolution Check (4 calls - No Collision)
-      .mockReturnValueOnce([false, false, false, false])
-      .mockReturnValueOnce([false, false, false, false])
-      .mockReturnValueOnce([false, false, false, false])
-      .mockReturnValueOnce([false, false, false, false]);
+    vi.mocked(checkRectMapCollision).mockReturnValue(-1); 
 
     tank.tile = mockTile;
 
     const initialX = tank.x;
     const initialY = tank.y;
     const initialAngle = tank.angle;
-
-    // Part 2 check (wall corners) should return empty/false
-    mockTile.corners.mockReturnValue([]);
 
     tank.move(1, 10);
 
@@ -124,36 +119,18 @@ describe("Tank Class", () => {
     tank.y = 90;
     tank.width = 30;
     tank.height = 30;
-    tank.angle = Math.PI / 4; // 45 degrees
+    tank.angle = Math.PI / 4; 
 
-    // Part A: No direct wall crossing for all checks
-    // checkWallCollision will call getWalls 4 times (for tank corners)
-    mockTile.getWalls.mockReturnValue([false, false, false, false]);
-
-    // Setup Part B: Corner (100, 100) is active.
-    mockTile.x = 0;
-    mockTile.y = 0;
-    mockTile.dx = 100;
-    mockTile.dy = 100;
-
-    // We mock corners() to return the active corner.
-    mockTile.corners.mockReturnValue([
-      { x: 0, y: 0, w: false },
-      { x: 0, y: 100, w: false },
-      { x: 100, y: 100, w: true }, // Bottom-Right corner is active
-      { x: 100, y: 0, w: false },
-    ]);
+    // checkWallCollision returns 5 (Wall corner inside tank)
+    vi.mocked(checkRectMapCollision).mockReturnValue(5);
 
     tank.tile = mockTile;
     const initialX = tank.x;
 
-    // Angle PI/2 is facing right.
-    tank.angle = Math.PI / 2;
-
     // Move forward.
     tank.move(1, 100);
 
-    // Expectation: checkWallCollision returns 5. move() reverts position.
+    // Expectation: move() reverts position.
     expect(tank.x).toBe(initialX);
   });
 
@@ -164,10 +141,8 @@ describe("Tank Class", () => {
 
     const initialAngle = tank.angle;
 
-    // Mock collision to always be true to force revert after failed resolution
-    // turn() calls checkWallCollision -> returns index 0 (collision)
-    // Then loop calls checkWallCollision -> returns index 0 (collision)
-    mockTile.getWalls.mockReturnValue([true, false, false, false]);
+    // Mock collision to always be true (0)
+    vi.mocked(checkRectMapCollision).mockReturnValue(0);
     tank.tile = mockTile;
 
     tank.turn(1, 10);
@@ -176,7 +151,6 @@ describe("Tank Class", () => {
 
   it("should be invincible when spawnshield is active", () => {
     const tank = new Tank(mockPlayer, mockGame);
-    // age starts at 0, Settings.SpawnShieldTime is usually > 0
     expect(tank.spawnshield()).toBe(true);
     expect(tank.invincible()).toBe(true);
   });
@@ -263,14 +237,14 @@ describe("Tank Class", () => {
     const tank = new Tank(mockPlayer, mockGame);
     tank.x = 50;
     tank.y = 50;
-    tank.age = 100000; // Expire spawnshield
+    tank.age = 100000; 
 
     const mockBullet = {
       x: 50,
       y: 50,
       age: 10,
       lethal: true,
-      player: { team: TEAMS[1], id: 999, stats: { kills: 0 } }, // Same team, different player
+      player: { team: TEAMS[1], id: 999, stats: { kills: 0 } }, 
       onDeleted: vi.fn(),
       delete: vi.fn(),
     };
@@ -278,13 +252,11 @@ describe("Tank Class", () => {
 
     mockTile.objs.push(mockBullet);
 
-    // Friendly Fire OFF
     Settings.FriendlyFire = false;
     tank.step(10);
     expect(mockBullet.delete).not.toHaveBeenCalled();
     expect(tank.isDeleted()).toBe(false);
 
-    // Friendly Fire ON
     Settings.FriendlyFire = true;
     tank.step(10);
     expect(mockBullet.delete).toHaveBeenCalled();
@@ -302,7 +274,7 @@ describe("Tank Class", () => {
       y: 50,
       age: 10,
       lethal: true,
-      player: { team: TEAMS[2], stats: { kills: 0 } }, // Enemy team
+      player: { team: TEAMS[2], stats: { kills: 0 } }, 
       isDeleted: vi.fn(),
       delete: vi.fn(),
     };

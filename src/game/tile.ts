@@ -1,5 +1,5 @@
 import GameObject from "@/entities/gameobject";
-import { type Coord } from "@/utils/geometry";
+import { type Coord } from "@/physics/geometry";
 import type GameMap from "./gamemap";
 
 /**
@@ -115,80 +115,6 @@ export default class Tile implements Coord {
     if (neighbor && neighborTile) {
       neighborTile.addWall(direction + 2, remove, false);
     }
-  }
-
-  /**
-   * Is there any walls between the tile and a point at x,y?
-   * @param x - X coordinate.
-   * @param y - Y coordinate.
-   * @returns List of walls encountered.
-   */
-  getWalls(x: number, y: number): boolean[] {
-    const { x: tx, y: ty, dx, dy, walls, neighbors } = this;
-    const distx = tx - x;
-    const disty = ty - y;
-    const collisionFlags = [false, false, false, false];
-
-    // Determine relative position
-    const isLeft = distx > 0;
-    const isRight = distx < -dx;
-    const isTop = disty > 0;
-    const isBottom = disty < -dy;
-
-    // Check direct walls
-    if (isTop && walls[0]) {
-      collisionFlags[0] = true;
-    }
-    if (isLeft && walls[1]) {
-      collisionFlags[1] = true;
-    }
-    if (isBottom && walls[2]) {
-      collisionFlags[2] = true;
-    }
-    if (isRight && walls[3]) {
-      collisionFlags[3] = true;
-    }
-
-    // Check corner cases (diagonal neighbors)
-    if (isTop) {
-      if (isLeft) {
-        // Top-Left Corner
-        if (!walls[1] && neighbors[1]?.walls[0]) {
-          collisionFlags[0] = true;
-        }
-        if (!walls[0] && neighbors[0]?.walls[1]) {
-          collisionFlags[1] = true;
-        }
-      } else if (isRight) {
-        // Top-Right Corner
-        if (!walls[3] && neighbors[3]?.walls[0]) {
-          collisionFlags[0] = true;
-        }
-        if (!walls[0] && neighbors[0]?.walls[3]) {
-          collisionFlags[3] = true;
-        }
-      }
-    } else if (isBottom) {
-      if (isLeft) {
-        // Bottom-Left Corner
-        if (!walls[1] && neighbors[1]?.walls[2]) {
-          collisionFlags[2] = true;
-        }
-        if (!walls[2] && neighbors[2]?.walls[1]) {
-          collisionFlags[1] = true;
-        }
-      } else if (isRight) {
-        // Bottom-Right Corner
-        if (!walls[3] && neighbors[3]?.walls[2]) {
-          collisionFlags[2] = true;
-        }
-        if (!walls[2] && neighbors[2]?.walls[3]) {
-          collisionFlags[3] = true;
-        }
-      }
-    }
-
-    return collisionFlags;
   }
 
   /**

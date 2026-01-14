@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import GameMap from "@/game/gamemap";
 import Tile from "@/game/tile";
 import { Settings } from "@/stores/settings";
+import { getWallsForTile } from "@/physics/grid";
 
 describe("Map Class", () => {
   let mockCanvas: any;
@@ -111,7 +112,7 @@ describe("Tile Class", () => {
     tile.walls[0] = true; // top wall
 
     // Point above tile (disty > 0)
-    const walls = tile.getWalls(50, -10);
+    const walls = getWallsForTile(tile, 50, -10);
     expect(walls[0]).toBe(true);
     expect(walls[1]).toBe(false);
   });

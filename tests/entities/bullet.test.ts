@@ -93,16 +93,23 @@ describe("Bullet Class", () => {
   });
 
   it("should bounce off walls", () => {
+    // Setup tile at 100, 100
     const tile = {
-      getWalls: vi.fn().mockReturnValue([true, false, false, false]), // Top wall
+      x: 100, y: 100, dx: 100, dy: 100,
+      walls: [true, false, false, false], // Top wall
+      neighbors: [null, null, null, null],
+      getWalls: vi.fn(), 
     };
     mockMap.getTileByPos.mockReturnValue(tile);
     bullet.tile = tile as any;
 
     bullet.angle = 0; // Moving up
+    bullet.x = 150; // Center X
+    bullet.y = 100; // Top edge
 
     // Call step to trigger movement and collision check
-    bullet.step(0);
+    // Moves to y = 99 (approx), crossing top wall
+    bullet.step(10);
 
     // Should bounce off top wall: angle = PI - angle = PI - 0 = PI
     expect(bullet.angle).toBeCloseTo(Math.PI);
@@ -110,17 +117,19 @@ describe("Bullet Class", () => {
 
   it("should bounce off side walls", () => {
     const tile = {
-      getWalls: vi.fn().mockReturnValue([false, true, false, false]), // Left wall
+      x: 100, y: 100, dx: 100, dy: 100,
+      walls: [false, false, false, true], // Right wall
+      neighbors: [null, null, null, null],
+      getWalls: vi.fn(),
     };
     mockMap.getTileByPos.mockReturnValue(tile);
     bullet.tile = tile as any;
 
-    bullet.angle = Math.PI / 4; // Moving up-left
-    // Reset position to center for clean calculation, though step moves it slightly
-    bullet.x = 100;
-    bullet.y = 100;
+    bullet.angle = Math.PI / 4; // Moving up-right
+    bullet.x = 200; // Right edge
+    bullet.y = 150; // Center Y
 
-    bullet.step(0);
+    bullet.step(10);
 
     // Should bounce off side wall: angle = -angle = -PI/4
     expect(bullet.angle).toBeCloseTo(-Math.PI / 4);
@@ -128,20 +137,23 @@ describe("Bullet Class", () => {
 
   it("should bounce 180 degrees when hitting a corner (2 walls)", () => {
     const tile = {
-      getWalls: vi.fn().mockReturnValue([true, true, false, false]), // Top-left corner
+      x: 100, y: 100, dx: 100, dy: 100,
+      walls: [true, false, false, true], // Top and Right (Top-Right corner)
+      neighbors: [null, null, null, null],
+      getWalls: vi.fn(),
     };
     mockMap.getTileByPos.mockReturnValue(tile);
     bullet.tile = tile as any;
 
-    bullet.angle = 0;
-    bullet.x = 100;
-    bullet.y = 100;
+    bullet.angle = Math.PI / 4; // Moving NE
+    bullet.x = 200; // Right edge
+    bullet.y = 100; // Top edge
 
-    bullet.step(0);
+    bullet.step(10);
 
-    expect(bullet.angle).toBeCloseTo(Math.PI);
-    // x/y are harder to predict exactly because step moves them before collision reset,
-    // but they should be reset close to original by the bounce logic
+    // Bounce 180: PI/4 + PI = 5PI/4 = -3PI/4
+    const expected = Math.PI / 4 + Math.PI;
+    expect(bullet.angle).toBeCloseTo(expected);
   });
 
   it("should draw correctly without image", () => {
@@ -190,12 +202,17 @@ describe("Bullet Class", () => {
     const otherBullet = new Bullet(mockWeapon);
     otherBullet.x = 100; // Same pos
     otherBullet.y = 100;
+    otherBullet.radius = 4;
     otherBullet.age = 10;
     otherBullet.lethal = true;
 
+    // Need to setup mockTile so getWallsForTile doesn't crash if called
     const tile = {
+      x: 100, y: 100, dx: 100, dy: 100,
+      walls: [false, false, false, false],
+      neighbors: [null, null, null, null],
       objs: [bullet, otherBullet],
-      getWalls: vi.fn().mockReturnValue([false, false, false, false]),
+      getWalls: vi.fn(),
     };
     mockMap.getTileByPos.mockReturnValue(tile);
     bullet.tile = tile as any;
@@ -210,10 +227,15 @@ describe("Bullet Class", () => {
   });
 
   it("should not collide with itself", () => {
-    mockMap.getTileByPos.mockReturnValue({
+    const tile = {
+      x: 100, y: 100, dx: 100, dy: 100,
+      walls: [false, false, false, false],
+      neighbors: [null, null, null, null],
       objs: [bullet],
-      getWalls: vi.fn().mockReturnValue([false, false, false, false]),
-    });
+      getWalls: vi.fn(),
+    };
+    mockMap.getTileByPos.mockReturnValue(tile);
+    bullet.tile = tile as any;
 
     Settings.BulletsCanCollide = true;
     bullet.age = 10;

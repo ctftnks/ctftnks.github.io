@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isPointInRectangle, getRotatedCorners, circlesIntersect } from "@/utils/geometry";
+import { isPointInRectangle, getRotatedCorners, circlesIntersect } from "@/physics/geometry";
 
 describe("Geometry Utils", () => {
   describe("isPointInRectangle", () => {

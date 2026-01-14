@@ -3,6 +3,13 @@ import { Gun, MG, Grenade, Laser, Mine, Guided, WreckingBall, Slingshot } from "
 import { TEAMS } from "@/game/team";
 import { Settings } from "@/stores/settings";
 import Tank from "@/entities/tank";
+import { getWallsForTile } from "@/physics/grid";
+
+// Mock Physics Grid
+vi.mock("@/physics/grid", () => ({
+  getWallsForTile: vi.fn(),
+  checkRectMapCollision: vi.fn(),
+}));
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -118,7 +125,7 @@ describe("Weapon System", () => {
       addTimeout: vi.fn(() => ({ triggerTime: 0, callback: vi.fn() })),
       map: {
         getTileByPos: vi.fn().mockReturnValue({
-          getWalls: vi.fn().mockReturnValue([true, false, false, false]),
+          getWalls: vi.fn().mockReturnValue([true, false, false, false]), // Unused legacy mock
           neighbors: [null, {}, {}, {}],
           addWall: vi.fn(),
           objs: [],
@@ -145,6 +152,9 @@ describe("Weapon System", () => {
       angle: 0,
       rapidfire: false,
     };
+
+    // Default: No collision
+    vi.mocked(getWallsForTile).mockReturnValue([false, false, false, false]);
   });
 
   afterEach(() => {
@@ -305,8 +315,10 @@ describe("Weapon System", () => {
       const ball = new WreckingBall(mockTank);
       const bullet = ball.newBullet();
 
+      // Mock collision with top wall (index 0)
+      vi.mocked(getWallsForTile).mockReturnValue([true, false, false, false]);
+
       const mockTile = {
-        getWalls: vi.fn().mockReturnValue([true, false, false, false]),
         neighbors: [{}, {}, {}, {}], // neighbors exist, so it's not an outer wall
         addWall: vi.fn(),
       };
@@ -321,8 +333,11 @@ describe("Weapon System", () => {
     it("should bounce off outer walls", () => {
       const ball = new WreckingBall(mockTank);
       const bullet = ball.newBullet();
+
+      // Mock collision with top wall
+      vi.mocked(getWallsForTile).mockReturnValue([true, false, false, false]);
+
       const mockTile = {
-        getWalls: vi.fn().mockReturnValue([true, false, false, false]), // Top wall
         neighbors: [undefined, {}, {}, {}], // Top neighbor is missing (outer wall)
         addWall: vi.fn(),
       };

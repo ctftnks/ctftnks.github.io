@@ -5,7 +5,8 @@ import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import type Player from "@/game/player";
 import type Weapon from "./weapons/weapon";
-import { circlesIntersect, Coord } from "@/utils/geometry";
+import { circlesIntersect, Coord } from "@/physics/geometry";
+import { getWallsForTile } from "@/physics/grid";
 
 /**
  * Represents a bullet fired by a tank.
@@ -91,7 +92,7 @@ export default class Bullet extends GameObject {
       return;
     }
 
-    const walls = this.tile.getWalls(this.x, this.y);
+    const walls = getWallsForTile(this.tile, this.x, this.y);
     const nwalls = walls.filter((w) => w).length;
 
     if (nwalls === 0) {

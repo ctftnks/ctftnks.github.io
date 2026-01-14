@@ -1,6 +1,7 @@
 import GameObject from "./gameobject";
 import type GameMap from "@/game/gamemap";
-import { type Coord } from "@/utils/geometry";
+import { type Coord } from "@/physics/geometry";
+import { getWallsForTile } from "@/physics/grid";
 import type Game from "@/game/game";
 
 declare interface TrajectoryPoint extends Coord {
@@ -81,7 +82,7 @@ export default class Trajectory extends GameObject {
         return;
       }
 
-      const walls = tile.getWalls(nextpoint.x, nextpoint.y);
+      const walls = getWallsForTile(tile, nextpoint.x, nextpoint.y);
       const nwalls = walls.filter((w: boolean) => w).length;
       // if there seems to be a wall: handle accordingly
       if (nwalls === 2) {

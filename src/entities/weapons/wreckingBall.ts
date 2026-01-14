@@ -6,7 +6,8 @@ import { generateCloud } from "../smoke";
 import { IMAGES, SOUNDS } from "@/game/assets";
 import { playSound } from "@/game/effects";
 import { Settings } from "@/stores/settings";
-import { Coord } from "@/utils/geometry";
+import { Coord } from "@/physics/geometry";
+import { getWallsForTile } from "@/physics/grid";
 
 /**
  * Destroys walls.
@@ -46,7 +47,7 @@ export class WreckingBall extends Weapon {
       if (!this.tile) {
         return;
       }
-      const walls = this.tile.getWalls(this.x, this.y);
+      const walls = getWallsForTile(this.tile, this.x, this.y);
       const wall = walls.indexOf(true);
       if (wall !== -1) {
         if (typeof this.tile.neighbors[wall] === "undefined" || this.tile.neighbors[wall] === null) {

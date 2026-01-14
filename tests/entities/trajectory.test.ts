@@ -2,6 +2,12 @@ import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import Trajectory from "@/entities/trajectory";
 import { Settings } from "@/stores/settings";
 import Tank from "@/entities/tank";
+import { getWallsForTile } from "@/physics/grid";
+
+// Mock Grid
+vi.mock("@/physics/grid", () => ({
+  getWallsForTile: vi.fn(),
+}));
 
 describe("Trajectory Class", () => {
   let mockMap: any;
@@ -11,7 +17,6 @@ describe("Trajectory Class", () => {
 
   beforeEach(() => {
     mockTile = {
-      getWalls: vi.fn().mockReturnValue([false, false, false, false]),
       objs: [],
     };
 
@@ -26,6 +31,9 @@ describe("Trajectory Class", () => {
     traj = new Trajectory(mockGame, 0, 0, 0);
 
     Settings.DT = 10;
+    
+    // Default no collision
+    vi.mocked(getWallsForTile).mockReturnValue([false, false, false, false]);
   });
 
   afterEach(() => {
@@ -66,17 +74,36 @@ describe("Trajectory Class", () => {
 
   it("should bounce off walls", () => {
     // 1. Bounce 180 degrees (corner)
-    mockTile.getWalls.mockReturnValueOnce([true, true, false, false]);
+    // mockReturnValueOnce for the first collision check in loop
+    // BUT traj loop runs many times.
+    // We want it to bounce at some point.
+    // Let's say at step 5 it hits a wall.
+    // The loop in step() checks getWallsForTile every step.
+    
+    // We can configure mock to return walls only on 10th call?
+    let callCount = 0;
+    vi.mocked(getWallsForTile).mockImplementation(() => {
+        callCount++;
+        if (callCount === 10) return [true, true, false, false];
+        return [false, false, false, false];
+    });
+
     traj.angle = 0;
     traj.step(0);
-    // It's a loop, so checking exact points is tricky, but we can check if angle changed in the points
+    
     const points = traj.points;
     const bounced = points.some((p) => Math.abs(p.angle - Math.PI) < 0.1);
     expect(bounced).toBe(true);
   });
 
   it("should bounce off side walls", () => {
-    mockTile.getWalls.mockReturnValue([false, true, false, false]); // Right wall
+    let callCount = 0;
+    vi.mocked(getWallsForTile).mockImplementation(() => {
+        callCount++;
+        if (callCount === 10) return [false, true, false, false];
+        return [false, false, false, false];
+    });
+
     traj.angle = Math.PI / 4;
     traj.step(0);
     // Angle should flip sign: PI/4 -> -PI/4
@@ -86,7 +113,13 @@ describe("Trajectory Class", () => {
   });
 
   it("should bounce off top/bottom walls", () => {
-    mockTile.getWalls.mockReturnValue([true, false, false, false]); // Top wall
+    let callCount = 0;
+    vi.mocked(getWallsForTile).mockImplementation(() => {
+        callCount++;
+        if (callCount === 10) return [true, false, false, false];
+        return [false, false, false, false];
+    });
+
     traj.angle = Math.PI / 4;
     traj.step(0);
     // Angle should flip around X axis: PI/4 -> 3PI/4 (PI - angle)

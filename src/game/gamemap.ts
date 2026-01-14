@@ -2,7 +2,7 @@ import { Settings } from "@/stores/settings";
 import GameObject from "@/entities/gameobject";
 import Canvas from "./canvas";
 import Tile from "./tile";
-import { type Coord } from "@/utils/geometry";
+import { type Coord } from "@/physics/geometry";
 
 /**
  * Represents the game map.

@@ -1,5 +1,5 @@
 import type Game from "@/game/game";
-import { type Coord } from "@/utils/geometry";
+import { type Coord } from "@/physics/geometry";
 import Updatable from "./updatable";
 import type Tile from "@/game/tile";
 
