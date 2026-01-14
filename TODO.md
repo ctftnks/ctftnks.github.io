@@ -2,6 +2,12 @@
 
 - fix many sounds playing at the same time
 - add background music
+- arc42
+- Players can get stuck moving on wall corners
+- physics (collision detectioin etc. to separate file)
+- aiming of weapons for autopilot to separate file/logic
+- fix tank/wall collision and make better
+- first spawn of CTF mode does not appear near base
 
 ## Refactoring
 
