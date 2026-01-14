@@ -216,6 +216,4 @@ describe("Tile Visuals and Walls", () => {
     expect(t1.walls[2]).toBe(false);
     expect(t2.walls[0]).toBe(false);
   });
-
 });
-

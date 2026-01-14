@@ -95,10 +95,13 @@ describe("Bullet Class", () => {
   it("should bounce off walls", () => {
     // Setup tile at 100, 100
     const tile = {
-      x: 100, y: 100, dx: 100, dy: 100,
+      x: 100,
+      y: 100,
+      dx: 100,
+      dy: 100,
       walls: [true, false, false, false], // Top wall
       neighbors: [null, null, null, null],
-      getWalls: vi.fn(), 
+      getWalls: vi.fn(),
     };
     mockMap.getTileByPos.mockReturnValue(tile);
     bullet.tile = tile as any;
@@ -117,7 +120,10 @@ describe("Bullet Class", () => {
 
   it("should bounce off side walls", () => {
     const tile = {
-      x: 100, y: 100, dx: 100, dy: 100,
+      x: 100,
+      y: 100,
+      dx: 100,
+      dy: 100,
       walls: [false, false, false, true], // Right wall
       neighbors: [null, null, null, null],
       getWalls: vi.fn(),
@@ -137,7 +143,10 @@ describe("Bullet Class", () => {
 
   it("should bounce 180 degrees when hitting a corner (2 walls)", () => {
     const tile = {
-      x: 100, y: 100, dx: 100, dy: 100,
+      x: 100,
+      y: 100,
+      dx: 100,
+      dy: 100,
       walls: [true, false, false, true], // Top and Right (Top-Right corner)
       neighbors: [null, null, null, null],
       getWalls: vi.fn(),
@@ -208,7 +217,10 @@ describe("Bullet Class", () => {
 
     // Need to setup mockTile so getWallsForTile doesn't crash if called
     const tile = {
-      x: 100, y: 100, dx: 100, dy: 100,
+      x: 100,
+      y: 100,
+      dx: 100,
+      dy: 100,
       walls: [false, false, false, false],
       neighbors: [null, null, null, null],
       objs: [bullet, otherBullet],
@@ -228,7 +240,10 @@ describe("Bullet Class", () => {
 
   it("should not collide with itself", () => {
     const tile = {
-      x: 100, y: 100, dx: 100, dy: 100,
+      x: 100,
+      y: 100,
+      dx: 100,
+      dy: 100,
       walls: [false, false, false, false],
       neighbors: [null, null, null, null],
       objs: [bullet],

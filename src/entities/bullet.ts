@@ -73,7 +73,7 @@ export default class Bullet extends GameObject {
       this.leaveTrace();
     }
 
-    const oldPosition = {x: this.x, y: this.y};
+    const oldPosition = { x: this.x, y: this.y };
     this.x -= (this.speed * Math.sin(-this.angle) * dt) / 1000;
     this.y -= (this.speed * Math.cos(-this.angle) * dt) / 1000;
 

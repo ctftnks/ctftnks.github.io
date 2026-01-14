@@ -31,7 +31,7 @@ describe("Trajectory Class", () => {
     traj = new Trajectory(mockGame, 0, 0, 0);
 
     Settings.DT = 10;
-    
+
     // Default no collision
     vi.mocked(getWallsForTile).mockReturnValue([false, false, false, false]);
   });
@@ -79,18 +79,18 @@ describe("Trajectory Class", () => {
     // We want it to bounce at some point.
     // Let's say at step 5 it hits a wall.
     // The loop in step() checks getWallsForTile every step.
-    
+
     // We can configure mock to return walls only on 10th call?
     let callCount = 0;
     vi.mocked(getWallsForTile).mockImplementation(() => {
-        callCount++;
-        if (callCount === 10) return [true, true, false, false];
-        return [false, false, false, false];
+      callCount++;
+      if (callCount === 10) return [true, true, false, false];
+      return [false, false, false, false];
     });
 
     traj.angle = 0;
     traj.step(0);
-    
+
     const points = traj.points;
     const bounced = points.some((p) => Math.abs(p.angle - Math.PI) < 0.1);
     expect(bounced).toBe(true);
@@ -99,9 +99,9 @@ describe("Trajectory Class", () => {
   it("should bounce off side walls", () => {
     let callCount = 0;
     vi.mocked(getWallsForTile).mockImplementation(() => {
-        callCount++;
-        if (callCount === 10) return [false, true, false, false];
-        return [false, false, false, false];
+      callCount++;
+      if (callCount === 10) return [false, true, false, false];
+      return [false, false, false, false];
     });
 
     traj.angle = Math.PI / 4;
@@ -115,9 +115,9 @@ describe("Trajectory Class", () => {
   it("should bounce off top/bottom walls", () => {
     let callCount = 0;
     vi.mocked(getWallsForTile).mockImplementation(() => {
-        callCount++;
-        if (callCount === 10) return [true, false, false, false];
-        return [false, false, false, false];
+      callCount++;
+      if (callCount === 10) return [true, false, false, false];
+      return [false, false, false, false];
     });
 
     traj.angle = Math.PI / 4;

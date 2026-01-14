@@ -97,7 +97,7 @@ describe("Tank Class", () => {
     // 1. move() -> checkWallCollision() -> Collision at Corner 0.
     vi.mocked(checkRectMapCollision).mockReturnValueOnce(0);
     // 2. move() -> Resolution Loop -> checkWallCollision() -> No Collision.
-    vi.mocked(checkRectMapCollision).mockReturnValue(-1); 
+    vi.mocked(checkRectMapCollision).mockReturnValue(-1);
 
     tank.tile = mockTile;
 
@@ -119,7 +119,7 @@ describe("Tank Class", () => {
     tank.y = 90;
     tank.width = 30;
     tank.height = 30;
-    tank.angle = Math.PI / 4; 
+    tank.angle = Math.PI / 4;
 
     // checkWallCollision returns 5 (Wall corner inside tank)
     vi.mocked(checkRectMapCollision).mockReturnValue(5);
@@ -237,14 +237,14 @@ describe("Tank Class", () => {
     const tank = new Tank(mockPlayer, mockGame);
     tank.x = 50;
     tank.y = 50;
-    tank.age = 100000; 
+    tank.age = 100000;
 
     const mockBullet = {
       x: 50,
       y: 50,
       age: 10,
       lethal: true,
-      player: { team: TEAMS[1], id: 999, stats: { kills: 0 } }, 
+      player: { team: TEAMS[1], id: 999, stats: { kills: 0 } },
       onDeleted: vi.fn(),
       delete: vi.fn(),
     };
@@ -274,7 +274,7 @@ describe("Tank Class", () => {
       y: 50,
       age: 10,
       lethal: true,
-      player: { team: TEAMS[2], stats: { kills: 0 } }, 
+      player: { team: TEAMS[2], stats: { kills: 0 } },
       isDeleted: vi.fn(),
       delete: vi.fn(),
     };
