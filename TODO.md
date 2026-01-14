@@ -5,7 +5,7 @@
 - arc42
 - physics (collision detection etc. to separate file)
 - aiming of weapons for autopilot to separate file/logic
-- first spawn of CTF mode does not appear near base
+- loosen coupling using event hub
 
 ## Refactoring
 
