@@ -91,6 +91,7 @@ export default class Game {
    */
   addObject(object: GameObject): void {
     this.objs.push(object);
+    this.map.addObject(object);
   }
 
   /**
