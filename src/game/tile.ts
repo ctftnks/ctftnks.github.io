@@ -52,12 +52,32 @@ export default class Tile implements Coord {
    * @returns List of corners with {x, y, w}.
    */
   corners(): { x: number; y: number; w: boolean }[] {
-    const { x, y, dx, dy, walls } = this;
+    const { x, y, dx, dy, walls, neighbors } = this;
     return [
-      { x, y, w: walls[0] || walls[1] }, // top left
-      { x, y: y + dy, w: walls[1] || walls[2] }, // bottom left
-      { x: x + dx, y: y + dy, w: walls[2] || walls[3] }, // bottom right
-      { x: x + dx, y, w: walls[3] || walls[0] }, // top right
+      // top left: check Top wall (0), Left wall (1), Top Neighbor's Left Wall (neighbors[0].walls[1]), Left Neighbor's Top Wall (neighbors[1].walls[0])
+      {
+        x,
+        y,
+        w: walls[0] || walls[1] || (neighbors[0]?.walls[1] ?? false) || (neighbors[1]?.walls[0] ?? false),
+      },
+      // bottom left: check Left wall (1), Bottom wall (2), Left Neighbor's Bottom Wall (neighbors[1].walls[2]), Bottom Neighbor's Left Wall (neighbors[2].walls[1])
+      {
+        x,
+        y: y + dy,
+        w: walls[1] || walls[2] || (neighbors[1]?.walls[2] ?? false) || (neighbors[2]?.walls[1] ?? false),
+      },
+      // bottom right: check Bottom wall (2), Right wall (3), Bottom Neighbor's Right Wall (neighbors[2].walls[3]), Right Neighbor's Bottom Wall (neighbors[3].walls[2])
+      {
+        x: x + dx,
+        y: y + dy,
+        w: walls[2] || walls[3] || (neighbors[2]?.walls[3] ?? false) || (neighbors[3]?.walls[2] ?? false),
+      },
+      // top right: check Right wall (3), Top wall (0), Right Neighbor's Top Wall (neighbors[3].walls[0]), Top Neighbor's Right Wall (neighbors[0].walls[3])
+      {
+        x: x + dx,
+        y,
+        w: walls[3] || walls[0] || (neighbors[3]?.walls[0] ?? false) || (neighbors[0]?.walls[3] ?? false),
+      },
     ];
   }
 

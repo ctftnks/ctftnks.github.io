@@ -6,7 +6,6 @@ import { playSound } from "@/game/effects";
 import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import type Player from "@/game/player";
-import type Tile from "@/game/tile";
 import PowerUp from "./powerups/powerup";
 import Bullet from "./bullet";
 import Flag from "./flag";
@@ -140,15 +139,29 @@ export default class Tank extends GameObject {
     this.x -= (direction * speed * Math.sin(-this.angle) * dt) / 1000;
     this.y -= (direction * speed * Math.cos(-this.angle) * dt) / 1000;
 
+    // Wall collision detection
     const collidingCorner = this.checkWallCollision();
-    if (collidingCorner !== -1) {
+    if (collidingCorner === -1) {
+      // no collision, all fine
+      return;
+    }
+    if (collidingCorner > 4) {
+      // collision: wall corner hit tank edge
       this.setPosition(oldPosition);
-      const oldangle = this.angle;
-      this.angle -= 0.1 * ((collidingCorner % 2) - 0.5) * direction;
-      if (this.checkWallCollision() !== -1) {
-        this.angle = oldangle;
+      return;
+    }
+    // collision: tank corner hit wall edge
+    const oldangle = this.angle;
+    while (Math.abs(oldangle - this.angle) < 0.15) {
+      // try to turn the tank until the collision is resolved
+      this.angle -= 0.05 * ((collidingCorner % 2) - 0.5) * direction;
+      if (this.checkWallCollision() === -1) {
+        return;
       }
     }
+    // Collision could not be resolved. Tank is stuck
+    this.setPosition(oldPosition);
+    this.angle = oldangle;
   }
 
   /**
@@ -157,22 +170,38 @@ export default class Tank extends GameObject {
    * @param dt - The time elapsed since the last frame in milliseconds.
    */
   turn(direction: number, dt: number): void {
-    const oldangle = this.angle;
+    const oldAngle = this.angle;
+    const oldPosition = { x: this.x, y: this.y };
+
     this.angle += (((direction * Settings.TankTurnSpeed * dt) / 1000) * Settings.TankSpeed) / 180;
 
-    const collidingCorner = this.checkWallCollision();
-    if (collidingCorner !== -1) {
-      this.angle = oldangle;
-      const oldPosition = { x: this.x, y: this.y };
-      const sign = (collidingCorner - 2) * direction * 0.1;
-      this.x += sign * Math.cos(-this.angle);
-      this.y += -sign * Math.sin(-this.angle);
-      if (this.checkWallCollision() !== -1) {
-        this.x -= 2 * sign * Math.cos(-this.angle);
-        this.y -= -2 * sign * Math.sin(-this.angle);
-        if (this.checkWallCollision() !== -1) {
-          this.setPosition(oldPosition);
+    if (this.checkWallCollision() !== -1) {
+      // Collision detected. Try to nudge the tank to a valid position.
+      let resolved = false;
+      const maxDist = 4; // Check up to 4 pixels away
+      for (let d = 1; d <= maxDist; d++) {
+        const offsets = [
+          { x: d, y: 0 },
+          { x: -d, y: 0 },
+          { x: 0, y: d },
+          { x: 0, y: -d },
+        ];
+        for (const off of offsets) {
+          this.x = oldPosition.x + off.x;
+          this.y = oldPosition.y + off.y;
+          if (this.checkWallCollision() === -1) {
+            resolved = true;
+            break;
+          }
         }
+        if (resolved) {
+          break;
+        }
+      }
+      if (!resolved) {
+        // If could not resolve, revert everything
+        this.angle = oldAngle;
+        this.setPosition(oldPosition);
       }
     }
   }
@@ -228,12 +257,12 @@ export default class Tank extends GameObject {
    * Does the tank intersect with a point?
    * @param x - X coordinate.
    * @param y - Y coordinate.
+   * @param corners - Pre-calculated tank corners.
    * @returns True if intersecting.
    */
-  private intersects(x: number, y: number): boolean {
+  private intersects(x: number, y: number, corners: { x: number; y: number }[] = this.corners()): boolean {
     // checks if (0 < AM*AB < AB*AB) ^ (0 < AM*AD < AD*AD)
     // see: https://math.stackexchange.com/questions/190111/how-to-check-if-a-point-is-inside-a-rectangle
-    const corners = this.corners();
     const A = corners[0];
     const B = corners[1];
     const D = corners[2];
@@ -250,31 +279,32 @@ export default class Tank extends GameObject {
    * @returns Index of colliding corner or -1.
    */
   private checkWallCollision(): number {
-    if (!this.tile) {
+    const centerTile = this.game.map.getTileByPos(this.x, this.y);
+    if (!centerTile) {
       return -1;
     }
-    const corners = this.corners();
-    const neighborTiles = new Set<Tile>();
-    for (let i = 0; i < corners.length; i++) {
-      const corner = corners[i];
-      if (this.tile.getWalls(corner.x, corner.y).some((w) => w)) {
-        return i;
-      }
-      const tileAtCorner = this.game.map.getTileByPos(corner.x, corner.y);
-      if (tileAtCorner && tileAtCorner !== this.tile) {
-        neighborTiles.add(tileAtCorner);
-      }
-    }
-    // check if any wall corner end intersects with the tank
-    for (const currentTile of neighborTiles) {
-      const tileCorners = currentTile.corners();
-      for (let i = 0; i < tileCorners.length; i++) {
-        const corner = tileCorners[i];
-        if (corner.w && this.intersects(corner.x, corner.y)) {
-          return i;
-        }
+
+    const tankCorners = this.corners();
+
+    // 1. Check if any tank corner crossed a wall
+    for (let k = 0; k < tankCorners.length; k++) {
+      const corner = tankCorners[k];
+      const walls = centerTile.getWalls(corner.x, corner.y);
+      if (walls[0] || walls[1] || walls[2] || walls[3]) {
+        return k;
       }
     }
+
+    // 2. Check if any wall corner is inside the tank
+    // Since the tank is smaller than a tile, we only need to check the 4 corners of the current tile.
+    const wallCorners = centerTile.corners();
+
+    for (const wc of wallCorners) {
+      if (wc.w && this.intersects(wc.x, wc.y, tankCorners)) {
+        return 5;
+      }
+    }
+
     return -1;
   }
 
@@ -292,7 +322,8 @@ export default class Tank extends GameObject {
     const bullets = new Set<Bullet>();
     const powerups = new Set<PowerUp>();
 
-    for (const corner of this.corners()) {
+    const tankCorners = this.corners();
+    for (const corner of tankCorners) {
       const tile = this.game.map.getTileByPos(corner.x, corner.y);
       if (tile) {
         for (const obj of tile.objs) {
@@ -306,7 +337,7 @@ export default class Tank extends GameObject {
     }
     // for each bullet in the list, check if it intersects the tank
     for (const bullet of bullets) {
-      if (!this.intersects(bullet.x, bullet.y)) {
+      if (!this.intersects(bullet.x, bullet.y, tankCorners)) {
         continue;
       }
       // Friendly fire?
