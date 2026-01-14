@@ -6,7 +6,7 @@ import { SOUNDS } from "@/game/assets";
 import type Game from "./game";
 import type Team from "./team";
 import { Settings } from "@/stores/settings";
-import type Coord from "@/entities/coord";
+import { type Coord } from "@/utils/geometry";
 
 /**
  * Base class for game modes.

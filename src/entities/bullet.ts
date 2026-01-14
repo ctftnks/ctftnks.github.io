@@ -5,6 +5,7 @@ import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import type Player from "@/game/player";
 import type Weapon from "./weapons/weapon";
+import { circlesIntersect } from "@/utils/geometry";
 
 /**
  * Represents a bullet fired by a tank.
@@ -125,10 +126,7 @@ export default class Bullet extends GameObject {
     }
     for (const obj of this.tile.objs) {
       if (obj instanceof Bullet && obj.age > 0 && obj !== this) {
-        const rad = 0.65 * this.radius + 0.65 * obj.radius + this.extrahitbox;
-        const dx = obj.x - this.x;
-        const dy = obj.y - this.y;
-        if (rad > 0 && dx * dx + dy * dy <= rad * rad) {
+        if (circlesIntersect(this, 0.65 * this.radius + this.extrahitbox, obj, 0.65 * obj.radius)) {
           if (!obj.lethal) {
             return;
           }

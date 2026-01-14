@@ -10,6 +10,7 @@ import PowerUp from "./powerups/powerup";
 import Bullet from "./bullet";
 import Flag from "./flag";
 import type Game from "@/game/game";
+import { type Coord, getRotatedCorners, isPointInRectangle } from "@/utils/geometry";
 
 /**
  * Represents a Tank controlled by a player.
@@ -233,44 +234,17 @@ export default class Tank extends GameObject {
    * @returns List of corners {x, y}.
    */
   corners(): { x: number; y: number }[] {
-    return [
-      {
-        x: this.x - (this.width / 2) * Math.cos(-this.angle) - (this.height / 2) * Math.sin(-this.angle),
-        y: this.y + (this.width / 2) * Math.sin(-this.angle) - (this.height / 2) * Math.cos(-this.angle),
-      },
-      {
-        x: this.x + (this.width / 2) * Math.cos(-this.angle) - (this.height / 2) * Math.sin(-this.angle),
-        y: this.y - (this.width / 2) * Math.sin(-this.angle) - (this.height / 2) * Math.cos(-this.angle),
-      },
-      {
-        x: this.x - (this.width / 2) * Math.cos(-this.angle) + (this.height / 2) * Math.sin(-this.angle),
-        y: this.y + (this.width / 2) * Math.sin(-this.angle) + (this.height / 2) * Math.cos(-this.angle),
-      },
-      {
-        x: this.x + (this.width / 2) * Math.cos(-this.angle) + (this.height / 2) * Math.sin(-this.angle),
-        y: this.y - (this.width / 2) * Math.sin(-this.angle) + (this.height / 2) * Math.cos(-this.angle),
-      },
-    ];
+    return getRotatedCorners(this.x, this.y, this.width, this.height, -this.angle);
   }
 
   /**
    * Does the tank intersect with a point?
-   * @param x - X coordinate.
-   * @param y - Y coordinate.
+   * @param point - a point in the 2d coordinate system {x, y}
    * @param corners - Pre-calculated tank corners.
    * @returns True if intersecting.
    */
-  private intersects(x: number, y: number, corners: { x: number; y: number }[] = this.corners()): boolean {
-    // checks if (0 < AM*AB < AB*AB) ^ (0 < AM*AD < AD*AD)
-    // see: https://math.stackexchange.com/questions/190111/how-to-check-if-a-point-is-inside-a-rectangle
-    const A = corners[0];
-    const B = corners[1];
-    const D = corners[2];
-    const AMAB = (A.x - x) * (A.x - B.x) + (A.y - y) * (A.y - B.y);
-    const AMAD = (A.x - x) * (A.x - D.x) + (A.y - y) * (A.y - D.y);
-    const ABAB = (A.x - B.x) * (A.x - B.x) + (A.y - B.y) * (A.y - B.y);
-    const ADAD = (A.x - D.x) * (A.x - D.x) + (A.y - D.y) * (A.y - D.y);
-    return 0 < AMAB && AMAB < ABAB && 0 < AMAD && AMAD < ADAD;
+  private intersects(point: Coord, corners: Coord[]): boolean {
+    return isPointInRectangle(point, corners);
   }
 
   /**
@@ -283,9 +257,7 @@ export default class Tank extends GameObject {
     if (!centerTile) {
       return -1;
     }
-
     const tankCorners = this.corners();
-
     // 1. Check if any tank corner crossed a wall
     for (let k = 0; k < tankCorners.length; k++) {
       const corner = tankCorners[k];
@@ -294,17 +266,14 @@ export default class Tank extends GameObject {
         return k;
       }
     }
-
     // 2. Check if any wall corner is inside the tank
     // Since the tank is smaller than a tile, we only need to check the 4 corners of the current tile.
     const wallCorners = centerTile.corners();
-
     for (const wc of wallCorners) {
-      if (wc.w && this.intersects(wc.x, wc.y, tankCorners)) {
+      if (wc.w && this.intersects(wc, tankCorners)) {
         return 5;
       }
     }
-
     return -1;
   }
 
@@ -326,7 +295,7 @@ export default class Tank extends GameObject {
     for (const corner of tankCorners) {
       const tile = this.game.map.getTileByPos(corner.x, corner.y);
       if (tile) {
-        for (const obj of tile.objs) {
+        for (const obj of tile?.objs ?? []) {
           if (obj instanceof Bullet && obj.age > 0) {
             bullets.add(obj);
           } else if (obj instanceof PowerUp) {
@@ -337,7 +306,7 @@ export default class Tank extends GameObject {
     }
     // for each bullet in the list, check if it intersects the tank
     for (const bullet of bullets) {
-      if (!this.intersects(bullet.x, bullet.y, tankCorners)) {
+      if (!this.intersects(bullet, tankCorners)) {
         continue;
       }
       // Friendly fire?
@@ -367,7 +336,7 @@ export default class Tank extends GameObject {
     }
 
     for (const powerup of powerups) {
-      if (this.intersects(powerup.x, powerup.y)) {
+      if (this.intersects(powerup, tankCorners)) {
         powerup.apply(this);
         powerup.delete();
       }

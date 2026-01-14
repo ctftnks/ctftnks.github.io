@@ -1,6 +1,6 @@
 import GameObject from "./gameobject";
 import type GameMap from "@/game/gamemap";
-import Coord from "./coord";
+import { type Coord } from "@/utils/geometry";
 import type Game from "@/game/game";
 
 declare interface TrajectoryPoint extends Coord {
