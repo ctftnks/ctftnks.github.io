@@ -50,8 +50,7 @@ export class Guided extends Weapon {
     e.step = function (dt: number): void {
       e.leaveTrace();
 
-      const oldx = e.x;
-      const oldy = e.y;
+      const oldPosition = { x: e.x, y: e.y };
       // normal translation
       if (gotoTarget === null) {
         e.x -= (e.speed * Math.sin(-e.angle) * dt) / 1000;
@@ -70,7 +69,7 @@ export class Guided extends Weapon {
         }
       }
       // check for wall collisions
-      e.checkCollision(oldx, oldy);
+      e.checkCollision(oldPosition);
       // check for bullet-bullet collisions
       e.checkBulletCollision();
       // calculate path to next tank and set next goto tile

@@ -6,6 +6,7 @@ import { generateCloud } from "../smoke";
 import { IMAGES, SOUNDS } from "@/game/assets";
 import { playSound } from "@/game/effects";
 import { Settings } from "@/stores/settings";
+import { Coord } from "@/utils/geometry";
 
 /**
  * Destroys walls.
@@ -39,10 +40,9 @@ export class WreckingBall extends Weapon {
     bullet.maxAge = 1000;
     /**
      * Custom collision logic for wrecking ball.
-     * @param x - Old x position.
-     * @param y - Old y position.
+     * @param oldPosition - Old position {x, y}.
      */
-    bullet.checkCollision = function (x: number, y: number): void {
+    bullet.checkCollision = function (oldPosition: Coord): void {
       if (!this.tile) {
         return;
       }
@@ -56,12 +56,12 @@ export class WreckingBall extends Weapon {
           if (wall === 1 || wall === 3) {
             // left or right
             this.angle *= -1;
-            this.x = 2 * x - this.x;
+            this.x = 2 * oldPosition.x - this.x;
           }
           if (wall === 0 || wall === 2) {
             // top or bottom
             this.angle = Math.PI - this.angle;
-            this.y = 2 * y - this.y;
+            this.y = 2 * oldPosition.y - this.y;
           }
         } else {
           // hit a wall: remove it!

@@ -3,7 +3,7 @@
 - fix many sounds playing at the same time
 - add background music
 - arc42
-- physics (collision detectioin etc. to separate file)
+- physics (collision detection etc. to separate file)
 - aiming of weapons for autopilot to separate file/logic
 - first spawn of CTF mode does not appear near base
 

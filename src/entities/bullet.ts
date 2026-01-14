@@ -5,7 +5,7 @@ import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import type Player from "@/game/player";
 import type Weapon from "./weapons/weapon";
-import { circlesIntersect } from "@/utils/geometry";
+import { circlesIntersect, Coord } from "@/utils/geometry";
 
 /**
  * Represents a bullet fired by a tank.
@@ -72,12 +72,11 @@ export default class Bullet extends GameObject {
       this.leaveTrace();
     }
 
-    const oldx = this.x;
-    const oldy = this.y;
+    const oldPosition = {x: this.x, y: this.y};
     this.x -= (this.speed * Math.sin(-this.angle) * dt) / 1000;
     this.y -= (this.speed * Math.cos(-this.angle) * dt) / 1000;
 
-    this.checkCollision(oldx, oldy);
+    this.checkCollision(oldPosition);
     if (Settings.BulletsCanCollide) {
       this.checkBulletCollision();
     }
@@ -85,10 +84,9 @@ export default class Bullet extends GameObject {
 
   /**
    * Check for collision with walls, handle them.
-   * @param oldx - Previous X position.
-   * @param oldy - Previous Y position.
+   * @param oldPosition - Previous position {x, y}.
    */
-  checkCollision(oldx: number, oldy: number): void {
+  checkCollision(oldPosition: Coord): void {
     if (!this.tile) {
       return;
     }
@@ -106,14 +104,13 @@ export default class Bullet extends GameObject {
 
     if (nwalls === 2) {
       this.angle += Math.PI;
-      this.x = oldx;
-      this.y = oldy;
+      this.setPosition(oldPosition);
     } else if (walls[1] || walls[3]) {
       this.angle *= -1;
-      this.x = 2 * oldx - this.x;
+      this.x = 2 * oldPosition.x - this.x;
     } else if (walls[0] || walls[2]) {
       this.angle = Math.PI - this.angle;
-      this.y = 2 * oldy - this.y;
+      this.y = 2 * oldPosition.y - this.y;
     }
   }
 

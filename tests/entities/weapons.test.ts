@@ -313,7 +313,7 @@ describe("Weapon System", () => {
       mockGame.map.getTileByPos.mockReturnValue(mockTile);
       (bullet as any).tile = mockTile;
 
-      (bullet as any).checkCollision(0, 0);
+      (bullet as any).checkCollision({ x: 0, y: 0 });
 
       expect(mockTile.addWall).toHaveBeenCalled();
     });
@@ -333,7 +333,7 @@ describe("Weapon System", () => {
       bullet.y = 10;
       const oldY = 12;
 
-      (bullet as any).checkCollision(10, oldY);
+      (bullet as any).checkCollision({ x: 10, y: oldY });
 
       expect(mockTile.addWall).not.toHaveBeenCalled();
       // Should bounce: angle = PI - angle

@@ -338,4 +338,31 @@ describe("Tile Corner Collision", () => {
 
     expect(walls[0]).toBe(true);
   });
+
+  it("should NOT detect phantom left wall when hitting flat ceiling with vertical wall above (T-shape collision)", () => {
+    // Layout:
+    // T2(1,0) [Left Wall]
+    // T3(1,1) [Top Wall]   T1(0,1) [Top Wall]
+    
+    // T3 is current tile (1,1).
+    // T1 is Left neighbor (0,1).
+    // T2 is Top neighbor (1,0).
+
+    const t3 = grid[3]; // Current (1,1)
+    const t1 = grid[1]; // Left (0,1)
+    const t2 = grid[2]; // Top (1,0)
+
+    // Setup walls
+    t3.addWall(0, false, true); // T3 Top (Ceiling)
+    t1.addWall(0, false, true); // T1 Top (Ceiling extension)
+    t2.addWall(1, false, true); // T2 Left (Vertical stem UP from corner)
+
+    // Bullet moves from inside T3 to T0 (crossing Top-Left corner of T3)
+    // T3 at (100, 100). Target (90, 90).
+    const walls = t3.getWalls(90, 90);
+
+    // Expect ONLY Top wall (0). Left wall (1) should be false.
+    expect(walls[0]).toBe(true);
+    expect(walls[1]).toBe(false);
+  });
 });

@@ -153,36 +153,36 @@ export default class Tile implements Coord {
     if (isTop) {
       if (isLeft) {
         // Top-Left Corner
-        if (neighbors[1]?.walls[0]) {
+        if (!walls[1] && neighbors[1]?.walls[0]) {
           collisionFlags[0] = true;
         }
-        if (neighbors[0]?.walls[1]) {
+        if (!walls[0] && neighbors[0]?.walls[1]) {
           collisionFlags[1] = true;
         }
       } else if (isRight) {
         // Top-Right Corner
-        if (neighbors[3]?.walls[0]) {
+        if (!walls[3] && neighbors[3]?.walls[0]) {
           collisionFlags[0] = true;
         }
-        if (neighbors[0]?.walls[3]) {
+        if (!walls[0] && neighbors[0]?.walls[3]) {
           collisionFlags[3] = true;
         }
       }
     } else if (isBottom) {
       if (isLeft) {
         // Bottom-Left Corner
-        if (neighbors[1]?.walls[2]) {
+        if (!walls[1] && neighbors[1]?.walls[2]) {
           collisionFlags[2] = true;
         }
-        if (neighbors[2]?.walls[1]) {
+        if (!walls[2] && neighbors[2]?.walls[1]) {
           collisionFlags[1] = true;
         }
       } else if (isRight) {
         // Bottom-Right Corner
-        if (neighbors[3]?.walls[2]) {
+        if (!walls[3] && neighbors[3]?.walls[2]) {
           collisionFlags[2] = true;
         }
-        if (neighbors[2]?.walls[3]) {
+        if (!walls[2] && neighbors[2]?.walls[3]) {
           collisionFlags[3] = true;
         }
       }
