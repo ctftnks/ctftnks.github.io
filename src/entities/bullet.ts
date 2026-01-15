@@ -25,6 +25,7 @@ export default class Bullet extends GameObject {
   exploded: boolean = false; // used only for some powerups
   smokeColor: string | null = null; // used only for some powerups
   image?: HTMLImageElement; // optional image for rendering the bullet
+  isBulletBulletCollisionEnabled: boolean = true; // do the bullets explode when they hit each other?
 
   /**
    * Creates a new Bullet.
@@ -72,7 +73,7 @@ export default class Bullet extends GameObject {
       this.leaveTrace();
     }
 
-    const oldPosition = {x: this.x, y: this.y};
+    const oldPosition = { x: this.x, y: this.y };
     this.x -= (this.speed * Math.sin(-this.angle) * dt) / 1000;
     this.y -= (this.speed * Math.cos(-this.angle) * dt) / 1000;
 
@@ -118,15 +119,12 @@ export default class Bullet extends GameObject {
    * Checks for collision with other bullets.
    */
   checkBulletCollision(): void {
-    if (!this.tile) {
+    if (!this.isBulletBulletCollisionEnabled || !this.tile) {
       return;
     }
     for (const obj of this.tile.objs) {
-      if (obj instanceof Bullet && obj.age > 0 && obj !== this) {
+      if (obj instanceof Bullet && obj.age > 0 && obj !== this && obj.lethal) {
         if (circlesIntersect(this, 0.65 * this.radius + this.extrahitbox, obj, 0.65 * obj.radius)) {
-          if (!obj.lethal) {
-            return;
-          }
           obj.explode();
           this.explode();
           obj.delete();

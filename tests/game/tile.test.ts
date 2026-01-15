@@ -343,7 +343,7 @@ describe("Tile Corner Collision", () => {
     // Layout:
     // T2(1,0) [Left Wall]
     // T3(1,1) [Top Wall]   T1(0,1) [Top Wall]
-    
+
     // T3 is current tile (1,1).
     // T1 is Left neighbor (0,1).
     // T2 is Top neighbor (1,0).

@@ -47,15 +47,11 @@ export class Laser extends Weapon {
       bullet.setPosition(p);
       bullet.angle = p.angle;
       bullet.radius = 2;
-      bullet.extrahitbox = -100;
+      bullet.isBulletBulletCollisionEnabled = false;
       bullet.maxAge = 150;
       bullet.speed = 0;
       bullet.color = this.tank.player.team.color;
       bullet.bounceSound = "";
-      /**
-       * Custom collision check for laser bullet.
-       */
-      bullet.checkCollision = function (): void {};
       this.tank.game.addObject(bullet);
     }
     this.deactivate();

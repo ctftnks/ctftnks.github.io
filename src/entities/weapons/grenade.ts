@@ -3,7 +3,6 @@ import type Tank from "../tank";
 import Bullet from "../bullet";
 import { IMAGES, SOUNDS } from "@/game/assets";
 import { playSound } from "@/game/effects";
-import { Settings } from "@/stores/settings";
 import { createShrapnelExplosion } from "./utils";
 
 /**
@@ -37,6 +36,7 @@ export class Grenade extends Weapon {
     e.image = new Image();
     e.image.src = IMAGES.grenade;
     e.radius = 6;
+    e.extrahitbox = 10;
     e.color = "#000";
     e.maxAge = 10000;
     e.exploded = false;
@@ -48,10 +48,7 @@ export class Grenade extends Weapon {
       if (!e.exploded) {
         e.exploded = true;
         playSound(SOUNDS.grenade);
-        createShrapnelExplosion(this, e.x, e.y, this.nshrapnels, {
-          timeout: (360 * 280) / Settings.BulletSpeed,
-          noCollision: true,
-        });
+        createShrapnelExplosion(this, e.x, e.y, this.nshrapnels, 310);
         this.bullet = null;
         this.deactivate();
       }

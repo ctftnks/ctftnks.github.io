@@ -32,6 +32,7 @@ export class Mine extends Weapon {
     e.image = new Image();
     e.image.src = IMAGES.mine;
     e.radius = 6;
+    e.extrahitbox = 10;
     e.exploded = false;
     e.color = "#000";
     e.maxAge = 120000 + 20 * Math.random();
@@ -43,9 +44,7 @@ export class Mine extends Weapon {
       if (!e.exploded) {
         e.exploded = true;
         playSound(SOUNDS.grenade);
-        createShrapnelExplosion(this, e.x, e.y, this.nshrapnels, {
-          timeout: 600,
-        });
+        createShrapnelExplosion(this, e.x, e.y, this.nshrapnels, 600);
         this.bullet = null;
       }
     };

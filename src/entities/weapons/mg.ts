@@ -34,7 +34,7 @@ export class MG extends Weapon {
     const bullet = super.newBullet();
     bullet.radius = 2;
     bullet.bounceSound = "";
-    bullet.extrahitbox = -3;
+    bullet.isBulletBulletCollisionEnabled = false;
     bullet.angle = this.tank.angle + 0.2 * (0.5 - Math.random());
     bullet.maxAge = 4000 + 1000 * (0.5 - Math.random());
     bullet.color = "#000";
