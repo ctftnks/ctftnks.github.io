@@ -4,7 +4,7 @@ We use **Architecture Decision Records (ADRs)** to capture important architectur
 
 ## Index
 
-- [ADR-001: Use Vue.js for UI Overlay](./decisions/adr-001-use-vue-for-ui.md) (Example)
+- [ADR-001: Use Vue.js for UI Overlay](./adr-001-use-vue-for-ui.md) (Example)
 
 ---
 
