@@ -20,6 +20,12 @@ CTF-TNKS is a fast-paced, tank battle browser game featuring multiple game modes
 3. **Controls:** Default controls for Player 1 are Arrow Keys to move and Space to fire. These can be remapped in the Menu.
 4. **Goal:** Capture the enemy flag and return it to your base while defending your own!
 
+## Documentation
+
+- **[API Documentation](https://ctftnks.github.io/docs/)**: Automated TypeDoc documentation of the classes and entities.
+- **Architecture (arc42)**: High-level design and goals in `docs/architecture/`.
+- **Developer Guides**: How to extend weapons and power-ups in `docs/development/`.
+
 ## First Steps for Development
 
 ### Prerequisites
