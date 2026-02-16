@@ -2,10 +2,13 @@
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": ["src", "docs"],
   "entryPointStrategy": "expand",
+  "readme": "README.md",
   "out": "dist/docs",
-  "name": "CTFTNKS API Documentation",
+  "name": "CTFTNKS Project Documentation",
   "includeVersion": true,
   "githubPages": true,
   "cleanOutputDir": true,
-  "exclude": ["**/*.test.ts", "node_modules/**"]
+  "exclude": ["**/*.test.ts", "node_modules/**"],
+  "searchInComments": true,
+  "hideGenerator": true
 }
