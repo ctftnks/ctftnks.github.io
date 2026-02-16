@@ -1,0 +1,11 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src", "docs"],
+  "entryPointStrategy": "expand",
+  "out": "dist/docs",
+  "name": "CTFTNKS API Documentation",
+  "includeVersion": true,
+  "githubPages": true,
+  "cleanOutputDir": true,
+  "exclude": ["**/*.test.ts", "node_modules/**"]
+}
