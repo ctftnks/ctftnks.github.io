@@ -6,6 +6,7 @@
 - physics (collision detection etc. to separate file)
 - aiming of weapons for autopilot to separate file/logic
 - loosen coupling using event hub
+- make bots smarter
 
 ## Refactoring
 
