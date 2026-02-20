@@ -22,9 +22,10 @@ CTF-TNKS is a fast-paced, tank battle browser game featuring multiple game modes
 
 ## Documentation
 
-- **[Full Project & API Documentation](https://ctftnks.github.io/docs/)**: The central hub for all project documentation.
-- **[Architecture (arc42)](./docs/architecture/index.md)**: High-level design, goals, and system overview.
-- **[Development Guides](./docs/development/index.md)**: How-to guides for adding weapons, power-ups, and more.
+- :books: **[Architecture & Guides (VitePress)](https://ctftnks.github.io/docs/)**: High-level design, arc42 documentation, ADRs, and development guides.
+- :memo: **[API Documentation (TypeDoc)](https://ctftnks.github.io/docs/api/)**: Detailed technical documentation of classes, methods, and types.
+
+The raw documentation-as-code is placed in the directory `/docs/`.
 
 ## First Steps for Development
 

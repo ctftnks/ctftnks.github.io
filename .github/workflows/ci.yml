@@ -30,7 +30,9 @@ jobs:
         #   VITE_BASE_PATH: "ctftnks"
 
       - name: Build Documentation
-        run: npm run docs
+        run: |
+          npm run docs:build
+          npm run docs:api
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4

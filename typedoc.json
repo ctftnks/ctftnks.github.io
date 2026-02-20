@@ -3,7 +3,7 @@
   "entryPoints": ["src", "docs"],
   "entryPointStrategy": "expand",
   "readme": "README.md",
-  "out": "dist/docs",
+  "out": "dist/docs/api",
   "name": "CTFTNKS Project Documentation",
   "includeVersion": true,
   "githubPages": true,
