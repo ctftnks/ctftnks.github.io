@@ -16,10 +16,6 @@ A chronological log of significant architectural choices and their justification
 
 ### [Development Guides](./development/index)
 
-Practical guides for extending the game, such as adding new weapons or power-ups.
-
-### [API Documentation (TypeDoc)](./api/index)
-
 Detailed technical documentation generated from the source code, covering all classes, interfaces, and methods.
 
 ---
