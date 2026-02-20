@@ -9,10 +9,8 @@ export const IMAGES = {
   tiled: "/img/textures/tiled.png",
   guided: "/img/guided.png",
   grenade: "/img/grenade.png",
-  wallBuilder: "/img/wallBuilder.png",
   speed: "/img/speed.png",
   laser: "/img/laser.png",
-  multi: "/img/multi.png",
   wreckingBall: "/img/wreckingBall.png",
   invincible: "/img/invincible.png",
 };
