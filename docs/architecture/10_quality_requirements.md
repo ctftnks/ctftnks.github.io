@@ -1,12 +1,12 @@
 # Quality Requirements
 
-This section defines the quality goals and specifies them through concrete quality scenarios.
+This section defines the core quality goals, focusing on aspects that are verifiable via automated unit and performance tests.
 
 ## Top Quality Goals
 
-1. **Performance**: The game must remain fluid and responsive even during high-intensity combat.
-2. **Extensibility**: The effort to add new game content (weapons, power-ups) must be kept to a minimum.
-3. **Testability**: Core logic must be verifiable in an automated fashion to prevent regressions.
+1. **Efficiency**: The simulation logic must remain fast enough to allow 60 FPS rendering.
+2. **Reliability**: Physics and AI pathfinding must behave predictably in complex or high-speed situations.
+3. **Integrity**: Gameplay mechanics (like power-ups and feedback triggers) must function according to the design rules.
 
 ## Quality Tree
 
@@ -14,35 +14,36 @@ This section defines the quality goals and specifies them through concrete quali
 graph TD
     Quality[Quality Goals]
 
-    Quality --> Perf[Performance]
-    Perf --> S1[Scenario 1: Combat Load]
+    Quality --> Efficiency
+    Efficiency --> S1[Scenario 1: Logic Step Performance]
 
-    Quality --> Ext[Extensibility]
-    Ext --> S2[Scenario 2: New Weapon]
+    Quality --> Reliability
+    Reliability --> S2[Scenario 2: Engine Robustness - Physics & AI]
 
-    Quality --> Test[Testability]
-    Test --> S3[Scenario 3: Logic Regression]
+    Quality --> Integrity
+    Integrity --> S3[Scenario 3: Gameplay Logic & Balance]
 ```
 
 ## Quality Scenarios
 
-### Scenario 1: Performance under Combat Load
+### Scenario 1: Logic Step Performance (Efficiency)
 
-- **Stimulus**: 8 tanks are active on a large map, and more than 50 bullets/particles are being processed simultaneously.
-- **Context**: Normal gameplay in a modern browser.
-- **Response**: The game engine completes the logic step and rendering within the frame budget.
-- **Measure**: Frame rate remains at a stable 60 FPS (frame time < 16.6ms).
+- **Stimulus**: A combat situation with 8 tanks and 100+ active projectiles.
+- **Measure**: The average execution time of the `game.step()` function must be significantly below 16.6ms (target < 2ms) to leave headroom for rendering.
+- **Verification**: `tests/performance/stress.test.ts`
 
-### Scenario 2: Adding a New Weapon Type
+### Scenario 2: Engine Robustness (Reliability)
 
-- **Stimulus**: A developer wants to add a new weapon with unique behavior (e.g., a "Flamethrower").
-- **Context**: Development phase.
-- **Response**: The developer only needs to implement a new subclass of `Weapon` and register it in a single configuration point.
-- **Measure**: No modifications to the core `Game` or `Tank` classes are required. Implementation and registration take less than 1 hour for an experienced developer.
+- **Stimulus**: Fast-moving objects hitting corners or bots navigating complex mazes.
+- **Measure**:
+  - (Physics): Bullets do not tunnel through walls at speeds up to 2000px/s.
+  - (AI): The `Autopilot` always selects a target coordinate that reduces the Dijkstra distance to the objective.
+- **Verification**: `tests/quality/robustness.test.ts`, `tests/quality/ai_stability.test.ts`
 
-### Scenario 3: Verifying Physics Logic
+### Scenario 3: Gameplay Logic & Balance (Integrity)
 
-- **Stimulus**: A change is made to the core collision detection or movement logic.
-- **Context**: Continuous Integration (CI).
-- **Response**: Automated unit tests verify the math and behavior without requiring a browser environment or manual testing.
-- **Measure**: 100% of core physics/geometry utility tests pass within the CI pipeline in less than 30 seconds.
+- **Stimulus**: A tank collects a power-up or is destroyed.
+- **Measure**:
+  - (Balance): Power-up effects (e.g., `SpeedBonus`) are reverted exactly after their defined duration.
+  - (Feedback): System events (e.g., `kill()`) correctly trigger the necessary UI/Canvas responses (e.g., `shake()`).
+- **Verification**: `tests/quality/gameplay.test.ts`
