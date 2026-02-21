@@ -18,6 +18,10 @@ A chronological log of significant architectural choices and their justification
 
 Detailed technical documentation generated from the source code, covering all classes, interfaces, and methods.
 
+Practical guides for extending the game, such as adding new weapons or power-ups.
+
+### [API Documentation (TypeDoc)](./api/index)
+
 ---
 
 _Documentation is automatically built and updated via the project's CI/CD pipelines._
