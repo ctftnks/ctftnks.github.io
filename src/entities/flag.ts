@@ -10,7 +10,7 @@ import type Base from "./base";
  * Represents a Flag in Capture the Flag mode.
  * @augments GameObject
  */
-export default class Flag extends GameObject {
+export class Flag extends GameObject {
   /** The team this flag belongs to. */
   team: Team;
   /** The color of the flag. */
@@ -123,3 +123,5 @@ export default class Flag extends GameObject {
     context.restore();
   }
 }
+
+export default Flag;

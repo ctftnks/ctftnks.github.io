@@ -1,7 +1,7 @@
 /**
  * Parent class for all things in the game that have a step() method that is called on every game step
  */
-export default abstract class Updatable {
+export abstract class Updatable {
   /** time (in milliseconds) for how long the object already exists in the game */
   age: number = 0;
   /** optional duration in milliseconds for how long the object should still exist in the game */
@@ -33,3 +33,5 @@ export default abstract class Updatable {
    */
   step(_dt: number): void {}
 }
+
+export default Updatable;

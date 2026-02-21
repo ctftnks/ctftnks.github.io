@@ -11,16 +11,16 @@ import { type Coord } from "@/utils/geometry";
  * also the tiles keep object lists for spatial sorting
  * the canvas is passed to the constructor to provide the size of the canvas
  */
-export default class GameMap {
-  /** Number of tiles in X. */
+export class GameMap {
+  /** Number of horizontal tiles. Calculated based on settings and canvas aspect ratio. */
   Nx: number;
-  /** Number of tiles in Y. */
+  /** Number of vertical tiles. */
   Ny: number;
-  /** Tile width. */
+  /** Tile width in world coordinates (pixels). Default is 130. */
   dx: number = 130;
-  /** Tile height. */
+  /** Tile height in world coordinates (pixels). Always equal to dx (square tiles). */
   dy: number;
-  /** List of tiles. */
+  /** Flat array of all tiles in the map, indexed as `i * Ny + j`. */
   tiles: Tile[] = [];
 
   /**
@@ -217,3 +217,5 @@ export default class GameMap {
     }
   }
 }
+
+export default GameMap;

@@ -11,7 +11,7 @@ import { circlesIntersect, Coord } from "@/utils/geometry";
  * Represents a bullet fired by a tank.
  * @augments GameObject
  */
-export default class Bullet extends GameObject {
+export class Bullet extends GameObject {
   player: Player;
   weapon: Weapon;
   angle: number = 0;
@@ -149,3 +149,5 @@ export default class Bullet extends GameObject {
    */
   explode(): void {}
 }
+
+export default Bullet;

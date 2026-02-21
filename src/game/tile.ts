@@ -6,7 +6,7 @@ import type GameMap from "./gamemap";
  * Class for tiles of a {@link GameMap}.
  * Contains position, wall list, neighbor list, object list.
  */
-export default class Tile implements Coord {
+export class Tile implements Coord {
   /** X index. */
   i: number;
   /** Y index. */
@@ -283,3 +283,5 @@ export default class Tile implements Coord {
     return xypath;
   }
 }
+
+export default Tile;

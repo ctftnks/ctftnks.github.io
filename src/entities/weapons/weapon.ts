@@ -7,7 +7,7 @@ import { SOUNDS } from "@/game/assets";
 /**
  * Base class for all weapons.
  */
-export default class Weapon {
+export class Weapon {
   name: string = "Weapon";
   image: HTMLImageElement;
   isActive: boolean = true;
@@ -106,3 +106,5 @@ export default class Weapon {
    */
   crosshair(): void {}
 }
+
+export default Weapon;

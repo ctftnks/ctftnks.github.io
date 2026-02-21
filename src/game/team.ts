@@ -13,7 +13,7 @@ const TEAMCOLORS = [
 /**
  * Represents a team of players in the game.
  */
-export default class Team {
+export class Team {
   id: number;
   color: string;
 
@@ -27,6 +27,8 @@ export default class Team {
     this.color = color ?? TEAMCOLORS[this.id];
   }
 }
+
+export default Team;
 
 // list of available teams
 export const TEAMS = Array.from({ length: 8 }, (_, i) => new Team(i));

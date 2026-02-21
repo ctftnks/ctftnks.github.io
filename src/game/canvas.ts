@@ -3,12 +3,18 @@ import type Game from "./game";
 /**
  * Manages the game canvas and rendering loop.
  */
-export default class Canvas {
+export class Canvas {
+  /** The main game world HTML canvas element. */
   canvas: HTMLCanvasElement;
+  /** The overlay HTML canvas element for temporary visual effects (fog, etc.). */
   effectsCanvas: HTMLCanvasElement;
+  /** The 2D rendering context for the main canvas. */
   context: CanvasRenderingContext2D;
+  /** The height of the drawing area in CSS pixels. */
   height: number;
+  /** The width of the drawing area in CSS pixels. */
   width: number;
+  /** Current zoom/scaling factor applied to the context. Used for window resizing. */
   scale: number = 1;
 
   /**
@@ -81,3 +87,5 @@ export default class Canvas {
     c?.getContext("2d")?.clearRect(0, 0, c.width, c.height);
   }
 }
+
+export default Canvas;

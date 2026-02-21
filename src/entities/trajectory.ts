@@ -11,7 +11,7 @@ declare interface TrajectoryPoint extends Coord {
  * Represents a trajectory for ray-casting or lasers.
  * @augments GameObject
  */
-export default class Trajectory extends GameObject {
+export class Trajectory extends GameObject {
   hidden: boolean = false;
   color: string = "#000";
   thickness: number = 2;
@@ -106,3 +106,5 @@ export default class Trajectory extends GameObject {
     }
   }
 }
+
+export default Trajectory;

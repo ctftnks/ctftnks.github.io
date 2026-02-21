@@ -11,11 +11,16 @@ import type Team from "./team";
  * Keeps the players score, color, name, keymap
  * and the tank to be controlled
  */
-export default class Player {
+export class Player {
+  /** The current game instance this player is associated with. */
   game?: Game;
+  /** The home base of the player's team (if applicable to the game mode). */
   base?: Base;
+  /** Cumulative score for the current round. */
   score: number = 0;
+  /** Number of kills without dying. Triggers "Killing Spree" sound at certain thresholds. */
   spree: number = 0;
+  /** Persistent statistics for the player across games. */
   stats: { deaths: number; kills: number; miles: number; shots: number } = { deaths: 0, kills: 0, miles: 0, shots: 0 };
 
   /**
@@ -110,3 +115,5 @@ export default class Player {
     return false;
   }
 }
+
+export default Player;

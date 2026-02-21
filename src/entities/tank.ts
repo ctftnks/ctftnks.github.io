@@ -21,26 +21,26 @@ import { type Coord, getRotatedCorners, isPointInRectangle } from "@/utils/geome
  * contains a weapon and a method to shoot it
  * @augments GameObject
  */
-export default class Tank extends GameObject {
-  /** Tank color. */
+export class Tank extends GameObject {
+  /** Hex color code or CSS color name for the tank body. */
   color: string;
-  /** Rotation angle. */
+  /** Current rotation in radians. 0 is pointing up. */
   angle: number = 2 * Math.PI * Math.random();
-  /** Tank width. */
+  /** Dimensional width in world pixels. Affects hitboxes. */
   width: number = Settings.TankWidth;
-  /** Tank height. */
+  /** Dimensional height in world pixels. */
   height: number = Settings.TankHeight;
-  /** Current weapon. */
+  /** The currently equipped weapon logic. */
   weapon: Weapon;
-  /** Movement speed. */
+  /** Base movement speed in pixels per second. Can be modified by power-ups. */
   speed: number = Settings.TankSpeed;
-  /** Duration of invincibility in ms. */
+  /** Remaining time (ms) of invincibility. If > 0, tank is immune to bullets. */
   invincibleDuration: number = 0;
-  /** The flag currently carried, or null if none. */
+  /** Reference to a Flag entity if the tank is currently carrying one. */
   carriedFlag: Flag | null = null;
-  /** Inventory of weapons (unused?). */
+  /** Optional inventory for future multi-weapon support. */
   weapons: Weapon[] = [];
-  /** Whether rapid fire is active. */
+  /** If true, weapon cooldowns are significantly reduced. */
   rapidfire: boolean = false;
 
   /**
@@ -373,3 +373,5 @@ export default class Tank extends GameObject {
     super.delete();
   }
 }
+
+export default Tank;

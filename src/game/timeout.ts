@@ -3,7 +3,7 @@ import Updatable from "@/entities/updatable";
 /**
  * A timeout that executes a callback after a specific game time delay.
  */
-export default class GameTimeout extends Updatable {
+export class GameTimeout extends Updatable {
   private isInterval: boolean;
 
   /**
@@ -37,3 +37,5 @@ export default class GameTimeout extends Updatable {
     }
   }
 }
+
+export default GameTimeout;

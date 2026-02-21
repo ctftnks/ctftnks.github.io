@@ -21,7 +21,7 @@ import { PerformanceMonitor } from "./performanceMonitor";
  * contains a list of players, list of objects in the game
  * contains a loop mechanism for time-iteration
  */
-export default class Game {
+export class Game {
   /** The canvas manager, used for size/resolution. */
   canvas: Canvas;
   /** The game map. */
@@ -30,28 +30,28 @@ export default class Game {
   players: Player[] = [];
   /** List of game objects. */
   objs: GameObject[] = [];
-  /** List of updatables in the game. */
+  /** List of updatables in the game. These are not rendered but updated every tick (e.g. timeouts). */
   updatables: Updatable[] = [];
-  /** Whether the game is paused. */
+  /** Whether the game simulation is currently paused. Rendering continues. */
   paused: boolean = false;
-  /** Interval ID for the game loop. */
+  /** Interval ID for the requestAnimationFrame loop. */
   loop?: number;
-  /** Game time counter in ms. */
+  /** Game time counter in milliseconds (since start of round). */
   t: number = 0;
-  /** Timestamp of the last frame. */
+  /** Timestamp of the last frame for deltaTime calculation. */
   lastTime: number = 0;
-  /** Accumulated time for fixed-step updates. */
+  /** Accumulated time for fixed-step physics updates. Ensures consistency regardless of FPS. */
   accumulator: number = 0;
-  /** Total kills in the game. */
+  /** Total kills in the current game session across all players. */
   nkills: number = 0;
-  /** The current game mode. */
+  /** The logic/rules for the current match (e.g. CaptureTheFlag). */
   mode: Gamemode;
-  /** Performance Monitor instance */
+  /** Performance Monitor instance for tracking frame budget and logic overhead. */
   monitor: PerformanceMonitor = PerformanceMonitor.getInstance();
 
-  /** Accumulator for powerup spawning. */
+  /** Accumulator for powerup spawning logic. */
   powerUpSpawnAccumulator: number = 0;
-  /** Multiplier for powerup spawn rate. */
+  /** Multiplier for powerup spawn rate, can be modified by bonuses. */
   powerUpSpawnRateMultiplier: number = 1;
 
   /**
@@ -308,6 +308,8 @@ export default class Game {
     }
   }
 }
+
+export default Game;
 
 /**
  * Create and start a new game instance.

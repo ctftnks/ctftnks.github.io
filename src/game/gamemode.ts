@@ -12,8 +12,12 @@ import { type Coord } from "@/utils/geometry";
  * Base class for game modes.
  */
 export abstract class Gamemode {
+  /** Internal identifier for the game mode. */
   name: string = "defaultmode";
-  /** Distance from base center to player spawn point (used in Player.spawn). */
+  /**
+   * Distance (in tiles) from the base center where players should spawn.
+   * A value of 2-3 ensures they don't spawn directly on the flag.
+   */
   BaseSpawnDistance: number = 2;
 
   /**

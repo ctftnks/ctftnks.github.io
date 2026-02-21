@@ -7,7 +7,7 @@ import type Tile from "@/game/tile";
  * Parent class for all objects in the game.
  * Base class for Tanks, Bullets, PowerUps, etc.
  */
-export default abstract class GameObject extends Updatable implements Coord {
+export abstract class GameObject extends Updatable implements Coord {
   x: number = 0;
   y: number = 0;
   width: number = 0;
@@ -36,3 +36,5 @@ export default abstract class GameObject extends Updatable implements Coord {
    */
   abstract draw(context: CanvasRenderingContext2D): void;
 }
+
+export default GameObject;

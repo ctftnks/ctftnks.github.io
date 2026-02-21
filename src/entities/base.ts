@@ -10,7 +10,7 @@ import type Flag from "./flag";
  * Represents a Base in the game.
  * @augments GameObject
  */
-export default class Base extends GameObject {
+export class Base extends GameObject {
   /** Base color. */
   color: string;
   /** The flag belonging to this base. */
@@ -92,6 +92,8 @@ export default class Base extends GameObject {
     return this.flag.inBase;
   }
 }
+
+export default Base;
 
 /**
  * Represents a Hill in King of the Hill mode.

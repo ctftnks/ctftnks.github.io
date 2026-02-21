@@ -6,7 +6,7 @@ import Tile from "./tile";
 /**
  * Static class containing map generation algorithms.
  */
-export default class MapGenerator {
+export class MapGenerator {
   static algorithms: ((map: GameMap, x1?: number, y1?: number, x2?: number, y2?: number) => void)[];
 
   /**
@@ -189,6 +189,8 @@ export default class MapGenerator {
     }
   }
 }
+
+export default MapGenerator;
 
 // List of all algorithms
 MapGenerator.algorithms = [

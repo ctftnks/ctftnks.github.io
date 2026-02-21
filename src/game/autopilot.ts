@@ -55,7 +55,7 @@ interface AimResult {
 /**
  * Handles the automatic steering logic for a bot player.
  */
-export default class Autopilot {
+export class Autopilot {
   goto: Coord | null = null;
   private timeSinceLastUpdate: number = 0;
   private fleeingState: { from: Tile[] | null; condition: (() => boolean) | null } = { from: null, condition: null };
@@ -545,3 +545,5 @@ export default class Autopilot {
     }
   }
 }
+
+export default Autopilot;

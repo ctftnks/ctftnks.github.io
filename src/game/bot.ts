@@ -7,7 +7,7 @@ import type Team from "./team";
  * A bot player that controls a tank automatically.
  * @augments Player
  */
-export default class Bot extends Player {
+export class Bot extends Player {
   // keys are inherited from Player
   private autopilot: Autopilot;
 
@@ -41,3 +41,5 @@ export default class Bot extends Player {
     this.autopilot.step(tank, this.game, dt);
   }
 }
+
+export default Bot;
