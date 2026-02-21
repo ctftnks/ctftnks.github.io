@@ -8,7 +8,6 @@ import { Settings } from "@/stores/settings";
  * @param x - X coordinate.
  * @param y - Y coordinate.
  * @param count - Number of shrapnels.
- * @param options - Explosion options.
  * @param timeout - duration of a shrapnel in ms.
  */
 export function createShrapnelExplosion(weapon: Weapon, x: number, y: number, count: number, timeout: number): void {

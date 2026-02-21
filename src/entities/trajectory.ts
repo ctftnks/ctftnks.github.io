@@ -3,7 +3,10 @@ import type GameMap from "@/game/gamemap";
 import { type Coord } from "@/utils/geometry";
 import type Game from "@/game/game";
 
-declare interface TrajectoryPoint extends Coord {
+/**
+ * Represents a single point in a calculated trajectory.
+ */
+export interface TrajectoryPoint extends Coord {
   angle: number;
 }
 

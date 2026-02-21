@@ -235,7 +235,6 @@ export class Game {
 
   /**
    * Modifies the powerup spawn rate for a duration.
-   * @param factor - The factor to multiply the spawn rate by.
    * @param duration - The duration of the effect in milliseconds.
    */
   modifyPowerUpSpawnRate(duration: number): void {

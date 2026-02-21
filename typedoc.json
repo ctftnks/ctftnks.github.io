@@ -8,7 +8,7 @@
   "includeVersion": true,
   "githubPages": true,
   "cleanOutputDir": true,
-  "exclude": ["**/*.test.ts", "node_modules/**"],
+  "exclude": ["**/*.test.ts", "node_modules/**", "docs/.vitepress/config.ts"],
   "searchInComments": true,
   "hideGenerator": true
 }

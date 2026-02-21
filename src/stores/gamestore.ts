@@ -12,7 +12,7 @@ import { reactive, markRaw } from "vue";
  * Data Structure for the global state of the website.
  * Manages players, game instances, and settings persistence.
  */
-class GameStore {
+export class GameStore {
   game?: Game;
   canvas?: Canvas;
   players: Player[] = [];

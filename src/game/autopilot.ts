@@ -77,10 +77,12 @@ export class Autopilot {
   }
 
   /**
-   * Decides the next action for the bot.
-   * @param tank The tank to be steered by the bot
-   * @param game The game in which the tank lives
-   * @param dt The time elapsed since the last frame in milliseconds
+   * Main decision-making loop for the bot.
+   * It evaluates multiple possible actions (powerups, enemies, objectives, fleeing)
+   * and selects the one with the highest priority weight.
+   * @param tank - The tank to be steered by the bot
+   * @param game - The game in which the tank lives
+   * @param dt - The time elapsed since the last frame in milliseconds
    */
   private updateDecision(tank: Tank, game: Game, dt: number): void {
     this.timeSinceLastUpdate += dt;
@@ -156,6 +158,8 @@ export class Autopilot {
 
   /**
    * Evaluates engaging nearby enemies.
+   * It calculates a path to the nearest enemy and decides whether to follow
+   * them or open fire based on weapon readiness and distance.
    * @param tile
    * @param tank
    * @param game
@@ -383,6 +387,8 @@ export class Autopilot {
 
   /**
    * Executes a shooting action.
+   * Includes "human-like" inaccuracies like aim jitter and reaction delays
+   * to ensure bots are balanced and fun to play against.
    * @param tank
    * @param target
    * @param game

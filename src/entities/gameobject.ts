@@ -23,7 +23,7 @@ export abstract class GameObject extends Updatable implements Coord {
 
   /**
    * Update the position of the object on the map
-   * @param coord a coordinate tuple (x, y)
+   * @param coord - a coordinate tuple (x, y)
    */
   setPosition(coord: Coord): void {
     this.x = coord.x;
