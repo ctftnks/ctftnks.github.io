@@ -11,5 +11,5 @@ This section describes the technical and organizational constraints that limit t
 
 ## Organizational Constraints
 
-- **Open Source**: The project is managed as an open-source repository on GitHub, requiring clear documentation (arc42) and a clean contribution process.
+- **Open Source**: The project is licensed under the GNU General Public License v3.0 and managed as an open-source repository on GitHub, requiring clear documentation (arc42) and a clean contribution process.
 - **Local-First**: Multiplayer features are currently limited to local/same-device play and bot integration, avoiding the complexity of real-time network synchronization for now.
