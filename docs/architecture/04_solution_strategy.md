@@ -2,6 +2,14 @@
 
 The architecture of CTFTNKS is driven by the goals of high performance (60fps in browser) and high extensibility for new game mechanics.
 
+## Mental Model: The Engine Pulse
+
+To understand CTFTNKS, think of it as a **Simulation Heartbeat** with a **UI Observer**.
+
+1.  **The Heartbeat (Engine)**: Every ~16ms, the game "ticks." It doesn't care about Vue or buttons; it only cares about physics, vectors, and entity states. It moves objects, checks for collisions, and updates variables.
+2.  **The Bridge (Store)**: The engine writes its most important high-level data (like scores, player lists, and game status) into a reactive `GameStore`.
+3.  **The Observer (Vue)**: The Vue UI simply "watches" the store. When a score changes in the engine, the UI updates automatically. This keeps the performance-heavy simulation code clean and "vanilla."
+
 ## Fundamental Decisions and Strategies
 
 ### 1. Decoupling of UI and Game Engine

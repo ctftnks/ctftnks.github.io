@@ -1,19 +1,14 @@
 # Runtime View
 
-## Game Loop (The "Tick")
+## The "Life of a Frame": A Story of a Tick
 
-The game operates on a fixed-step update loop followed by a variable-rate render call:
+Instead of a simple list of steps, let's walk through what happens in the ~16.6 milliseconds of a single game frame:
 
-1. **Input Processing**: `Player` objects (Human or Bot) update their intended actions (steering, shooting).
-2. **Physics & Movement**:
-   - `Tank` objects update their position based on speed and angle.
-   - Collision detection is checked against `GameMap` tiles and other `GameObject` instances.
-3. **Entity Logic**:
-   - `Bullet` trajectories are calculated.
-   - `PowerUp` timers and effects are updated.
-   - `Smoke` and other particle effects are stepped.
-4. **Spatial Partitioning**: Objects are re-indexed in the `GameMap` grid to ensure efficient collision checks for the next frame.
-5. **Rendering**: The `Canvas` manager clears the screen and calls `draw()` on the map and all active game objects.
+1. **"What do they want to do?" (Input)**: We check the `Key` state for humans and let the `Autopilot` think for the bots. This sets the _intended_ velocity and rotation for every tank.
+2. **"Where would they be?" (Physics Simulation)**: The engine calculates the next position. It checks: _"If this tank moves 5 pixels, does it hit a wall?"_ If yes, the custom physics engine slides the tank along the wall or stops it.
+3. **"Did something die?" (Collision Resolution)**: We check if any bullet is close enough to a tank to trigger a `kill()`. If so, scores are updated in the `GameStore`, and the tank is scheduled for respawn.
+4. **"Clean up the mess" (Maintenance)**: We remove bullets that have lived too long and particles that have faded out. We re-sort everything into the Grid Tiles so the next frame's physics checks are fast.
+5. **"Paint the result" (Rendering)**: Finally, the engine tells the `Canvas`: _"Everyone is in their final position for this frame. Show the user."_ The canvas clears, draws the map, and then draws each object.
 
 ## Power-up Spawning
 
