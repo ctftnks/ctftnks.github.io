@@ -35,7 +35,7 @@
     "@vitest/coverage-v8": "^4.0.16",
     "@vue/test-utils": "^2.4.11",
     "dpdm": "^3.14.0",
-    "esbuild": "^0.27.7",
+    "esbuild": "^0.28.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsdoc": "^50.6.11",
