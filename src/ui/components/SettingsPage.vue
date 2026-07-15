@@ -137,11 +137,11 @@
       </div>
     </div>
     <div style="text-align: center; clear: both; padding-top: 20px; display: flex; justify-content: center; gap: 10px;">
-      <button id="btnResetSettings" class="option option-icon-btn" @click="resetToDefaults">
+      <button id="btnResetSettings" class="option" @click="resetToDefaults">
         <RotateCcw :size="16" />
         Reset to Defaults
       </button>
-      <button id="btnCloseSettings" class="option option-icon-btn" @click="closeSettings">
+      <button id="btnCloseSettings" class="option" @click="closeSettings">
         <ArrowLeft :size="16" />
         Back
       </button>
@@ -201,12 +201,5 @@ function updateSetting(key: keyof typeof Settings, delta: number, min: number = 
   position: relative;
   left: 0;
   top: 0;
-}
-
-.option-icon-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
 }
 </style>

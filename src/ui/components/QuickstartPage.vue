@@ -14,7 +14,7 @@
     <button class="option vspace" @click="quickMixed(3, 2)">2M vs 2M vs 2M</button><br />
     <button class="option vspace" @click="quickUnevenMixed(2, 2)">2M vs 2B</button><br />
     <br />
-    <button id="btnCloseQuickstart" class="option vspace option-icon-btn" @click="close">
+    <button id="btnCloseQuickstart" class="option vspace" @click="close">
       <ArrowLeft :size="16" />
       Back
     </button>
@@ -86,12 +86,3 @@ function quickUnevenMixed(nteams: number, teamsize: number): void {
   close();
 }
 </script>
-
-<style scoped>
-.option-icon-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-</style>

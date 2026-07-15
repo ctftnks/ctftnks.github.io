@@ -23,16 +23,16 @@
         <option value="1.8">Insane</option>
       </select>
     </div>
-    <button id="btnMute" class="option option-icon-btn" style="width: 120px" @click="toggleMute">
+    <button id="btnMute" class="option" style="width: 120px" @click="toggleMute">
       <VolumeX v-if="Settings.muted" :size="16" />
       <Volume2 v-else :size="16" />
       Sound: {{ Settings.muted ? "off" : "on" }}
     </button>
-    <button id="btnPowerups" class="option option-icon-btn" @click="openPage('powerups')">
+    <button id="btnPowerups" class="option" @click="openPage('powerups')">
       <Zap :size="16" />
       PowerUps
     </button>
-    <button id="btnSettings" class="option option-icon-btn" @click="openPage('settings')">
+    <button id="btnSettings" class="option" @click="openPage('settings')">
       <Sliders :size="16" />
       Settings
     </button>
@@ -72,19 +72,19 @@
       </div>
     </div>
 
-    <button id="btnAddPlayer" class="option vspace option-icon-btn" @click="addPlayer(false)">
+    <button id="btnAddPlayer" class="option vspace" @click="addPlayer(false)">
       <UserPlus :size="16" />
       Add Player
     </button>
-    <button id="btnAddBot" class="option vspace option-icon-btn" @click="addPlayer(true)">
+    <button id="btnAddBot" class="option vspace" @click="addPlayer(true)">
       <Bot :size="16" />
       Add Bot
     </button>
-    <button id="btnQuickTeams" class="option vspace option-icon-btn" @click="openPage('quickstart')">
+    <button id="btnQuickTeams" class="option vspace" @click="openPage('quickstart')">
       <Users :size="16" />
       Quick Teams
     </button>
-    <button id="btnStartGame" class="option vspace option-icon-btn" @click="startGame">
+    <button id="btnStartGame" class="option vspace" @click="startGame">
       <Play :size="16" />
       Start Game!
     </button>
@@ -256,13 +256,6 @@ onUnmounted(() => {
 
 .keyEditButton.editing {
   opacity: 0.6;
-}
-
-.option-icon-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
 }
 
 .header-icon-btn {

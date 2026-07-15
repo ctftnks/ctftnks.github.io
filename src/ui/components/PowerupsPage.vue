@@ -32,7 +32,7 @@
       <button class="right" @click="updateSetting('MaxPowerUps', 2)">+</button>
     </div>
 
-    <button id="btnClose" class="option vspace option-icon-btn" @click="close">
+    <button id="btnClose" class="option vspace" @click="close">
       <ArrowLeft :size="16" />
       Back
     </button>
@@ -86,12 +86,5 @@ function updateSetting(key: keyof typeof Settings, delta: number, min: number = 
   background-color: #fff;
   box-shadow: 0px 0px 13px 0px rgba(94, 94, 94, 1);
   text-align: center;
-}
-
-.option-icon-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
 }
 </style>
