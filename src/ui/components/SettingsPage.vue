@@ -113,7 +113,7 @@
         <br />
       </div>
     </div>
-    <div style="text-align: center; clear: both; padding-top: 20px; display: flex; justify-content: center; gap: 10px;">
+    <div style="text-align: center; clear: both; padding-top: 20px; display: flex; justify-content: center; gap: 10px">
       <button id="btnResetSettings" class="option" @click="resetToDefaults">
         <RotateCcw :size="16" />
         Reset to Defaults
