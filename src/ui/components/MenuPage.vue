@@ -49,7 +49,9 @@
         <span style="width: 50px; display: inline-block"></span>
       </div>
       <div v-for="(player, index) in store.players" :key="player.id" class="entry">
-        <button class="team" :style="{ color: player.team.color }" @click="changeTeam(index)">●</button>
+        <button class="team" @click="changeTeam(index)">
+          <Flag :size="16" :fill="player.team.color" :style="{ color: player.team.color }" />
+        </button>
         <button class="name" :style="{ color: player.team.color }" @click="editName(index)">{{ player.name }}</button>
 
         <template v-if="player.isBot()">
@@ -111,6 +113,7 @@ import {
   ArrowDown,
   ArrowLeft,
   ArrowRight,
+  Flag,
 } from "@lucide/vue";
 
 const editingMapID = ref<number | null>(null);
@@ -235,8 +238,7 @@ onUnmounted(() => {
   display: inline-block;
   width: 36px;
   margin-right: 20px;
-  font-size: 1.2em;
-  padding: 4px;
+  padding: 0;
 }
 
 #playersMenu .remove {
@@ -246,7 +248,7 @@ onUnmounted(() => {
   width: 36px;
   margin-left: 20px;
   color: #f44336;
-  padding: 6px;
+  padding: 0;
 }
 
 .keyEditButton {
