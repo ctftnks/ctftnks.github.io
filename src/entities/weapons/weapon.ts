@@ -41,7 +41,7 @@ export abstract class Weapon {
   /**
    * Fires the weapon.
    * Plays sound and creates a new bullet.
-   * @param dt - The time elapsed since the last frame in milliseconds.
+   * @param _dt - The time elapsed since the last frame in milliseconds.
    */
   shoot(_dt: number): void {
     if (!this.isActive) {

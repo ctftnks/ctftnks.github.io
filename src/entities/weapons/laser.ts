@@ -15,6 +15,10 @@ export class Laser extends Weapon {
   override fired: boolean = false;
   override trajectory: Trajectory;
 
+  /**
+   * Laser does not use single bullet logic, throws an error.
+   * @override
+   */
   override newBullet(): Bullet {
     throw new Error("Laser does not use single bullet logic");
   }

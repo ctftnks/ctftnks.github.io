@@ -53,6 +53,7 @@ export function createShrapnelExplosion(weapon: Weapon, x: number, y: number, co
     shrapnel.bounceSound = "";
 
     if (options.noCollision) {
+      /** Disable collision check. */
       shrapnel.checkCollision = function (): void {};
     }
 

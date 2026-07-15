@@ -28,14 +28,24 @@ const mockTank = {
   rapidfire: false,
 } as unknown as Tank;
 
-// Concrete implementation for testing abstract class
+/**
+ * Concrete implementation for testing abstract class.
+ */
 class TestWeapon extends Weapon {
   name = "TestWeapon";
+  /**
+   * Creates a new TestWeapon.
+   * @param tank - The tank instance.
+   */
   constructor(tank: Tank) {
     super(tank);
     this.image.src = "test.png";
   }
 
+  /**
+   * Spawns a new bullet.
+   * @returns The Bullet instance.
+   */
   newBullet(): Bullet {
     const bullet = new Bullet(this);
     this.tank.game.addObject(bullet);
