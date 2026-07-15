@@ -39,7 +39,7 @@
         <span style="width: 50px; display: inline-block"></span>
       </div>
       <div v-for="(player, index) in store.players" :key="player.id" class="entry">
-        <button class="team" :style="{ color: player.team.color }" @click="changeTeam(index)">&diams;</button>
+        <button class="team" :style="{ color: player.team.color }" @click="changeTeam(index)">●</button>
         <button class="name" :style="{ color: player.team.color }" @click="editName(index)">{{ player.name }}</button>
 
         <template v-if="player.isBot()">
