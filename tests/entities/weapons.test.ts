@@ -3,6 +3,7 @@ import { Gun, MG, Grenade, Laser, Mine, Guided, WreckingBall, Slingshot } from "
 import { TEAMS } from "@/game/team";
 import { Settings } from "@/stores/settings";
 import Tank from "@/entities/tank";
+import { createShrapnelExplosion } from "@/entities/weapons/utils";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -208,6 +209,26 @@ describe("Weapon System", () => {
       laser.crosshair();
       expect(laser.trajectory.x).toBe(mockTank.x);
     });
+
+    it("should throw error on newBullet", () => {
+      const laser = new Laser(mockTank);
+      expect(() => laser.newBullet()).toThrow("Laser does not use single bullet logic");
+    });
+
+    it("should not shoot if inactive", () => {
+      const laser = new Laser(mockTank);
+      mockGame.addObject.mockClear();
+      laser.isActive = false;
+      laser.shoot(16);
+      expect(mockGame.addObject).not.toHaveBeenCalled();
+    });
+
+    it("should delete weapon and trajectory", () => {
+      const laser = new Laser(mockTank);
+      laser.delete();
+      expect(laser.isDeleted).toBe(true);
+      expect(laser.trajectory.delete).toHaveBeenCalled();
+    });
   });
 
   describe("Grenade", () => {
@@ -350,6 +371,20 @@ describe("Weapon System", () => {
       const sling = new Slingshot(mockTank);
       const bullet = sling.newBullet();
       expect(bullet.speed).toBe(2 * Settings.BulletSpeed);
+    });
+  });
+
+  describe("createShrapnelExplosion Utility", () => {
+    it("should disable collision check if noCollision is true", () => {
+      const gun = new Gun(mockTank);
+      mockGame.addObject.mockClear();
+      createShrapnelExplosion(gun, 0, 0, 1, { timeout: 100, noCollision: true });
+      expect(mockGame.addObject).toHaveBeenCalled();
+      const shrapnel = mockGame.addObject.mock.calls[0][0];
+      expect(shrapnel.checkCollision).toBeInstanceOf(Function);
+      
+      const oldPosition = { x: 0, y: 0 };
+      expect(() => shrapnel.checkCollision(oldPosition)).not.toThrow();
     });
   });
 });
