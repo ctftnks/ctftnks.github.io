@@ -4,9 +4,10 @@ import type Bullet from "../bullet";
 import { Smoke } from "../smoke";
 import { generateCloud } from "../smoke";
 import { IMAGES, SOUNDS } from "@/game/assets";
-import { playSound } from "@/game/effects";
+import { playSound } from "@/game/sounds";
 import { Settings } from "@/stores/settings";
-import { Coord } from "@/utils/geometry";
+import { createBaseBullet } from "./utils";
+import type { Coord } from "@/utils/geometry";
 
 /**
  * Destroys walls.
@@ -33,7 +34,7 @@ export class WreckingBall extends Weapon {
    * @override
    */
   override newBullet(): Bullet {
-    const bullet = super.newBullet();
+    const bullet = createBaseBullet(this);
     bullet.radius = 10;
     bullet.color = "#000";
     bullet.speed = Settings.TankSpeed * 1.1;

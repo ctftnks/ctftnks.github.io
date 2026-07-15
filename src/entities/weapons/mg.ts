@@ -2,7 +2,8 @@ import Weapon from "./weapon";
 import type Tank from "../tank";
 import type Bullet from "../bullet";
 import { IMAGES, SOUNDS } from "@/game/assets";
-import { playSound } from "@/game/effects";
+import { playSound } from "@/game/sounds";
+import { createBaseBullet } from "./utils";
 
 /**
  * A rapid-firing machine gun.
@@ -31,7 +32,7 @@ export class MG extends Weapon {
    * @override
    */
   override newBullet(): Bullet {
-    const bullet = super.newBullet();
+    const bullet = createBaseBullet(this);
     bullet.radius = 2;
     bullet.bounceSound = "";
     bullet.isBulletBulletCollisionEnabled = false;

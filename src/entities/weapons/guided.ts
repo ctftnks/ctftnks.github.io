@@ -3,8 +3,9 @@ import Tank from "../tank";
 import Bullet from "../bullet";
 import { Smoke } from "../smoke";
 import { IMAGES, SOUNDS } from "@/game/assets";
-import { playSound } from "@/game/effects";
+import { playSound } from "@/game/sounds";
 import { Settings } from "@/stores/settings";
+import { createBaseBullet } from "./utils";
 import type Tile from "@/game/tile";
 import type GameObject from "../gameobject";
 
@@ -32,7 +33,7 @@ export class Guided extends Weapon {
    * @override
    */
   override newBullet(): Bullet {
-    const e = super.newBullet();
+    const e = createBaseBullet(this);
     e.radius = 6;
     e.image = new Image();
     e.image.src = IMAGES.guided;
