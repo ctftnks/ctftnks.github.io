@@ -103,6 +103,9 @@ button.option {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  padding-top: 0;
+  padding-bottom: 0;
+  line-height: 1;
 }
 
 .option select {

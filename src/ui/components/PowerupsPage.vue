@@ -20,16 +20,12 @@
 
     <div class="option vspace">
       <span>Rate</span>
-      <button class="left" @click="updateSetting('PowerUpRate', -1, 1, 60)">-</button>
-      <input class="left right" :value="Settings.PowerUpRate + 's'" size="1" readonly />
-      <button class="right" @click="updateSetting('PowerUpRate', 1, 1, 60)">+</button>
+      <NumberSelector v-model="Settings.PowerUpRate" :min="1" :max="60" suffix="s" @change="save" />
     </div>
 
     <div class="option vspace">
       <span>Amount</span>
-      <button class="left" @click="updateSetting('MaxPowerUps', -2, 0)">-</button>
-      <input class="left right" :value="Settings.MaxPowerUps" size="1" readonly />
-      <button class="right" @click="updateSetting('MaxPowerUps', 2)">+</button>
+      <NumberSelector v-model="Settings.MaxPowerUps" :min="0" :step="2" @change="save" />
     </div>
 
     <button id="btnClose" class="option vspace" @click="close">
@@ -45,22 +41,13 @@ import { PowerUps } from "@/entities/powerups";
 import { store } from "@/stores/gamestore";
 import { openPage } from "@/stores/ui";
 import { ArrowLeft } from "@lucide/vue";
+import NumberSelector from "./NumberSelector.vue";
 
 function close(): void {
   openPage("menu");
 }
 
-function updateSetting(key: keyof typeof Settings, delta: number, min: number = 0, max?: number): void {
-  let val = Settings[key] as number;
-  val += delta;
-  if (val < min) {
-    val = min;
-  }
-  if (max !== undefined && val > max) {
-    val = max;
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (Settings as any)[key] = val;
+function save(): void {
   store.saveSettings();
 }
 </script>
