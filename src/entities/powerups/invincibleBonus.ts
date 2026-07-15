@@ -1,7 +1,7 @@
 import PowerUp from "./powerup";
 import type Tank from "../tank";
 import { IMAGES, SOUNDS } from "@/game/assets";
-import { stopMusic, playMusic } from "@/game/effects";
+import { stopMusic, playMusic } from "@/game/sounds";
 import { Settings } from "@/stores/settings";
 import type Game from "@/game/game";
 

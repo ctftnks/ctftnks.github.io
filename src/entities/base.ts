@@ -1,5 +1,5 @@
 import GameObject from "./gameobject";
-import { playSound } from "@/game/effects";
+import { playSound } from "@/game/sounds";
 import { SOUNDS } from "@/game/assets";
 import type Game from "@/game/game";
 import Tank from "./tank";
