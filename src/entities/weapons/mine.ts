@@ -44,7 +44,7 @@ export class Mine extends Weapon {
       if (!e.exploded) {
         e.exploded = true;
         playSound(SOUNDS.grenade);
-        createShrapnelExplosion(this, e.x, e.y, this.nshrapnels, 600);
+        createShrapnelExplosion(this, e.x, e.y, this.nshrapnels, { timeout: 600 });
         this.bullet = null;
       }
     };

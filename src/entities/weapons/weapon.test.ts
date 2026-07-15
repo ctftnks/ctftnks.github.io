@@ -19,6 +19,7 @@ const mockPlayer = {
 
 const mockTank = {
   player: mockPlayer,
+  game: mockGame,
   angle: 0,
   corners: () => [
     { x: 0, y: 0 },
@@ -37,7 +38,7 @@ class TestWeapon extends Weapon {
 
   newBullet(): Bullet {
     const bullet = new Bullet(this);
-    this.tank.player.game!.addObject(bullet);
+    this.tank.game.addObject(bullet);
     return bullet;
   }
 }
