@@ -41,11 +41,13 @@ function increment(): void {
 
 <style scoped>
 .number-selector {
-  display: inline-flex;
+  display: inline-block;
   align-items: center;
   vertical-align: middle;
   height: 34px;
   box-sizing: border-box;
+  border: solid 1px #aaa;
+  margin-left: -1px;
 }
 
 .selector-btn,
@@ -73,21 +75,17 @@ function increment(): void {
 }
 
 .left-btn {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
   border-right: none;
 }
 
 .right-btn {
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
   border-left: none;
 }
 
 .selector-value {
-  background: #fff;
+  background: #ddd;
   cursor: default;
-  min-width: 40px;
+  min-width: 60px;
   white-space: nowrap;
 }
 </style>

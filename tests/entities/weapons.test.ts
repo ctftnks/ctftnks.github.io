@@ -382,7 +382,7 @@ describe("Weapon System", () => {
       expect(mockGame.addObject).toHaveBeenCalled();
       const shrapnel = mockGame.addObject.mock.calls[0][0];
       expect(shrapnel.checkCollision).toBeInstanceOf(Function);
-      
+
       const oldPosition = { x: 0, y: 0 };
       expect(() => shrapnel.checkCollision(oldPosition)).not.toThrow();
     });
