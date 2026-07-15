@@ -29,9 +29,16 @@ vi.mock("@/stores/gamestore", () => ({
 }));
 
 // Mock UI Store
-vi.mock("@/stores/ui", () => ({
-  openPage: vi.fn(),
-}));
+vi.mock("@/stores/ui", () => {
+  const currentPage = { value: "game" };
+  (globalThis as any).mockCurrentPage = currentPage;
+  return {
+    currentPage,
+    openPage: vi.fn((p) => {
+      currentPage.value = p;
+    }),
+  };
+});
 
 describe("GameView.vue", () => {
   beforeEach(() => {
@@ -79,8 +86,9 @@ describe("GameView.vue", () => {
     expect(store.game!.resize).toHaveBeenCalled();
   });
 
-  it("handles keydown event (Escape)", async () => {
+  it("handles keydown event (Escape from game to menu)", async () => {
     mount(GameView);
+    (globalThis as any).mockCurrentPage.value = "game";
     store.game = {
       resize: vi.fn(),
       stop: vi.fn(),
@@ -91,6 +99,37 @@ describe("GameView.vue", () => {
     window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
 
     expect(store.game!.pause).toHaveBeenCalled();
+    expect(openPage).toHaveBeenCalledWith("menu");
+  });
+
+  it("handles keydown event (Escape from menu to game)", async () => {
+    mount(GameView);
+    (globalThis as any).mockCurrentPage.value = "menu";
+    store.game = {
+      resize: vi.fn(),
+      stop: vi.fn(),
+      pause: vi.fn(),
+      paused: true,
+    } as any;
+
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+
+    expect(store.game!.paused).toBe(false);
+    expect(openPage).toHaveBeenCalledWith("game");
+  });
+
+  it("handles keydown event (Escape from settings to menu)", async () => {
+    mount(GameView);
+    (globalThis as any).mockCurrentPage.value = "settings";
+    store.game = {
+      resize: vi.fn(),
+      stop: vi.fn(),
+      pause: vi.fn(),
+      paused: true,
+    } as any;
+
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+
     expect(openPage).toHaveBeenCalledWith("menu");
   });
 });

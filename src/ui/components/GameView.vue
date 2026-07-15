@@ -22,7 +22,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import Canvas from "@/game/canvas";
 import { store } from "@/stores/gamestore";
-import { openPage } from "@/stores/ui";
+import { openPage, currentPage } from "@/stores/ui";
 import { PerformanceMonitor, type PerformanceStats } from "@/game/performanceMonitor";
 import { Settings } from "@/stores/settings";
 
@@ -76,9 +76,19 @@ function handleResize(): void {
 }
 
 function handleKeydown(e: KeyboardEvent): void {
-  if (e.key === "Escape" && store.game && !store.game.paused) {
-    store.game.pause();
-    openPage("menu");
+  if (e.key === "Escape") {
+    if (currentPage.value === "game" && store.game && !store.game.paused) {
+      store.game.pause();
+      openPage("menu");
+    } else if (currentPage.value === "menu") {
+      if (store.game) {
+        store.game.paused = false;
+        openPage("game");
+        window.dispatchEvent(new Event("resize"));
+      }
+    } else if (currentPage.value !== "game") {
+      openPage("menu");
+    }
   }
 }
 
