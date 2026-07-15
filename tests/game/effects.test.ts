@@ -31,8 +31,24 @@ describe("Effects Module", () => {
     });
 
     it("should play music and handle loop", () => {
+      let endedCallback: any;
+      const addEventListenerSpy = vi.spyOn(Audio.prototype, "addEventListener").mockImplementation((event, cb) => {
+        if (event === "ended") {
+          endedCallback = cb;
+        }
+      });
       playMusic("music.mp3");
       expect(playSpy).toHaveBeenCalled();
+      expect(addEventListenerSpy).toHaveBeenCalledWith("ended", expect.any(Function), false);
+
+      // Trigger "ended" event manually
+      const mockAudioElement = {
+        currentTime: 10,
+        play: vi.fn().mockResolvedValue(undefined),
+      };
+      endedCallback.call(mockAudioElement);
+      expect(mockAudioElement.currentTime).toBe(0);
+      expect(mockAudioElement.play).toHaveBeenCalled();
     });
 
     it("should not restart music if same file is playing", () => {
