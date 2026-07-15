@@ -3,7 +3,8 @@ import type Tank from "../tank";
 import Bullet from "../bullet";
 import Trajectory from "../trajectory";
 import { IMAGES, SOUNDS } from "@/game/assets";
-import { playSound, hexToRgbA } from "@/game/effects";
+import { playSound } from "@/game/sounds";
+import { hexToRgbA } from "@/game/effects";
 
 /**
  * Laser weapon.
@@ -13,6 +14,10 @@ export class Laser extends Weapon {
   override name: string = "Laser";
   override fired: boolean = false;
   override trajectory: Trajectory;
+
+  override newBullet(): Bullet {
+    throw new Error("Laser does not use single bullet logic");
+  }
 
   /**
    * Creates a new Laser.

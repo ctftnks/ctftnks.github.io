@@ -2,8 +2,8 @@ import Weapon from "./weapon";
 import type Tank from "../tank";
 import Bullet from "../bullet";
 import { IMAGES, SOUNDS } from "@/game/assets";
-import { playSound } from "@/game/effects";
-import { createShrapnelExplosion } from "./utils";
+import { playSound } from "@/game/sounds";
+import { createShrapnelExplosion, createBaseBullet } from "./utils";
 
 /**
  * A grenade that can be remotely detonated.
@@ -32,7 +32,7 @@ export class Grenade extends Weapon {
    * @override
    */
   override newBullet(): Bullet {
-    const e = super.newBullet();
+    const e = createBaseBullet(this);
     e.image = new Image();
     e.image.src = IMAGES.grenade;
     e.radius = 6;
@@ -48,7 +48,7 @@ export class Grenade extends Weapon {
       if (!e.exploded) {
         e.exploded = true;
         playSound(SOUNDS.grenade);
-        createShrapnelExplosion(this, e.x, e.y, this.nshrapnels, 310);
+        createShrapnelExplosion(this, e.x, e.y, this.nshrapnels, { timeout: 310 });
         this.bullet = null;
         this.deactivate();
       }
@@ -61,7 +61,7 @@ export class Grenade extends Weapon {
    * Fires or detonates the grenade.
    * @override
    */
-  override shoot(): void {
+  override shoot(_dt: number): void {
     if (!this.isActive) {
       return;
     }

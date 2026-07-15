@@ -1,6 +1,6 @@
 import GameObject from "./gameobject";
 import { Smoke, generateCloud } from "./smoke";
-import { playSound } from "@/game/effects";
+import { playSound } from "@/game/sounds";
 import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import type Player from "@/game/player";
