@@ -158,11 +158,15 @@ describe("Weapon System", () => {
       expect(gun.isDeleted).toBe(false);
     });
 
-    it("should shoot and create bullet", () => {
+    it("should shoot and create bullet with correct angle and color", () => {
+      mockTank.angle = 1.23;
       const gun = new Gun(mockTank);
       vi.useFakeTimers();
       gun.shoot(16);
       expect(mockGame.addObject).toHaveBeenCalled();
+      const bullet = mockGame.addObject.mock.calls[0][0];
+      expect(bullet.angle).toBe(1.23);
+      expect(bullet.color).toBe(mockTank.player.team.color);
       expect(gun.isActive).toBe(false);
       vi.useRealTimers();
     });
