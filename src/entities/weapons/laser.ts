@@ -38,7 +38,7 @@ export class Laser extends Weapon {
    * Fires the laser.
    * @override
    */
-  override shoot(): void {
+  override shoot(_dt: number): void {
     if (!this.isActive) {
       return;
     }

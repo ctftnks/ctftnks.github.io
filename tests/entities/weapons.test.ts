@@ -161,7 +161,7 @@ describe("Weapon System", () => {
     it("should shoot and create bullet", () => {
       const gun = new Gun(mockTank);
       vi.useFakeTimers();
-      gun.shoot();
+      gun.shoot(16);
       expect(mockGame.addObject).toHaveBeenCalled();
       expect(gun.isActive).toBe(false);
       vi.useRealTimers();
@@ -194,7 +194,7 @@ describe("Weapon System", () => {
   describe("Laser", () => {
     it("should fire multiple bullets along trajectory", () => {
       const laser = new Laser(mockTank);
-      laser.shoot();
+      laser.shoot(16);
       expect(mockGame.addObject).toHaveBeenCalled();
       expect(laser.trajectory.step).toHaveBeenCalled();
     });
@@ -224,7 +224,7 @@ describe("Weapon System", () => {
       grenade.bullet = bullet as any;
       bullet.age = 400;
 
-      grenade.shoot();
+      grenade.shoot(16);
       expect(explodeSpy).toHaveBeenCalled();
     });
   });

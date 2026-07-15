@@ -3,7 +3,7 @@ import Game from "@/game/game";
 import { Settings } from "@/stores/settings";
 import Canvas from "@/game/canvas";
 import Bullet from "@/entities/bullet";
-import Weapon from "@/entities/weapons/weapon";
+import { Gun } from "@/entities/weapons";
 import Player from "@/game/player";
 import { TEAMS } from "@/game/team";
 import Tank from "@/entities/tank";
@@ -47,7 +47,7 @@ describe("Collision Robustness (Scenario 4)", () => {
     const player = new Player(0, "P1", TEAMS[0], []);
     game.addPlayer(player);
     const tank = new Tank(player, game);
-    const weapon = new Weapon(tank);
+    const weapon = new Gun(tank);
     const bullet = new Bullet(weapon);
 
     // Position bullet near a wall (tile 0,0 has border walls)
@@ -81,7 +81,7 @@ describe("Collision Robustness (Scenario 4)", () => {
 
     const player = new Player(0, "P1", TEAMS[0], []);
     const tank = new Tank(player, game);
-    const weapon = new Weapon(tank);
+    const weapon = new Gun(tank);
     const bullet = new Bullet(weapon);
 
     bullet.x = 125;
