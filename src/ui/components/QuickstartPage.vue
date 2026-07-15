@@ -12,13 +12,19 @@
     <br />
     <button class="option vspace" @click="quickMixed(2, 2)">2M vs 2M</button><br />
     <button class="option vspace" @click="quickMixed(3, 2)">2M vs 2M vs 2M</button><br />
-    <button class="option vspace" @click="quickUnevenMixed(2, 2)">2M vs 2B</button>
+    <button class="option vspace" @click="quickUnevenMixed(2, 2)">2M vs 2B</button><br />
+    <br />
+    <button id="btnCloseQuickstart" class="option vspace option-icon-btn" @click="close">
+      <ArrowLeft :size="16" />
+      Back
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { store } from "@/stores/gamestore";
 import { openPage } from "@/stores/ui";
+import { ArrowLeft } from "@lucide/vue";
 
 function close(): void {
   openPage("menu");
@@ -80,3 +86,12 @@ function quickUnevenMixed(nteams: number, teamsize: number): void {
   close();
 }
 </script>
+
+<style scoped>
+.option-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+</style>

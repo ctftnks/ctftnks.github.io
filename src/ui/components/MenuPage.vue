@@ -23,18 +23,28 @@
         <option value="1.8">Insane</option>
       </select>
     </div>
-    <button id="btnMute" class="option" style="width: 90px" @click="toggleMute">Sound: {{ Settings.muted ? "off" : "on" }}</button>
-    <button id="btnPowerups" class="option" @click="openPage('powerups')">PowerUps</button>
-    <button id="btnSettings" class="option" @click="openPage('settings')">Settings</button>
+    <button id="btnMute" class="option option-icon-btn" style="width: 120px" @click="toggleMute">
+      <VolumeX v-if="Settings.muted" :size="16" />
+      <Volume2 v-else :size="16" />
+      Sound: {{ Settings.muted ? "off" : "on" }}
+    </button>
+    <button id="btnPowerups" class="option option-icon-btn" @click="openPage('powerups')">
+      <Zap :size="16" />
+      PowerUps
+    </button>
+    <button id="btnSettings" class="option option-icon-btn" @click="openPage('settings')">
+      <Sliders :size="16" />
+      Settings
+    </button>
 
     <div id="playersMenu">
       <div class="entry">
         <span style="width: 50px; display: inline-block"></span>
         <button class="name notclickable">Name</button>
-        <button class="keyEditButton notclickable">&uarr;</button>
-        <button class="keyEditButton notclickable">&larr;</button>
-        <button class="keyEditButton notclickable">&darr;</button>
-        <button class="keyEditButton notclickable">&rarr;</button>
+        <button class="keyEditButton notclickable header-icon-btn"><ArrowUp :size="12" /></button>
+        <button class="keyEditButton notclickable header-icon-btn"><ArrowLeft :size="12" /></button>
+        <button class="keyEditButton notclickable header-icon-btn"><ArrowDown :size="12" /></button>
+        <button class="keyEditButton notclickable header-icon-btn"><ArrowRight :size="12" /></button>
         <button class="keyEditButton notclickable">Fire</button>
         <span style="width: 50px; display: inline-block"></span>
       </div>
@@ -56,14 +66,28 @@
             {{ getKeyLabel(key) }}
           </button>
         </template>
-        <button class="remove" @click="removePlayer(player.id)">&times;</button>
+        <button class="remove" @click="removePlayer(player.id)">
+          <Trash2 :size="14" />
+        </button>
       </div>
     </div>
 
-    <button id="btnAddPlayer" class="option vspace" @click="addPlayer(false)">Add Player</button>
-    <button id="btnAddBot" class="option vspace" @click="addPlayer(true)">Add Bot</button>
-    <button id="btnQuickTeams" class="option vspace" @click="openPage('quickstart')">Quick Teams</button>
-    <button id="btnStartGame" class="option vspace" @click="startGame">Start Game!</button>
+    <button id="btnAddPlayer" class="option vspace option-icon-btn" @click="addPlayer(false)">
+      <UserPlus :size="16" />
+      Add Player
+    </button>
+    <button id="btnAddBot" class="option vspace option-icon-btn" @click="addPlayer(true)">
+      <Bot :size="16" />
+      Add Bot
+    </button>
+    <button id="btnQuickTeams" class="option vspace option-icon-btn" @click="openPage('quickstart')">
+      <Users :size="16" />
+      Quick Teams
+    </button>
+    <button id="btnStartGame" class="option vspace option-icon-btn" @click="startGame">
+      <Play :size="16" />
+      Start Game!
+    </button>
   </div>
 </template>
 
@@ -73,6 +97,21 @@ import { store } from "@/stores/gamestore";
 import { Settings } from "@/stores/settings";
 import { openPage } from "@/stores/ui";
 import { TEAMS } from "@/game/team";
+import {
+  Volume2,
+  VolumeX,
+  Zap,
+  Sliders,
+  UserPlus,
+  Bot,
+  Users,
+  Play,
+  Trash2,
+  ArrowUp,
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+} from "@lucide/vue";
 
 const editingMapID = ref<number | null>(null);
 const editingKeyID = ref<number | null>(null);
@@ -196,13 +235,18 @@ onUnmounted(() => {
   display: inline-block;
   width: 36px;
   margin-right: 20px;
+  font-size: 1.2em;
+  padding: 4px;
 }
 
 #playersMenu .remove {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 36px;
   margin-left: 20px;
   color: #f44336;
+  padding: 6px;
 }
 
 .keyEditButton {
@@ -212,5 +256,19 @@ onUnmounted(() => {
 
 .keyEditButton.editing {
   opacity: 0.6;
+}
+
+.option-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.header-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px !important;
 }
 </style>
