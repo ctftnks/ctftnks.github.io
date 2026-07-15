@@ -13,6 +13,13 @@ updates:
       - "dependencies"
       - "npm"
     groups:
+      eslint:
+        patterns:
+          - "eslint"
+          - "@eslint/*"
+          - "eslint-*"
+          - "typescript-eslint"
+          - "@typescript-eslint/*"
       npm-frontend-minor-patch:
         patterns:
           - "*"
