@@ -1,5 +1,5 @@
 import { reactive } from "vue";
-import { playSound } from "@/game/effects";
+import { playSound } from "@/game/sounds";
 import { SOUNDS, IMAGES } from "@/game/assets";
 
 import { WeaponBonus } from "./weaponBonus";

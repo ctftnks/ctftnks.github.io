@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Weapon } from "./weapon";
+import type Game from "@/game/game";
+import type Player from "@/game/player";
 import Tank from "../tank";
 import Bullet from "../bullet";
 
@@ -8,12 +10,12 @@ const mockGame = {
   addObject: vi.fn(),
   timeouts: [],
   addTimeout: vi.fn(),
-} as any;
+} as unknown as Game;
 
 const mockPlayer = {
   game: mockGame,
   team: { color: "red" },
-} as any;
+} as unknown as Player;
 
 const mockTank = {
   player: mockPlayer,

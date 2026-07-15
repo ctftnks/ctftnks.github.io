@@ -2,7 +2,7 @@ import GameObject from "./gameobject";
 import type Weapon from "./weapons/weapon";
 import { Gun } from "./weapons/gun";
 import { generateCloud } from "./smoke";
-import { playSound } from "@/game/effects";
+import { playSound } from "@/game/sounds";
 import { Settings } from "@/stores/settings";
 import { SOUNDS } from "@/game/assets";
 import type Player from "@/game/player";
