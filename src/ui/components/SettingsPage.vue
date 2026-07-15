@@ -7,51 +7,37 @@
       <div class="leftCol">
         <div class="option">
           <span>Tank speed</span>
-          <button class="left" @click="updateSetting('TankSpeed', -20, 0)">-</button>
-          <input class="left right" :value="Settings.TankSpeed" size="2" readonly />
-          <button class="right" @click="updateSetting('TankSpeed', 20)">+</button>
+          <NumberSelector v-model="Settings.TankSpeed" :min="0" :step="20" @change="save" />
         </div>
         <br />
         <div class="option">
           <span>Bullet speed</span>
-          <button class="left" @click="updateSetting('BulletSpeed', -20, 0)">-</button>
-          <input class="left right" :value="Settings.BulletSpeed" size="2" readonly />
-          <button class="right" @click="updateSetting('BulletSpeed', 20)">+</button>
+          <NumberSelector v-model="Settings.BulletSpeed" :min="0" :step="20" @change="save" />
         </div>
         <br />
         <div class="option">
           <span>Bullet timeout</span>
-          <button class="left" @click="updateSetting('BulletTimeout', -1, 1)">-</button>
-          <input class="left right" :value="Settings.BulletTimeout + 's'" size="2" readonly />
-          <button class="right" @click="updateSetting('BulletTimeout', 1)">+</button>
+          <NumberSelector v-model="Settings.BulletTimeout" :min="1" :step="1" suffix="s" @change="save" />
         </div>
         <br />
         <div class="option">
           <span>Respawn time</span>
-          <button class="left" @click="updateSetting('RespawnTime', -0.5, 0)">-</button>
-          <input class="left right" :value="Settings.RespawnTime + 's'" size="2" readonly />
-          <button class="right" @click="updateSetting('RespawnTime', 0.5)">+</button>
+          <NumberSelector v-model="Settings.RespawnTime" :min="0" :step="0.5" suffix="s" @change="save" />
         </div>
         <br />
         <div class="option">
           <span>Spawn shield</span>
-          <button class="left" @click="updateSetting('SpawnShieldTime', -0.5, 0)">-</button>
-          <input class="left right" :value="Settings.SpawnShieldTime + 's'" size="2" readonly />
-          <button class="right" @click="updateSetting('SpawnShieldTime', 0.5)">+</button>
+          <NumberSelector v-model="Settings.SpawnShieldTime" :min="0" :step="0.5" suffix="s" @change="save" />
         </div>
         <br />
         <div class="option">
           <span>Map min-size</span>
-          <button class="left" @click="updateSetting('MapNxMin', -1, 2)">-</button>
-          <input class="left right" :value="Settings.MapNxMin" size="2" readonly />
-          <button class="right" @click="updateSetting('MapNxMin', 1)">+</button>
+          <NumberSelector v-model="Settings.MapNxMin" :min="2" :step="1" @change="save" />
         </div>
         <br />
         <div class="option">
           <span>Map max-size</span>
-          <button class="left" @click="updateSetting('MapNxMax', -1, 2)">-</button>
-          <input class="left right" :value="Settings.MapNxMax" size="2" readonly />
-          <button class="right" @click="updateSetting('MapNxMax', 1)">+</button>
+          <NumberSelector v-model="Settings.MapNxMax" :min="2" :step="1" @change="save" />
         </div>
         <br />
         <div class="option">
@@ -73,17 +59,8 @@
       </div>
       <div class="rightCol">
         <div class="option">
-          <div class="option">
-            <span>Respawn time</span>
-            <button class="left" @click="updateSetting('RespawnTime', -0.5, 0)">-</button>
-            <input class="left right" :value="Settings.RespawnTime + ' s'" size="2" readonly />
-            <button class="right" @click="updateSetting('RespawnTime', 0.5)">+</button>
-          </div>
-          <br />
           <span>Round time</span>
-          <button class="left" @click="updateSetting('RoundTime', -0.5, 1)">-</button>
-          <input class="left right" :value="Settings.RoundTime + ' min'" size="2" readonly />
-          <button class="right" @click="updateSetting('RoundTime', 0.5)">+</button>
+          <NumberSelector v-model="Settings.RoundTime" :min="1" :step="0.5" suffix=" min" @change="save" />
         </div>
         <br />
         <div class="option">
@@ -154,6 +131,7 @@ import { Settings, DEFAULT_SETTINGS } from "@/stores/settings";
 import { store } from "@/stores/gamestore";
 import { openPage } from "@/stores/ui";
 import { RotateCcw, ArrowLeft } from "@lucide/vue";
+import NumberSelector from "./NumberSelector.vue";
 
 function closeSettings(): void {
   openPage("menu");
@@ -165,17 +143,6 @@ function save(): void {
 
 function resetToDefaults(): void {
   Object.assign(Settings, DEFAULT_SETTINGS);
-  save();
-}
-
-function updateSetting(key: keyof typeof Settings, delta: number, min: number = 0): void {
-  let val = Settings[key] as number;
-  val += delta;
-  if (val < min) {
-    val = min;
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (Settings as any)[key] = val;
   save();
 }
 </script>

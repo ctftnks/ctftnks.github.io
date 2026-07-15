@@ -28,7 +28,7 @@ describe("SettingsPage.vue", () => {
   it("updates setting when button is clicked", async () => {
     const wrapper = mount(SettingsPage);
     const initialSpeed = Settings.TankSpeed;
-    const plusBtn = wrapper.findAll("button.right")[0]; // First + button (Tank Speed)
+    const plusBtn = wrapper.findAll("button.right-btn")[0]; // First + button (Tank Speed)
 
     await plusBtn.trigger("click");
 
@@ -72,11 +72,12 @@ describe("SettingsPage.vue", () => {
   it("updates numeric setting with min value constraint", async () => {
     const wrapper = mount(SettingsPage);
     Settings.MapNxMin = 2; // Set to min
+    await wrapper.vm.$nextTick();
 
     // Wait, nth-of-type(6) might be tricky. Let's find by text.
     const options = wrapper.findAll(".option");
     const minSizeOption = options.find((o) => o.text().includes("Map min-size"))!;
-    const minus = minSizeOption.find("button.left");
+    const minus = minSizeOption.find("button.left-btn");
 
     await minus.trigger("click");
 
@@ -111,7 +112,7 @@ describe("SettingsPage.vue", () => {
 
   it("updates various numeric settings", async () => {
     const wrapper = mount(SettingsPage);
-    const buttons = wrapper.findAll("button.left, button.right");
+    const buttons = wrapper.findAll("button.left-btn, button.right-btn");
 
     // Click a few more buttons to cover different settings
     // We don't need to assert exact values for every single one, just triggering the click handler
