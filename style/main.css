@@ -82,6 +82,7 @@ h2 {
 .option input,
 #playersMenu button,
 button.option {
+  box-sizing: border-box;
   text-align: center;
   background: #ddd;
   border: solid 1px #ccc;
@@ -91,6 +92,17 @@ button.option {
   padding-left: 12px;
   padding-right: 12px;
   cursor: pointer;
+  vertical-align: middle;
+  height: 34px;
+}
+
+.option button,
+#playersMenu button,
+button.option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .option select {
