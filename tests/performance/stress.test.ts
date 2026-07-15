@@ -6,7 +6,7 @@ import Canvas from "@/game/canvas";
 import { TEAMS } from "@/game/team";
 import Tank from "@/entities/tank";
 import Bullet from "@/entities/bullet";
-import Weapon from "@/entities/weapons/weapon";
+import { Gun } from "@/entities/weapons";
 
 // Mock dependencies to avoid browser-specific issues
 vi.mock("@/game/effects", () => ({
@@ -72,7 +72,7 @@ describe("Performance Stress Test (Scenario 1)", () => {
     expect(tanks.length).toBe(8);
 
     // 2. Setup Stimulus: 100 bullets
-    const weapon = new Weapon(tanks[0]);
+    const weapon = new Gun(tanks[0]);
     for (let i = 0; i < 100; i++) {
       const bullet = new Bullet(weapon);
       // Scatter bullets to trigger various spatial partitions
