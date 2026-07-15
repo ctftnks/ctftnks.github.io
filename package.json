@@ -38,7 +38,7 @@
     "esbuild": "^0.28.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-jsdoc": "^50.6.11",
+    "eslint-plugin-jsdoc": "^63.0.13",
     "eslint-plugin-vue": "^9.32.0",
     "globals": "^17.0.0",
     "jsdom": "^27.4.0",
