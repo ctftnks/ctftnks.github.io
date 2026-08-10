@@ -41,7 +41,7 @@
     "eslint-plugin-jsdoc": "^63.2.0",
     "eslint-plugin-vue": "^10.9.2",
     "globals": "^17.8.0",
-    "jsdom": "^29.1.1",
+    "jsdom": "^30.0.1",
     "mermaid": "^11.16.0",
     "prettier": "^3.9.6",
     "typedoc": "^0.28.20",
