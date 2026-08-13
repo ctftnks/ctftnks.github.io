@@ -14,18 +14,17 @@ updates:
       - "npm"
     groups:
       eslint:
+        # All ESLint-related packages in one PR (major + minor + patch)
         patterns:
           - "eslint"
           - "@eslint/*"
           - "eslint-*"
           - "typescript-eslint"
           - "@typescript-eslint/*"
-      npm-frontend-minor-patch:
+      npm-all:
+        # Everything else (major + minor + patch) in one PR
         patterns:
           - "*"
-        update-types:
-          - "minor"
-          - "patch"
 
   # Maintain GitHub Actions dependencies
   - package-ecosystem: "github-actions"
@@ -40,9 +39,7 @@ updates:
       - "dependencies"
       - "github-actions"
     groups:
-      actions-minor-patch:
+      actions:
+        # All GitHub Actions updates (major + minor + patch) in one PR
         patterns:
           - "*"
-        update-types:
-          - "minor"
-          - "patch"
