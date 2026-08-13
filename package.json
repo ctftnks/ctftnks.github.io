@@ -45,7 +45,7 @@
     "mermaid": "^11.16.1",
     "prettier": "^3.9.6",
     "typedoc": "^0.28.20",
-    "typescript": "^5.9.3",
+    "typescript": "^7.0.2",
     "typescript-eslint": "^8.66.0",
     "vite": "^8.0.16",
     "vitepress": "^1.6.4",
