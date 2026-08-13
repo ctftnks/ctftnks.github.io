@@ -25,6 +25,11 @@ updates:
         # Everything else (major + minor + patch) in one PR
         patterns:
           - "*"
+    ignore:
+      # typescript-eslint and typedoc don't support the TS7 Go compiler API yet.
+      # Re-enable once typescript-eslint releases TS7 support (expected ~TS 7.1).
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
 
   # Maintain GitHub Actions dependencies
   - package-ecosystem: "github-actions"
