@@ -1,31 +1,12 @@
 # TODO
 
-- fix many sounds playing at the same time
 - add background music
-- arc42
-- physics (collision detection etc. to separate file)
-- aiming of weapons for autopilot to separate file/logic
-- loosen coupling using event hub
-- make bots smarter
-
-## Refactoring
-
-## Bugs
-
-## Bots reimplementation
-
-- improve Bot's laser aiming
-
-## Minor features
-
-- own flags could be required to be brought home in CTF
 
 ## Enhancement
 
 - Weapon queue
 - different tank types (visually): write a class for that?
 - music, especially when holding flag
-- let bots pick up powerups on intention
 
 ## Long term issues
 
