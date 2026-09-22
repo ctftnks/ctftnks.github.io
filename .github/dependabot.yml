@@ -30,6 +30,9 @@ updates:
       # Re-enable once typescript-eslint releases TS7 support (expected ~TS 7.1).
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
+      # vitepress-plugin-mermaid@2.0.17 only supports mermaid ^10 || ^11
+      - dependency-name: "mermaid"
+        update-types: ["version-update:semver-major"]
 
   # Maintain GitHub Actions dependencies
   - package-ecosystem: "github-actions"
