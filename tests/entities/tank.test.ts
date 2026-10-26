@@ -193,13 +193,35 @@ describe("Tank Class", () => {
     const tank = new Tank(mockPlayer, mockGame);
     tank.age = 100000; // Force spawnshield expiration
     const shootSpy = vi.spyOn(tank.weapon, "shoot").mockImplementation(() => {
-      tank.weapon.isActive = true;
+      tank.weapon.isActive = false; // real weapons deactivate themselves when firing
     });
     tank.weapon.isActive = true;
 
     tank.shoot(10);
     expect(shootSpy).toHaveBeenCalled();
     expect(mockPlayer.stats.shots).toBe(1);
+  });
+
+  it("should count a shot of the default gun only once per bullet", () => {
+    mockGame.addTimeout = vi.fn();
+    const tank = new Tank(mockPlayer, mockGame);
+    tank.age = 100000;
+
+    tank.shoot(10);
+    tank.shoot(10); // weapon is still deactivated
+    expect(mockPlayer.stats.shots).toBe(1);
+  });
+
+  it("should not count the detonation of a bullet as a new shot", () => {
+    const tank = new Tank(mockPlayer, mockGame);
+    tank.age = 100000;
+    tank.weapon.bullet = { age: 1000, explode: vi.fn(), delete: vi.fn() } as any;
+    vi.spyOn(tank.weapon, "shoot").mockImplementation(() => {
+      tank.weapon.isActive = false;
+    });
+
+    tank.shoot(10);
+    expect(mockPlayer.stats.shots).toBe(0);
   });
 
   it("should drop flag and delete weapon when deleted", () => {

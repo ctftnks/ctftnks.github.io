@@ -215,8 +215,11 @@ export class Tank extends GameObject {
     if (this.spawnshield()) {
       return;
     }
+    // Weapons deactivate themselves when firing, so the state has to be checked before shooting.
+    // Remotely detonating an existing bullet (e.g. grenade) is not a new shot.
+    const countsAsShot = this.weapon.isActive && this.weapon.name !== "MG" && !this.weapon.bullet;
     this.weapon.shoot(dt);
-    if (this.weapon.isActive && this.weapon.name !== "MG") {
+    if (countsAsShot) {
       this.player.stats.shots += 1;
     }
   }
