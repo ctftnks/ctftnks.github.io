@@ -347,12 +347,12 @@ describe("Weapon System", () => {
       expect(spy).toHaveBeenCalled();
     });
 
-    it("should ignore other bullets if bullet collisions are disabled", () => {
+    it("should always be possible to shoot it down, even if bullet collisions are disabled", () => {
       Settings.BulletsCanCollide = false;
       const bullet = createMissile();
       const spy = vi.spyOn(bullet, "checkBulletCollision");
       bullet.step(10);
-      expect(spy).not.toHaveBeenCalled();
+      expect(spy).toHaveBeenCalled();
     });
 
     it("should not produce NaN coordinates when exactly on its target", () => {

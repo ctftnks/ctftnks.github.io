@@ -75,9 +75,8 @@ export class Guided extends Weapon {
       // check for wall collisions
       e.checkCollision(oldPosition);
       // check for bullet-bullet collisions
-      if (Settings.BulletsCanCollide) {
-        e.checkBulletCollision();
-      }
+      // This intentionally ignores Settings.BulletsCanCollide: a guided missile can always be shot down.
+      e.checkBulletCollision();
       // calculate path to next tank and set next goto tile
       // at first, it waits a while and then repeats the task every few ms
       if (e.age > 1750) {
