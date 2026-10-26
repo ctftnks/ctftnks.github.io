@@ -47,7 +47,12 @@ export class GameStore {
    * @returns The newly created player.
    */
   createPlayer(isBot: boolean = false): Player {
-    const id = this.players.length;
+    // use the lowest free id, so players added after a removal don't share id and keymap with an existing one
+    const usedIds = new Set(this.players.map((p) => p.id));
+    let id = 0;
+    while (usedIds.has(id)) {
+      id++;
+    }
     const name = (isBot ? "Bot " : "Player ") + (id + 1);
     const team = TEAMS[id % TEAMS.length];
     const keys = this.keymaps[id] || this.keymaps[0].slice();

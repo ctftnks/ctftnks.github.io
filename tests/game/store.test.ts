@@ -79,6 +79,21 @@ describe("Game Store", () => {
     expect(b1.isBot()).toBe(true);
   });
 
+  it("should not reuse the id or keymap of an existing player after a removal", () => {
+    store.players = [];
+    const p0 = store.createPlayer();
+    store.createPlayer();
+    const p2 = store.createPlayer();
+    store.players = store.players.filter((p) => p.id !== p0.id);
+
+    const added = store.createPlayer();
+
+    expect(added.id).toBe(0);
+    expect(new Set(store.players.map((p) => p.id)).size).toBe(3);
+    expect(added.keys).not.toBe(p2.keys);
+    expect(added.keys).toEqual(store.keymaps[0]);
+  });
+
   it("should initialize default players", () => {
     store.players = [];
 
