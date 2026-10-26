@@ -98,6 +98,13 @@ describe("Gamemode Classes", () => {
       expect(player1.score).toBe(-1);
     });
 
+    it("should not extend the killing spree for teamkills", () => {
+      player1.spree = 3;
+      mode.newKill(player1, player3);
+      expect(player1.score).toBe(-1);
+      expect(player1.spree).toBe(3);
+    });
+
     it("should handle killing sprees", () => {
       player1.spree = 4;
       mode.giveScore(player1, 1);
@@ -150,6 +157,12 @@ describe("Gamemode Classes", () => {
 
     beforeEach(() => {
       mode = new TeamDeathmatch(mockGame as Game);
+    });
+
+    it("should not extend the killing spree for teamkills", () => {
+      player1.spree = 3;
+      mode.newKill(player1, player3);
+      expect(player1.spree).toBe(3);
     });
 
     it("should give points to all team members", () => {

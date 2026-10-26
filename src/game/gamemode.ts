@@ -137,7 +137,10 @@ export class Deathmatch extends Gamemode {
 
   override giveScore(player: Player, val: number = 1): void {
     player.score += val;
-    this.handleMultiKill(player);
+    // only real kills count for the killing spree, not penalties for teamkills or suicides
+    if (val > 0) {
+      this.handleMultiKill(player);
+    }
     this.adaptBotSpeed(this.game.players, player.team);
   }
 
@@ -167,7 +170,10 @@ export class TeamDeathmatch extends Gamemode {
         p.score += val;
       }
     }
-    this.handleMultiKill(player);
+    // only real kills count for the killing spree, not penalties for teamkills or suicides
+    if (val > 0) {
+      this.handleMultiKill(player);
+    }
     this.adaptBotSpeed(this.game.players, player.team);
   }
 
