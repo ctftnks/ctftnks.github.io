@@ -204,8 +204,10 @@ export class Game {
     if (this.powerUpSpawnAccumulator >= powerUpInterval) {
       this.powerUpSpawnAccumulator -= powerUpInterval;
       const p = getRandomPowerUp(this);
-      p.setPosition(this.map.spawnPoint());
-      this.addObject(p);
+      if (p) {
+        p.setPosition(this.map.spawnPoint());
+        this.addObject(p);
+      }
     }
 
     // end the game when the round time is over

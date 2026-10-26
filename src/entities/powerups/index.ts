@@ -87,20 +87,26 @@ export const PowerUps = reactive([
 /**
  * Returns a random powerup based on weights.
  * @param game - The game instance.
- * @returns A new PowerUp instance.
+ * @returns A new PowerUp instance, or null if all powerups are disabled (weight 0).
  */
-export function getRandomPowerUp(game: Game): PowerUp {
-  let totalWeights = 0;
-  for (let i = 0; i < PowerUps.length; i++) {
-    totalWeights += PowerUps[i].weight;
+export function getRandomPowerUp(game: Game): PowerUp | null {
+  const candidates = PowerUps.filter((p) => p.weight > 0);
+  if (candidates.length === 0) {
+    return null;
   }
+  const totalWeights = candidates.reduce((sum, p) => sum + p.weight, 0);
 
   let randWeight = Math.random() * totalWeights;
-  let h: number;
-  for (h = 0; randWeight > 0; h++) {
-    randWeight -= PowerUps[h].weight;
+  // fall back to the last candidate to be safe against floating point rounding
+  let chosen = candidates[candidates.length - 1];
+  for (const candidate of candidates) {
+    randWeight -= candidate.weight;
+    if (randWeight < 0) {
+      chosen = candidate;
+      break;
+    }
   }
 
   playSound(SOUNDS.origPowerup);
-  return PowerUps[h - 1].create(game);
+  return chosen.create(game);
 }

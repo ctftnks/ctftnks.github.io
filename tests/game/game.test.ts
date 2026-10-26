@@ -8,6 +8,7 @@ import Canvas from "@/game/canvas";
 import { TEAMS } from "@/game/team";
 import Tank from "@/entities/tank";
 import PowerUp from "@/entities/powerups/powerup";
+import { PowerUps } from "@/entities/powerups";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -194,6 +195,18 @@ describe("Game Class", () => {
     const powerups = game.objs.filter((o) => o instanceof PowerUp);
     expect(powerups.length).toBeGreaterThan(0);
     expect(game.nkills).toBe(0);
+  });
+
+  it("should not crash when all powerups are disabled", () => {
+    const weights = PowerUps.map((p) => p.weight);
+    PowerUps.forEach((p) => (p.weight = 0));
+    try {
+      Settings.PowerUpRate = 0.01;
+      expect(() => game.step(Settings.DT)).not.toThrow();
+      expect(game.objs.filter((o) => o instanceof PowerUp)).toHaveLength(0);
+    } finally {
+      PowerUps.forEach((p, i) => (p.weight = weights[i]));
+    }
   });
 
   it("should end game when time is up", () => {

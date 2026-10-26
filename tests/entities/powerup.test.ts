@@ -107,8 +107,30 @@ describe("PowerUp System", () => {
 
   it("should get a random powerup", () => {
     const p = getRandomPowerUp(mockGame);
-    expect(p).toBeDefined();
-    expect(p.image.src).toBeDefined();
+    expect(p).not.toBeNull();
+    expect(p!.image.src).toBeDefined();
+  });
+
+  it("should return null if all powerups are disabled", () => {
+    const weights = PowerUps.map((p) => p.weight);
+    PowerUps.forEach((p) => (p.weight = 0));
+    try {
+      expect(getRandomPowerUp(mockGame)).toBeNull();
+    } finally {
+      PowerUps.forEach((p, i) => (p.weight = weights[i]));
+    }
+  });
+
+  it("should never pick powerups with weight 0", () => {
+    const weights = PowerUps.map((p) => p.weight);
+    PowerUps.forEach((p) => (p.weight = p.name === "Laser" ? 1 : 0));
+    try {
+      for (let i = 0; i < 50; i++) {
+        expect(getRandomPowerUp(mockGame)!.image.src).toContain("laser");
+      }
+    } finally {
+      PowerUps.forEach((p, i) => (p.weight = weights[i]));
+    }
   });
 
   it("should apply LaserBonus", () => {
