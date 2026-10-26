@@ -192,10 +192,11 @@ export class Tile implements Coord {
   }
 
   /**
-   * Recursively find the shortest path to any tile in map where condition is met.
+   * Find the shortest path to any tile in the map where condition is met (breadth-first search).
+   * Among equally short paths, the one preferring the directions in the order top, left, bottom, right wins.
    * @param condition - Function returning boolean.
-   * @param path - Current path.
-   * @param minPathLength - Optimization: abort if path is longer than this.
+   * @param path - Tiles already visited before this one, they are prepended to the result and not visited again.
+   * @param minPathLength - Only accept paths that are shorter than this.
    * @param maxPathLength - Max allowed path length.
    * @returns The path or null if not found.
    */
@@ -205,39 +206,39 @@ export class Tile implements Coord {
     minPathLength: number | null = null,
     maxPathLength: number | null = null,
   ): Tile[] | null {
-    // add current tile to path
-    path.push(this);
-    // if the current path is longer than the shortest known path: abort!
-    if (minPathLength !== null && path.length >= minPathLength) {
-      return null;
+    const cameFrom = new Map<Tile, Tile | null>([[this, null]]);
+    for (const visited of path) {
+      cameFrom.set(visited, null);
     }
-    if (maxPathLength !== null && path.length > maxPathLength) {
-      return null;
-    }
-    // is this tile what we've been searching for? Then we're done!
-    if (condition(this)) {
-      return path;
-    }
-    // else keep searching:
-    // for every neighbor that is not separated by a wall and is not yet in path
-    // calculate the path recursively. If a path is found, add it to a list
-    const options: Tile[][] = [];
-    for (let d = 0; d < 4; d++) {
-      const neighbor = this.neighbors[d];
-      if (!this.walls[d] && neighbor && !path.includes(neighbor)) {
-        const option = neighbor.pathTo(condition, [...path], minPathLength, maxPathLength);
-        if (option !== null) {
-          minPathLength = option.length;
-          options.push(option);
+    let frontier: Tile[] = [this];
+    // number of tiles of a path that ends in the current frontier
+    let length = path.length + 1;
+
+    while (frontier.length > 0) {
+      if ((minPathLength !== null && length >= minPathLength) || (maxPathLength !== null && length > maxPathLength)) {
+        return null;
+      }
+      const next: Tile[] = [];
+      for (const tile of frontier) {
+        if (condition(tile)) {
+          const result: Tile[] = [];
+          for (let t: Tile | null | undefined = tile; t; t = cameFrom.get(t)) {
+            result.unshift(t);
+          }
+          return [...path, ...result];
+        }
+        for (let d = 0; d < 4; d++) {
+          const neighbor = tile.neighbors[d];
+          if (!tile.walls[d] && neighbor && !cameFrom.has(neighbor)) {
+            cameFrom.set(neighbor, tile);
+            next.push(neighbor);
+          }
         }
       }
+      frontier = next;
+      length++;
     }
-    // found no options? negative result
-    if (options.length === 0) {
-      return null;
-    }
-    // find option with minimal length and return
-    return options.reduce((prev, curr) => (curr.length < prev.length ? curr : prev));
+    return null;
   }
 
   /**

@@ -114,6 +114,35 @@ describe("Tile Pathfinding", () => {
   });
 });
 
+describe("Tile pathfinding performance and limits", () => {
+  it("should find the shortest path across a large open map quickly", () => {
+    const { tiles } = createMockGrid(25, 25);
+    const start = tiles[0];
+    const end = tiles[tiles.length - 1];
+
+    const t0 = performance.now();
+    const path = start.pathTo((t) => t === end);
+    const duration = performance.now() - t0;
+
+    expect(path).not.toBeNull();
+    expect(path!.length).toBe(49); // 24 steps right + 24 steps down + the start tile
+    expect(duration).toBeLessThan(500);
+  });
+
+  it("should only accept paths shorter than minPathLength", () => {
+    const { tiles } = createMockGrid(3, 3);
+    const end = tiles[8]; // path of 5 tiles
+
+    expect(tiles[0].pathTo((t) => t === end, [], 5)).toBeNull();
+    expect(tiles[0].pathTo((t) => t === end, [], 6)).toHaveLength(5);
+  });
+
+  it("should return a path that starts with the start tile when the condition matches immediately", () => {
+    const { tiles } = createMockGrid(3, 3);
+    expect(tiles[4].pathTo(() => true)).toEqual([tiles[4]]);
+  });
+});
+
 describe("Tile Object Pathfinding", () => {
   let grid: Tile[];
 
