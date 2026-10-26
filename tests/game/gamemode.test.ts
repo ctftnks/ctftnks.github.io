@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { Deathmatch, TeamDeathmatch, KingOfTheHill, CaptureTheFlag } from "@/game/gamemode";
 import Game from "@/game/game";
+import { Settings } from "@/stores/settings";
 
 // Mock dependencies
 vi.mock("@/game/effects", () => ({
@@ -102,6 +103,45 @@ describe("Gamemode Classes", () => {
       mode.giveScore(player1, 1);
       expect(player1.spree).toBe(5);
       expect(player1.score).toBe(2);
+    });
+  });
+
+  describe("adaptive bot speed", () => {
+    let bot1: any;
+    let bot2: any;
+    let human: any;
+    let mode: Deathmatch;
+    const originalSpeed = Settings.BotSpeed;
+    const originalAdaptive = Settings.AdaptiveBotSpeed;
+
+    beforeEach(() => {
+      // the blue team has two bots, the red team none
+      human = { id: 1, team: redTeam, score: 0, spree: 0, isBot: () => false };
+      bot1 = { id: 2, team: blueTeam, score: 0, spree: 0, isBot: () => true };
+      bot2 = { id: 3, team: blueTeam, score: 0, spree: 0, isBot: () => true };
+      mockGame.players = [human, bot1, bot2];
+      mode = new Deathmatch(mockGame as Game);
+      Settings.AdaptiveBotSpeed = true;
+      Settings.BotSpeed = 1;
+    });
+
+    afterEach(() => {
+      Settings.BotSpeed = originalSpeed;
+      Settings.AdaptiveBotSpeed = originalAdaptive;
+    });
+
+    it("should not drop below the minimum speed", () => {
+      for (let i = 0; i < 100; i++) {
+        mode.giveScore(bot1, 1);
+      }
+      expect(Settings.BotSpeed).toBe(0.6);
+    });
+
+    it("should not exceed the maximum speed", () => {
+      for (let i = 0; i < 100; i++) {
+        mode.giveScore(human, 1);
+      }
+      expect(Settings.BotSpeed).toBe(1.8);
     });
   });
 

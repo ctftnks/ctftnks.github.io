@@ -8,6 +8,11 @@ import type Team from "./team";
 import { Settings } from "@/stores/settings";
 import { type Coord } from "@/utils/geometry";
 
+/** Lower limit for the bot speed, matches the slowest bot level in the menu. */
+const MIN_BOT_SPEED = 0.6;
+/** Upper limit for the bot speed, matches the fastest bot level in the menu. */
+const MAX_BOT_SPEED = 1.8;
+
 /**
  * Base class for game modes.
  */
@@ -80,7 +85,9 @@ export abstract class Gamemode {
     const currentTeamBots = teamData.get(team)?.botCount ?? 0;
 
     // Adjust global bot speed based on team composition balance
-    Settings.BotSpeed += (avgBots - currentTeamBots) * val;
+    // keep the speed within the range selectable in the menu, otherwise bots could end up driving backwards
+    const adapted = Settings.BotSpeed + (avgBots - currentTeamBots) * val;
+    Settings.BotSpeed = Math.min(MAX_BOT_SPEED, Math.max(MIN_BOT_SPEED, adapted));
   }
 
   /**
