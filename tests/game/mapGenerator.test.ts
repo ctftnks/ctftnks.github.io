@@ -86,4 +86,34 @@ describe("MapGenerator", () => {
     }
     expect(internalWalls).toBeGreaterThan(0);
   });
+
+  it("should use the porous algorithm for all subdivisions", () => {
+    const plainSpy = vi.spyOn(MapGenerator, "recursiveDivision");
+
+    MapGenerator.porousRecursiveDivision(map);
+
+    expect(plainSpy).not.toHaveBeenCalled();
+    plainSpy.mockRestore();
+  });
+
+  it("should generate porous maps in which every tile is reachable", () => {
+    for (let n = 0; n < 20; n++) {
+      const m = new GameMap(mockCanvas, 12, 8);
+      MapGenerator.porousRecursiveDivision(m);
+
+      const seen = new Set<number>([m.tiles[0].id]);
+      const stack: Tile[] = [m.tiles[0]];
+      while (stack.length > 0) {
+        const tile = stack.pop()!;
+        for (let d = 0; d < 4; d++) {
+          const neighbor = tile.neighbors[d];
+          if (!tile.walls[d] && neighbor && !seen.has(neighbor.id)) {
+            seen.add(neighbor.id);
+            stack.push(neighbor);
+          }
+        }
+      }
+      expect(seen.size).toBe(m.tiles.length);
+    }
+  });
 });

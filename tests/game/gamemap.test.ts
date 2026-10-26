@@ -24,6 +24,34 @@ describe("Map Class", () => {
     expect(map.tiles.length).toBe(80);
   });
 
+  it("should include both configured size limits when choosing a random size", () => {
+    Settings.MapNxMin = 3;
+    Settings.MapNxMax = 5;
+    const sizes = new Set<number>();
+    for (let i = 0; i < 500; i++) {
+      sizes.add(new GameMap(mockCanvas).Nx);
+    }
+    expect([...sizes].sort()).toEqual([3, 4, 5]);
+  });
+
+  it("should handle swapped size limits", () => {
+    Settings.MapNxMin = 5;
+    Settings.MapNxMax = 3;
+    for (let i = 0; i < 100; i++) {
+      const nx = new GameMap(mockCanvas).Nx;
+      expect(nx).toBeGreaterThanOrEqual(3);
+      expect(nx).toBeLessThanOrEqual(5);
+    }
+  });
+
+  it("should always have at least one row, even on very wide canvases", () => {
+    Settings.MapNxMin = 2;
+    Settings.MapNxMax = 2;
+    const map = new GameMap({ width: 2000, height: 300, rescale: vi.fn() } as any);
+    expect(map.Ny).toBeGreaterThanOrEqual(1);
+    expect(map.tiles.length).toBeGreaterThan(0);
+  });
+
   it("should link neighbors correctly", () => {
     const map = new GameMap(mockCanvas, 3, 3);
     const centerTile = map.getTileByIndex(1, 1);

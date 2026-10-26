@@ -170,8 +170,8 @@ export class MapGenerator {
         const posY = y1 + Math.floor(Math.random() * (y2 - y1));
         (map.getTileByIndex(posX, posY) as Tile).addWall(3, true);
       }
-      MapGenerator.recursiveDivision(map, x1, y1, posX + 1, y2);
-      MapGenerator.recursiveDivision(map, posX + 1, y1, x2, y2);
+      MapGenerator.porousRecursiveDivision(map, x1, y1, posX + 1, y2);
+      MapGenerator.porousRecursiveDivision(map, posX + 1, y1, x2, y2);
     } else {
       // horizontal cell-dividing wall
       const posY = y1 + Math.floor(Math.random() * (y2 - y1 - 1));
@@ -184,8 +184,8 @@ export class MapGenerator {
         const posX = x1 + Math.floor(Math.random() * (x2 - x1));
         (map.getTileByIndex(posX, posY) as Tile).addWall(2, true);
       }
-      MapGenerator.recursiveDivision(map, x1, y1, x2, posY + 1);
-      MapGenerator.recursiveDivision(map, x1, posY + 1, x2, y2);
+      MapGenerator.porousRecursiveDivision(map, x1, y1, x2, posY + 1);
+      MapGenerator.porousRecursiveDivision(map, x1, posY + 1, x2, y2);
     }
   }
 }

@@ -34,8 +34,12 @@ export class GameMap {
     Nx: number | null = null,
     Ny: number | null = null,
   ) {
-    this.Nx = Nx ?? Math.floor(Settings.MapNxMin + (Settings.MapNxMax - Settings.MapNxMin) * Math.random());
-    this.Ny = Ny ?? Math.floor(((0.25 * Math.random() + 0.75) * this.Nx * canvas.height) / canvas.width);
+    // both limits are inclusive, regardless of the order in which they were configured
+    const nxMin = Math.min(Settings.MapNxMin, Settings.MapNxMax);
+    const nxMax = Math.max(Settings.MapNxMin, Settings.MapNxMax);
+    this.Nx = Nx ?? nxMin + Math.floor((nxMax - nxMin + 1) * Math.random());
+    // a map needs at least one row, even on very wide canvases
+    this.Ny = Ny ?? Math.max(1, Math.floor(((0.25 * Math.random() + 0.75) * this.Nx * canvas.height) / canvas.width));
     this.dy = this.dx;
 
     // Tile initialization
