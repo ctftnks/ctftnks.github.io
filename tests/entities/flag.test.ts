@@ -145,6 +145,30 @@ describe("Flag Class", () => {
     expect(flag.x).toBe(base.x);
   });
 
+  it("should not be picked up or returned by tanks that were destroyed in this frame", () => {
+    const base = new Base(mockGame, 100, 100, mockPlayer.team);
+    const flag = new Flag(mockGame, base);
+    flag.drop(200, 200);
+    flag.inBase = false;
+    base.flag = flag;
+
+    const deadEnemy = new Tank(new Player(1, "E1", TEAMS[2], []), mockGame);
+    const deadFriend = new Tank(new Player(0, "P1", TEAMS[1], []), mockGame);
+    for (const tank of [deadEnemy, deadFriend]) {
+      tank.x = 200;
+      tank.y = 200;
+      tank.delete();
+      mockTile.objs.push(tank);
+    }
+
+    flag.tile = mockTile;
+    flag.step(0);
+
+    expect(flag.picked).toBe(false);
+    expect(deadEnemy.carriedFlag).toBeNull();
+    expect(flag.inBase).toBe(false);
+  });
+
   it("should reset automatically after timeout", () => {
     const base = new Base(mockGame, 100, 100, mockPlayer.team);
     const flag = new Flag(mockGame, base);

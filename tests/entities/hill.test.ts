@@ -54,6 +54,20 @@ describe("Hill Class", () => {
     expect(hill.team).toBe(TEAMS[2]);
   });
 
+  it("should not be captured by a tank that was destroyed in this frame", () => {
+    const hill = new Hill(mockGame, 200, 200);
+    const tank = new Tank(new Player(1, "E1", TEAMS[2], []), mockGame);
+    tank.x = 200;
+    tank.y = 200;
+    tank.delete();
+    mockTile.objs.push(tank);
+    hill.tile = mockTile;
+
+    hill.step(0);
+
+    expect(hill.team).toBeUndefined();
+  });
+
   it("should do nothing in step if no tile", () => {
     const hill = new Hill(mockGame, 200, 200);
     hill.tile = undefined;

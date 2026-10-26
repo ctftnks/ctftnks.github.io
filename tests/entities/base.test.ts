@@ -88,6 +88,27 @@ describe("Base Class", () => {
     expect(friendlyTank.carriedFlag).toBeNull();
   });
 
+  it("should not score for a tank that was destroyed in this frame", () => {
+    const base = new Base(mockGame, 50, 50, TEAMS[1]);
+    const flag = new Flag(mockGame, base);
+    base.flag = flag;
+    flag.inBase = true;
+
+    const player = new Player(0, "P1", TEAMS[1], []);
+    const tank = new Tank(player, mockGame);
+    tank.x = 50;
+    tank.y = 50;
+    tank.carriedFlag = new Flag(mockGame, new Base(mockGame, 500, 500, TEAMS[2]));
+    // the dead tank is still listed in its tile until the game cleans up
+    tank.delete();
+    mockTile.objs.push(tank);
+    base.tile = mockTile;
+
+    base.step(0);
+
+    expect(mockGame.mode.giveScore).not.toHaveBeenCalled();
+  });
+
   it("should draw itself", () => {
     const base = new Base(mockGame, 50, 50, TEAMS[1]);
     const mockContext = {

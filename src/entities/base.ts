@@ -67,6 +67,7 @@ export class Base extends GameObject {
     for (const obj of this.tile.objs) {
       if (
         obj instanceof Tank &&
+        !obj.isDeleted() &&
         obj.player.team === this.team &&
         Math.pow(this.x - obj.x, 2) + Math.pow(this.y - obj.y, 2) < Math.pow(2 * this.size, 2)
       ) {
@@ -121,6 +122,7 @@ export class Hill extends Base {
     for (const obj of this.tile.objs) {
       if (
         obj instanceof Tank &&
+        !obj.isDeleted() &&
         obj.player.team !== this.team &&
         Math.pow(this.x - obj.x, 2) + Math.pow(this.y - obj.y, 2) < Math.pow(2 * this.size, 2)
       ) {

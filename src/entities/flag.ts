@@ -83,14 +83,19 @@ export class Flag extends GameObject {
       return;
     }
     for (const tank of this.tile.objs) {
-      if (tank instanceof Tank && Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)) {
+      // tanks that were destroyed in this frame stay in the tile lists until the next step
+      if (
+        tank instanceof Tank &&
+        !tank.isDeleted() &&
+        Math.pow(this.x - tank.x, 2) + Math.pow(this.y - tank.y, 2) < Math.pow(2 * this.size, 2)
+      ) {
         if (tank.player.team === this.team) {
           if (!this.base.hasFlag()) {
             // return flag to base
             this.reset();
             playSound(SOUNDS.resetFlag);
           }
-        } else if (tank.carriedFlag === null && !this.picked && !tank.isDeleted()) {
+        } else if (tank.carriedFlag === null && !this.picked) {
           // pick up flag
           this.pickup(tank as Tank);
           playSound(SOUNDS.coin);
