@@ -140,7 +140,8 @@ export class Game {
       // Cap accumulator to avoid spiral of death (max 200ms)
       this.accumulator = Math.min(this.accumulator, 200);
 
-      while (this.accumulator >= Settings.DT) {
+      // a step can end the game, which pauses it: don't keep simulating a finished game
+      while (!this.paused && this.accumulator >= Settings.DT) {
         this.step(Settings.DT);
         this.accumulator -= Settings.DT;
       }
@@ -151,6 +152,10 @@ export class Game {
     this.canvas.draw(this);
     this.monitor.endMeasure("render");
 
+    // the game may have been stopped during this frame (e.g. when the round ended), don't restart the loop then
+    if (!this.loop) {
+      return;
+    }
     this.loop = requestAnimationFrame((t) => this.gameLoop(t));
   }
 

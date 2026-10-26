@@ -220,6 +220,20 @@ describe("Game Class", () => {
     expect(endSpy).toHaveBeenCalled();
   });
 
+  it("should not restart the loop or step again when the round ends during a frame", () => {
+    game.start();
+    const endSpy = vi.spyOn(game, "end");
+    const rafSpy = vi.spyOn(window, "requestAnimationFrame");
+    rafSpy.mockClear();
+
+    game.t = Settings.RoundTime * 60000 + 100;
+    game.gameLoop(game.lastTime + 5 * Settings.DT); // enough time for several steps
+
+    expect(endSpy).toHaveBeenCalledTimes(1);
+    expect(game.loop).toBeUndefined();
+    expect(rafSpy).not.toHaveBeenCalled();
+  });
+
   it("should return tanks with getTanks", () => {
     const player = new Player(0, "P1", TEAMS[0], []);
     const tank = new Tank(player, game);
