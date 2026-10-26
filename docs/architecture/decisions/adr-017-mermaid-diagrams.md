@@ -29,3 +29,4 @@ Chosen option: **Mermaid.js** (implemented in commit `9af6391`), because it offe
 - **Positive**: Easy to maintain and version, improved readability within the documentation files, and better support for collaboration.
 - **Negative**: Limited styling options compared to dedicated design tools.
 - **Integration**: Leveraged by the arc42 documentation (ADR-015).
+- **Rendering**: Diagrams are rendered client-side by a small `Mermaid.vue` theme component (`docs/.vitepress/theme/`), which a markdown-it fence override in `docs/.vitepress/config.ts` routes ```` ```mermaid ```` blocks to. We previously used `vitepress-plugin-mermaid`, but it is unmaintained and does not support mermaid 12 or VitePress 2.
