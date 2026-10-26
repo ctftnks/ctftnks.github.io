@@ -34,6 +34,8 @@ export class WeaponBonus extends PowerUp {
    */
   apply(tank: Tank): void {
     playSound(SOUNDS.reload);
+    // retire the old weapon, so that pending timeouts (e.g. of an MG burst) stop firing it
+    tank.weapon.delete();
     tank.weapon = new this.weaponClass(tank);
   }
 }

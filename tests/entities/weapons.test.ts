@@ -194,6 +194,17 @@ describe("Weapon System", () => {
       expect(mg.nshots).toBe(19);
       expect(mockGame.addObject).toHaveBeenCalled();
     });
+
+    it("should stop firing once it has been deleted (e.g. replaced by another weapon)", () => {
+      const mg = new MG(mockTank);
+      mg.delete();
+      mockGame.addObject.mockClear();
+
+      mg.shoot(10);
+
+      expect(mg.nshots).toBe(20);
+      expect(mockGame.addObject).not.toHaveBeenCalled();
+    });
   });
 
   describe("Laser", () => {

@@ -91,7 +91,7 @@ describe("PowerUp System", () => {
         team: { color: "#ff0000" },
       },
       timers: { invincible: 0 },
-      weapon: {},
+      weapon: { delete: vi.fn() },
       rapidfire: false,
       invincible: () => false,
       corners: () => [
@@ -138,6 +138,15 @@ describe("PowerUp System", () => {
     const bonus = creator.create(mockGame);
     bonus.apply(mockTank);
     expect(mockTank.weapon.name).toBe("Laser");
+  });
+
+  it("should retire the previous weapon when a weapon is picked up", () => {
+    const oldWeapon = mockTank.weapon;
+    PowerUps.find((p) => p.name === "Laser")!
+      .create(mockGame)
+      .apply(mockTank);
+    expect(oldWeapon.delete).toHaveBeenCalled();
+    expect(mockTank.weapon).not.toBe(oldWeapon);
   });
 
   it("should apply MGBonus", () => {
