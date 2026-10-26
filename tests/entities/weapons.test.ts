@@ -325,6 +325,50 @@ describe("Weapon System", () => {
     });
   });
 
+  describe("Guided Missile collisions", () => {
+    const originalSetting = Settings.BulletsCanCollide;
+
+    afterEach(() => {
+      Settings.BulletsCanCollide = originalSetting;
+    });
+
+    /** Creates a missile that is placed in a tile without any objects. */
+    const createMissile = (): any => {
+      const bullet: any = new Guided(mockTank).newBullet();
+      bullet.tile = { pathTo: vi.fn().mockReturnValue(null), objs: [] };
+      return bullet;
+    };
+
+    it("should check for bullet collisions if enabled", () => {
+      Settings.BulletsCanCollide = true;
+      const bullet = createMissile();
+      const spy = vi.spyOn(bullet, "checkBulletCollision");
+      bullet.step(10);
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it("should ignore other bullets if bullet collisions are disabled", () => {
+      Settings.BulletsCanCollide = false;
+      const bullet = createMissile();
+      const spy = vi.spyOn(bullet, "checkBulletCollision");
+      bullet.step(10);
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it("should not produce NaN coordinates when exactly on its target", () => {
+      const bullet = createMissile();
+      const target = { x: 100, y: 100, dx: 0, dy: 0, objs: [] };
+      bullet.tile = { pathTo: vi.fn().mockReturnValue([{ id: 1, objs: [] }, target]), objs: [] };
+      bullet.age = 2000;
+      bullet.step(10); // sets the target
+      bullet.x = 100;
+      bullet.y = 100;
+      bullet.step(10);
+      expect(Number.isNaN(bullet.x)).toBe(false);
+      expect(Number.isNaN(bullet.y)).toBe(false);
+    });
+  });
+
   describe("WreckingBall", () => {
     it("should damage walls on collision", () => {
       const ball = new WreckingBall(mockTank);

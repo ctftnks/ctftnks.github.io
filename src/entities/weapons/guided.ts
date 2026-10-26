@@ -62,9 +62,12 @@ export class Guided extends Weapon {
         const distx = gotoTarget.x + gotoTarget.dx / 2 - e.x;
         const disty = gotoTarget.y + gotoTarget.dy / 2 - e.y;
         const len = Math.sqrt(distx * distx + disty * disty);
-        e.x += (e.speed * (distx / len) * dt) / 1000;
-        e.y += (e.speed * (disty / len) * dt) / 1000;
-        this.angle = Math.atan2(-distx, disty) + Math.PI;
+        // standing exactly on the target would divide by zero
+        if (len > 0) {
+          e.x += (e.speed * (distx / len) * dt) / 1000;
+          e.y += (e.speed * (disty / len) * dt) / 1000;
+          this.angle = Math.atan2(-distx, disty) + Math.PI;
+        }
         if (len < 5) {
           gotoTarget = null;
         }
@@ -72,7 +75,9 @@ export class Guided extends Weapon {
       // check for wall collisions
       e.checkCollision(oldPosition);
       // check for bullet-bullet collisions
-      e.checkBulletCollision();
+      if (Settings.BulletsCanCollide) {
+        e.checkBulletCollision();
+      }
       // calculate path to next tank and set next goto tile
       // at first, it waits a while and then repeats the task every few ms
       if (e.age > 1750) {
