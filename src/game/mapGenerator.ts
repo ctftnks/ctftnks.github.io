@@ -27,40 +27,36 @@ export class MapGenerator {
       map.tiles[i].walls = [true, true, true, true];
     }
 
-    const walls: number[] = [];
-    const inMaze: number[] = [];
+    // candidate walls as (tile, direction) pairs; the tile is always already part of the maze
+    const walls: { tile: Tile; dir: number }[] = [];
+    const inMaze = new Set<number>();
+
+    const addToMaze = (tile: Tile): void => {
+      inMaze.add(tile.id);
+      for (let dir = 0; dir < 4; dir++) {
+        if (tile.neighbors[dir]) {
+          walls.push({ tile, dir });
+        }
+      }
+    };
 
     // Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
-    const randomCell = map.tiles[parseInt("" + Math.random() * (map.Nx * map.Ny - 1))];
-    inMaze.push(randomCell.id);
-    for (let i = 0; i < 4; i++) {
-      walls.push(randomCell.id + 0.1 * i);
-    }
+    addToMaze(map.tiles[Math.floor(Math.random() * map.tiles.length)]);
 
     // While there are walls in the list:
     while (walls.length > 0) {
-      // Pick a random wall from the list.
-      const randomWallNo = parseInt((Math.random() * (walls.length - 1)).toString());
-      const randomWall = walls[randomWallNo];
+      // Pick a random wall from the list and remove it from the list.
+      const index = Math.floor(Math.random() * walls.length);
+      const { tile, dir } = walls[index];
+      walls[index] = walls[walls.length - 1];
+      walls.pop();
       // If the cell on the opposite side isn't in the maze yet:
-      const cellID = Math.floor(randomWall);
-      const wallDir = parseInt(((10 * randomWall) % 4).toString());
-      const tile = map.tiles[cellID];
-      const opposite = tile.neighbors[wallDir % 4];
-      if (opposite && inMaze.indexOf(opposite.id) === -1) {
+      const opposite = tile.neighbors[dir];
+      if (opposite && !inMaze.has(opposite.id)) {
         // Make the wall a passage and mark the cell on the opposite side as part of the maze.
-        tile.addWall(wallDir, true);
-        inMaze.push(opposite.id);
+        tile.addWall(dir, true);
         // Add the neighboring walls of the cell to the wall list.
-        for (let i = 0; i < 4; i++) {
-          if (opposite.walls[i]) {
-            walls.push(opposite.id + 0.1 * i);
-          }
-        }
-        walls.splice(randomWallNo, 1);
-      } else // If the cell on the opposite side already was in the maze, remove the wall from the list.
-      {
-        walls.splice(randomWallNo, 1);
+        addToMaze(opposite);
       }
     }
   }

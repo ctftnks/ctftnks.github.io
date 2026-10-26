@@ -47,6 +47,39 @@ describe("MapGenerator", () => {
     expect(wallCount).toBeLessThan(totalWalls);
   });
 
+  it("should generate a Prim's maze that is a spanning tree of all tiles", () => {
+    for (let n = 0; n < 20; n++) {
+      const m = new GameMap(mockCanvas, 9, 6);
+      MapGenerator.primsMaze(m);
+
+      // count passages between neighboring tiles (each passage is seen from both sides)
+      let passages = 0;
+      for (const tile of m.tiles) {
+        for (let d = 0; d < 4; d++) {
+          if (tile.neighbors[d] && !tile.walls[d]) {
+            passages++;
+          }
+        }
+      }
+      expect(passages / 2).toBe(m.tiles.length - 1);
+
+      // every tile must be reachable
+      const seen = new Set<number>([m.tiles[0].id]);
+      const stack: Tile[] = [m.tiles[0]];
+      while (stack.length > 0) {
+        const tile = stack.pop()!;
+        for (let d = 0; d < 4; d++) {
+          const neighbor = tile.neighbors[d];
+          if (!tile.walls[d] && neighbor && !seen.has(neighbor.id)) {
+            seen.add(neighbor.id);
+            stack.push(neighbor);
+          }
+        }
+      }
+      expect(seen.size).toBe(m.tiles.length);
+    }
+  });
+
   it("should generate Recursive Division map", () => {
     MapGenerator.recursiveDivision(map);
 
