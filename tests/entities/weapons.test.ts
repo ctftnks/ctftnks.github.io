@@ -337,12 +337,6 @@ describe("Weapon System", () => {
   });
 
   describe("Guided Missile collisions", () => {
-    const originalSetting = Settings.BulletsCanCollide;
-
-    afterEach(() => {
-      Settings.BulletsCanCollide = originalSetting;
-    });
-
     /** Creates a missile that is placed in a tile without any objects. */
     const createMissile = (): any => {
       const bullet: any = new Guided(mockTank).newBullet();

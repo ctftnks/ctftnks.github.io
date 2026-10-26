@@ -118,8 +118,6 @@ describe("Gamemode Classes", () => {
     let bot2: any;
     let human: any;
     let mode: Deathmatch;
-    const originalSpeed = Settings.BotSpeed;
-    const originalAdaptive = Settings.AdaptiveBotSpeed;
 
     beforeEach(() => {
       // the blue team has two bots, the red team none
@@ -130,11 +128,6 @@ describe("Gamemode Classes", () => {
       mode = new Deathmatch(mockGame as Game);
       Settings.AdaptiveBotSpeed = true;
       Settings.BotSpeed = 1;
-    });
-
-    afterEach(() => {
-      Settings.BotSpeed = originalSpeed;
-      Settings.AdaptiveBotSpeed = originalAdaptive;
     });
 
     it("should not drop below the minimum speed", () => {

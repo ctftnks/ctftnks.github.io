@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import Game from "@/game/game";
 import Player from "@/game/player";
 import Tank from "@/entities/tank";
@@ -12,7 +12,6 @@ vi.mock("@/game/effects", () => ({
 }));
 
 describe("Guided missile and other bullets", () => {
-  const originalSetting = Settings.BulletsCanCollide;
   let game: Game;
   let tank: Tank;
 
@@ -26,10 +25,6 @@ describe("Guided missile and other bullets", () => {
     tank = new Tank(player, game);
     tank.setPosition({ x: 195, y: 195 });
     game.addObject(tank);
-  });
-
-  afterEach(() => {
-    Settings.BulletsCanCollide = originalSetting;
   });
 
   for (const bulletsCanCollide of [true, false]) {

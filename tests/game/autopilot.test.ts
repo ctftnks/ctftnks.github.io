@@ -176,7 +176,6 @@ describe("Autopilot Class", () => {
     });
 
     describe("BotsShootBots setting", () => {
-      const originalSetting = Settings.BotsShootBots;
       const makeEnemy = (isBot: boolean): any => {
         const enemy = Object.create(Tank.prototype);
         enemy.player = { team: TEAMS[1], isBot: () => isBot };
@@ -188,10 +187,6 @@ describe("Autopilot Class", () => {
         (autopilot as any).evaluateEnemies(mockTile, mockTank, mockGame, 10);
         return mockTile.xypathToObj.mock.calls[0][0];
       };
-
-      afterEach(() => {
-        Settings.BotsShootBots = originalSetting;
-      });
 
       it("should target enemy bots when enabled", () => {
         Settings.BotsShootBots = true;
