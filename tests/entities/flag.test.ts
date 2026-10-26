@@ -66,6 +66,30 @@ describe("Flag Class", () => {
     expect(flag.isDeleted()).toBe(true);
   });
 
+  it("should be added to the game only once when dropped repeatedly", () => {
+    const base = new Base(mockGame, 100, 100, mockPlayer.team);
+    const flag = new Flag(mockGame, base);
+
+    flag.drop(10, 10);
+    flag.drop(20, 20);
+    flag.reset();
+
+    expect(mockGame.objs.filter((o: unknown) => o === flag)).toHaveLength(1);
+  });
+
+  it("should be re-added after pickup once it has been removed from the game", () => {
+    const base = new Base(mockGame, 100, 100, mockPlayer.team);
+    const flag = new Flag(mockGame, base);
+    flag.drop(base.x, base.y);
+    flag.pickup({ carriedFlag: null } as any);
+    mockGame.objs.length = 0; // the game removes deleted objects
+
+    flag.drop(30, 30);
+
+    expect(mockGame.objs).toEqual([flag]);
+    expect(flag.isDeleted()).toBe(false);
+  });
+
   it("should reset to base", () => {
     const base = new Base(mockGame, 100, 100, mockPlayer.team);
     const flag = new Flag(mockGame, base);

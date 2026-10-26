@@ -68,7 +68,10 @@ export class Flag extends GameObject {
     this.resetTimer = this.game.t + 30000;
     this.picked = false;
     this.maxAge = undefined;
-    this.game.objs.push(this);
+    // a flag that was not picked up is still part of the game, don't add it a second time
+    if (!this.game.objs.includes(this)) {
+      this.game.objs.push(this);
+    }
   }
 
   /**
