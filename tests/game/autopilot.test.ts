@@ -3,6 +3,7 @@ import Autopilot from "@/game/autopilot";
 import { Laser, Guided, Slingshot, WreckingBall } from "@/entities/weapons";
 import Tank from "@/entities/tank";
 import { TEAMS } from "@/game/team";
+import { Settings } from "@/stores/settings";
 import { CaptureTheFlag, KingOfTheHill } from "@/game/gamemode";
 
 vi.mock("@/game/assets", () => ({
@@ -172,6 +173,57 @@ describe("Autopilot Class", () => {
 
       // Should follow
       expect(autopilot.goto).toEqual(enemyTank);
+    });
+
+    describe("BotsShootBots setting", () => {
+      const originalSetting = Settings.BotsShootBots;
+      const makeEnemy = (isBot: boolean): any => {
+        const enemy = Object.create(Tank.prototype);
+        enemy.player = { team: TEAMS[1], isBot: () => isBot };
+        return enemy;
+      };
+      /** Runs the enemy evaluation and returns the predicate used to search for enemies. */
+      const searchPredicate = (): ((obj: any) => boolean) => {
+        mockTile.xypathToObj.mockReturnValue(null);
+        (autopilot as any).evaluateEnemies(mockTile, mockTank, mockGame, 10);
+        return mockTile.xypathToObj.mock.calls[0][0];
+      };
+
+      afterEach(() => {
+        Settings.BotsShootBots = originalSetting;
+      });
+
+      it("should target enemy bots when enabled", () => {
+        Settings.BotsShootBots = true;
+        const predicate = searchPredicate();
+        expect(predicate(makeEnemy(true))).toBe(true);
+        expect(predicate(makeEnemy(false))).toBe(true);
+      });
+
+      it("should ignore enemy bots but still target humans when disabled", () => {
+        Settings.BotsShootBots = false;
+        const predicate = searchPredicate();
+        expect(predicate(makeEnemy(true))).toBe(false);
+        expect(predicate(makeEnemy(false))).toBe(true);
+      });
+
+      it("should never target teammates", () => {
+        Settings.BotsShootBots = true;
+        const mate = makeEnemy(false);
+        mate.player.team = mockPlayer.team;
+        expect(searchPredicate()(mate)).toBe(false);
+      });
+
+      it("should not fire the laser at enemy bots when disabled", () => {
+        Settings.BotsShootBots = false;
+        const laser = new Laser(mockTank);
+        mockTank.weapon = laser;
+        const enemyBot = makeEnemy(true);
+        enemyBot.invincible = () => false;
+        laser.trajectory.possibleTargets = [enemyBot];
+        const result = (autopilot as any).calculateAim(mockTank, enemyBot, [{ x: 0, y: 0 }] as any, mockGame);
+        expect(result.shouldShoot).toBe(false);
+      });
     });
 
     it("should back off if too close to enemy (Personal Space)", () => {

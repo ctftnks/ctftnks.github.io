@@ -8,6 +8,7 @@ import { type Coord } from "@/utils/geometry";
 import { Laser, Guided, WreckingBall, Slingshot } from "@/entities/weapons";
 import { CaptureTheFlag, KingOfTheHill } from "./gamemode";
 import type Game from "./game";
+import type Player from "./player";
 
 /**
  * Configuration constants for Autopilot behavior.
@@ -50,6 +51,17 @@ interface AimResult {
   shouldShoot: boolean;
   target: Tank | Coord;
   weight: number;
+}
+
+/**
+ * Is the tank an enemy that the bot is allowed to engage?
+ * Enemy bots are only fought if the setting "Bots shoot bots" is enabled.
+ * @param bot - The bot that is looking for targets.
+ * @param tank - The potential target.
+ * @returns True if the bot may chase and shoot the tank.
+ */
+function isTargetableEnemy(bot: Player, tank: Tank): boolean {
+  return tank.player.team !== bot.team && (Settings.BotsShootBots || !tank.player.isBot());
 }
 
 /**
@@ -167,7 +179,7 @@ export class Autopilot {
    */
   private evaluateEnemies(tile: Tile, tank: Tank, game: Game, dt: number): AutopilotAction | null {
     const bot = tank.player;
-    const path = tile.xypathToObj((obj) => obj instanceof Tank && obj.player.team !== bot.team);
+    const path = tile.xypathToObj((obj) => obj instanceof Tank && isTargetableEnemy(bot, obj));
 
     if (!path) {
       return null;
@@ -358,7 +370,7 @@ export class Autopilot {
       // Shoot if laser line hits an enemy
       result.shouldShoot = weapon.trajectory.possibleTargets
         .filter((t) => t instanceof Tank)
-        .some((t) => t.player.team !== tank.player.team && !enemy.invincible());
+        .some((t) => isTargetableEnemy(tank.player, t) && !enemy.invincible());
     } else if (weapon instanceof Guided || weapon instanceof WreckingBall) {
       // These weapons need wall proximity to be effective or need smart placement
       result.shouldShoot = false;
